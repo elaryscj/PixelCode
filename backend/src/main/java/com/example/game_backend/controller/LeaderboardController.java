@@ -30,6 +30,7 @@ public class LeaderboardController {
         for (User u : users.findTop50ByOrderByRatingDescIdAsc()) {
             Map<String, Object> m = new LinkedHashMap<>();
             m.put("place", place++);
+            m.put("id", u.getId());
             m.put("username", u.getUsername());
             m.put("rating", u.getRating());
             out.add(m);

@@ -59,6 +59,7 @@ const TopRating = () => {
             <Rank
               key={item.username}
               place={item.place}
+              userId={item.id}
               username={item.username}
               mmr={item.rating}
               isCurrentUser={!!me && me.toLowerCase() === item.username.toLowerCase()}

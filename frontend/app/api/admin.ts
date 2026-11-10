@@ -35,3 +35,8 @@ export const createCosmetic = (name: string, price: number, image: string) =>
   api<AdminCosmetic>("/admin/cosmetics", { method: "POST", body: JSON.stringify({ name, price, image }) });
 export const toggleCosmetic = (id: string, publish: boolean) =>
   api<AdminCosmetic>(`/admin/cosmetics/${id.replace("c_", "")}/${publish ? "publish" : "withdraw"}`, { method: "POST" });
+
+export type AdminUser = { id: number; username: string; rating: number; pixels: number };
+export const searchUsers = (q: string) => api<AdminUser[]>(`/admin/users?q=${encodeURIComponent(q)}`);
+export const changeBalance = (id: number, mode: "set" | "add", amount: number) =>
+  api<AdminUser>(`/admin/users/${id}/balance`, { method: "POST", body: JSON.stringify({ mode, amount }) });

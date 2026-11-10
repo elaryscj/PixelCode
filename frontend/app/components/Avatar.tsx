@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { useAvatar } from "~/lib/avatar";
+import { API_BASE } from "~/api/http";
 
 /**
  * A player's avatar. Without props it shows the logged-in player's own picture;
@@ -19,7 +20,7 @@ const Avatar = ({
 }) => {
   const own = useAvatar();
   const [failed, setFailed] = useState(false);
-  const url = src !== undefined ? src : userId != null ? (failed ? null : `/api/avatars/${userId}`) : own;
+  const url = src !== undefined ? src : userId != null ? (failed ? null : `${API_BASE}/avatars/${userId}`) : own;
   return url ? (
     <img
       src={url}

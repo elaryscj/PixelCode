@@ -14,6 +14,9 @@ import {
   listCosmetics,
   toggleCosmetic,
   type AdminCosmetic,
+  searchUsers,
+  changeBalance,
+  type AdminUser,
 } from "~/api/admin";
 import { SkinArt } from "~/components/skins";
 
@@ -59,6 +62,22 @@ export default function Admin() {
   const [ok, setOk] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [skins, setSkins] = useState<AdminCosmetic[]>([]);
+  const [players, setPlayers] = useState<AdminUser[]>([]);
+  const [query, setQuery] = useState("");
+  const [amounts, setAmounts] = useState<Record<number, string>>({});
+  const [balMsg, setBalMsg] = useState<string | null>(null);
+  const findPlayers = () => searchUsers(query).then(setPlayers).catch(() => setBalMsg("Could not load players"));
+  const applyBalance = async (id: number, mode: "set" | "add", sign = 1) => {
+    const n = Number(amounts[id]);
+    if (!Number.isInteger(n)) return setBalMsg("Enter a whole number");
+    try {
+      const u = await changeBalance(id, mode, n * sign);
+      setPlayers((ps) => ps.map((p) => (p.id === u.id ? u : p)));
+      setBalMsg(`${u.username}: ${u.pixels} PIXELS`);
+    } catch (e) {
+      setBalMsg(e instanceof Error ? e.message : "Failed");
+    }
+  };
   const [skinName, setSkinName] = useState("");
   const [skinPrice, setSkinPrice] = useState("500");
   const [skinImage, setSkinImage] = useState<string | null>(null);
@@ -243,6 +262,41 @@ export default function Admin() {
             </li>
           ))}
         </ul>
+
+        <h2 className="text-neon text-3xl mt-12 mb-3">&gt; PLAYER BALANCE</h2>
+        <div className="border-2 border-neon bg-[#070c1e]/90 p-6">
+          <div className="flex gap-3">
+            <input
+              className={field}
+              placeholder="username (empty = top 50)"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && findPlayers()}
+            />
+            <button onClick={findPlayers} className="px-6 bg-pink border-2 border-yellow text-black text-2xl">FIND</button>
+          </div>
+          {balMsg && <p className="text-neon text-xl mt-3 font-sans">{balMsg}</p>}
+          <ul className="flex flex-col gap-2 mt-4">
+            {players.map((p) => (
+              <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 border border-neon/50 px-4 py-3">
+                <span className="text-yellow text-2xl">
+                  {p.username} <span className="text-neon text-lg">{p.pixels} PIXELS</span>
+                </span>
+                <span className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    className="w-32 bg-[#0a0f25] border border-neon text-white px-2 py-1 font-sans"
+                    value={amounts[p.id] ?? ""}
+                    onChange={(e) => setAmounts({ ...amounts, [p.id]: e.target.value })}
+                  />
+                  <button onClick={() => applyBalance(p.id, "add")} className="border border-neon px-3 py-1 text-yellow text-xl">+ Add</button>
+                  <button onClick={() => applyBalance(p.id, "add", -1)} className="border border-neon px-3 py-1 text-pink text-xl">- Take</button>
+                  <button onClick={() => applyBalance(p.id, "set")} className="border border-neon px-3 py-1 text-yellow text-xl">Set</button>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </>
   );

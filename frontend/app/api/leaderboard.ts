@@ -1,7 +1,7 @@
 // app/api/leaderboard.ts
 import { api } from "./http";
 
-export type LeaderboardEntry = { place: number; username: string; rating: number };
+export type LeaderboardEntry = { place: number; id?: number; username: string; rating: number };
 export type MyRank = { place: number; username: string; rating: number; wins: number; losses: number };
 
 export const getLeaderboard = () => api<LeaderboardEntry[]>("/leaderboard");

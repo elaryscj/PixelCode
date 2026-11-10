@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { FaUser } from "react-icons/fa";
 import Avatar from "./Avatar";
 
 const Rank = ({
@@ -7,11 +6,13 @@ const Rank = ({
   username,
   mmr,
   isCurrentUser = false,
+  userId,
 }: {
   place: number;
   username: string;
   mmr: number;
   isCurrentUser?: boolean;
+  userId?: number;
 }) => {
   const { t } = useTranslation();
 
@@ -48,7 +49,7 @@ const Rank = ({
       </div>
       <div className="flex flex-1 items-center gap-4">
         <span className={frame}>
-          {isCurrentUser ? <Avatar className="w-6 h-6" iconClass="text-base" /> : <FaUser />}
+          <Avatar className="w-6 h-6" iconClass="text-base" userId={userId ?? null} />
         </span>
         <span className="text-3xl font-pixel">{username}</span>
         {isCurrentUser && (
