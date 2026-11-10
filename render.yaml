@@ -1,0 +1,50 @@
+# Render Blueprint: New + > Blueprint > pick this repo. Replace the two URLs after the first deploy (see DEPLOY.md).
+databases:
+  - name: pixelcode-db
+    plan: free
+    databaseName: game_db
+
+services:
+  - type: web
+    name: pixelcode-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - key: DB_HOST
+        fromDatabase: { name: pixelcode-db, property: host }
+      - key: DB_PORT
+        fromDatabase: { name: pixelcode-db, property: port }
+      - key: DB_NAME
+        fromDatabase: { name: pixelcode-db, property: database }
+      - key: DB_USER
+        fromDatabase: { name: pixelcode-db, property: user }
+      - key: DB_PASSWORD
+        fromDatabase: { name: pixelcode-db, property: password }
+      - key: TOKEN_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: FRONTEND_URL
+        value: https://pixelcode-frontend.onrender.com
+      - key: ADMIN_USERNAMES
+        sync: false
+      - key: MAIL_HOST
+        sync: false
+      - key: MAIL_USER
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
+
+  - type: web
+    name: pixelcode-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: free
+    buildArgs:
+      - key: VITE_API_URL
+        value: https://pixelcode-backend.onrender.com
+      - key: VITE_WS_URL
+        value: wss://pixelcode-backend.onrender.com/ws

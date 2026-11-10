@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+/* Design font: Press Start 2P. Every size in the app was tuned for a narrow pixel font,
+   so the face is drawn at 50% (size-adjust) - text-3xl etc. then match the design. */
+@font-face {
+  font-family: "Press Start 2P Scaled";
+  src: url("/fonts/press-start-2p.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  size-adjust: 50%;
+}
+
+@theme {
+  --color-pink: #FE2C96;
+  --color-yellow: #FDE047;
+  --color-neon: #01E4FF;
+  --bg-main: #060814;
+  --bg-neonbg: #0B1F3D;
+  --font-pixel: "Press Start 2P Scaled", "Press Start 2P", monospace;
+  --font-sans: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* podium ranks */
+  --color-silver: #C8D0DA;
+  --color-bronze: #E08A3C;
+
+  /* table surfaces */
+  --color-surface: #111834;
+  --color-surface-alt: #161E42;
+}
+
+@utility text-glow {
+  text-shadow:
+    0 0 4px currentColor,
+    0 0 11px currentColor,
+    0 0 19px currentColor;
+}
+@utility text-glow-sm {
+  text-shadow: 0 0 6px currentColor;
+}
+
+@utility border-glow-* {
+  box-shadow:
+    0 0 6px --value(--color-*),
+    0 0 16px --value(--color-*);
+}
+@utility border-glow-sm-* {
+  box-shadow: 0 0 8px --value(--color-*);
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility range-bar {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1.25rem;              /* h-5 */
+  cursor: pointer;
+  outline: none;
+  border-radius: 0;
+  border: 2px solid #2e4468;
+  background: #16233c;          /* fallback — inline gradient overrides it */
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 2rem;               /* h-8 */
+    width: 1rem;                /* w-4 */
+    margin-top: -8px;           /* re-center oversized thumb on WebKit */
+    border-radius: 0;
+    background: #e9c84b;
+    border: 2px solid #0a0e1a;
+  }
+
+  &::-moz-range-thumb {
+    height: 2rem;
+    width: 1rem;
+    border-radius: 0;
+    background: #e9c84b;
+    border: 2px solid #0a0e1a;
+  }
+}
+
+
+@utility star-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  background:
+    radial-gradient(circle at 70% 20%, #01E4FF 1px, transparent 2px),
+    radial-gradient(circle at 10% 70%, #FE2C96 1px, transparent 2px);
+
+  background-size: 200px 200px;
+  background-color: #050816;
+
+  animation: moveStars 20s linear infinite;
+}
+
+@utility grid-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(1, 228, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(1, 228, 255, 0.07) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@keyframes moveStars {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 200px 200px;
+  }
+}
+
+/* Background lives on html only. If body also had one it would paint over
+   anything at z-index:-1, hiding the star layer. */
+html {
+  background-color: #060814;
+  color: white;
+  color-scheme: dark;
+}
