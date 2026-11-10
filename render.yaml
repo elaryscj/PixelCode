@@ -43,8 +43,8 @@ services:
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend
     plan: free
-    buildArgs:
+    envVars:
       - key: VITE_API_URL
-        value: https://pixelcode-backend.onrender.com
+        value: https://pixelcode-backend-unf5.onrender.com
       - key: VITE_WS_URL
-        value: wss://pixelcode-backend.onrender.com/ws
+        value: wss://pixelcode-backend-unf5.onrender.com/ws
