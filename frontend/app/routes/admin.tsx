@@ -1,5 +1,7 @@
 // /admin - US-22 add a validated challenge, US-23 withdraw / re-publish one
 import { useEffect, useState, type FormEvent } from "react";
+import { ClientOnly } from "~/lib/currentUser";
+import ScreenLoading from "~/components/ScreenLoading";
 import { Link } from "react-router";
 import { getCurrentUser } from "~/api/auth";
 import { ApiError } from "~/api/http";
@@ -54,7 +56,7 @@ const empty: ChallengeForm = {
 const field = "w-full bg-[#02050f] border border-neon text-white px-3 py-2 font-sans text-lg outline-none focus:border-glow-neon-sm";
 const label = "block font-pixel text-yellow text-xl mt-4 mb-1";
 
-export default function Admin() {
+function AdminScreen() {
   const user = getCurrentUser();
   const [items, setItems] = useState<AdminChallenge[]>([]);
   const [form, setForm] = useState<ChallengeForm>(empty);
@@ -300,4 +302,8 @@ export default function Admin() {
       </div>
     </>
   );
+}
+
+export default function Admin() {
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <AdminScreen />}</ClientOnly>;
 }

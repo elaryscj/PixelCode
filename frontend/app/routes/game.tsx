@@ -1,13 +1,18 @@
 // app/routes/game.tsx
 // Real-time duel: physics run in the browser, but doors, timers, finish and rating are decided by the server.
 import { useState, useEffect, useRef, useCallback } from "react";
+import { ClientOnly } from "~/lib/currentUser";
+import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useParams, useNavigate } from "react-router";
 import ChallengeModal from "~/components/game/ChallengeModal";
 import GameResultModal from "~/components/game/GameResultModal";
+import TouchControls from "~/components/game/TouchControls";
+import { burst, confetti, flash, shake } from "~/components/game/fx";
+import { sfx } from "~/lib/sfx";
 import { SkinArt } from "~/components/skins";
 import { getCurrentUser, refreshUser } from "~/api/auth";
 import { rematchRoom } from "~/api/room";
-import { pingLabel, usePing } from "~/lib/liveStats";
+import { pingColor, pingLabel, usePing } from "~/lib/liveStats";
 import { getToken } from "~/api/http";
 import { onGameEvent, sendMove } from "~/api/socket";
 import {
@@ -25,6 +30,7 @@ import {
   CHAR_H,
   CHAR_W,
   DOORS,
+  DOOR_W,
   createPlayer,
   doorRespawn,
   floorOf,
@@ -94,7 +100,7 @@ function PanelHeader({
   );
 }
 
-export default function Game() {
+function GameScreen() {
   const { code = "" } = useParams();
   const navigate = useNavigate();
   const me = getCurrentUser();
@@ -186,6 +192,44 @@ export default function Game() {
   const [mySkin, setMySkin] = useState<string>("neon_ronin");
   const [oppSkin, setOppSkin] = useState<string>("neon_ronin");
   const keysPressed = useRef<{ [key: string]: boolean }>({});
+  const arenaWrapRef = useRef<HTMLDivElement | null>(null);
+  // doors we already celebrated (socket + poll can report the same door twice)
+  const celebratedRef = useRef({ me: new Set<number>(), opp: new Set<number>(), loaded: false });
+  const [banner, setBanner] = useState<{ text: string; tone: "neon" | "pink" | "yellow"; id: number } | null>(null);
+  const showBanner = useCallback((text: string, tone: "neon" | "pink" | "yellow", ms = 1600) => {
+    const id = Date.now();
+    setBanner({ text, tone, id });
+    setTimeout(() => setBanner((b) => (b && b.id === id ? null : b)), ms);
+  }, []);
+
+  // ---------------------------------------------------------------- juice
+  const doorCenter = (cpNum: number) => {
+    const d = mapRef.current?.doors.find((c) => c.num === cpNum);
+    return d ? { x: d.x + DOOR_W / 2, y: d.y + 6 } : null;
+  };
+  const celebrateMine = (cpNum: number) => {
+    const c = celebratedRef.current;
+    if (c.me.has(cpNum)) return;
+    c.me.add(cpNum);
+    if (!c.loaded) return;
+    const at = doorCenter(cpNum);
+    if (at) burst(myArenaRef.current, at.x, at.y, { color: "#01E4FF", count: 26, spread: 90 });
+    flash(myArenaRef.current, "rgba(1,228,255,0.3)");
+    sfx.doorOpen();
+    const left = DOORS - c.me.size;
+    showBanner(left > 0 ? `GATE ${cpNum} SECURED` : "ALL GATES OPEN - RUN!", left > 0 ? "neon" : "yellow");
+  };
+  const celebrateRival = (cpNum: number) => {
+    const c = celebratedRef.current;
+    if (c.opp.has(cpNum)) return;
+    c.opp.add(cpNum);
+    if (!c.loaded) return;
+    const at = doorCenter(cpNum);
+    if (at) burst(oppArenaRef.current, 100 - at.x, at.y, { color: "#FE2C96", count: 18, spread: 70 });
+    flash(oppArenaRef.current, "rgba(254,44,150,0.3)");
+    sfx.rivalDoor();
+    showBanner(`RIVAL CRACKED GATE ${cpNum}`, "pink", 1300);
+  };
 
   // ---------------------------------------------------------------- server state
   const applyState = useCallback(
@@ -209,6 +253,7 @@ export default function Game() {
       }
       const curMap = mapRef.current;
       if (st.me) {
+        st.me.unlocked.forEach(celebrateMine);
         setUnlockedCps((prev) => Array.from(new Set([...prev, ...st.me!.unlocked])));
         setMyRating(st.me.rating);
         if (st.me.skin) setMySkin(st.me.skin);
@@ -233,8 +278,16 @@ export default function Game() {
         setOppRating(st.opponent.rating);
         if (st.opponent.skin) setOppSkin(st.opponent.skin);
         setOppDoors(toDeadlines(st.opponent.doors));
+        st.opponent.unlocked.forEach(celebrateRival);
         setOpponentUnlockedCps(st.opponent.unlocked);
         setOppConnected(st.opponent.connected);
+      }
+      if (!celebratedRef.current.loaded) {
+        celebratedRef.current.loaded = true;
+        if ((st.elapsedSeconds ?? 0) < 8) {
+          sfx.fight();
+          showBanner("FIGHT!", "yellow", 1200);
+        }
       }
       if (st.doorSeconds) setDoorSecondsTotal(st.doorSeconds);
       if (st.maxSeconds !== undefined && st.elapsedSeconds !== undefined) {
@@ -278,6 +331,23 @@ export default function Game() {
     return () => clearInterval(id);
   }, [code, gameOver, applyState]);
 
+  // Last ten seconds: a clock tick every second
+  useEffect(() => {
+    if (!gameOver && matchSeconds > 0 && matchSeconds <= 10) sfx.tick();
+  }, [matchSeconds, gameOver]);
+
+  // Result sting: fanfare + confetti for a win, a falling tune for a loss
+  useEffect(() => {
+    if (!result) return;
+    if (result.winnerUserId === null) return;
+    if (result.winnerUserId === myId) {
+      sfx.victory();
+      confetti();
+    } else {
+      sfx.defeat();
+    }
+  }, [result]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Local second-by-second display of the match timer
   useEffect(() => {
     if (gameOver) return;
@@ -301,9 +371,11 @@ export default function Game() {
           return next;
         };
         if (data.userId === myId) {
+          celebrateMine(data.cpNum);
           setUnlockedCps((prev) => Array.from(new Set([...prev, data.cpNum])));
           setMyDoors(drop);
         } else {
+          celebrateRival(data.cpNum);
           setOpponentUnlockedCps((prev) => Array.from(new Set([...prev, data.cpNum])));
           setOppDoors(drop);
         }
@@ -328,6 +400,11 @@ export default function Game() {
   };
 
   const triggerRespawn = () => {
+    const p = playerState.current;
+    burst(myArenaRef.current, p.x + CHAR_W / 2, p.y + 4, { color: "#FE2C96", count: 22, spread: 60 });
+    shake(arenaWrapRef.current, 10);
+    sfx.hazard();
+    navigator.vibrate?.(60);
     setHazardHit(true);
     setTimeout(() => setHazardHit(false), 400);
     respawn(playerState.current);
@@ -349,6 +426,7 @@ export default function Game() {
 
   const handleChallengeSuccess = useCallback((cpNum: number) => {
     setIsModalOpen(false);
+    celebrateMine(cpNum);
     setMyDoors((prev) => {
       const next = { ...prev };
       delete next[cpNum];
@@ -439,7 +517,12 @@ export default function Game() {
               jump: !!(keys["Space"] || keys["KeyW"] || keys["ArrowUp"]),
             };
 
+        const wasGrounded = p.isGrounded;
         const res = stepPlayer(p, input, map, unlockedRef.current, crumbleRef.current, t, tPrev, dt);
+        if (wasGrounded && !p.isGrounded && p.vy > 0.5) {
+          sfx.jump();
+          burst(myArenaRef.current, p.x + CHAR_W / 2, p.y, { color: "#ffffff", count: 6, spread: 18, size: 4 });
+        }
         if (res.hitHazard) triggerRespawn();
         if (res.nearDoor !== nearRef.current) setNearCheckpoint(res.nearDoor);
         // Exit: only counts when every door is open; the server confirms the win
@@ -503,19 +586,19 @@ export default function Game() {
   const timerDisplay = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
   return (
-    <div className={`min-h-screen bg-[#050814] flex flex-col p-4 md:p-6 font-pixel select-none relative ${
-      hazardHit ? "animate-pulse filter hue-rotate-90" : ""
+    <div className={`min-h-screen bg-[#050814] flex flex-col p-2 sm:p-4 md:p-6 short:p-1.5 font-pixel select-none relative ${
+      hazardHit ? "shadow-[inset_0_0_120px_rgba(254,44,150,0.55)]" : ""
     }`}>
       
       {/* 1. Header (Logo, Ping, Room Info) */}
-      <header className="flex justify-between items-center border-b border-neon/30 pb-3 mb-4">
+      <header className="flex justify-between items-center border-b border-neon/30 pb-3 mb-4 short:pb-1 short:mb-1">
         <div className="flex gap-6 items-center">
           <Link to="/play" className="text-yellow text-xl md:text-2xl leading-none hover:opacity-90 transition-opacity">
             PIXELCODE<br/><span className="text-pink text-xs">ARENA</span>
           </Link>
           <div className="hidden sm:flex text-neon text-[10px] md:text-xs border-l-2 border-neon/30 pl-4 uppercase items-center gap-2">
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span>
-            KZ-SERVER / {pingLabel(ping)}
+            KZ-SERVER / <span className={pingColor(ping)}>{pingLabel(ping)}</span>
           </div>
         </div>
 
@@ -534,20 +617,20 @@ export default function Game() {
       </header>
 
       {/* 2. Scoreboard (Player 1, Timer, Opponent) */}
-      <div className="flex justify-between items-center mb-4 gap-2">
+      <div className="flex justify-between items-center mb-4 gap-2 short:mb-1">
         
         {/* Local Player (Left) */}
         <div className="flex-1 flex flex-col gap-1.5">
           <div className="flex justify-between items-start border-l-4 border-neon pl-3">
             <div>
-              <h2 className="text-yellow text-xl md:text-3xl uppercase truncate max-w-[180px]">{localPlayerName}</h2>
+              <h2 className="text-yellow text-xl md:text-3xl short:text-base uppercase truncate max-w-[180px]">{localPlayerName}</h2>
               <p className="text-neon/70 text-[9px] md:text-[10px]">MMR {myRating}</p>
             </div>
             <span className="border border-neon text-neon px-2 py-0.5 text-[9px] bg-neon/10">YOU</span>
           </div>
 
           {/* Checkpoint Indicators */}
-          <div className="flex items-center gap-1.5 text-xs">
+          <div className="flex items-center gap-1.5 text-xs short:hidden">
             <span className="text-gray-400 text-[10px]">CP:</span>
             {[1, 2, 3, 4].map((num) => (
               <span
@@ -572,7 +655,7 @@ export default function Game() {
           }`}>
             {timerDisplay}
           </div>
-          <div className="text-yellow text-[9px] md:text-[10px] mt-1 uppercase tracking-wider text-center">
+          <div className="text-yellow text-[9px] md:text-[10px] mt-1 uppercase tracking-wider text-center short:hidden">
             UNLOCK ALL 4 DOORS ➔ SECURE EXIT
           </div>
         </div>
@@ -581,13 +664,13 @@ export default function Game() {
         <div className="flex-1 flex flex-col gap-1.5 items-end">
           <div className="flex justify-between items-start border-r-4 border-pink pr-3 w-full flex-row-reverse">
             <div className="text-right">
-              <h2 className="text-yellow text-xl md:text-3xl uppercase truncate max-w-[180px]">{opponentName}</h2>
+              <h2 className="text-yellow text-xl md:text-3xl short:text-base uppercase truncate max-w-[180px]">{opponentName}</h2>
               <p className="text-pink/70 text-[9px] md:text-[10px]">MMR {oppRating ?? "..."}</p>
             </div>
             <span className="border border-pink text-pink px-2 py-0.5 text-[9px] bg-pink/10">RIVAL</span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs flex-row-reverse">
+          <div className="flex items-center gap-1.5 text-xs flex-row-reverse short:hidden">
             <span className="text-gray-400 text-[10px]">:CP</span>
             {[1, 2, 3, 4].map((num) => (
               <span
@@ -607,15 +690,16 @@ export default function Game() {
 
       </div>
 
-      <div className="text-neon text-[10px] mb-2 flex justify-between items-center">
+      <div className="text-neon text-[10px] mb-2 flex justify-between items-center short:hidden">
         <span>{map ? `${map.name} · ${map.sector}` : "LOADING MAP..."}</span>
         <span className="text-gray-400">{map?.tagline ?? "SYMMETRIC DUEL · FIRST TO SOLVE ALL GATES WINS"}</span>
       </div>
 
       {/* 3. Dual-Panel Duel Arena */}
       <div
+        ref={arenaWrapRef}
         className="w-full border-2 border-pink/60 p-1 relative flex bg-[#060c20] overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.8)]"
-        style={{ height: "max(520px, calc(100vh - 380px))" }}
+        style={{ height: "var(--arena-h)" }}
       >
         
         {/* Central Divider Beam */}
@@ -701,7 +785,7 @@ export default function Game() {
       </div>
 
       {/* 4. Footer Controls & Status */}
-      <footer className="flex flex-col sm:flex-row justify-between items-center mt-3 text-[10px] text-gray-400 uppercase gap-2">
+      <footer className="flex flex-col sm:flex-row justify-between items-center mt-3 text-[10px] text-gray-400 uppercase gap-2 pointer-coarse:hidden">
         <div className="flex flex-wrap gap-4 items-center">
           <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">A / D</kbd> MOVE</span>
           <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">SPACE</kbd> JUMP</span>
@@ -714,6 +798,31 @@ export default function Game() {
           <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-yellow"></div> EXIT PORTAL</span>
         </div>
       </footer>
+
+      {banner && (
+        <div key={banner.id} className="fixed inset-x-0 top-[28%] z-45 flex justify-center pointer-events-none px-4">
+          <div
+            className={`enter-up text-center text-4xl sm:text-6xl short:text-3xl text-glow bg-black/55 px-6 py-3 border-y-2 ${
+              banner.tone === "neon" ? "text-neon border-neon" : banner.tone === "pink" ? "text-pink border-pink" : "text-yellow border-yellow"
+            }`}
+          >
+            {banner.text}
+          </div>
+        </div>
+      )}
+
+      {/* Phones / tablets: on-screen gamepad + "turn your phone" hint */}
+      <TouchControls
+        keys={keysPressed.current}
+        canInteract={nearCheckpoint !== null && !isModalOpen}
+        onInteract={() => nearRef.current && void openChallenge(nearRef.current)}
+        onRespawn={triggerRespawn}
+      />
+      <div className="hidden pointer-coarse:portrait:flex fixed inset-0 z-[55] flex-col items-center justify-center gap-6 bg-[#050814]/95 text-center px-8">
+        <div className="text-7xl text-neon animate-bounce">⟳</div>
+        <p className="text-yellow text-2xl">ROTATE YOUR PHONE</p>
+        <p className="font-sans text-gray-400 text-sm">The arena is played in landscape.</p>
+      </div>
 
       {/* 5. Door challenge (US-16 - US-21): checked by the server */}
       {activeChallenge && (
@@ -739,10 +848,10 @@ export default function Game() {
       )}
       {offline && !gameOver && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 font-pixel">
-          <div className="w-140 border-2 border-pink bg-[#050816] p-10 flex flex-col items-center gap-6 shadow-[0_0_50px_rgba(254,44,150,0.4)]">
+          <div className="w-[92vw] max-w-140 border-2 border-pink bg-[#050816] p-6 sm:p-10 flex flex-col items-center gap-6 shadow-[0_0_50px_rgba(254,44,150,0.4)]">
             <h2 className="text-pink text-4xl">&#9632; RECONNECTING &#9632;</h2>
             <p className="font-sans text-white text-lg">Connection lost. Reconnect within 05:00</p>
-            <div className="border-2 border-pink px-10 py-3 text-pink text-[88px]/none">
+            <div className="border-2 border-pink px-10 py-3 text-pink text-[56px]/none sm:text-[88px]/none">
               {`${String(Math.floor(offlineLeft / 60)).padStart(2, "0")}:${String(offlineLeft % 60).padStart(2, "0")}`}
             </div>
             <div className="w-full border border-neon/40 p-4 flex flex-col items-center gap-3">
@@ -793,4 +902,8 @@ export default function Game() {
 
     </div>
   );
+}
+
+export default function Game() {
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <GameScreen />}</ClientOnly>;
 }

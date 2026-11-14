@@ -1,18 +1,23 @@
 // app/routes/practice.tsx
 // Solo practice: run any arena map offline. Doors open instantly with E (no challenge, no rating).
 import { useEffect, useRef, useState } from "react";
+import { ClientOnly } from "~/lib/currentUser";
+import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useSearchParams } from "react-router";
 import { MapLayer, animateMap } from "~/components/game/MapLayer";
 import { SkinArt } from "~/components/skins";
 import { getCurrentUser } from "~/api/auth";
 import { MAPS, getMap, worldTime } from "~/game/maps";
+import TouchControls from "~/components/game/TouchControls";
+import { burst, flash, shake } from "~/components/game/fx";
+import { sfx } from "~/lib/sfx";
 import { CHAR_H, CHAR_W, DOORS, createPlayer, doorRespawn, respawn, stepPlayer, type CrumbleState } from "~/game/physics";
 
 export function meta() {
   return [{ title: "Practice | PixelCode Arena" }];
 }
 
-export default function Practice() {
+function PracticeScreen() {
   const [params, setParams] = useSearchParams();
   const mapId = Math.min(MAPS.length - 1, Math.max(0, Number(params.get("map") ?? 0) || 0));
   const map = getMap(mapId);
@@ -58,6 +63,9 @@ export default function Practice() {
         if (prev) {
           setUnlocked((u) => [...u, num]);
           const d = map.doors.find((x) => x.num === num);
+          sfx.doorOpen();
+          flash(arenaRef.current);
+          if (d) burst(arenaRef.current, d.x + 3, d.y + 6, { count: 24, spread: 80 });
           if (d) {
             const r = doorRespawn(d);
             player.current.respawnX = r.x;
@@ -94,6 +102,7 @@ export default function Practice() {
       const p = player.current;
       const k = keys.current;
       if (!doneRef.current) {
+        const wasGrounded = p.isGrounded;
         const res = stepPlayer(
           p,
           {
@@ -108,7 +117,14 @@ export default function Practice() {
           tPrev,
           dt,
         );
+        if (wasGrounded && !p.isGrounded && p.vy > 0.5) {
+          sfx.jump();
+          burst(arenaRef.current, p.x + CHAR_W / 2, p.y, { color: "#ffffff", count: 6, spread: 18, size: 4 });
+        }
         if (res.hitHazard) {
+          burst(arenaRef.current, p.x + CHAR_W / 2, p.y + 4, { color: "#FE2C96", count: 22, spread: 60 });
+          shake(arenaRef.current, 10);
+          sfx.hazard();
           respawn(p);
           setDeaths((d) => d + 1);
         }
@@ -116,6 +132,7 @@ export default function Practice() {
         if (res.atExit) {
           doneRef.current = true;
           setFinished((now - startedAt.current) / 1000);
+          sfx.victory();
         }
         if (++frame % 15 === 0) setElapsed((now - startedAt.current) / 1000);
       }
@@ -137,13 +154,30 @@ export default function Practice() {
   }, [map]);
 
   return (
-    <div className="min-h-screen bg-[#050814] flex flex-col p-4 md:p-6 font-pixel select-none">
-      <header className="flex flex-wrap justify-between items-center gap-3 border-b border-neon/30 pb-3 mb-4">
-        <Link to="/play" className="text-yellow text-xl leading-none">
+    <div className="min-h-screen bg-[#050814] flex flex-col p-2 sm:p-4 md:p-6 short:p-1.5 font-pixel select-none">
+      <TouchControls
+        keys={keys.current}
+        canInteract={near !== null}
+        onInteract={() => {
+          window.dispatchEvent(new KeyboardEvent("keydown", { code: "KeyE" }));
+          window.dispatchEvent(new KeyboardEvent("keyup", { code: "KeyE" }));
+        }}
+        onRespawn={() => {
+          window.dispatchEvent(new KeyboardEvent("keydown", { code: "KeyR" }));
+          window.dispatchEvent(new KeyboardEvent("keyup", { code: "KeyR" }));
+        }}
+      />
+      <div className="hidden pointer-coarse:portrait:flex fixed inset-0 z-[55] flex-col items-center justify-center gap-6 bg-[#050814]/95 text-center px-8">
+        <div className="text-7xl text-neon animate-bounce">⟳</div>
+        <p className="text-yellow text-2xl">ROTATE YOUR PHONE</p>
+        <p className="font-sans text-gray-400 text-sm">The arena is played in landscape.</p>
+      </div>
+      <header className="flex flex-wrap short:flex-nowrap justify-between items-center gap-3 border-b border-neon/30 pb-3 mb-4 short:pb-1 short:mb-1">
+        <Link to="/play" className="text-yellow text-xl short:text-sm leading-none shrink-0">
           PIXELCODE<br />
           <span className="text-pink text-xs">PRACTICE</span>
         </Link>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap short:flex-nowrap short:overflow-x-auto scrollbar-none gap-2 min-w-0">
           {MAPS.map((m) => (
             <button
               key={m.id}
@@ -151,7 +185,7 @@ export default function Practice() {
                 e.currentTarget.blur();
                 setParams({ map: String(m.id) });
               }}
-              className={`text-[10px] px-2 py-1 border ${m.id === mapId ? "border-yellow text-yellow bg-yellow/10" : "border-neon/40 text-neon/70 hover:border-neon hover:text-neon"}`}
+              className={`shrink-0 text-[10px] px-2 py-1 border ${m.id === mapId ? "border-yellow text-yellow bg-yellow/10" : "border-neon/40 text-neon/70 hover:border-neon hover:text-neon"}`}
             >
               {m.name}
             </button>
@@ -159,8 +193,8 @@ export default function Practice() {
         </div>
       </header>
 
-      <div className="flex flex-wrap justify-between items-end gap-2 mb-2">
-        <div>
+      <div className="flex flex-wrap justify-between items-end gap-2 mb-2 short:mb-1">
+        <div className="short:hidden">
           <div className="text-yellow text-lg">{map.name}</div>
           <div className="text-gray-400 text-[10px]">{map.tagline}</div>
         </div>
@@ -173,7 +207,7 @@ export default function Practice() {
 
       <div
         className="relative w-full max-w-[760px] mx-auto border-2 border-neon/50 bg-[#081026] overflow-hidden"
-        style={{ height: "max(480px, calc(100vh - 260px))" }}
+        style={{ height: "var(--practice-h)" }}
       >
         <div ref={arenaRef} className="absolute inset-0">
           <MapLayer map={map} mirror={false} unlocked={unlocked} doors={{}} tone="neon" nearCheckpoint={near} />
@@ -199,7 +233,7 @@ export default function Practice() {
         )}
       </div>
 
-      <footer className="flex flex-wrap gap-4 mt-3 text-[10px] text-gray-400 uppercase">
+      <footer className="flex flex-wrap gap-4 mt-3 text-[10px] text-gray-400 uppercase pointer-coarse:hidden">
         <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">A / D</kbd> MOVE</span>
         <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">SPACE</kbd> JUMP</span>
         <span><kbd className="border border-neon text-neon px-2 py-0.5">E</kbd> OPEN DOOR (NO CHALLENGE IN PRACTICE)</span>
@@ -207,4 +241,8 @@ export default function Practice() {
       </footer>
     </div>
   );
+}
+
+export default function Practice() {
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <PracticeScreen />}</ClientOnly>;
 }

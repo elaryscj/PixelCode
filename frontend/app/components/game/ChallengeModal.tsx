@@ -1,6 +1,7 @@
 // app/components/game/ChallengeModal.tsx
 // Cyberpunk Modal for Checkpoint Door Challenges (US-16, US-17, US-18, US-19, US-20, US-21)
 import { useState, useEffect, useRef } from "react";
+import { sfx } from "~/lib/sfx";
 import { FaCode, FaCheck, FaTimes, FaClock, FaTerminal, FaPlay, FaLockOpen } from "react-icons/fa";
 import { submitDoor, type DoorChallenge, type SubmitResult } from "~/api/game";
 
@@ -71,12 +72,14 @@ export default function ChallengeModal({
       const res = await submitDoor(roomCode, challenge.cpNum, code);
       setResult(res);
       setSecondsRemaining(res.secondsRemaining);
+      if (!res.unlocked) sfx.wrong();
       if (res.unlocked && !doneRef.current) {
         doneRef.current = true;
         setTimeout(() => onSuccess(challenge.cpNum), 1200);
       }
     } catch (e) {
       setSubmitError(e instanceof Error ? e.message : "Evaluator unavailable");
+      sfx.wrong();
     } finally {
       setEvaluating(false);
     }
@@ -102,8 +105,8 @@ export default function ChallengeModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4 font-pixel select-none animate-fadeIn">
-      <div className="relative w-full max-w-4xl bg-[#080d1a] border-2 border-neon shadow-[0_0_30px_rgba(0,255,204,0.3)] flex flex-col max-h-[92vh] overflow-hidden text-xs text-gray-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-2 sm:p-4 font-pixel select-none animate-fadeIn">
+      <div className="relative w-full max-w-4xl bg-[#080d1a] border-2 border-neon shadow-[0_0_30px_rgba(0,255,204,0.3)] flex flex-col max-h-[96dvh] sm:max-h-[92vh] overflow-hidden text-xs text-gray-200">
         
         {/* Top Header Bar */}
         <div className="flex items-center justify-between px-4 py-3 bg-[#0d162a] border-b border-neon/40">
@@ -201,7 +204,10 @@ export default function ChallengeModal({
                 onChange={(e) => setCode(e.target.value)}
                 onKeyDown={handleKeyDown}
                 spellCheck={false}
-                className="w-full flex-1 bg-transparent text-emerald-400 font-mono text-xs focus:outline-none resize-none leading-relaxed selection:bg-neon/30 selection:text-white"
+                autoCapitalize="off"
+                autoCorrect="off"
+                autoComplete="off"
+                className="w-full flex-1 bg-transparent text-emerald-400 font-mono text-[16px] md:text-xs focus:outline-none resize-none leading-relaxed selection:bg-neon/30 selection:text-white"
                 placeholder="Write your code here..."
               />
             </div>
