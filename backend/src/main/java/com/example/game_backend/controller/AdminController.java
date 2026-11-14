@@ -7,6 +7,7 @@ import com.example.game_backend.game.ChallengeEvaluator;
 import com.example.game_backend.game.EvalResult;
 import com.example.game_backend.repository.ChallengeRepository;
 import com.example.game_backend.repository.UserRepository;
+import com.example.game_backend.security.AdminAccess;
 import com.example.game_backend.security.TokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +32,12 @@ public class AdminController {
     private final ChallengeRepository challenges;
     private final UserRepository users;
     private final TokenService tokens;
+    private final AdminAccess admins;
     private final ChallengeEvaluator evaluator;
 
     public AdminController(ChallengeRepository challenges, UserRepository users, TokenService tokens,
-                           ChallengeEvaluator evaluator) {
+                           ChallengeEvaluator evaluator, AdminAccess admins) {
+        this.admins = admins;
         this.challenges = challenges;
         this.users = users;
         this.tokens = tokens;
@@ -42,11 +45,7 @@ public class AdminController {
     }
 
     private void requireAdmin(String auth) {
-        long id = tokens.requireUserId(auth);
-        User u = users.findById(id).orElseThrow(() -> new ApiException(401, "Please log in again"));
-        if (!tokens.isAdminUsername(u.getUsername())) {
-            throw new ApiException(403, "Administrator access required");
-        }
+        admins.require(auth);
     }
 
     @GetMapping

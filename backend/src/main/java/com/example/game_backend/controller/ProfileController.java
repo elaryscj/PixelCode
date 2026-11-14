@@ -3,6 +3,8 @@ package com.example.game_backend.controller;
 import com.example.game_backend.entity.User;
 import com.example.game_backend.error.ApiException;
 import com.example.game_backend.repository.UserRepository;
+import com.example.game_backend.security.AccountRules;
+import com.example.game_backend.security.AdminAccess;
 import com.example.game_backend.security.TokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,17 +18,17 @@ import java.util.regex.Pattern;
 @RestController
 @RequestMapping("/api/profile")
 public class ProfileController {
-    private static final Pattern USERNAME = Pattern.compile("^[A-Za-z0-9_]{3,16}$");
-    private static final Pattern EMAIL = Pattern.compile("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
     private static final int MAX_AVATAR_CHARS = 400_000;
 
     private final UserRepository users;
     private final TokenService tokens;
+    private final AdminAccess admins;
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public ProfileController(UserRepository users, TokenService tokens) {
+    public ProfileController(UserRepository users, TokenService tokens, AdminAccess admins) {
         this.users = users;
         this.tokens = tokens;
+        this.admins = admins;
     }
 
     private User me(long id, String auth) {
@@ -48,22 +50,28 @@ public class ProfileController {
                                                       @RequestHeader(value = "Authorization", required = false) String auth) {
         User u = me(id, auth);
         String name = str(body.get("playerName"));
-        if (name != null) {
-            name = name.trim();
-            if (!USERNAME.matcher(name).matches()) {
-                throw new ApiException(400, "Nickname must be 3-16 characters: letters, digits or underscore")
-                        .with("field", "playerName");
+        if (name != null && !name.trim().equals(u.getUsername())) {
+            try {
+                name = AccountRules.username(name);
+            } catch (ApiException e) {
+                throw new ApiException(400, e.getMessage()).with("field", "playerName");
             }
-            if (!name.equalsIgnoreCase(u.getUsername()) && users.existsByUsernameIgnoreCase(name)) {
-                throw new ApiException(409, "Nickname is already taken").with("field", "playerName");
+            if (!name.equalsIgnoreCase(u.getUsername())) {
+                if (users.existsByUsernameIgnoreCase(name) || admins.isReservedName(name)) {
+                    throw new ApiException(409, "Nickname is already taken").with("field", "playerName");
+                }
             }
             u.setUsername(name);
         }
         String email = str(body.get("email"));
         if (email != null && !email.isBlank()) {
-            email = email.trim();
-            if (!EMAIL.matcher(email).matches() || email.length() > 120) {
-                throw new ApiException(400, "Enter a valid e-mail address").with("field", "email");
+            email = AccountRules.email(email);
+            if (!email.equalsIgnoreCase(u.getEmail())) {
+                final String wanted = email;
+                boolean taken = users.findAllByEmailIgnoreCase(wanted).stream().anyMatch(o -> !o.getId().equals(u.getId()));
+                if (taken) {
+                    throw new ApiException(409, "This e-mail is already used by another account").with("field", "email");
+                }
             }
             u.setEmail(email);
         } else if (body.containsKey("email")) {
@@ -97,15 +105,17 @@ public class ProfileController {
         if (current == null || !encoder.matches(current, u.getPassword())) {
             throw new ApiException(400, "Current password is incorrect").with("field", "currentPassword");
         }
-        if (next == null || next.length() < 8 || next.length() > 72) {
-            throw new ApiException(400, "New password must be 8-72 characters").with("field", "newPassword");
-        }
+        AccountRules.password(next, "newPassword");
         if (!next.equals(confirm)) {
             throw new ApiException(400, "New passwords do not match").with("field", "confirmNewPassword");
         }
         u.setPassword(encoder.encode(next));
+        u.setTokenVersion(u.getTokenVersion() + 1); // every other session is signed out
         users.save(u);
-        return ResponseEntity.ok(Map.of("message", "Password updated successfully!"));
+        tokens.invalidate(u.getId());
+        // ...but this one continues with a fresh token
+        return ResponseEntity.ok(Map.of("message", "Password updated successfully!",
+                "token", tokens.issue(u.getId(), u.getTokenVersion())));
     }
 
     @DeleteMapping("/{id}")
@@ -116,6 +126,7 @@ public class ProfileController {
             throw new ApiException(400, "Type DELETE and confirm to remove the account");
         }
         users.delete(u);
+        tokens.invalidate(u.getId());
         return ResponseEntity.ok(Map.of("message", "Account deleted"));
     }
 

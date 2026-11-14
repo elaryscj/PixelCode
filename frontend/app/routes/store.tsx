@@ -6,6 +6,7 @@ import { FaChevronLeft, FaChevronRight, FaTwitch, FaYoutube } from "react-icons/
 import { SkinArt } from "~/components/skins";
 import { getCurrentUser, refreshUser } from "~/api/auth";
 import { buySkin, equipSkin, getStore, type StoreState } from "~/api/store";
+import { onlineLabel, useLiveStats } from "~/lib/liveStats";
 
 type Skin = {
   id: string;
@@ -55,6 +56,7 @@ const priceLabel = (n: number) => (n === 0 ? "FREE" : `${n.toLocaleString()} PIX
 
 export default function StoreRoute() {
   const navigate = useNavigate();
+  const liveStats = useLiveStats();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [store, setStore] = useState<StoreState | null>(null);
   const [busy, setBusy] = useState(false);
@@ -177,7 +179,7 @@ export default function StoreRoute() {
         <div className="flex items-center gap-3 text-xs">
           <span className="text-[#01E4FF]">SERVER: KAZAKHSTAN</span>
           <span className="w-2 h-2 rounded-full bg-yellow animate-pulse" />
-          <span className="text-gray-300">ONLINE: 24,810 PLYRS</span>
+          <span className="text-gray-300">{onlineLabel(liveStats)}</span>
         </div>
       </header>
 

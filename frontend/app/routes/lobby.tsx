@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
 import { FaCheck, FaCopy } from "react-icons/fa";
 import Avatar from "~/components/Avatar";
-import { getRoom, leaveRoom, readyRoom, type Room } from "~/api/room";
+import { getRoom, leaveRoom, readyRoom, voteMap, type Room } from "~/api/room";
+import MapVote from "~/components/game/MapVote";
 import { getCurrentUser } from "~/api/auth";
 import { useRoomSocket } from "~/api/socket";
 
@@ -93,6 +94,20 @@ const Lobby = () => {
     }
   };
 
+  const handleVote = async (mapId: number | null) => {
+    // optimistic: show the pick at once, the server echoes it back
+    setRoom((r) =>
+      r ? { ...r, players: r.players.map((p) => (p.userId === user?.id ? { ...p, mapVote: mapId } : p)) } : r,
+    );
+    try {
+      setRoom(await voteMap(code, mapId));
+      setError(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t("unexpected_error"));
+      void load();
+    }
+  };
+
   const handleLeave = async () => {
     try {
       await leaveRoom(code);
@@ -106,6 +121,10 @@ const Lobby = () => {
   const status = room?.roomStatus;
   const me = players.find((p) => p.userId === user?.id);
   const rival = players.find((p) => p.userId !== user?.id);
+  const canVote = !!me && (status === "WAITING" || status === "READY");
+  const vote = (
+    <MapVote myVote={me?.mapVote} rivalVote={rival?.mapVote} disabled={!canVote} onVote={handleVote} />
+  );
   const mm = left === null ? "" : `${String(Math.floor(left / 60)).padStart(2, "0")}:${String(left % 60).padStart(2, "0")}`;
 
   if (room?.ranked) {
@@ -144,6 +163,7 @@ const Lobby = () => {
             </div>
             {card(rival, false)}
           </div>
+          <div className="w-180">{vote}</div>
           <div className="w-150 border border-neon bg-[#060b1e] p-6 flex flex-col items-center gap-4">
             <p className="text-yellow text-4xl">{me?.ready ? "Joined" : `Join within ${mm || "05:00"}`}</p>
             <div className="w-full h-1 bg-neon" />
@@ -180,6 +200,8 @@ const Lobby = () => {
           </button>
         </div>
 
+        <p className="text-neon/80 text-xl -mt-4">PRIVATE ROOM · FRIENDLY MATCH, RATING UNCHANGED</p>
+
         {left !== null && (
           <p className="text-center text-2xl text-yellow">
             JOIN WITHIN <span className={left < 60 ? "text-pink" : "text-neon"}>{mm}</span>
@@ -213,6 +235,8 @@ const Lobby = () => {
             );
           })}
         </ul>
+
+        {vote}
 
         <button
           onClick={handleReady}

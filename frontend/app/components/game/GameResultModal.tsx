@@ -18,6 +18,13 @@ interface GameResultModalProps {
   myCheckpoints?: number;
   oppCheckpoints?: number;
   myRoomCode?: string;
+  /** ranked queue match (false = private room: no rating change) */
+  ranked?: boolean;
+  mapName?: string;
+  /** the rival already asked for a rematch */
+  rematchOffered?: boolean;
+  rematchBusy?: boolean;
+  onRematch?: () => void;
 }
 
 export default function GameResultModal({
@@ -35,6 +42,11 @@ export default function GameResultModal({
   myCheckpoints = 0,
   oppCheckpoints = 0,
   myRoomCode,
+  ranked = true,
+  mapName = "ARENA",
+  rematchOffered = false,
+  rematchBusy = false,
+  onRematch,
 }: GameResultModalProps) {
   if (!isOpen) return null;
 
@@ -88,7 +100,7 @@ export default function GameResultModal({
       <div className="grid-background" />
       <div className="relative mx-auto max-w-280 px-6 py-10 flex flex-col items-center gap-6">
         <p className="flex items-center gap-4 text-neon text-xl">
-          <span className="w-12 h-0.5 bg-neon" /> RANKED DUEL / MATCH COMPLETE <span className="w-12 h-0.5 bg-neon" />
+          <span className="w-12 h-0.5 bg-neon" /> {ranked ? "RANKED DUEL" : "PRIVATE ROOM"} / MATCH COMPLETE <span className="w-12 h-0.5 bg-neon" />
         </p>
         <h1 className={`${titleColor} text-glow-sm text-[96px]/none text-center`}>{title}</h1>
         <p className="font-sans text-xl text-gray-300 -mt-2">{subtitle}</p>
@@ -112,7 +124,9 @@ export default function GameResultModal({
               </div>
               <div className="w-full border border-neon text-center text-neon text-3xl py-2">{deltaTxt}</div>
             </div>
-            <span className="font-sans text-gray-400 text-base">RATING UPDATED · RANKED RESULT SAVED</span>
+            <span className="font-sans text-gray-400 text-base">
+              {ranked ? "RATING UPDATED · RANKED RESULT SAVED" : "PRIVATE ROOM · NOT RANKED, RATING UNCHANGED"}
+            </span>
           </div>
           <Player mine={false} />
         </div>
@@ -120,7 +134,7 @@ export default function GameResultModal({
         <div className="w-full border border-neon/50 bg-[#060b1e]">
           <div className="flex items-center justify-between px-5 py-3 text-lg">
             <span className="text-yellow">MATCH SUMMARY</span>
-            <span className="font-sans text-gray-400 flex-1 ml-6">MIRROR CIRCUIT · #{myRoomCode ?? "—"} · {matchDuration}</span>
+            <span className="font-sans text-gray-400 flex-1 ml-6">{mapName} · #{myRoomCode ?? "—"} · {matchDuration}</span>
             <span className="text-neon w-48 text-left">{playerNickname} / YOU</span>
             <span className="text-pink w-48 text-right truncate">{opponentNickname}</span>
           </div>
@@ -133,10 +147,21 @@ export default function GameResultModal({
           <Link to="/play" className="flex-[1.4] text-center py-4 text-2xl bg-pink border-2 border-yellow text-black">
             FIND A NEW MATCH
           </Link>
-          <Link to="/play" className="flex-1 text-center py-4 text-2xl border-2 border-neon text-yellow">
-            REMATCH
-          </Link>
-          <Link to="/profile" className="flex-1 text-center py-4 text-2xl border-2 border-neon text-yellow">
+          <button
+            type="button"
+            onClick={onRematch}
+            disabled={!onRematch || rematchBusy}
+            title="A friendly rematch with the same rival in a private room (not ranked)"
+            className={`flex-1 text-center py-4 text-2xl border-2 disabled:opacity-50 ${
+              rematchOffered ? "border-yellow text-black bg-yellow animate-pulse" : "border-neon text-yellow"
+            }`}
+          >
+            {rematchBusy ? "OPENING..." : rematchOffered ? "ACCEPT REMATCH" : "REMATCH"}
+          </button>
+          <Link
+            to={myRoomCode ? `/results?match=${encodeURIComponent(myRoomCode)}` : "/results"}
+            className="flex-1 text-center py-4 text-2xl border-2 border-neon text-yellow"
+          >
             SEE MY RESULTS
           </Link>
         </div>

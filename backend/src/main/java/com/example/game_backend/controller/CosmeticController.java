@@ -5,6 +5,7 @@ import com.example.game_backend.entity.User;
 import com.example.game_backend.error.ApiException;
 import com.example.game_backend.repository.CosmeticRepository;
 import com.example.game_backend.repository.UserRepository;
+import com.example.game_backend.security.AdminAccess;
 import com.example.game_backend.security.TokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,19 +23,17 @@ public class CosmeticController {
     private final CosmeticRepository cosmetics;
     private final UserRepository users;
     private final TokenService tokens;
+    private final AdminAccess admins;
 
-    public CosmeticController(CosmeticRepository cosmetics, UserRepository users, TokenService tokens) {
+    public CosmeticController(CosmeticRepository cosmetics, UserRepository users, TokenService tokens, AdminAccess admins) {
+        this.admins = admins;
         this.cosmetics = cosmetics;
         this.users = users;
         this.tokens = tokens;
     }
 
     private void requireAdmin(String auth) {
-        long id = tokens.requireUserId(auth);
-        User u = users.findById(id).orElseThrow(() -> new ApiException(401, "Please log in again"));
-        if (!tokens.isAdminUsername(u.getUsername())) {
-            throw new ApiException(403, "Administrator access required");
-        }
+        admins.require(auth);
     }
 
     @GetMapping("/admin/cosmetics")

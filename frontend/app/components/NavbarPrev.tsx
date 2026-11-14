@@ -1,10 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router";
 import { FaChevronLeft } from "react-icons/fa";
+import { onlineLabel, useLiveStats } from "~/lib/liveStats";
 
 const NavbarPrev = () => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
+  const stats = useLiveStats();
   // inside a lobby the way back leads to the mode selection, everywhere else to the menu
   const inLobby = /^\/play\/[^/]+$/.test(pathname);
 
@@ -20,7 +22,7 @@ const NavbarPrev = () => {
         <div className="flex items-center gap-4 font-pixel text-xl">
           <span className="text-neon">{t("server")}</span>
           <span className="w-2 h-2 rounded-full bg-yellow" />
-          <span className="text-white">ONLINE: 24,810 PLYRS</span>
+          <span className="text-white">{onlineLabel(stats)}</span>
         </div>
       </div>
     </header>

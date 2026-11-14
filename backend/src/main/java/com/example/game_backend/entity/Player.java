@@ -32,6 +32,10 @@ public class Player {
     @Column
     private String result;
 
+    /** map this player voted for in the lobby (null = no preference) */
+    @Column
+    private Integer mapVote;
+
     public Player() {
     }
 
@@ -54,4 +58,6 @@ public class Player {
     public void setRatingDelta(Integer ratingDelta) { this.ratingDelta = ratingDelta; }
     public String getResult() { return result; }
     public void setResult(String result) { this.result = result; }
+    public Integer getMapVote() { return mapVote; }
+    public void setMapVote(Integer mapVote) { this.mapVote = mapVote; }
 }

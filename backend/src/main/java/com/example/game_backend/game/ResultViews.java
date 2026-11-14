@@ -18,6 +18,8 @@ public final class ResultViews {
     public static Map<String, Object> of(Room room) {
         Map<String, Object> m = new LinkedHashMap<>();
         m.put("code", room.getCode());
+        m.put("ranked", room.isRanked());
+        m.put("mapId", room.getMapId());
         m.put("reason", room.getResultReason());
         m.put("technical", room.getResultReason() != null && TECHNICAL.contains(room.getResultReason()));
         m.put("winnerUserId", room.getWinnerUserId());

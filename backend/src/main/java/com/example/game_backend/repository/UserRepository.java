@@ -11,6 +11,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmailIgnoreCase(String email);
 
+    /** Older data may hold the same e-mail on several accounts (it used to be possible via profile edit). */
+    java.util.List<User> findAllByEmailIgnoreCase(String email);
+
+    java.util.List<User> findByAdminTrue();
+
     boolean existsByEmailIgnoreCase(String email);
 
     boolean existsByUsernameIgnoreCase(String username);

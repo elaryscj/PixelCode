@@ -14,8 +14,9 @@ export default function ResetPassword() {
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const lenOk = pw.length >= 12;
-  const mixOk = /[a-z]/.test(pw) && /[A-Z]/.test(pw) && /\d/.test(pw);
+  // same rule as registration and profile: 8-72 characters with a letter and a number
+  const lenOk = pw.length >= 8 && pw.length <= 72;
+  const mixOk = /[A-Za-z]/.test(pw) && /\d/.test(pw);
   const req = (ok: boolean, text: string) => (
     <li className={ok ? "text-[#01E4FF]" : "text-gray-500"}>
       {ok ? "\u221A" : "\u00B7"} {text}
@@ -25,8 +26,8 @@ export default function ResetPassword() {
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!lenOk) return setError("Password must be at least 12 characters.");
-    if (!mixOk) return setError("Include uppercase, lowercase and a number.");
+    if (!lenOk) return setError("Password must be 8-72 characters.");
+    if (!mixOk) return setError("Include a letter and a number.");
     if (pw !== pw2) return setError("Passwords do not match.");
     setBusy(true);
     try {
@@ -79,8 +80,8 @@ export default function ResetPassword() {
         </div>
         <p className="text-yellow text-[18px] mb-2">PASSWORD REQUIREMENTS</p>
         <ul className="font-sans text-sm mb-5 space-y-1">
-          {req(lenOk, "At least 12 characters")}
-          {req(mixOk, "Include uppercase, lowercase and a number")}
+          {req(lenOk, "8-72 characters")}
+          {req(mixOk, "Include a letter and a number")}
           {req(pw.length > 0 && pw === pw2, "Both passwords match")}
           <li className="text-gray-500">\u00B7 Use a password you haven&apos;t used before</li>
         </ul>

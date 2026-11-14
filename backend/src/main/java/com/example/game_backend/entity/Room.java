@@ -50,6 +50,14 @@ public class Room {
     @Column
     private Long durationSeconds;
 
+    /** arena map chosen when the match starts (from the players' votes) */
+    @Column
+    private Integer mapId;
+
+    /** private room opened from this one's result screen with "Rematch" */
+    @Column
+    private String rematchCode;
+
     /** true for rooms created by the ranked queue (they start automatically, no manual READY) */
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean ranked = false;
@@ -63,6 +71,10 @@ public class Room {
         this.createdAt = Instant.now();
     }
 
+    public String getRematchCode() { return rematchCode; }
+    public void setRematchCode(String rematchCode) { this.rematchCode = rematchCode; }
+    public Integer getMapId() { return mapId; }
+    public void setMapId(Integer mapId) { this.mapId = mapId; }
     public boolean isRanked() { return ranked; }
     public void setRanked(boolean ranked) { this.ranked = ranked; }
     public Long getId() { return id; }

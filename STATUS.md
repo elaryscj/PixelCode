@@ -43,5 +43,5 @@ US-08 Close account: excluded by SRS (a delete-account action exists in the prof
 
 ## Open items
 - Full end-to-end test in several browsers (NFR-08) and the 50-match load test (NFR-02/03) are not done.
-- E-mail verification, refresh of old login tokens after password reset.
+- E-mail verification. (Old login tokens now stop working after a password change or reset.)
 - Byte Knight skin art is a placeholder.

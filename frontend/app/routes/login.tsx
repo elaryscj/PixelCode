@@ -4,9 +4,11 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { FaEye, FaEyeSlash, FaGamepad, FaTwitch, FaWifi, FaYoutube } from "react-icons/fa";
 import { loginUser, registerUser, AuthError } from "~/api/auth";
+import { pingLabel, usePing } from "~/lib/liveStats";
 
 export default function LoginRoute() {
   const navigate = useNavigate();
+  const ping = usePing();
 
   // Mode: "login" or "register"
   const [isRegister, setIsRegister] = useState(false);
@@ -30,7 +32,8 @@ export default function LoginRoute() {
     if (isRegister) {
       if (trimmedUser.length < 2 || trimmedUser.length > 16) fe.username = "Username must be 2-16 characters.";
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) fe.email = "Enter a valid email address.";
-      if (password.length < 8) fe.password = "Password must be at least 8 characters.";
+      if (password.length < 8 || password.length > 72) fe.password = "Password must be 8-72 characters.";
+      else if (!/[A-Za-z]/.test(password) || !/\d/.test(password)) fe.password = "Password must contain a letter and a number.";
       if (password !== confirmPassword) fe.confirm = "Passwords do not match.";
     } else if (!trimmedUser || !password) {
       setErrorMessage("Please enter both username and password.");
@@ -93,7 +96,7 @@ export default function LoginRoute() {
         <div className="flex items-center gap-4 text-[20px]">
           <div className="flex items-center gap-2 text-[#01E4FF]">
             <FaWifi className="text-2xl" />
-            <span>18 MS</span>
+            <span>{pingLabel(ping)}</span>
           </div>
           <span className="text-gray-600">|</span>
           <div className="text-right text-[18px] leading-tight">

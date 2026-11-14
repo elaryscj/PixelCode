@@ -130,3 +130,7 @@ html {
   color: white;
   color-scheme: dark;
 }
+
+/* conveyor belts in the arena (MapLayer) */
+@keyframes pc-belt-right { from { background-position: 0 0; } to { background-position: 20px 0; } }
+@keyframes pc-belt-left { from { background-position: 20px 0; } to { background-position: 0 0; } }

@@ -100,6 +100,12 @@ public class MatchmakingService {
         }
     }
 
+    public int queueSize() {
+        synchronized (queue) {
+            return queue.size();
+        }
+    }
+
     public Map<String, Object> cancel(long userId) {
         synchronized (queue) {
             queue.remove(userId);

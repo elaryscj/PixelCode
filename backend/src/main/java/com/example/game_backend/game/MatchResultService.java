@@ -77,7 +77,8 @@ public class MatchResultService {
                             users.findById(p.getUserId()).ifPresent(u -> p.setRatingBefore(u.getRating()));
                         }
                         p.setRatingDelta(0);
-                        p.setResult(draw ? "VOID" : (winnerUserId.equals(p.getUserId()) ? "WIN" : "LOSS"));
+                        boolean cancelled = "VOID".equals(reason) || "SERVER_RESTART".equals(reason);
+                        p.setResult(draw ? (cancelled ? "VOID" : "DRAW") : (winnerUserId.equals(p.getUserId()) ? "WIN" : "LOSS"));
                     }
                 }
                 if (bannedUsers != null) {

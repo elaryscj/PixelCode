@@ -44,6 +44,20 @@ public class RoomController {
         return ResponseEntity.ok(roomService.ready(code, tokens.requireUserId(auth)));
     }
 
+    @PostMapping("/{code}/vote")
+    public ResponseEntity<Map<String, Object>> vote(@PathVariable String code, @RequestBody Map<String, Object> body,
+                                                    @RequestHeader(value = "Authorization", required = false) String auth) {
+        Object raw = body == null ? null : body.get("mapId");
+        Integer mapId = raw instanceof Number n ? n.intValue() : null;
+        return ResponseEntity.ok(roomService.vote(code, tokens.requireUserId(auth), mapId));
+    }
+
+    /** After a finished match: open (or join) a friendly rematch room with the same rival. */
+    @PostMapping("/{code}/rematch")
+    public ResponseEntity<Map<String, Object>> rematch(@PathVariable String code, @RequestHeader(value = "Authorization", required = false) String auth) {
+        return ResponseEntity.ok(roomService.rematch(code, tokens.requireUserId(auth)));
+    }
+
     @PostMapping("/{code}/leave")
     public ResponseEntity<Void> leave(@PathVariable String code, @RequestHeader(value = "Authorization", required = false) String auth) {
         roomService.leave(code, tokens.requireUserId(auth));

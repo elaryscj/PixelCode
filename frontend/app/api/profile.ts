@@ -56,7 +56,7 @@ export async function uploadAvatar(userId: number, file: File): Promise<ProfileR
 export const changePassword = (
   userId: number,
   data: { currentPassword: string; newPassword: string; confirmNewPassword: string },
-) => api<{ message: string }>(`/profile/${userId}/password`, { method: "PUT", body: JSON.stringify(data) });
+) => api<{ message: string; token?: string }>(`/profile/${userId}/password`, { method: "PUT", body: JSON.stringify(data) });
 
 export const verifyEmailToken = (token: string) =>
   api<{ message: string }>(`/profile/email/verify?token=${encodeURIComponent(token)}`);

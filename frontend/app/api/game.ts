@@ -12,6 +12,10 @@ export type MatchPlayerResult = {
 
 export type MatchResult = {
   code: string;
+  /** ranked queue match; private rooms change no rating */
+  ranked?: boolean;
+  /** map the match was played on (null for matches from before map voting) */
+  mapId?: number | null;
   reason: string;
   technical: boolean;
   winnerUserId: number | null;
@@ -41,6 +45,7 @@ export type GameState = {
   me?: SlotView;
   opponent?: SlotView | null;
   doorTitles?: string[];
+  mapId?: number;
   result: MatchResult | null;
 };
 
@@ -71,9 +76,20 @@ export type SubmitResult = {
 const enc = encodeURIComponent;
 
 export const getGameState = (code: string) => api<GameState>(`/games/${enc(code)}`);
-export const openDoor = (code: string, cp: number) =>
-  api<DoorChallenge>(`/games/${enc(code)}/doors/${cp}/open`, { method: "POST" });
+/** `x`/`y`: where the player stands; the server checks they are really at the door. */
+export const openDoor = (code: string, cp: number, x: number, y: number) =>
+  api<DoorChallenge>(`/games/${enc(code)}/doors/${cp}/open`, { method: "POST", body: JSON.stringify({ x, y }) });
 export const submitDoor = (code: string, cp: number, source: string) =>
   api<SubmitResult>(`/games/${enc(code)}/doors/${cp}/submit`, { method: "POST", body: JSON.stringify({ code: source }) });
-export const finishMatch = (code: string) =>
-  api<{ status: string; result: MatchResult }>(`/games/${enc(code)}/finish`, { method: "POST" });
+/** `x`/`y`: where the player stands; the server checks they are really at the exit. */
+export const finishMatch = (code: string, x: number, y: number) =>
+  api<{ status: string; result: MatchResult }>(`/games/${enc(code)}/finish`, { method: "POST", body: JSON.stringify({ x, y }) });
+
+/** One finished match in "See my results" (newest first). */
+export type MatchHistoryEntry = MatchResult & {
+  ranked: boolean;
+  mapId: number | null;
+  finishedAt: number | null;
+};
+
+export const getMatchHistory = (limit = 20) => api<MatchHistoryEntry[]>(`/games/history?limit=${limit}`);

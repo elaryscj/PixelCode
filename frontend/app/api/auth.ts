@@ -79,6 +79,13 @@ export function getCurrentUser(): AuthResponse | null {
   }
 }
 
+/** Swap the stored login token (after a password change the old one no longer works). */
+export function updateStoredToken(token: string): void {
+  const u = getCurrentUser();
+  if (!u) return;
+  localStorage.setItem("pixelcode.user", JSON.stringify({ ...u, token }));
+}
+
 export function logoutUser(): void {
   if (typeof window === "undefined") return;
   localStorage.removeItem("pixelcode.user");

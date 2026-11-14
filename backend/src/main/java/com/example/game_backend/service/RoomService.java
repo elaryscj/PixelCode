@@ -6,6 +6,7 @@ import com.example.game_backend.entity.RoomStatus;
 import com.example.game_backend.entity.User;
 import com.example.game_backend.error.ApiException;
 import com.example.game_backend.game.GameService;
+import com.example.game_backend.game.GameSession;
 import com.example.game_backend.game.MatchResultService;
 import com.example.game_backend.repository.RoomRepository;
 import com.example.game_backend.repository.UserRepository;
@@ -24,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 /** Rooms: create / join / ready / leave and the five-minute join window (US-32, US-34, US-35). */
 @Service
@@ -147,6 +149,7 @@ public class RoomService {
                 if (all) {
                     r.setRoomStatus(RoomStatus.PLAYING);
                     r.setStartedAt(Instant.now());
+                    r.setMapId(pickMap(r));
                     for (Player p : r.getPlayers()) {
                         users.findById(p.getUserId()).ifPresent(u -> p.setRatingBefore(u.getRating()));
                     }
@@ -162,6 +165,87 @@ public class RoomService {
             broadcast(room.getCode(), "PLAYER_READY");
         }
         return view(room);
+    }
+
+    /** Map vote in the lobby: allowed until the match starts, can be changed. */
+    public Map<String, Object> vote(String rawCode, long userId, Integer mapId) {
+        if (mapId != null && (mapId < 0 || mapId >= GameSession.MAP_COUNT)) {
+            throw new ApiException(400, "Unknown map");
+        }
+        String code = normalize(rawCode);
+        Room room;
+        synchronized (lock) {
+            room = tx.execute(st -> {
+                Room r = rooms.findByCode(code).orElseThrow(() -> new ApiException(404, "Room not found"));
+                Player me = r.findPlayer(userId);
+                if (me == null) {
+                    throw new ApiException(403, "You are not in this room");
+                }
+                if (r.getRoomStatus() != RoomStatus.WAITING && r.getRoomStatus() != RoomStatus.READY) {
+                    throw new ApiException(409, "The match has already started");
+                }
+                me.setMapVote(mapId);
+                return rooms.save(r);
+            });
+        }
+        broadcast(room.getCode(), "MAP_VOTED");
+        return view(room);
+    }
+
+    /** Same vote wins; two different votes = coin flip between them; no votes = any map. */
+    static int pickMap(Room r) {
+        List<Integer> votes = new ArrayList<>();
+        for (Player p : r.getPlayers()) {
+            if (p.getMapVote() != null) {
+                votes.add(p.getMapVote());
+            }
+        }
+        ThreadLocalRandom rnd = ThreadLocalRandom.current();
+        return votes.isEmpty() ? rnd.nextInt(GameSession.MAP_COUNT) : votes.get(rnd.nextInt(votes.size()));
+    }
+
+    /**
+     * "Rematch" after a finished match: the first player to ask opens a new private room (friendly, unrated),
+     * the rival is told over the game channel and joins the same room when they accept.
+     */
+    public Map<String, Object> rematch(String rawOldCode, long userId) {
+        String oldCode = normalize(rawOldCode);
+        Map<String, Object> view;
+        boolean created;
+        String nickname;
+        synchronized (lock) {
+            Room old = rooms.findByCode(oldCode).orElseThrow(() -> new ApiException(404, "Match not found"));
+            Player me = old.findPlayer(userId);
+            if (me == null) {
+                throw new ApiException(403, "You did not play in this match");
+            }
+            if (old.getRoomStatus() != RoomStatus.FINISHED) {
+                throw new ApiException(409, "The match is not over yet");
+            }
+            nickname = me.getNickname();
+            Room existing = old.getRematchCode() == null ? null : rooms.findByCode(old.getRematchCode()).orElse(null);
+            if (existing != null && (existing.getRoomStatus() == RoomStatus.WAITING || existing.getRoomStatus() == RoomStatus.READY)) {
+                view = joinRoom(existing.getCode(), userId);
+                created = false;
+            } else {
+                view = createRoom(userId);
+                String newCode = (String) view.get("code");
+                tx.executeWithoutResult(st -> rooms.findByCode(oldCode).ifPresent(r -> {
+                    r.setRematchCode(newCode);
+                    rooms.save(r);
+                }));
+                created = true;
+            }
+        }
+        if (created) {
+            Map<String, Object> msg = new LinkedHashMap<>();
+            msg.put("type", "REMATCH");
+            msg.put("userId", userId);
+            msg.put("sender", nickname);
+            msg.put("code", view.get("code"));
+            messaging.convertAndSend("/topic/room/" + oldCode + "/game", (Object) msg);
+        }
+        return view;
     }
 
     public void leave(String rawCode, long userId) {
@@ -230,10 +314,12 @@ public class RoomService {
                 }
             }
             try {
+                // absence bans and rating only for the ranked queue; a private room just closes
+                List<Long> banned = r.isRanked() ? absent : List.of();
                 if (absent.size() >= 2 || present == null) {
-                    results.finalizeMatch(r.getCode(), null, "VOID", absent, false);
+                    results.finalizeMatch(r.getCode(), null, "VOID", banned, false);
                 } else {
-                    results.finalizeMatch(r.getCode(), present, "NO_SHOW", absent, true);
+                    results.finalizeMatch(r.getCode(), present, "NO_SHOW", banned, r.isRanked());
                 }
                 broadcast(r.getCode(), "MATCH_CANCELLED");
             } catch (RuntimeException e) {
@@ -312,9 +398,12 @@ public class RoomService {
             pm.put("nickname", p.getNickname());
             pm.put("ready", p.isReady());
             pm.put("rating", p.getRatingBefore());
+            pm.put("mapVote", p.getMapVote());
             ps.add(pm);
         }
         m.put("players", ps);
+        m.put("mapId", r.getMapId());
+        m.put("rematchCode", r.getRematchCode());
         Long deadline = null;
         if (r.getRoomStatus() == RoomStatus.READY && r.getAssignedAt() != null) {
             deadline = r.getAssignedAt().plusSeconds(joinWindowSeconds).toEpochMilli();

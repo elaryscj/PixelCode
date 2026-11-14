@@ -3,7 +3,7 @@
 import { useState, useEffect, type FormEvent, type ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { FaUser, FaCamera, FaLock, FaTrash, FaSignOutAlt, FaShieldAlt, FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
-import { getCurrentUser, logoutUser, refreshUser } from "~/api/auth";
+import { getCurrentUser, logoutUser, refreshUser, updateStoredToken } from "~/api/auth";
 import { saveNickname } from "~/lib/nickname";
 import { saveAvatar } from "~/lib/avatar";
 import {
@@ -123,8 +123,12 @@ export default function ProfileRoute() {
     setPasswordError(null);
     setPasswordSuccess(null);
 
-    if (newPassword.length < 8) {
-      setPasswordError("New password must be at least 8 characters long.");
+    if (newPassword.length < 8 || newPassword.length > 72) {
+      setPasswordError("New password must be 8-72 characters.");
+      return;
+    }
+    if (!/[A-Za-z]/.test(newPassword) || !/\d/.test(newPassword)) {
+      setPasswordError("New password must contain a letter and a number.");
       return;
     }
     if (newPassword !== confirmNewPassword) {
@@ -139,6 +143,8 @@ export default function ProfileRoute() {
         newPassword,
         confirmNewPassword,
       });
+      // other sessions are signed out by the server; this one continues with the fresh token
+      if (res.token) updateStoredToken(res.token);
       setPasswordSuccess(res.message || "Password updated successfully!");
       setCurrentPassword("");
       setNewPassword("");

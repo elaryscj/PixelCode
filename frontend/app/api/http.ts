@@ -34,6 +34,12 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
   if (res.status === 204) return null as T;
   const data = await res.json().catch(() => null);
+  if (res.status === 401 && token && typeof window !== "undefined") {
+    // the session ended (password changed elsewhere, account deleted, token expired): sign out here too
+    localStorage.removeItem("pixelcode.user");
+    localStorage.removeItem("pixelcode.nickname");
+    window.dispatchEvent(new Event("pixelcode:nickname-change"));
+  }
   if (!res.ok) {
     throw new ApiError(res.status, data?.message ?? `Request failed (${res.status})`, data ?? {});
   }

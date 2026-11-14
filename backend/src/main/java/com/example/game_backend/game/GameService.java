@@ -32,6 +32,19 @@ public class GameService {
     private static final int MAX_SOURCE_CHARS = 20000;
     private static final long KEEP_FINISHED_MS = 10 * 60_000L;
     private static final long CONNECTED_MS = 10_000L;
+    /**
+     * Fastest legal motion in units/second (see reportPosition): sideways = running on ice plus a belt or a
+     * moving block (~50); up = bounce pad (~93); down = a fall from the top (~156). A little headroom on each.
+     */
+    private static final double SPEED_X = 70;
+    private static final double SPEED_UP = 100;
+    private static final double SPEED_DOWN = 170;
+    /** the budget holds at most this much movement, so idling or flooding messages buys no teleport */
+    private static final double BUDGET_SECONDS = 0.5;
+    private static final double SLACK = 4;
+    private static final double CAP_X = SPEED_X * BUDGET_SECONDS + SLACK;
+    private static final double CAP_UP = SPEED_UP * BUDGET_SECONDS + SLACK;
+    private static final double CAP_DOWN = SPEED_DOWN * BUDGET_SECONDS + SLACK;
 
     private final Map<String, GameSession> sessions = new ConcurrentHashMap<>();
     private final RoomRepository rooms;
@@ -109,7 +122,20 @@ public class GameService {
             final GameSession.Slot slot = slots[i];
             users.findById(p.getUserId()).ifPresent(u -> slot.skin = u.getActiveSkin());
         }
-        return new GameSession(room.getCode(), started, snaps, slots);
+        // rooms started before map voting existed have no map stored: derive a stable one from the code
+        int mapId = room.getMapId() != null ? room.getMapId() : Math.floorMod(room.getCode().hashCode(), GameSession.MAP_COUNT);
+        MapGeometry.Arena arena = MapGeometry.of(mapId);
+        for (GameSession.Slot slot : slots) {
+            slot.x = arena.startX();
+            slot.y = arena.startY();
+            slot.posAt = now;
+            slot.lastReportAt = now;
+            slot.budgetX = CAP_X;
+            slot.budgetUp = CAP_UP;
+            slot.budgetDown = CAP_DOWN;
+            slot.markVisited(slot.x, slot.y);
+        }
+        return new GameSession(room.getCode(), mapId, room.isRanked(), started, snaps, slots);
     }
 
     private GameSession activeSession(String code) {
@@ -165,6 +191,7 @@ public class GameService {
             m.put("elapsedSeconds", Math.max(0, (now - s.startedAt) / 1000));
             m.put("maxSeconds", maxMatchMs / 1000);
             m.put("doorSeconds", doorMs / 1000);
+            m.put("mapId", s.mapId);
             m.put("me", slotView(me, now, true));
             m.put("opponent", opp == null ? null : slotView(opp, now, true));
             List<String> titles = new ArrayList<>();
@@ -213,7 +240,7 @@ public class GameService {
     // ---------------------------------------------------------------- doors
 
     /** US-16: shows the challenge and starts the never-resetting door timer. */
-    public Map<String, Object> openDoor(String code, long userId, int cp) {
+    public Map<String, Object> openDoor(String code, long userId, int cp, Double x, Double y) {
         checkDoor(cp);
         GameSession s = activeSession(code);
         GameSession.Slot me = requireSlot(s, userId);
@@ -227,6 +254,10 @@ public class GameService {
             }
             if (cp > 1 && !me.unlocked[cp - 1]) {
                 throw new ApiException(409, "Open the previous door first");
+            }
+            reportPosition(s, me, x, y, now);
+            if (!MapGeometry.nearDoor(MapGeometry.of(s.mapId), cp, me.x, me.y)) {
+                throw new ApiException(409, "Walk up to the door first");
             }
             me.lastSeen = now;
             if (me.doorStartedAt[cp] == 0) {
@@ -309,13 +340,17 @@ public class GameService {
     // ---------------------------------------------------------------- finish
 
     /** US-15: first player at the exit with all doors open wins. */
-    public Map<String, Object> finish(String code, long userId) {
+    public Map<String, Object> finish(String code, long userId, Double x, Double y) {
         GameSession s = activeSession(code);
         GameSession.Slot me = requireSlot(s, userId);
         synchronized (s) {
             if (!s.over) {
                 if (me.unlockedCount() < GameSession.DOORS) {
                     throw new ApiException(409, "Unlock all doors before reaching the exit");
+                }
+                reportPosition(s, me, x, y, System.currentTimeMillis());
+                if (!MapGeometry.atExit(MapGeometry.of(s.mapId), me.x, me.y)) {
+                    throw new ApiException(409, "Reach the exit first");
                 }
                 conclude(s, me.userId, "FINISH", List.of(), true);
             }
@@ -330,7 +365,9 @@ public class GameService {
         if (s.over) {
             return;
         }
-        Map<String, Object> result = results.finalizeMatch(s.code, winnerUserId, reason, banned, rated);
+        // private rooms are friendly games: no rating, no PIXELS, no absence bans
+        Map<String, Object> result = results.finalizeMatch(s.code, winnerUserId, reason,
+                s.ranked ? banned : List.of(), rated && s.ranked);
         s.result = result;
         s.over = true;
         s.overAt = System.currentTimeMillis();
@@ -356,23 +393,75 @@ public class GameService {
         if (me == null || !Double.isFinite(x) || !Double.isFinite(y)) {
             return;
         }
-        double cx = Math.max(0, Math.min(100, x));
-        double cy = Math.max(0, Math.min(100, y));
         synchronized (s) {
             if (s.over) {
                 return;
             }
-            me.lastSeen = System.currentTimeMillis();
-            me.x = cx;
-            me.y = cy;
+            long now = System.currentTimeMillis();
+            me.lastSeen = now; // still a heartbeat, even when the position itself is refused
+            reportPosition(s, me, x, y, now);
         }
+    }
+
+    /**
+     * Anti-cheat: accepts a reported position only when the player could really have got there - the move fits
+     * the movement budget (refilled at the fastest legal speed, holding at most half a second of movement), or it
+     * goes back to a spot they already stood in (respawn). Accepted positions are relayed to the opponent; refused
+     * ones are dropped and the client catches up on its next reports.
+     */
+    private void reportPosition(GameSession s, GameSession.Slot me, Double rawX, Double rawY, long now) {
+        if (rawX == null || rawY == null || !Double.isFinite(rawX) || !Double.isFinite(rawY)) {
+            return;
+        }
+        double x = Math.max(0, Math.min(100, rawX));
+        double y = Math.max(0, Math.min(100, rawY));
+        // refill the movement budget for the time since the last report (capped)
+        double elapsed = Math.max(0, (now - me.lastReportAt) / 1000.0);
+        me.lastReportAt = now;
+        me.budgetX = Math.min(CAP_X, me.budgetX + SPEED_X * elapsed);
+        me.budgetUp = Math.min(CAP_UP, me.budgetUp + SPEED_UP * elapsed);
+        me.budgetDown = Math.min(CAP_DOWN, me.budgetDown + SPEED_DOWN * elapsed);
+        double dx = Math.abs(x - me.x);
+        double dy = y - me.y;
+        boolean reachable = dx <= me.budgetX && (dy >= 0 ? dy <= me.budgetUp : -dy <= me.budgetDown);
+        if (reachable) {
+            me.budgetX -= dx;
+            if (dy >= 0) {
+                me.budgetUp -= dy;
+            } else {
+                me.budgetDown += dy;
+            }
+        } else if (!me.visited(x, y)) { // a respawn jumps back to a spot the player already passed
+            if (++me.rejectedMoves % 50 == 1) {
+                log.warn("Refused impossible move of {} in {}: ({},{}) -> ({},{})", me.nickname, s.code,
+                        Math.round(me.x), Math.round(me.y), Math.round(x), Math.round(y));
+            }
+            return;
+        }
+        if (reachable) {
+            me.markPath(me.x, me.y, x, y);
+        }
+        me.x = x;
+        me.y = y;
+        me.posAt = now;
         Map<String, Object> msg = new LinkedHashMap<>();
         msg.put("type", "MOVE");
         msg.put("sender", me.nickname);
         msg.put("userId", me.userId);
-        msg.put("x", cx);
-        msg.put("y", cy);
-        emit(code, msg);
+        msg.put("x", x);
+        msg.put("y", y);
+        emit(s.code, msg);
+    }
+
+    /** Live counters for the "players online" line. */
+    public int activeMatches() {
+        int n = 0;
+        for (GameSession s : sessions.values()) {
+            if (!s.over) {
+                n++;
+            }
+        }
+        return n;
     }
 
     // ---------------------------------------------------------------- timers
