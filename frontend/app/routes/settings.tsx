@@ -19,7 +19,6 @@ const Settings = () => {
   const canSave = isValidNickname(draft) && draft.trim() !== nickname;
 
 
-  const [language, setLanguage] = useState('en')
   const navigate = useNavigate();
   const [fsDenied, setFsDenied] = useState(false);
   const toggleFullscreen = async () => {
@@ -32,70 +31,81 @@ const Settings = () => {
     }
   };
 
-  return (  
+  const card = "border border-neon/50 bg-[#060816]/80 p-4 sm:p-5";
+  const heading = "block font-pixel text-neon text-2xl sm:text-3xl mb-3";
+  const btnCls =
+    "btn-arcade py-2 px-4 text-xl sm:text-2xl border border-neon font-pixel text-yellow hover:text-glow-sm disabled:opacity-40 disabled:pointer-events-none";
+  const current = i18n.resolvedLanguage;
+
+  return (
     <>
       <div className="star-background"></div>
-      <div className="flex items-center justify-center gap-12 mx-auto max-w-200 lg:flex sm:hidden">
-        <div>
-          <div className="music-audio">
-            <h3 className="font-pixel text-neon text-3xl my-4">[ {t("music_audio")} ]</h3>
+      <div className="w-full max-w-200 mx-auto px-4 py-6 enter-up">
+        <h1 className="font-pixel text-yellow text-glow-sm text-center text-[12vw]/none sm:text-7xl/none mb-6">
+          {t("settings").toUpperCase()}
+        </h1>
+        <div className="grid gap-4 md:grid-cols-2">
+          <section className={card}>
+            <h3 className={heading}>[ {t("music_audio")} ]</h3>
             <MusicSlider />
-          </div>
+          </section>
 
-          <div className="language w-full">
-            <label htmlFor="language" className="block font-pixel text-neon text-3xl my-4">
-              [ {t("language")} ]
-            </label>
-            <div className="flex items-center justify-start gap-4">
-              <button className="py-1 px-4 text-2xl font-bold border hover:text-glow-sm border-neon hover:border-glow-neon-sm font-pixel text-yellow" value={'en'} lang="en" onClick={() => {i18n.changeLanguage('en')}}>English</button>
-              <button className="py-1 px-4 text-2xl font-bold border hover:text-glow-sm border-neon hover:border-glow-neon-sm font-pixel text-yellow" value={'kz'} lang="kz" onClick={() => {i18n.changeLanguage('kz')}}>Qazaqsha</button>
+          <section className={card}>
+            <h3 className={heading}>[ {t("language")} ]</h3>
+            <div className="flex flex-wrap items-center gap-3">
+              {[
+                ["en", "English"],
+                ["kz", "Qazaqsha"],
+              ].map(([code, label]) => (
+                <button
+                  key={code}
+                  lang={code}
+                  onClick={() => i18n.changeLanguage(code)}
+                  className={`${btnCls} ${current === code ? "bg-neon/15 border-glow-sm-neon" : ""}`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
-          </div>
-        </div>
-        <div>
+          </section>
 
-          <div className="nickname w-full">
-            <label htmlFor="nickname" className="block font-pixel text-neon text-3xl my-4">
+          <section className={card}>
+            <label htmlFor="nickname" className={heading}>
               [ {t("nickname")} ]
             </label>
-            <div className="flex items-center justify-start gap-4">
+            <div className="flex items-center gap-3">
               <input
                 id="nickname"
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
                 maxLength={NICKNAME_MAX}
                 placeholder="Player"
-                className="py-1 px-3 text-2xl bg-transparent border border-neon font-pixel text-yellow outline-none focus:border-glow-neon-sm"
+                className="min-w-0 flex-1 py-2 px-3 text-xl sm:text-2xl bg-transparent border border-neon font-pixel text-yellow outline-none focus:border-glow-sm-neon"
               />
-              <button
-                onClick={() => saveNickname(draft)}
-                disabled={!canSave}
-                className="py-1 px-4 text-2xl font-bold border border-neon font-pixel text-yellow hover:text-glow-sm hover:border-glow-neon-sm disabled:opacity-40 disabled:pointer-events-none"
-              >
+              <button onClick={() => saveNickname(draft)} disabled={!canSave} className={btnCls}>
                 Save
               </button>
             </div>
-          </div>
+          </section>
 
-          <div className="fullscreen w-full">
-            <h3 className="font-pixel text-neon text-3xl my-4">[ FULLSCREEN ]</h3>
-            <button onClick={toggleFullscreen} className="py-1 px-4 text-2xl font-bold border border-neon font-pixel text-yellow hover:text-glow-sm hover:border-glow-neon-sm">
+          <section className={card}>
+            <h3 className={heading}>[ FULLSCREEN ]</h3>
+            <button onClick={toggleFullscreen} className={btnCls}>
               Toggle fullscreen
             </button>
             {fsDenied && <p className="font-pixel text-pink text-xl mt-2">Fullscreen was blocked by the browser.</p>}
-          </div>
-
-          <button
-            onClick={() => { logoutUser(); navigate("/login"); }}
-            className="mt-8 py-1 px-4 text-2xl font-bold border-2 border-pink font-pixel text-pink hover:text-glow-sm"
-          >
-            Log out
-          </button>
+          </section>
         </div>
+
+        <button
+          onClick={() => { logoutUser(); navigate("/login"); }}
+          className="btn-arcade mt-6 w-full sm:w-auto py-2 px-6 text-2xl border-2 border-pink font-pixel text-pink hover:text-glow-sm"
+        >
+          Log out
+        </button>
       </div>
-      <h3 className="font-pixel text-4xl text-yellow hover:text-glow-sm text-center lg:hidden">Sorry, the game is not yet available for your device...</h3>
-    </> 
+    </>
   );
 }
- 
+
 export default Settings;

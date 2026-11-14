@@ -21,23 +21,23 @@ const PersonalRating = () => {
   }, [user?.id]);
 
   return (
-    <div className="w-full border border-neon border-glow-sm-neon p-4 flex items-center justify-between bg-[#060816]">
-      <div className="flex items-center justify-center gap-4 bg-[#060816]">
-        <div className="px-2">
-          <p className="font-pixel text-neon">{t("your_rank")}</p>
+    <div className="w-full border border-neon border-glow-sm-neon p-3 sm:p-4 flex items-center justify-between gap-3 bg-[#060816]">
+      <div className="flex items-center gap-3 sm:gap-4 min-w-0 bg-[#060816]">
+        <div className="px-1 sm:px-2 shrink-0">
+          <p className="font-pixel text-neon text-xs sm:text-base whitespace-nowrap">{t("your_rank")}</p>
           <p className="font-pixel text-yellow text-3xl/none">
             # <span className="text-4xl">{mine ? mine.place : "-"}</span>
           </p>
         </div>
-        <div className="p-1 border border-pink">
+        <div className="hidden sm:block p-1 border border-pink">
           <Avatar className="w-12 h-12" iconClass="text-3xl text-pink" />
         </div>
-        <h2 className="text-3xl text-yellow">{user?.username ?? "Guest"}</h2>
+        <h2 className="text-xl sm:text-3xl text-yellow truncate">{user?.username ?? "Guest"}</h2>
       </div>
 
-      <div className="text-end flex items-center justify-center gap-4">
+      <div className="text-end flex items-center justify-center gap-2 sm:gap-4 shrink-0">
         <div>
-          <p className="uppercase font-pixel text-2xl text-yellow">{t("current_mmr")}</p>
+          <p className="hidden sm:block uppercase font-pixel text-2xl text-yellow">{t("current_mmr")}</p>
           <p className="text-pink font-pixel text-xl">MMR {mine?.rating ?? user?.rating ?? 1500}</p>
           {mine && (
             <p className="text-neon font-pixel text-sm">
@@ -45,7 +45,7 @@ const PersonalRating = () => {
             </p>
           )}
         </div>
-        <p className="text-2xl text-neon text-glow-sm">●</p>
+        <p className="hidden sm:block text-2xl text-neon text-glow-sm">●</p>
       </div>
     </div>
   );

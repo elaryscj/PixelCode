@@ -14,7 +14,7 @@ const NotFound = () => (
           <p className="font-sans text-gray-300 text-sm text-center">Gate offline. No passage at this address.</p>
         </div>
         <div className="flex flex-col gap-6 max-w-xl">
-          <h1 className="text-yellow text-[184px]/none text-glow-sm">404</h1>
+          <h1 className="text-yellow text-[40vw]/none sm:text-[184px]/none text-glow-sm">404</h1>
           <h2 className="text-white text-[64px]/none">Page not found</h2>
           <p className="font-sans text-gray-400 text-lg">
             This door leads nowhere. The route is broken, but your arena is still waiting.

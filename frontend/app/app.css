@@ -134,3 +134,76 @@ html {
 /* conveyor belts in the arena (MapLayer) */
 @keyframes pc-belt-right { from { background-position: 0 0; } to { background-position: 20px 0; } }
 @keyframes pc-belt-left { from { background-position: 20px 0; } to { background-position: 0 0; } }
+
+/* ------------------------------------------------------------------ polish layer
+   CRT scanlines + vignette over every screen, arcade-style buttons, title effects. */
+@utility crt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.18) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* Arcade button: hard pixel shadow that "presses in" on click / tap */
+@utility btn-arcade {
+  position: relative;
+  box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.85);
+  transition: transform 80ms ease-out, box-shadow 80ms ease-out, filter 150ms;
+  -webkit-tap-highlight-color: transparent;
+  &:hover { filter: brightness(1.15); }
+  &:active { transform: translate(4px, 4px); box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.85); }
+}
+
+@utility title-flicker {
+  animation: pc-flicker 6s infinite steps(1);
+}
+@utility float-slow {
+  animation: pc-float 4s ease-in-out infinite;
+}
+@utility blink-caret {
+  animation: pc-blink 1s steps(1) infinite;
+}
+
+@keyframes pc-flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.55; }
+  94% { opacity: 1; }
+  96% { opacity: 0.7; }
+  97% { opacity: 1; }
+}
+@keyframes pc-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes pc-blink {
+  50% { opacity: 0; }
+}
+@keyframes pc-slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@utility enter-up {
+  animation: pc-slide-up 450ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Phones: no rubber-band scroll, no 300ms tap delay, respect the notch */
+html, body { overscroll-behavior: none; touch-action: manipulation; }
+body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* Short landscape screens (phones turned sideways): compact match HUD */
+@custom-variant short (@media (max-height: 560px));
+
+/* Height of the duel arena: roomy on desktop, fills what is left on a sideways phone */
+:root { --arena-h: max(520px, calc(100vh - 380px)); }
+@media (max-height: 560px) { :root { --arena-h: calc(100dvh - 92px); } }
+:root { --practice-h: max(480px, calc(100vh - 260px)); }
+@media (max-height: 560px) { :root { --practice-h: calc(100dvh - 70px); } }

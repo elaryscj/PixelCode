@@ -7,6 +7,7 @@ import { SkinArt } from "~/components/skins";
 import { getCurrentUser, refreshUser } from "~/api/auth";
 import { buySkin, equipSkin, getStore, type StoreState } from "~/api/store";
 import { onlineLabel, useLiveStats } from "~/lib/liveStats";
+import PingBadge from "~/components/PingBadge";
 
 type Skin = {
   id: string;
@@ -178,6 +179,8 @@ export default function StoreRoute() {
 
         <div className="flex items-center gap-3 text-xs">
           <span className="text-[#01E4FF]">SERVER: KAZAKHSTAN</span>
+          <span className="w-2 h-2 rounded-full bg-yellow animate-pulse" />
+          <PingBadge />
           <span className="w-2 h-2 rounded-full bg-yellow animate-pulse" />
           <span className="text-gray-300">{onlineLabel(liveStats)}</span>
         </div>
