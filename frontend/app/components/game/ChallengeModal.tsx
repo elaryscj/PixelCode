@@ -1,6 +1,7 @@
 // app/components/game/ChallengeModal.tsx
 // Cyberpunk Modal for Checkpoint Door Challenges (US-16, US-17, US-18, US-19, US-20, US-21)
 import { useState, useEffect, useRef } from "react";
+import { sfx } from "~/lib/sfx";
 import { FaCode, FaCheck, FaTimes, FaClock, FaTerminal, FaPlay, FaLockOpen } from "react-icons/fa";
 import { submitDoor, type DoorChallenge, type SubmitResult } from "~/api/game";
 
@@ -71,12 +72,14 @@ export default function ChallengeModal({
       const res = await submitDoor(roomCode, challenge.cpNum, code);
       setResult(res);
       setSecondsRemaining(res.secondsRemaining);
+      if (!res.unlocked) sfx.wrong();
       if (res.unlocked && !doneRef.current) {
         doneRef.current = true;
         setTimeout(() => onSuccess(challenge.cpNum), 1200);
       }
     } catch (e) {
       setSubmitError(e instanceof Error ? e.message : "Evaluator unavailable");
+      sfx.wrong();
     } finally {
       setEvaluating(false);
     }

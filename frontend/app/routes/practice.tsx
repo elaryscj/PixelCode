@@ -9,6 +9,8 @@ import { SkinArt } from "~/components/skins";
 import { getCurrentUser } from "~/api/auth";
 import { MAPS, getMap, worldTime } from "~/game/maps";
 import TouchControls from "~/components/game/TouchControls";
+import { burst, flash, shake } from "~/components/game/fx";
+import { sfx } from "~/lib/sfx";
 import { CHAR_H, CHAR_W, DOORS, createPlayer, doorRespawn, respawn, stepPlayer, type CrumbleState } from "~/game/physics";
 
 export function meta() {
@@ -61,6 +63,9 @@ function PracticeScreen() {
         if (prev) {
           setUnlocked((u) => [...u, num]);
           const d = map.doors.find((x) => x.num === num);
+          sfx.doorOpen();
+          flash(arenaRef.current);
+          if (d) burst(arenaRef.current, d.x + 3, d.y + 6, { count: 24, spread: 80 });
           if (d) {
             const r = doorRespawn(d);
             player.current.respawnX = r.x;
@@ -97,6 +102,7 @@ function PracticeScreen() {
       const p = player.current;
       const k = keys.current;
       if (!doneRef.current) {
+        const wasGrounded = p.isGrounded;
         const res = stepPlayer(
           p,
           {
@@ -111,7 +117,14 @@ function PracticeScreen() {
           tPrev,
           dt,
         );
+        if (wasGrounded && !p.isGrounded && p.vy > 0.5) {
+          sfx.jump();
+          burst(arenaRef.current, p.x + CHAR_W / 2, p.y, { color: "#ffffff", count: 6, spread: 18, size: 4 });
+        }
         if (res.hitHazard) {
+          burst(arenaRef.current, p.x + CHAR_W / 2, p.y + 4, { color: "#FE2C96", count: 22, spread: 60 });
+          shake(arenaRef.current, 10);
+          sfx.hazard();
           respawn(p);
           setDeaths((d) => d + 1);
         }
@@ -119,6 +132,7 @@ function PracticeScreen() {
         if (res.atExit) {
           doneRef.current = true;
           setFinished((now - startedAt.current) / 1000);
+          sfx.victory();
         }
         if (++frame % 15 === 0) setElapsed((now - startedAt.current) / 1000);
       }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import MusicSlider from "../components/MusicSlider";
+import { getSfxVolume, setSfxVolume, sfx } from "~/lib/sfx";
 import { useNavigate } from "react-router";
 import { logoutUser } from "~/api/auth";
 import { useNickname, saveNickname, isValidNickname, NICKNAME_MAX } from "~/lib/nickname";
@@ -17,6 +18,10 @@ const Settings = () => {
     }, [nickname]);
 
   const canSave = isValidNickname(draft) && draft.trim() !== nickname;
+
+  // sound effects volume (separate from music); read after mount so SSR matches
+  const [fxVol, setFxVol] = useState(60);
+  useEffect(() => setFxVol(Math.round(getSfxVolume() * 100)), []);
 
 
   const navigate = useNavigate();
@@ -48,6 +53,25 @@ const Settings = () => {
           <section className={card}>
             <h3 className={heading}>[ {t("music_audio")} ]</h3>
             <MusicSlider />
+            <label htmlFor="sfx-volume" className="block font-pixel text-xl sm:text-3xl mt-4">Sound Effects</label>
+            <div className="flex items-center justify-center gap-4">
+              <input
+                id="sfx-volume"
+                type="range"
+                min={0}
+                max={100}
+                value={fxVol}
+                onChange={(e) => {
+                  setFxVol(+e.target.value);
+                  setSfxVolume(+e.target.value / 100);
+                }}
+                onPointerUp={() => sfx.doorOpen()}
+                onKeyUp={() => sfx.jump()}
+                className="range-bar"
+                style={{ background: `linear-gradient(to right, #FE2C96 0% ${fxVol}%, #16233c ${fxVol}% 100%)` }}
+              />
+              <h3 className="font-pixel text-yellow text-xl sm:text-2xl w-14 text-right">{fxVol}%</h3>
+            </div>
           </section>
 
           <section className={card}>

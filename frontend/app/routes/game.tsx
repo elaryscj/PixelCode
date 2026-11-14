@@ -7,6 +7,8 @@ import { Link, useParams, useNavigate } from "react-router";
 import ChallengeModal from "~/components/game/ChallengeModal";
 import GameResultModal from "~/components/game/GameResultModal";
 import TouchControls from "~/components/game/TouchControls";
+import { burst, confetti, flash, shake } from "~/components/game/fx";
+import { sfx } from "~/lib/sfx";
 import { SkinArt } from "~/components/skins";
 import { getCurrentUser, refreshUser } from "~/api/auth";
 import { rematchRoom } from "~/api/room";
@@ -28,6 +30,7 @@ import {
   CHAR_H,
   CHAR_W,
   DOORS,
+  DOOR_W,
   createPlayer,
   doorRespawn,
   floorOf,
@@ -189,6 +192,44 @@ function GameScreen() {
   const [mySkin, setMySkin] = useState<string>("neon_ronin");
   const [oppSkin, setOppSkin] = useState<string>("neon_ronin");
   const keysPressed = useRef<{ [key: string]: boolean }>({});
+  const arenaWrapRef = useRef<HTMLDivElement | null>(null);
+  // doors we already celebrated (socket + poll can report the same door twice)
+  const celebratedRef = useRef({ me: new Set<number>(), opp: new Set<number>(), loaded: false });
+  const [banner, setBanner] = useState<{ text: string; tone: "neon" | "pink" | "yellow"; id: number } | null>(null);
+  const showBanner = useCallback((text: string, tone: "neon" | "pink" | "yellow", ms = 1600) => {
+    const id = Date.now();
+    setBanner({ text, tone, id });
+    setTimeout(() => setBanner((b) => (b && b.id === id ? null : b)), ms);
+  }, []);
+
+  // ---------------------------------------------------------------- juice
+  const doorCenter = (cpNum: number) => {
+    const d = mapRef.current?.doors.find((c) => c.num === cpNum);
+    return d ? { x: d.x + DOOR_W / 2, y: d.y + 6 } : null;
+  };
+  const celebrateMine = (cpNum: number) => {
+    const c = celebratedRef.current;
+    if (c.me.has(cpNum)) return;
+    c.me.add(cpNum);
+    if (!c.loaded) return;
+    const at = doorCenter(cpNum);
+    if (at) burst(myArenaRef.current, at.x, at.y, { color: "#01E4FF", count: 26, spread: 90 });
+    flash(myArenaRef.current, "rgba(1,228,255,0.3)");
+    sfx.doorOpen();
+    const left = DOORS - c.me.size;
+    showBanner(left > 0 ? `GATE ${cpNum} SECURED` : "ALL GATES OPEN - RUN!", left > 0 ? "neon" : "yellow");
+  };
+  const celebrateRival = (cpNum: number) => {
+    const c = celebratedRef.current;
+    if (c.opp.has(cpNum)) return;
+    c.opp.add(cpNum);
+    if (!c.loaded) return;
+    const at = doorCenter(cpNum);
+    if (at) burst(oppArenaRef.current, 100 - at.x, at.y, { color: "#FE2C96", count: 18, spread: 70 });
+    flash(oppArenaRef.current, "rgba(254,44,150,0.3)");
+    sfx.rivalDoor();
+    showBanner(`RIVAL CRACKED GATE ${cpNum}`, "pink", 1300);
+  };
 
   // ---------------------------------------------------------------- server state
   const applyState = useCallback(
@@ -212,6 +253,7 @@ function GameScreen() {
       }
       const curMap = mapRef.current;
       if (st.me) {
+        st.me.unlocked.forEach(celebrateMine);
         setUnlockedCps((prev) => Array.from(new Set([...prev, ...st.me!.unlocked])));
         setMyRating(st.me.rating);
         if (st.me.skin) setMySkin(st.me.skin);
@@ -236,8 +278,16 @@ function GameScreen() {
         setOppRating(st.opponent.rating);
         if (st.opponent.skin) setOppSkin(st.opponent.skin);
         setOppDoors(toDeadlines(st.opponent.doors));
+        st.opponent.unlocked.forEach(celebrateRival);
         setOpponentUnlockedCps(st.opponent.unlocked);
         setOppConnected(st.opponent.connected);
+      }
+      if (!celebratedRef.current.loaded) {
+        celebratedRef.current.loaded = true;
+        if ((st.elapsedSeconds ?? 0) < 8) {
+          sfx.fight();
+          showBanner("FIGHT!", "yellow", 1200);
+        }
       }
       if (st.doorSeconds) setDoorSecondsTotal(st.doorSeconds);
       if (st.maxSeconds !== undefined && st.elapsedSeconds !== undefined) {
@@ -281,6 +331,23 @@ function GameScreen() {
     return () => clearInterval(id);
   }, [code, gameOver, applyState]);
 
+  // Last ten seconds: a clock tick every second
+  useEffect(() => {
+    if (!gameOver && matchSeconds > 0 && matchSeconds <= 10) sfx.tick();
+  }, [matchSeconds, gameOver]);
+
+  // Result sting: fanfare + confetti for a win, a falling tune for a loss
+  useEffect(() => {
+    if (!result) return;
+    if (result.winnerUserId === null) return;
+    if (result.winnerUserId === myId) {
+      sfx.victory();
+      confetti();
+    } else {
+      sfx.defeat();
+    }
+  }, [result]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Local second-by-second display of the match timer
   useEffect(() => {
     if (gameOver) return;
@@ -304,9 +371,11 @@ function GameScreen() {
           return next;
         };
         if (data.userId === myId) {
+          celebrateMine(data.cpNum);
           setUnlockedCps((prev) => Array.from(new Set([...prev, data.cpNum])));
           setMyDoors(drop);
         } else {
+          celebrateRival(data.cpNum);
           setOpponentUnlockedCps((prev) => Array.from(new Set([...prev, data.cpNum])));
           setOppDoors(drop);
         }
@@ -331,6 +400,11 @@ function GameScreen() {
   };
 
   const triggerRespawn = () => {
+    const p = playerState.current;
+    burst(myArenaRef.current, p.x + CHAR_W / 2, p.y + 4, { color: "#FE2C96", count: 22, spread: 60 });
+    shake(arenaWrapRef.current, 10);
+    sfx.hazard();
+    navigator.vibrate?.(60);
     setHazardHit(true);
     setTimeout(() => setHazardHit(false), 400);
     respawn(playerState.current);
@@ -352,6 +426,7 @@ function GameScreen() {
 
   const handleChallengeSuccess = useCallback((cpNum: number) => {
     setIsModalOpen(false);
+    celebrateMine(cpNum);
     setMyDoors((prev) => {
       const next = { ...prev };
       delete next[cpNum];
@@ -442,7 +517,12 @@ function GameScreen() {
               jump: !!(keys["Space"] || keys["KeyW"] || keys["ArrowUp"]),
             };
 
+        const wasGrounded = p.isGrounded;
         const res = stepPlayer(p, input, map, unlockedRef.current, crumbleRef.current, t, tPrev, dt);
+        if (wasGrounded && !p.isGrounded && p.vy > 0.5) {
+          sfx.jump();
+          burst(myArenaRef.current, p.x + CHAR_W / 2, p.y, { color: "#ffffff", count: 6, spread: 18, size: 4 });
+        }
         if (res.hitHazard) triggerRespawn();
         if (res.nearDoor !== nearRef.current) setNearCheckpoint(res.nearDoor);
         // Exit: only counts when every door is open; the server confirms the win
@@ -507,7 +587,7 @@ function GameScreen() {
 
   return (
     <div className={`min-h-screen bg-[#050814] flex flex-col p-2 sm:p-4 md:p-6 short:p-1.5 font-pixel select-none relative ${
-      hazardHit ? "animate-pulse filter hue-rotate-90" : ""
+      hazardHit ? "shadow-[inset_0_0_120px_rgba(254,44,150,0.55)]" : ""
     }`}>
       
       {/* 1. Header (Logo, Ping, Room Info) */}
@@ -617,6 +697,7 @@ function GameScreen() {
 
       {/* 3. Dual-Panel Duel Arena */}
       <div
+        ref={arenaWrapRef}
         className="w-full border-2 border-pink/60 p-1 relative flex bg-[#060c20] overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.8)]"
         style={{ height: "var(--arena-h)" }}
       >
@@ -717,6 +798,18 @@ function GameScreen() {
           <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-yellow"></div> EXIT PORTAL</span>
         </div>
       </footer>
+
+      {banner && (
+        <div key={banner.id} className="fixed inset-x-0 top-[28%] z-45 flex justify-center pointer-events-none px-4">
+          <div
+            className={`enter-up text-center text-4xl sm:text-6xl short:text-3xl text-glow bg-black/55 px-6 py-3 border-y-2 ${
+              banner.tone === "neon" ? "text-neon border-neon" : banner.tone === "pink" ? "text-pink border-pink" : "text-yellow border-yellow"
+            }`}
+          >
+            {banner.text}
+          </div>
+        </div>
+      )}
 
       {/* Phones / tablets: on-screen gamepad + "turn your phone" hint */}
       <TouchControls
