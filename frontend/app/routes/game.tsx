@@ -1,6 +1,8 @@
 // app/routes/game.tsx
 // Real-time duel: physics run in the browser, but doors, timers, finish and rating are decided by the server.
 import { useState, useEffect, useRef, useCallback } from "react";
+import { ClientOnly } from "~/lib/currentUser";
+import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useParams, useNavigate } from "react-router";
 import ChallengeModal from "~/components/game/ChallengeModal";
 import GameResultModal from "~/components/game/GameResultModal";
@@ -95,7 +97,7 @@ function PanelHeader({
   );
 }
 
-export default function Game() {
+function GameScreen() {
   const { code = "" } = useParams();
   const navigate = useNavigate();
   const me = getCurrentUser();
@@ -807,4 +809,8 @@ export default function Game() {
 
     </div>
   );
+}
+
+export default function Game() {
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <GameScreen />}</ClientOnly>;
 }

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import Rank from "./Rank";
-import { getCurrentUser } from "~/api/auth";
+import { useCurrentUser } from "~/lib/currentUser";
 import { getLeaderboard, type LeaderboardEntry } from "~/api/leaderboard";
 
 const WIDTHS = ["w-60", "w-48", "w-60", "w-48", "w-60"];
@@ -25,7 +25,7 @@ const TopRating = () => {
   const { t } = useTranslation();
   const [rows, setRows] = useState<LeaderboardEntry[] | null>(null);
   const [failed, setFailed] = useState(false);
-  const me = getCurrentUser()?.username;
+  const me = useCurrentUser()?.username;
 
   const load = useCallback(() => {
     setFailed(false);

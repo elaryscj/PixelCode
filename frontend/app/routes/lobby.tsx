@@ -1,5 +1,7 @@
 // app/routes/lobby.tsx  —  /play/:code : the assigned match (five-minute join window, US-32)
 import { useCallback, useEffect, useRef, useState } from "react";
+import { ClientOnly } from "~/lib/currentUser";
+import ScreenLoading from "~/components/ScreenLoading";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
 import { FaCheck, FaCopy } from "react-icons/fa";
@@ -11,7 +13,7 @@ import { useRoomSocket } from "~/api/socket";
 
 const POLL_MS = 1000;
 
-const Lobby = () => {
+const LobbyScreen = () => {
   const { t } = useTranslation();
   const { code = "" } = useParams();
   const navigate = useNavigate();
@@ -255,4 +257,6 @@ const Lobby = () => {
   );
 };
 
-export default Lobby;
+export default function Lobby() {
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <LobbyScreen />}</ClientOnly>;
+}

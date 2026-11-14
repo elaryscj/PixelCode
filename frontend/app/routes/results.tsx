@@ -1,5 +1,7 @@
 // app/routes/results.tsx  —  /results?match=CODE : "See my results" (stats + recent matches)
 import { useEffect, useState } from "react";
+import { ClientOnly } from "~/lib/currentUser";
+import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { getCurrentUser, refreshUser } from "~/api/auth";
 import { getMatchHistory, type MatchHistoryEntry } from "~/api/game";
@@ -37,7 +39,7 @@ function ago(ms: number | null): string {
   return new Date(ms).toLocaleDateString();
 }
 
-export default function Results() {
+function ResultsScreen() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const highlight = params.get("match")?.toUpperCase() ?? null;
@@ -150,4 +152,8 @@ export default function Results() {
       </div>
     </>
   );
+}
+
+export default function Results() {
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <ResultsScreen />}</ClientOnly>;
 }

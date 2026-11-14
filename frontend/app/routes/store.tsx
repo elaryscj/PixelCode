@@ -1,6 +1,8 @@
 // app/routes/store.tsx
 // PixelCode Arena Store: skins are bought with PIXELS (balance, ownership and prices are kept on the server)
 import { useState, useEffect, useCallback } from "react";
+import { ClientOnly } from "~/lib/currentUser";
+import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useNavigate } from "react-router";
 import { FaChevronLeft, FaChevronRight, FaTwitch, FaYoutube } from "react-icons/fa";
 import { SkinArt } from "~/components/skins";
@@ -55,7 +57,7 @@ const BASE_SKINS: Skin[] = [
 
 const priceLabel = (n: number) => (n === 0 ? "FREE" : `${n.toLocaleString()} PIXELS`);
 
-export default function StoreRoute() {
+function StoreRouteScreen() {
   const navigate = useNavigate();
   const liveStats = useLiveStats();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -461,4 +463,8 @@ export default function StoreRoute() {
       </footer>
     </div>
   );
+}
+
+export default function StoreRoute() {
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <StoreRouteScreen />}</ClientOnly>;
 }

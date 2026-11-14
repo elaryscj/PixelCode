@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router";
-import { getCurrentUser, logoutUser } from "~/api/auth";
+import { logoutUser } from "~/api/auth";
+import { useCurrentUser } from "~/lib/currentUser";
 import { useTranslation } from "react-i18next";
 
 const base =
@@ -9,6 +10,7 @@ const secondary = `${base} border-2 border-neon text-yellow hover:text-glow-sm h
 const HeroNavigation = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const user = useCurrentUser();
 
   return (
     <nav className="enter-up mx-auto w-full max-w-100 flex flex-col gap-4" style={{ animationDelay: "120ms" }}>
@@ -32,7 +34,7 @@ const HeroNavigation = () => {
       <Link to={"/settings"} className={secondary}>
         {t("settings")}
       </Link>
-      {getCurrentUser()?.admin && (
+      {user?.admin && (
         <Link to={"/admin"} className={`${base} border-2 border-yellow text-yellow hover:text-glow-sm`}>
           ADMIN
         </Link>

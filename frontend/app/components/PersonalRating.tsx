@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Avatar from "./Avatar";
-import { getCurrentUser } from "~/api/auth";
+import { useCurrentUser } from "~/lib/currentUser";
 import { getMyRank, type MyRank } from "~/api/leaderboard";
 
 const PersonalRating = () => {
   const { t } = useTranslation();
-  const user = getCurrentUser();
+  const user = useCurrentUser();
   const [mine, setMine] = useState<MyRank | null>(null);
 
   useEffect(() => {

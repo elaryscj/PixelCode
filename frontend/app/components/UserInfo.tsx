@@ -1,11 +1,11 @@
 import Avatar from "./Avatar";
 import { Link } from "react-router";
 import { useNickname } from "~/lib/nickname";
-import { getCurrentUser } from "~/api/auth";
+import { useCurrentUser } from "~/lib/currentUser";
 
 const UserInfo = () => {
   const nickname = useNickname();
-  const currentUser = getCurrentUser();
+  const currentUser = useCurrentUser();
   const displayName = nickname ?? currentUser?.username ?? "Guest";
   const displayRating = currentUser?.rating ? `MMR ${currentUser.rating}` : "MMR 1500";
   const targetRoute = currentUser ? "/profile" : "/login";

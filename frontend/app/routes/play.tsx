@@ -1,5 +1,7 @@
 // app/routes/play.tsx  —  /play : ranked matchmaking, or create / join a private room
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { ClientOnly } from "~/lib/currentUser";
+import ScreenLoading from "~/components/ScreenLoading";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import { ApiError, createRoom, getRoom, joinRoom, myRoom, type Room } from "~/api/room";
@@ -10,7 +12,7 @@ import Avatar from "~/components/Avatar";
 const btn =
   "btn-arcade uppercase w-full text-2xl sm:text-3xl font-pixel py-3 sm:py-2 px-6 text-center border-2 disabled:opacity-40 disabled:pointer-events-none";
 
-const Play = () => {
+const PlayScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [user, setUser] = useState(() => getCurrentUser());
@@ -272,4 +274,6 @@ const Play = () => {
   );
 };
 
-export default Play;
+export default function Play() {
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <PlayScreen />}</ClientOnly>;
+}

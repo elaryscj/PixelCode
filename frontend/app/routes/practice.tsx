@@ -1,6 +1,8 @@
 // app/routes/practice.tsx
 // Solo practice: run any arena map offline. Doors open instantly with E (no challenge, no rating).
 import { useEffect, useRef, useState } from "react";
+import { ClientOnly } from "~/lib/currentUser";
+import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useSearchParams } from "react-router";
 import { MapLayer, animateMap } from "~/components/game/MapLayer";
 import { SkinArt } from "~/components/skins";
@@ -13,7 +15,7 @@ export function meta() {
   return [{ title: "Practice | PixelCode Arena" }];
 }
 
-export default function Practice() {
+function PracticeScreen() {
   const [params, setParams] = useSearchParams();
   const mapId = Math.min(MAPS.length - 1, Math.max(0, Number(params.get("map") ?? 0) || 0));
   const map = getMap(mapId);
@@ -225,4 +227,8 @@ export default function Practice() {
       </footer>
     </div>
   );
+}
+
+export default function Practice() {
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <PracticeScreen />}</ClientOnly>;
 }
