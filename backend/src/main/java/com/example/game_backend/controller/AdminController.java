@@ -27,7 +27,7 @@ public class AdminController {
 
     public static class ChallengeForm {
         public String title, description, inputDescription, outputDescription, functionName,
-                starterCode, examples, testsJson, referenceSolution;
+                starterCode, examples, testsJson, referenceSolution, difficulty;
     }
 
     private final ChallengeRepository challenges;
@@ -67,6 +67,10 @@ public class AdminController {
         require(f.functionName, "functionName");
         require(f.testsJson, "testsJson");
         require(f.referenceSolution, "referenceSolution");
+        String difficulty = f.difficulty == null || f.difficulty.isBlank() ? "EASY" : f.difficulty.trim().toUpperCase();
+        if (!java.util.Set.of("EASY", "MEDIUM", "HARD").contains(difficulty)) {
+            throw new ApiException(400, "Difficulty must be EASY, MEDIUM or HARD").with("field", "difficulty");
+        }
         if (!IDENT.matcher(f.functionName.trim()).matches()) {
             throw new ApiException(400, "Function name is not a valid identifier").with("field", "functionName");
         }
@@ -89,7 +93,7 @@ public class AdminController {
                 ? JavaStarter.build(f.functionName.trim(), f.testsJson, null) : f.starterCode);
         c.setExamples(f.examples);
         c.setTestsJson(f.testsJson);
-        c.setDifficulty("EASY");
+        c.setDifficulty(difficulty);
         c.setPublished(true);
         return ResponseEntity.ok(view(challenges.save(c)));
     }

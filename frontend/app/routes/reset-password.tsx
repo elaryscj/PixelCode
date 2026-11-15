@@ -1,11 +1,12 @@
 import { useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router";
+import { useTranslation } from "react-i18next";
 import { FaCheckCircle, FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 import { resetPassword } from "~/api/auth";
 import RecoveryShell, { CardTitle, cardCls, inputCls, primaryBtn } from "~/components/RecoveryShell";
-import EnglishOnly from "~/components/EnglishOnly";
 
-function ResetPasswordScreen() {
+export default function ResetPassword() {
+  const { t } = useTranslation();
   const [params] = useSearchParams();
   const token = params.get("token") ?? "";
   const [pw, setPw] = useState("");
@@ -27,15 +28,15 @@ function ResetPasswordScreen() {
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!lenOk) return setError("Password must be 8-72 characters.");
-    if (!mixOk) return setError("Include a letter and a number.");
-    if (pw !== pw2) return setError("Passwords do not match.");
+    if (!lenOk) return setError(t("pf_pw_len"));
+    if (!mixOk) return setError(t("pf_pw_mix"));
+    if (pw !== pw2) return setError(t("pf_pw_match"));
     setBusy(true);
     try {
       await resetPassword(token, pw);
       setDone(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(err instanceof Error ? err.message : t("unexpected_error"));
     } finally {
       setBusy(false);
     }
@@ -45,11 +46,11 @@ function ResetPasswordScreen() {
     return (
       <RecoveryShell>
         <div className={cardCls}>
-          <CardTitle text="PASSWORD UPDATED" square />
+          <CardTitle text={t("rp_done_title")} square />
           <FaCheckCircle className="text-[#01E4FF] text-5xl mb-5" />
-          <p className="font-sans text-lg mb-6">Your password was changed. Sign in with your new password.</p>
+          <p className="font-sans text-lg mb-6">{t("rp_done_text")}</p>
           <Link to="/login" className={primaryBtn}>
-            Back to login
+            {t("fp_back_login")}
           </Link>
         </div>
       </RecoveryShell>
@@ -65,48 +66,39 @@ function ResetPasswordScreen() {
   return (
     <RecoveryShell width="max-w-[600px]">
       <form onSubmit={submit} className={cardCls}>
-        <CardTitle text="RESET PASSWORD" square />
+        <CardTitle text={t("rp_title")} square />
         <p className="font-sans text-lg mb-5">
           Choose a new password for your account. You&apos;re using a secure, one-time link from your email.
         </p>
-        <label className="block text-yellow text-[18px] mb-2">NEW PASSWORD</label>
+        <label className="block text-yellow text-[18px] mb-2">{t("pf_new_pw")}</label>
         <div className="relative mb-5">
-          <input type={show ? "text" : "password"} value={pw} onChange={(e) => setPw(e.target.value)} className={inputCls} autoComplete="new-password" required />
+          <input dir="ltr" type={show ? "text" : "password"} value={pw} onChange={(e) => setPw(e.target.value)} className={inputCls} autoComplete="new-password" required />
           {eye}
         </div>
-        <label className="block text-yellow text-[18px] mb-2">CONFIRM NEW PASSWORD</label>
+        <label className="block text-yellow text-[18px] mb-2">{t("pf_confirm_pw")}</label>
         <div className="relative mb-5">
-          <input type={show ? "text" : "password"} value={pw2} onChange={(e) => setPw2(e.target.value)} className={inputCls} autoComplete="new-password" required />
+          <input dir="ltr" type={show ? "text" : "password"} value={pw2} onChange={(e) => setPw2(e.target.value)} className={inputCls} autoComplete="new-password" required />
           {eye}
         </div>
-        <p className="text-yellow text-[18px] mb-2">PASSWORD REQUIREMENTS</p>
+        <p className="text-yellow text-[18px] mb-2">{t("rp_requirements")}</p>
         <ul className="font-sans text-sm mb-5 space-y-1">
-          {req(lenOk, "8-72 characters")}
-          {req(mixOk, "Include a letter and a number")}
-          {req(pw.length > 0 && pw === pw2, "Both passwords match")}
-          <li className="text-gray-500">\u00B7 Use a password you haven&apos;t used before</li>
+          {req(lenOk, t("rp_req_len"))}
+          {req(mixOk, t("rp_req_mix"))}
+          {req(pw.length > 0 && pw === pw2, t("rp_req_match"))}
+          <li className="text-gray-500">\u00B7 {t("rp_req_new")}</li>
         </ul>
         <div className="border-l-4 border-[#01E4FF] bg-black/30 p-4 mb-5 font-sans">
           <div className="flex items-center gap-2 text-[#01E4FF] text-lg mb-1">
             <FaLock /> Secure reset session
           </div>
-          <p className="text-gray-400 text-sm">After resetting, sign in with your new password. Existing sessions will be signed out.</p>
+          <p className="text-gray-400 text-sm">{t("rp_after")}</p>
         </div>
         {error && <div className="text-pink text-[18px] border border-pink/40 bg-pink/10 px-3 py-2 mb-4">[!] {error}</div>}
         <button type="submit" disabled={busy || !token} className={primaryBtn}>
-          {busy ? "Saving..." : "Reset password"}
+          {busy ? t("pf_saving") : t("rp_submit")}
         </button>
-        {!token && <p className="text-pink text-sm mt-3 font-sans">This link is incomplete. Request a new one.</p>}
+        {!token && <p className="text-pink text-sm mt-3 font-sans">{t("rp_incomplete")}</p>}
       </form>
     </RecoveryShell>
-  );
-}
-
-// not translated yet: keep it left-to-right English in Arabic / Urdu
-export default function ResetPassword() {
-  return (
-    <EnglishOnly>
-      <ResetPasswordScreen />
-    </EnglishOnly>
   );
 }

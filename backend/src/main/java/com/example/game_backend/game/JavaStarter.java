@@ -33,6 +33,15 @@ public final class JavaStarter {
      * @param oldJsStarter optional old JavaScript starter, only used to keep the parameter names
      */
     public static String build(String functionName, String testsJson, String oldJsStarter) {
+        return build(functionName, testsJson, oldJsStarter, null);
+    }
+
+    /** @param paramNames comma separated parameter names, e.g. "nums, target" (used when they match the tests) */
+    public static String buildWithNames(String functionName, String testsJson, String paramNames) {
+        return build(functionName, testsJson, null, paramNames);
+    }
+
+    private static String build(String functionName, String testsJson, String oldJsStarter, String paramNames) {
         List<List<Object>> inputs = new ArrayList<>();
         List<Object> expected = new ArrayList<>();
         try {
@@ -52,7 +61,7 @@ public final class JavaStarter {
         }
 
         int arity = inputs.isEmpty() ? 0 : inputs.get(0).size();
-        List<String> names = jsParameterNames(oldJsStarter, arity);
+        List<String> names = jsParameterNames(paramNames != null ? "function f(" + paramNames + ")" : oldJsStarter, arity);
         StringBuilder params = new StringBuilder();
         for (int i = 0; i < arity; i++) {
             List<Object> column = new ArrayList<>();

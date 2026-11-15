@@ -27,7 +27,7 @@ public class LeaderboardController {
     public ResponseEntity<List<Map<String, Object>>> top() {
         List<Map<String, Object>> out = new ArrayList<>();
         int place = 1;
-        for (User u : users.findTop50ByOrderByRatingDescIdAsc()) {
+        for (User u : users.findTop50ByBotFalseOrderByRatingDescIdAsc()) {
             Map<String, Object> m = new LinkedHashMap<>();
             m.put("place", place++);
             m.put("id", u.getId());
@@ -43,7 +43,7 @@ public class LeaderboardController {
         long id = tokens.requireUserId(auth);
         User u = users.findById(id).orElseThrow(() -> new ApiException(401, "Please log in again"));
         Map<String, Object> m = new LinkedHashMap<>();
-        m.put("place", users.countByRatingGreaterThan(u.getRating()) + 1);
+        m.put("place", users.countByBotFalseAndRatingGreaterThan(u.getRating()) + 1);
         m.put("username", u.getUsername());
         m.put("rating", u.getRating());
         m.put("wins", u.getWins());

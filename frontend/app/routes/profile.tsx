@@ -4,6 +4,7 @@ import { useState, useEffect, type FormEvent, type ChangeEvent } from "react";
 import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { FaUser, FaCamera, FaLock, FaTrash, FaSignOutAlt, FaShieldAlt, FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 import { getCurrentUser, logoutUser, refreshUser, updateStoredToken } from "~/api/auth";
 import { saveNickname } from "~/lib/nickname";
@@ -17,9 +18,9 @@ import {
   type ProfileResponse,
   type ProfileError,
 } from "~/api/profile";
-import EnglishOnly from "~/components/EnglishOnly";
 
 function ProfileRouteScreen() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const currentUser = getCurrentUser();
 
@@ -67,7 +68,7 @@ function ProfileRouteScreen() {
         setEmail(data.email || "");
       })
       .catch((err) => {
-        setProfileError(err.message || "Failed to load profile.");
+        setProfileError(err.message || t("pf_err_load"));
       })
       .finally(() => setLoading(false));
   }, [currentUser?.id, navigate]);
@@ -88,9 +89,9 @@ function ProfileRouteScreen() {
       setProfile(updated);
       saveNickname(updated.playerName);
       void refreshUser();
-      setProfileSuccess("Profile updated successfully!");
+      setProfileSuccess(t("pf_saved"));
     } catch (err: any) {
-      setProfileError(err.message || "Failed to update profile.");
+      setProfileError(err.message || t("pf_err_save"));
     } finally {
       setProfileSaving(false);
     }
@@ -103,7 +104,7 @@ function ProfileRouteScreen() {
     setAvatarError(null);
 
     if (file.size > 2 * 1024 * 1024) {
-      setAvatarError("Avatar file must be 2 MB or smaller.");
+      setAvatarError(t("pf_avatar_size"));
       return;
     }
 
@@ -112,9 +113,9 @@ function ProfileRouteScreen() {
       const updated = await uploadAvatar(profile.id, file);
       setProfile(updated);
       saveAvatar(updated.avatarUrl);
-      setProfileSuccess("Avatar uploaded successfully!");
+      setProfileSuccess(t("pf_avatar_ok"));
     } catch (err: any) {
-      setAvatarError(err.message || "Failed to upload avatar.");
+      setAvatarError(err.message || t("pf_avatar_err"));
     } finally {
       setAvatarUploading(false);
     }
@@ -128,15 +129,15 @@ function ProfileRouteScreen() {
     setPasswordSuccess(null);
 
     if (newPassword.length < 8 || newPassword.length > 72) {
-      setPasswordError("New password must be 8-72 characters.");
+      setPasswordError(t("pf_pw_len"));
       return;
     }
     if (!/[A-Za-z]/.test(newPassword) || !/\d/.test(newPassword)) {
-      setPasswordError("New password must contain a letter and a number.");
+      setPasswordError(t("pf_pw_mix"));
       return;
     }
     if (newPassword !== confirmNewPassword) {
-      setPasswordError("New passwords do not match.");
+      setPasswordError(t("pf_pw_match"));
       return;
     }
 
@@ -149,12 +150,12 @@ function ProfileRouteScreen() {
       });
       // other sessions are signed out by the server; this one continues with the fresh token
       if (res.token) updateStoredToken(res.token);
-      setPasswordSuccess(res.message || "Password updated successfully!");
+      setPasswordSuccess(t("pf_pw_ok"));
       setCurrentPassword("");
       setNewPassword("");
       setConfirmNewPassword("");
     } catch (err: any) {
-      setPasswordError(err.message || "Failed to change password.");
+      setPasswordError(err.message || t("pf_pw_err"));
     } finally {
       setPasswordSaving(false);
     }
@@ -167,11 +168,11 @@ function ProfileRouteScreen() {
     setDeleteError(null);
 
     if (deleteConfirmation !== "DELETE") {
-      setDeleteError("Type DELETE in capital letters to confirm.");
+      setDeleteError(t("pf_del_type"));
       return;
     }
     if (!deleteAcknowledged) {
-      setDeleteError("You must check the acknowledgment checkbox.");
+      setDeleteError(t("pf_del_ack"));
       return;
     }
 
@@ -184,7 +185,7 @@ function ProfileRouteScreen() {
       logoutUser();
       navigate("/login", { replace: true });
     } catch (err: any) {
-      setDeleteError(err.message || "Failed to delete account.");
+      setDeleteError(err.message || t("pf_del_err"));
     } finally {
       setDeleting(false);
     }
@@ -199,7 +200,7 @@ function ProfileRouteScreen() {
     return (
       <div className="min-h-screen bg-[#040714] text-white flex items-center justify-center font-pixel">
         <div className="text-yellow text-xl tracking-widest animate-pulse">
-          INITIALIZING TERMINAL PROFILE...
+          {t("loading")}
         </div>
       </div>
     );
@@ -226,13 +227,13 @@ function ProfileRouteScreen() {
           to="/"
           className="flex items-center gap-2 border-2 border-pink px-4 py-1.5 text-xs text-pink uppercase hover:bg-pink/10 transition-colors"
         >
-          &lt; MENU
+          &lt; {t("menu")}
         </Link>
 
         <div className="flex items-center gap-4 text-xs">
           <Link to="/results" className="flex items-center gap-2 text-[#01E4FF] hover:text-white uppercase">
             <FaShieldAlt className="text-sm" />
-            <span>MY RESULTS</span>
+            <span>{t("menu_results")}</span>
           </Link>
           <span className="text-gray-600">|</span>
           <button
@@ -240,7 +241,7 @@ function ProfileRouteScreen() {
             className="flex items-center gap-2 text-yellow hover:text-white transition-colors cursor-pointer text-xs uppercase"
           >
             <FaSignOutAlt />
-            LOG OUT
+            {t("log_out").toUpperCase()}
           </button>
         </div>
       </header>
@@ -250,10 +251,10 @@ function ProfileRouteScreen() {
         {/* Title */}
         <div className="text-center mb-8">
           <h1 className="text-yellow text-4xl sm:text-5xl tracking-wider text-glow-sm">
-            MY ACCOUNT
+            {t("pf_title")}
           </h1>
           <div className="text-xs text-gray-400 mt-2 uppercase">
-            Profile · password · account
+            {t("pf_subtitle")}
           </div>
         </div>
 
@@ -263,7 +264,7 @@ function ProfileRouteScreen() {
           {/* Card 1: Identity & Avatar */}
           <div className="bg-[#070c1e]/90 border-2 border-[#01E4FF] p-6 shadow-[0_0_20px_rgba(1,228,255,0.15)] flex flex-col gap-6">
             <div className="flex items-center justify-between pb-3 border-b border-[#01E4FF]/30">
-              <span className="text-sm text-[#01E4FF]">&gt; PROFILE</span>
+              <span className="text-sm text-[#01E4FF]">&gt; {t("menu_profile")}</span>
               <span className="text-xs px-2 py-0.5 bg-yellow/10 border border-yellow text-yellow uppercase">
                 {profile?.rankTitle || "CODE RUNNER"}
               </span>
@@ -290,7 +291,7 @@ function ProfileRouteScreen() {
                   className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-[11px] text-[#01E4FF]"
                 >
                   <FaCamera className="text-lg mb-1" />
-                  CHANGE
+                  {t("pf_change")}
                 </label>
                 <input
                   id="avatar-upload"
@@ -303,16 +304,16 @@ function ProfileRouteScreen() {
               </div>
 
               <div className="flex flex-col gap-1.5 flex-1">
-                <div className="text-xs text-gray-400 uppercase">CURRENT RATING</div>
+                <div className="text-xs text-gray-400 uppercase">{t("pf_current_rating")}</div>
                 <div className="text-pink text-2xl tracking-widest font-bold">
                   MMR {profile?.mmr || 1500}
                 </div>
                 <div className="text-[11px] text-gray-500">
-                  PNG, JPEG, WebP • MAX 2MB
+                  {t("pf_avatar_hint")}
                 </div>
                 {avatarUploading && (
                   <div className="text-xs text-yellow animate-pulse">
-                    UPLOADING AVATAR...
+                    {t("pf_uploading")}
                   </div>
                 )}
                 {avatarError && (
@@ -325,9 +326,10 @@ function ProfileRouteScreen() {
             <form onSubmit={handleProfileSubmit} className="flex flex-col gap-4 mt-2">
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs text-yellow tracking-wider uppercase">
-                  NICKNAME
+                  {t("pf_nickname")}
                 </label>
                 <input
+                  dir="ltr"
                   type="text"
                   value={playerName}
                   onChange={(e) => setPlayerName(e.target.value)}
@@ -336,26 +338,27 @@ function ProfileRouteScreen() {
                   className="w-full bg-[#02050f] border border-[#01E4FF] text-white px-3.5 py-2.5 text-sm outline-none focus:border-glow-neon-sm"
                 />
                 <span className="font-sans text-[11px] text-gray-400">
-                  Unique. 2-16 letters, digits or _. Other players see this name and you log in with it.
+                  {t("pf_nickname_hint")}
                 </span>
               </div>
 
               <div className="flex flex-col gap-1.5">
                 <div className="flex justify-between items-center">
                   <label className="text-xs text-yellow tracking-wider uppercase">
-                    EMAIL ADDRESS
+                    {t("pf_email")}
                   </label>
                   {profile?.emailVerified ? (
                     <span className="flex items-center gap-1 text-[11px] text-emerald-400">
-                      <FaCheckCircle /> VERIFIED
+                      <FaCheckCircle /> {t("pf_verified")}
                     </span>
                   ) : profile?.email ? (
                     <span className="flex items-center gap-1 text-[11px] text-yellow">
-                      <FaExclamationTriangle /> UNVERIFIED
+                      <FaExclamationTriangle /> {t("pf_unverified")}
                     </span>
                   ) : null}
                 </div>
                 <input
+                  dir="ltr"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -363,18 +366,18 @@ function ProfileRouteScreen() {
                   className="w-full bg-[#02050f] border border-[#01E4FF] text-white px-3.5 py-2.5 text-sm outline-none focus:border-glow-neon-sm"
                 />
                 <span className="font-sans text-[11px] text-gray-400">
-                  Used only to reset a forgotten password.
+                  {t("pf_email_hint")}
                 </span>
                 {profile?.pendingEmail && (
                   <div className="text-[11px] text-yellow bg-yellow/10 border border-yellow/30 p-2 mt-1 leading-normal">
-                    Pending verification link sent to: <strong>{profile.pendingEmail}</strong>
+                    {t("pf_pending")} <strong>{profile.pendingEmail}</strong>
                   </div>
                 )}
               </div>
 
               {profileError && (
                 <div className="text-pink text-xs border border-pink/40 bg-pink/10 px-3 py-2">
-                  [!] ERROR: {profileError}
+                  [!] {t("error").toUpperCase()}: {profileError}
                 </div>
               )}
               {profileSuccess && (
@@ -388,7 +391,7 @@ function ProfileRouteScreen() {
                 disabled={profileSaving}
                 className="w-full py-3 bg-[#01E4FF] border-2 border-yellow text-black text-xs uppercase tracking-widest hover:brightness-110 active:scale-[0.99] transition-all cursor-pointer disabled:opacity-50"
               >
-                {profileSaving ? "SAVING CHANGES..." : "SAVE PROFILE"}
+                {profileSaving ? t("pf_saving") : t("pf_save")}
               </button>
             </form>
           </div>
@@ -400,17 +403,18 @@ function ProfileRouteScreen() {
             <div className="bg-[#070c1e]/90 border-2 border-[#01E4FF] p-6 shadow-[0_0_20px_rgba(1,228,255,0.15)] flex flex-col gap-4">
               <div className="flex items-center justify-between pb-3 border-b border-[#01E4FF]/30">
                 <span className="text-sm text-[#01E4FF] flex items-center gap-2">
-                  <FaLock className="text-xs" /> &gt; CHANGE PASSWORD
+                  <FaLock className="text-xs" /> &gt; {t("pf_change_pw")}
                 </span>
-                <span className="text-[11px] text-gray-400">8+ CHARS · LETTER + NUMBER</span>
+                <span className="text-[11px] text-gray-400">{t("pf_pw_rule")}</span>
               </div>
 
               <form onSubmit={handlePasswordSubmit} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs text-yellow tracking-wider uppercase">
-                    CURRENT PASSWORD
+                    {t("pf_current_pw")}
                   </label>
                   <input
+                    dir="ltr"
                     type="password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
@@ -422,9 +426,10 @@ function ProfileRouteScreen() {
 
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs text-yellow tracking-wider uppercase">
-                    NEW PASSWORD
+                    {t("pf_new_pw")}
                   </label>
                   <input
+                    dir="ltr"
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
@@ -436,9 +441,10 @@ function ProfileRouteScreen() {
 
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs text-yellow tracking-wider uppercase">
-                    CONFIRM NEW PASSWORD
+                    {t("pf_confirm_pw")}
                   </label>
                   <input
+                    dir="ltr"
                     type="password"
                     value={confirmNewPassword}
                     onChange={(e) => setConfirmNewPassword(e.target.value)}
@@ -450,7 +456,7 @@ function ProfileRouteScreen() {
 
                 {passwordError && (
                   <div className="text-pink text-xs border border-pink/40 bg-pink/10 px-3 py-2">
-                    [!] ERROR: {passwordError}
+                    [!] {t("error").toUpperCase()}: {passwordError}
                   </div>
                 )}
                 {passwordSuccess && (
@@ -464,7 +470,7 @@ function ProfileRouteScreen() {
                   disabled={passwordSaving}
                   className="w-full py-3 bg-[#FE2C96] border-2 border-yellow text-black text-xs uppercase tracking-widest hover:brightness-110 active:scale-[0.99] transition-all cursor-pointer disabled:opacity-50"
                 >
-                  {passwordSaving ? "UPDATING PASSWORD..." : "UPDATE PASSWORD"}
+                  {passwordSaving ? t("pf_pw_updating") : t("pf_pw_update")}
                 </button>
               </form>
             </div>
@@ -473,13 +479,13 @@ function ProfileRouteScreen() {
             <div className="bg-[#1a0510]/90 border-2 border-pink p-6 shadow-[0_0_20px_rgba(255,42,133,0.2)] flex flex-col gap-4">
               <div className="flex items-center justify-between pb-3 border-b border-pink/30 text-pink">
                 <span className="text-sm flex items-center gap-2">
-                  <FaTrash className="text-xs" /> &gt; DELETE ACCOUNT
+                  <FaTrash className="text-xs" /> &gt; {t("pf_delete_title")}
                 </span>
-                <span className="text-[11px] uppercase">CANNOT BE UNDONE</span>
+                <span className="text-[11px] uppercase">{t("pf_cannot_undo")}</span>
               </div>
 
               <p className="text-xs text-gray-300 leading-relaxed font-sans">
-                Deleting your account permanently erases your nickname, MMR, pixels, skins, avatar and match history.
+                {t("pf_delete_warn")}
               </p>
 
               {!showDelete ? (
@@ -488,7 +494,7 @@ function ProfileRouteScreen() {
                   onClick={() => setShowDelete(true)}
                   className="w-full py-2.5 border border-pink text-pink text-xs uppercase tracking-widest hover:bg-pink/10 transition-colors cursor-pointer"
                 >
-                  Delete my account...
+                  {t("pf_delete_open")}
                 </button>
               ) : (
               <form onSubmit={handleDeleteSubmit} className="flex flex-col gap-3">
@@ -499,14 +505,15 @@ function ProfileRouteScreen() {
                     onChange={(e) => setDeleteAcknowledged(e.target.checked)}
                     className="accent-pink"
                   />
-                  <span>I understand this deletes my account for good.</span>
+                  <span>{t("pf_delete_ack")}</span>
                 </label>
 
                 <div className="flex flex-col gap-1">
                   <span className="text-[11px] text-gray-400">
-                    Type <strong className="text-pink">DELETE</strong> to confirm:
+                    {t("pf_delete_type_a")} <strong className="text-pink">DELETE</strong> {t("pf_delete_type_b")}
                   </span>
                   <input
+                    dir="ltr"
                     type="text"
                     value={deleteConfirmation}
                     onChange={(e) => setDeleteConfirmation(e.target.value)}
@@ -517,7 +524,7 @@ function ProfileRouteScreen() {
 
                 {deleteError && (
                   <div className="text-pink text-xs border border-pink/40 bg-pink/10 px-3 py-2">
-                    [!] ERROR: {deleteError}
+                    [!] {t("error").toUpperCase()}: {deleteError}
                   </div>
                 )}
 
@@ -526,7 +533,7 @@ function ProfileRouteScreen() {
                   disabled={deleting || deleteConfirmation !== "DELETE" || !deleteAcknowledged}
                   className="w-full py-2.5 bg-red-600 border border-yellow text-white text-xs uppercase tracking-widest hover:bg-red-700 active:scale-[0.99] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  {deleting ? "DELETING..." : "DELETE ACCOUNT FOREVER"}
+                  {deleting ? t("pf_deleting") : t("pf_delete_forever")}
                 </button>
                 <button
                   type="button"
@@ -538,7 +545,7 @@ function ProfileRouteScreen() {
                   }}
                   className="text-xs text-gray-400 hover:text-white uppercase cursor-pointer"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
               </form>
               )}
@@ -563,9 +570,5 @@ function ProfileRouteScreen() {
 }
 
 export default function ProfileRoute() {
-  return <ClientOnly fallback={<ScreenLoading />}>{() => (
-        <EnglishOnly>
-          <ProfileRouteScreen />
-        </EnglishOnly>
-      )}</ClientOnly>;
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <ProfileRouteScreen />}</ClientOnly>;
 }

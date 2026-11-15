@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useParams, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import ChallengeModal from "~/components/game/ChallengeModal";
 import GameResultModal from "~/components/game/GameResultModal";
 import TouchControls from "~/components/game/TouchControls";
@@ -68,6 +69,7 @@ function PanelHeader({
   floors: number;
   tone: "neon" | "pink";
 }) {
+  const { t } = useTranslation();
   const next = [1, 2, 3, 4].find((n) => !unlocked.includes(n));
   const deadline = next !== undefined ? doors[next] : undefined;
   const left = deadline !== undefined ? Math.max(0, Math.ceil((deadline - Date.now()) / 1000)) : total;
@@ -82,7 +84,7 @@ function PanelHeader({
     <div className="flex items-center justify-between px-3 py-1.5 border-b border-white/10 bg-black/20">
       <div className="flex items-center gap-3 min-w-0">
         <div className="leading-tight">
-          <div className="text-[9px] text-gray-400 tracking-wider">FLOOR {floor} / {floors}</div>
+          <div className="text-[9px] text-gray-400 tracking-wider">{t("g_floor")} {floor} / {floors}</div>
           <div className={`text-sm truncate max-w-[140px] ${tone === "neon" ? "text-yellow" : "text-yellow"}`}>{name}</div>
         </div>
         <span className={`text-[9px] px-1.5 py-0.5 border ${tone === "neon" ? "border-neon text-neon" : "border-pink text-pink"}`}>
@@ -91,16 +93,17 @@ function PanelHeader({
       </div>
       <div className="flex items-center gap-2">
         <div className="text-right leading-tight">
-          <div className="text-[9px] text-gray-400 tracking-wider">DOOR TIMER</div>
+          <div className="text-[9px] text-gray-400 tracking-wider">{t("cm_door_timer")}</div>
           <div className={`text-sm ${state === "ACTIVE" && left <= 30 ? "text-pink animate-pulse" : "text-white"}`}>{fmt(left)}</div>
         </div>
-        <span className={`text-[9px] px-1.5 py-0.5 border ${badge}`}>{state}</span>
+        <span className={`text-[9px] px-1.5 py-0.5 border ${badge}`}>{t(`g_state_${state.toLowerCase()}`)}</span>
       </div>
     </div>
   );
 }
 
 function GameScreen() {
+  const { t } = useTranslation();
   const { code = "" } = useParams();
   const navigate = useNavigate();
   const me = getCurrentUser();
@@ -217,7 +220,7 @@ function GameScreen() {
     flash(myArenaRef.current, "rgba(1,228,255,0.3)");
     sfx.doorOpen();
     const left = DOORS - c.me.size;
-    showBanner(left > 0 ? `GATE ${cpNum} SECURED` : "ALL GATES OPEN - RUN!", left > 0 ? "neon" : "yellow");
+    showBanner(left > 0 ? t("g_gate_secured", { n: cpNum }) : t("g_all_open"), left > 0 ? "neon" : "yellow");
   };
   const celebrateRival = (cpNum: number) => {
     const c = celebratedRef.current;
@@ -228,7 +231,7 @@ function GameScreen() {
     if (at) burst(oppArenaRef.current, 100 - at.x, at.y, { color: "#FE2C96", count: 18, spread: 70 });
     flash(oppArenaRef.current, "rgba(254,44,150,0.3)");
     sfx.rivalDoor();
-    showBanner(`RIVAL CRACKED GATE ${cpNum}`, "pink", 1300);
+    showBanner(t("g_rival_cracked", { n: cpNum }), "pink", 1300);
   };
 
   // ---------------------------------------------------------------- server state
@@ -286,7 +289,7 @@ function GameScreen() {
         celebratedRef.current.loaded = true;
         if ((st.elapsedSeconds ?? 0) < 8) {
           sfx.fight();
-          showBanner("FIGHT!", "yellow", 1200);
+          showBanner(t("g_fight"), "yellow", 1200);
         }
       }
       if (st.doorSeconds) setDoorSecondsTotal(st.doorSeconds);
@@ -299,10 +302,15 @@ function GameScreen() {
 
   // Ranked queue match or private room (only for the header label)
   const [ranked, setRanked] = useState<boolean | null>(null);
+  const [botMatch, setBotMatch] = useState(false);
   useEffect(() => {
     let alive = true;
     getRoom(code)
-      .then((r) => alive && setRanked(r.ranked ?? true))
+      .then((r) => {
+        if (!alive) return;
+        setRanked(r.ranked ?? true);
+        setBotMatch(!!r.botMatch);
+      })
       .catch(() => {});
     return () => {
       alive = false;
@@ -325,7 +333,7 @@ function GameScreen() {
         if (!alive) return;
         const status = (e as any)?.status;
         if (status === 409) navigate(`/play/${code}`);
-        else setLoadError(e instanceof Error ? e.message : "Could not load the match");
+        else setLoadError(e instanceof Error ? e.message : t("g_err_load"));
       });
     return () => {
       alive = false;
@@ -432,7 +440,7 @@ function GameScreen() {
       setActiveChallenge(ch);
       setIsModalOpen(true);
     } catch (e) {
-      showNotice(e instanceof Error ? e.message : "Could not open the door");
+      showNotice(e instanceof Error ? e.message : t("g_err_door"));
     }
   };
 
@@ -460,7 +468,7 @@ function GameScreen() {
       const room = await rematchRoom(code);
       navigate(`/play/${room.code}`);
     } catch (e) {
-      showNotice(e instanceof Error ? e.message : "Could not start a rematch");
+      showNotice(e instanceof Error ? e.message : t("g_err_rematch"));
       setRematchBusy(false);
     }
   };
@@ -474,7 +482,7 @@ function GameScreen() {
       if (res.result) setResult(res.result);
     } catch (e) {
       finishingRef.current = false;
-      showNotice(e instanceof Error ? e.message : "Could not finish");
+      showNotice(e instanceof Error ? e.message : t("g_err_finish"));
     }
   };
 
@@ -618,13 +626,13 @@ function GameScreen() {
         <div className="flex items-center gap-3">
           <div className="text-gray-400 text-[10px] md:text-xs flex items-center gap-2 uppercase border border-pink/40 px-3 py-1 bg-pink/5">
             <span className="w-2 h-2 bg-pink inline-block animate-pulse"></span>
-            {ranked === false ? "PRIVATE ROOM" : "RANKED DUEL"} #{code}
+            {botMatch ? t("kind_bot") : ranked === false ? t("kind_private") : t("kind_ranked")} #{code}
           </div>
           <Link
             to="/play"
             className="text-[10px] text-gray-500 hover:text-pink border border-gray-800 hover:border-pink px-2 py-1 transition-colors"
           >
-            EXIT MATCH
+            {t("g_exit_match")}
           </Link>
         </div>
       </header>
@@ -639,7 +647,7 @@ function GameScreen() {
               <h2 className="text-yellow text-xl md:text-3xl short:text-base uppercase truncate max-w-[180px]">{localPlayerName}</h2>
               <p className="text-neon/70 text-[9px] md:text-[10px]">MMR {myRating}</p>
             </div>
-            <span className="border border-neon text-neon px-2 py-0.5 text-[9px] bg-neon/10">YOU</span>
+            <span className="border border-neon text-neon px-2 py-0.5 text-[9px] bg-neon/10">{t("tag_you")}</span>
           </div>
 
           {/* Checkpoint Indicators */}
@@ -657,7 +665,7 @@ function GameScreen() {
                 {num}
               </span>
             ))}
-            <span className="text-neon ml-2 text-[10px]">{unlockedCps.length} / {DOORS} SECURED</span>
+            <span className="text-neon ml-2 text-[10px]">{unlockedCps.length} / {DOORS} {t("g_secured")}</span>
           </div>
         </div>
 
@@ -669,7 +677,7 @@ function GameScreen() {
             {timerDisplay}
           </div>
           <div className="text-yellow text-[9px] md:text-[10px] mt-1 uppercase tracking-wider text-center short:hidden">
-            UNLOCK ALL 4 DOORS ➔ SECURE EXIT
+            {t("g_goal")}
           </div>
         </div>
 
@@ -680,7 +688,7 @@ function GameScreen() {
               <h2 className="text-yellow text-xl md:text-3xl short:text-base uppercase truncate max-w-[180px]">{opponentName}</h2>
               <p className="text-pink/70 text-[9px] md:text-[10px]">MMR {oppRating ?? "..."}</p>
             </div>
-            <span className="border border-pink text-pink px-2 py-0.5 text-[9px] bg-pink/10">RIVAL</span>
+            <span className="border border-pink text-pink px-2 py-0.5 text-[9px] bg-pink/10">{botMatch ? t("tag_bot") : t("tag_rival")}</span>
           </div>
 
           <div className="flex items-center gap-1.5 text-xs flex-row-reverse short:hidden">
@@ -697,15 +705,15 @@ function GameScreen() {
                 {num}
               </span>
             ))}
-            <span className="text-pink mr-2 text-[10px]">{opponentUnlockedCps.length} / {DOORS} SECURED</span>
+            <span className="text-pink mr-2 text-[10px]">{opponentUnlockedCps.length} / {DOORS} {t("g_secured")}</span>
           </div>
         </div>
 
       </div>
 
       <div className="text-neon text-[10px] mb-2 flex justify-between items-center short:hidden">
-        <span>{map ? `${map.name} · ${map.sector}` : "LOADING MAP..."}</span>
-        <span className="text-gray-400">{map?.tagline ?? "SYMMETRIC DUEL · FIRST TO SOLVE ALL GATES WINS"}</span>
+        <span>{map ? `${map.name} · ${map.sector}` : t("g_loading_map")}</span>
+        <span className="text-gray-400">{map?.tagline ?? t("g_tagline")}</span>
       </div>
 
       {/* 3. Dual-Panel Duel Arena */}
@@ -800,15 +808,15 @@ function GameScreen() {
       {/* 4. Footer Controls & Status */}
       <footer className="flex flex-col sm:flex-row justify-between items-center mt-3 text-[10px] text-gray-400 uppercase gap-2 pointer-coarse:hidden">
         <div className="flex flex-wrap gap-4 items-center">
-          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">A / D</kbd> MOVE</span>
-          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">SPACE</kbd> JUMP</span>
-          <span><kbd className="border border-neon text-neon px-2 py-0.5">E</kbd> INTERACT</span>
-          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">R</kbd> RESPAWN</span>
+          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">A / D</kbd> {t("k_move")}</span>
+          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">SPACE</kbd> {t("k_jump")}</span>
+          <span><kbd className="border border-neon text-neon px-2 py-0.5">E</kbd> {t("k_interact")}</span>
+          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">R</kbd> {t("k_respawn")}</span>
         </div>
         <div className="flex gap-4 items-center">
-          <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-neon"></div> CP GATE</span>
-          <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-pink"></div> SPIKE HAZARD</span>
-          <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-yellow"></div> EXIT PORTAL</span>
+          <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-neon"></div> {t("k_gate")}</span>
+          <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-pink"></div> {t("k_spike")}</span>
+          <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-yellow"></div> {t("k_exit")}</span>
         </div>
       </footer>
 
@@ -833,8 +841,8 @@ function GameScreen() {
       />
       <div className="hidden pointer-coarse:portrait:flex fixed inset-0 z-[55] flex-col items-center justify-center gap-6 bg-[#050814]/95 text-center px-8">
         <div className="text-7xl text-neon animate-bounce">⟳</div>
-        <p className="text-yellow text-2xl">ROTATE YOUR PHONE</p>
-        <p className="font-sans text-gray-400 text-sm">The arena is played in landscape.</p>
+        <p className="text-yellow text-2xl">{t("rotate_title")}</p>
+        <p className="font-sans text-gray-400 text-sm">{t("rotate_text")}</p>
       </div>
 
       {/* 5. Door challenge (US-16 - US-21): checked by the server */}
@@ -862,16 +870,16 @@ function GameScreen() {
       {offline && !gameOver && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 font-pixel">
           <div className="w-[92vw] max-w-140 border-2 border-pink bg-[#050816] p-6 sm:p-10 flex flex-col items-center gap-6 shadow-[0_0_50px_rgba(254,44,150,0.4)]">
-            <h2 className="text-pink text-4xl">&#9632; RECONNECTING &#9632;</h2>
-            <p className="font-sans text-white text-lg">Connection lost. Reconnect within 05:00</p>
+            <h2 className="text-pink text-4xl">&#9632; {t("g_reconnecting")} &#9632;</h2>
+            <p className="font-sans text-white text-lg">{t("g_conn_lost")}</p>
             <div className="border-2 border-pink px-10 py-3 text-pink text-[56px]/none sm:text-[88px]/none">
               {`${String(Math.floor(offlineLeft / 60)).padStart(2, "0")}:${String(offlineLeft % 60).padStart(2, "0")}`}
             </div>
             <div className="w-full border border-neon/40 p-4 flex flex-col items-center gap-3">
-              <span className="text-yellow text-xl">RECONNECTING TO SERVER...</span>
+              <span className="text-yellow text-xl">{t("g_reconnecting_server")}</span>
               <span className="w-full h-2 bg-neon/20"><span className="block h-full bg-pink animate-pulse w-1/3" /></span>
             </div>
-            <p className="font-sans text-gray-400 text-sm">Match will be abandoned if timer expires</p>
+            <p className="font-sans text-gray-400 text-sm">{t("g_abandon")}</p>
           </div>
         </div>
       )}
@@ -905,6 +913,8 @@ function GameScreen() {
             oppCheckpoints={opponentUnlockedCps.length}
             myRoomCode={code}
             ranked={result.ranked ?? true}
+            botMatch={!!result.botMatch}
+            botReward={({ WIN: 40, DRAW: 20, LOSS: 10 } as Record<string, number>)[mine?.result ?? ""] ?? 0}
             mapName={map?.name ?? (result.mapId != null ? getMap(result.mapId).name : undefined)}
             rematchOffered={!!rematchOffer}
             rematchBusy={rematchBusy}

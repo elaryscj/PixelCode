@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useNavigate, useSearchParams } from "react-router";
+import { useTranslation } from "react-i18next";
 import { MapLayer, animateMap } from "~/components/game/MapLayer";
 import { SkinArt } from "~/components/skins";
 import { getCurrentUser } from "~/api/auth";
@@ -18,6 +19,7 @@ export function meta() {
 }
 
 function PracticeScreen() {
+  const { t } = useTranslation();
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const mapId = Math.min(MAPS.length - 1, Math.max(0, Number(params.get("map") ?? 0) || 0));
@@ -171,8 +173,8 @@ function PracticeScreen() {
       />
       <div className="hidden pointer-coarse:portrait:flex fixed inset-0 z-[55] flex-col items-center justify-center gap-6 bg-[#050814]/95 text-center px-8">
         <div className="text-7xl text-neon animate-bounce">⟳</div>
-        <p className="text-yellow text-2xl">ROTATE YOUR PHONE</p>
-        <p className="font-sans text-gray-400 text-sm">The arena is played in landscape.</p>
+        <p className="text-yellow text-2xl">{t("rotate_title")}</p>
+        <p className="font-sans text-gray-400 text-sm">{t("rotate_text")}</p>
       </div>
       <header className="flex flex-wrap short:flex-nowrap justify-between items-center gap-3 border-b border-neon/30 pb-3 mb-4 short:pb-1 short:mb-1">
         <div className="flex items-center gap-3 shrink-0">
@@ -181,11 +183,11 @@ function PracticeScreen() {
             to="/"
             className="border-2 border-pink text-pink px-3 py-1.5 text-xs short:text-[10px] short:py-1 hover:bg-pink/10 relative z-50"
           >
-            &lt; MENU
+            &lt; {t("menu")}
           </Link>
           <div className="text-yellow text-xl short:text-sm leading-none">
             PIXELCODE<br />
-            <span className="text-pink text-xs">PRACTICE</span>
+            <span className="text-pink text-xs">{t("menu_practice")}</span>
           </div>
         </div>
         <div className="flex flex-wrap short:flex-nowrap short:overflow-x-auto scrollbar-none gap-2 min-w-0">
@@ -210,8 +212,8 @@ function PracticeScreen() {
           <div className="text-gray-400 text-[10px]">{map.tagline}</div>
         </div>
         <div className="flex gap-4 text-[10px] text-neon">
-          <span>DOORS {unlocked.length}/{DOORS}</span>
-          <span>FALLS {deaths}</span>
+          <span>{t("p_doors")} {unlocked.length}/{DOORS}</span>
+          <span>{t("p_falls")} {deaths}</span>
           <span className="text-white text-sm">{(finished ?? elapsed).toFixed(1)}s</span>
         </div>
       </div>
@@ -235,14 +237,14 @@ function PracticeScreen() {
 
         {finished !== null && (
           <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/75">
-            <div className="text-yellow text-3xl">CLEARED</div>
-            <div className="text-white">{finished.toFixed(1)}s · {deaths} falls</div>
+            <div className="text-yellow text-3xl">{t("p_cleared")}</div>
+            <div className="text-white">{finished.toFixed(1)}s · {deaths} {t("p_falls_lower")}</div>
             <div className="flex gap-3">
               <button onClick={reset} className="border-2 border-neon text-neon px-4 py-2 text-xs hover:bg-neon/10">
-                RUN AGAIN
+                {t("p_run_again")}
               </button>
               <Link to="/" className="border-2 border-pink text-pink px-4 py-2 text-xs hover:bg-pink/10">
-                MENU
+                {t("menu")}
               </Link>
             </div>
           </div>
@@ -250,11 +252,11 @@ function PracticeScreen() {
       </div>
 
       <footer className="flex flex-wrap gap-4 mt-3 text-[10px] text-gray-400 uppercase pointer-coarse:hidden">
-        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">A / D</kbd> MOVE</span>
-        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">SPACE</kbd> JUMP</span>
-        <span><kbd className="border border-neon text-neon px-2 py-0.5">E</kbd> OPEN DOOR (NO CHALLENGE IN PRACTICE)</span>
-        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">R</kbd> RESPAWN</span>
-        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">ESC</kbd> MENU</span>
+        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">A / D</kbd> {t("k_move")}</span>
+        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">SPACE</kbd> {t("k_jump")}</span>
+        <span><kbd className="border border-neon text-neon px-2 py-0.5">E</kbd> {t("p_open_door")}</span>
+        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">R</kbd> {t("k_respawn")}</span>
+        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">ESC</kbd> {t("menu")}</span>
       </footer>
     </div>
   );

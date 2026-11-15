@@ -241,6 +241,7 @@ const PlayScreen = () => {
               <p className="text-neon text-xl text-center">
                 {waited}s · {inQueue} {t("in_queue")}
               </p>
+              <p className="font-sans text-gray-400 text-sm sm:text-base text-center px-4">{t("bot_hint")}</p>
               <button onClick={handleCancel} className={`${btn} max-w-80 border-pink text-yellow`}>
                 {t("cancel")}
               </button>

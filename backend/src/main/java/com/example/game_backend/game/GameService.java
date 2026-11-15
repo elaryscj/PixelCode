@@ -4,6 +4,7 @@ import com.example.game_backend.entity.Challenge;
 import com.example.game_backend.entity.Player;
 import com.example.game_backend.entity.Room;
 import com.example.game_backend.entity.RoomStatus;
+import com.example.game_backend.entity.User;
 import com.example.game_backend.error.ApiException;
 import com.example.game_backend.repository.ChallengeRepository;
 import com.example.game_backend.repository.RoomRepository;
@@ -16,6 +17,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -100,17 +102,75 @@ public class GameService {
         session(code);
     }
 
-    private GameSession build(Room room) {
-        List<Challenge> pool = new ArrayList<>(challenges.findByPublishedTrueAndDifficulty("EASY"));
-        if (pool.isEmpty()) {
+    /**
+     * Door difficulty grows along the map and with the players' level (average MMR before the match):
+     * newcomers meet mostly EASY gates, strong players MEDIUM and HARD ones. Both players get the same four.
+     */
+    static List<String> doorDifficulties(int averageRating) {
+        if (averageRating < 1550) {
+            return List.of("EASY", "EASY", "EASY", "MEDIUM");
+        }
+        if (averageRating < 1650) {
+            return List.of("EASY", "EASY", "MEDIUM", "MEDIUM");
+        }
+        if (averageRating < 1800) {
+            return List.of("EASY", "MEDIUM", "MEDIUM", "HARD");
+        }
+        return List.of("MEDIUM", "MEDIUM", "HARD", "HARD");
+    }
+
+    private static final List<String> EASIER_FIRST = List.of("HARD", "MEDIUM", "EASY");
+
+    private List<Challenge> pickChallenges(int averageRating) {
+        Map<String, List<Challenge>> byLevel = new HashMap<>();
+        for (Challenge c : challenges.findByPublishedTrue()) {
+            byLevel.computeIfAbsent(c.getDifficulty(), k -> new ArrayList<>()).add(c);
+        }
+        if (byLevel.isEmpty()) {
             throw new ApiException(503, "No challenges are published yet");
         }
-        Collections.shuffle(pool);
+        byLevel.values().forEach(Collections::shuffle);
+        List<Challenge> picked = new ArrayList<>();
+        for (String wanted : doorDifficulties(averageRating)) {
+            Challenge c = null;
+            // the wanted level first, then easier ones, then anything left; avoid repeating a challenge
+            List<String> order = new ArrayList<>();
+            order.add(wanted);
+            for (String lvl : EASIER_FIRST.subList(EASIER_FIRST.indexOf(wanted) + 1, EASIER_FIRST.size())) {
+                order.add(lvl);
+            }
+            order.addAll(byLevel.keySet());
+            for (String lvl : order) {
+                List<Challenge> pool = byLevel.getOrDefault(lvl, List.of());
+                for (Challenge cand : pool) {
+                    if (!picked.contains(cand)) {
+                        c = cand;
+                        break;
+                    }
+                }
+                if (c != null) {
+                    break;
+                }
+            }
+            if (c == null) { // fewer published challenges than doors: repeat the first one
+                c = picked.get(0);
+            }
+            picked.add(c);
+        }
+        return picked;
+    }
+
+    private GameSession build(Room room) {
+        int sum = 0;
+        for (Player p : room.getPlayers()) {
+            sum += p.getRatingBefore() == null ? 1500 : p.getRatingBefore();
+        }
+        int average = room.getPlayers().isEmpty() ? 1500 : sum / room.getPlayers().size();
         List<GameSession.Snap> snaps = new ArrayList<>();
-        for (int i = 0; i < GameSession.DOORS; i++) {
-            Challenge c = pool.get(i % pool.size());
+        for (Challenge c : pickChallenges(average)) {
             snaps.add(new GameSession.Snap(c.getId(), c.getTitle(), c.getDescription(), c.getInputDescription(),
-                    c.getOutputDescription(), c.getFunctionName(), c.getStarterCode(), c.getExamples(), c.getTestsJson()));
+                    c.getOutputDescription(), c.getFunctionName(), c.getStarterCode(), c.getExamples(), c.getTestsJson(),
+                    c.getDifficulty()));
         }
         long now = System.currentTimeMillis();
         long started = room.getStartedAt() != null ? room.getStartedAt().toEpochMilli() : now;
@@ -121,6 +181,14 @@ public class GameService {
                     p.getRatingBefore() == null ? 1500 : p.getRatingBefore(), now);
             final GameSession.Slot slot = slots[i];
             users.findById(p.getUserId()).ifPresent(u -> slot.skin = u.getActiveSkin());
+        }
+        GameSession.Slot botSlot = null;
+        if (room.isBotMatch()) {
+            for (GameSession.Slot slot : slots) {
+                if (users.findById(slot.userId).map(User::isBot).orElse(false)) {
+                    botSlot = slot;
+                }
+            }
         }
         // rooms started before map voting existed have no map stored: derive a stable one from the code
         int mapId = room.getMapId() != null ? room.getMapId() : Math.floorMod(room.getCode().hashCode(), GameSession.MAP_COUNT);
@@ -135,7 +203,17 @@ public class GameService {
             slot.budgetDown = CAP_DOWN;
             slot.markVisited(slot.x, slot.y);
         }
-        return new GameSession(room.getCode(), mapId, room.isRanked(), started, snaps, slots);
+        GameSession session = new GameSession(room.getCode(), mapId, room.isRanked(), started, snaps, slots);
+        if (botSlot != null) {
+            GameSession.Slot human = session.other(botSlot.userId);
+            List<String> levels = new ArrayList<>();
+            for (GameSession.Snap sn : snaps) {
+                levels.add(sn.difficulty);
+            }
+            session.bot = new BotPlan(botSlot, arena, levels, human == null ? 1500 : human.rating,
+                    now + BotPlan.START_DELAY_MS, doorMs, new java.util.Random());
+        }
+        return session;
     }
 
     private GameSession activeSession(String code) {
@@ -267,7 +345,7 @@ public class GameService {
             Map<String, Object> m = new LinkedHashMap<>();
             m.put("cpNum", cp);
             m.put("title", sn.title);
-            m.put("difficulty", "EASY");
+            m.put("difficulty", sn.difficulty);
             m.put("description", sn.description);
             m.put("inputDescription", sn.inputDescription);
             m.put("outputDescription", sn.outputDescription);
@@ -525,6 +603,61 @@ public class GameService {
                     conclude(s, ca > cb ? a.userId : b.userId, "TIME_LIMIT", List.of(), true);
                 }
             }
+        }
+    }
+
+    // ---------------------------------------------------------------- PIXEL_BOT
+
+    /** Four times a second: move PIXEL_BOT along its plan, open its doors, let it finish. */
+    public void botTick() {
+        long now = System.currentTimeMillis();
+        for (GameSession s : sessions.values()) {
+            if (s.bot == null) {
+                continue;
+            }
+            try {
+                synchronized (s) {
+                    if (!s.over) {
+                        stepBot(s, now);
+                    }
+                }
+            } catch (RuntimeException e) {
+                log.error("Bot step failed for {}", s.code, e);
+            }
+        }
+    }
+
+    private void stepBot(GameSession s, long now) {
+        BotPlan plan = s.bot;
+        GameSession.Slot bot = plan.slot;
+        bot.lastSeen = now; // the bot is never "absent"
+        double[] p = plan.positionAt(now);
+        if (p[0] != bot.x || p[1] != bot.y) {
+            bot.x = p[0];
+            bot.y = p[1];
+            bot.posAt = now;
+            Map<String, Object> msg = new LinkedHashMap<>();
+            msg.put("type", "MOVE");
+            msg.put("sender", bot.nickname);
+            msg.put("userId", bot.userId);
+            msg.put("x", bot.x);
+            msg.put("y", bot.y);
+            emit(s.code, msg);
+        }
+        for (int cp = 1; cp <= GameSession.DOORS; cp++) {
+            if (bot.unlocked[cp]) {
+                continue;
+            }
+            if (bot.doorStartedAt[cp] == 0 && now >= plan.arriveAt[cp]) {
+                bot.doorStartedAt[cp] = plan.arriveAt[cp]; // its door timer runs like a human's
+            }
+            if (now >= plan.solvedAt[cp]) {
+                unlock(s, bot, cp, "SOLVED");
+            }
+            break; // doors open strictly in order
+        }
+        if (bot.unlockedCount() == GameSession.DOORS && now >= plan.arriveAt[5]) {
+            conclude(s, bot.userId, "FINISH", List.of(), true);
         }
     }
 

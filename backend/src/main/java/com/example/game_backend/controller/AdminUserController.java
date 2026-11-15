@@ -34,7 +34,7 @@ public class AdminUserController {
         requireAdmin(auth);
         String needle = q.trim().toLowerCase();
         List<Map<String, Object>> out = new ArrayList<>();
-        for (User u : users.findTop50ByOrderByRatingDescIdAsc()) {
+        for (User u : users.findTop50ByBotFalseOrderByRatingDescIdAsc()) {
             if (needle.isEmpty() || u.getUsername().toLowerCase().contains(needle)) out.add(view(u));
         }
         if (!needle.isEmpty()) {

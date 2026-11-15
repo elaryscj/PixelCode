@@ -22,6 +22,8 @@ public class GameSession {
     public boolean over;
     public long overAt;
     public Map<String, Object> result;
+    /** set when the opponent is PIXEL_BOT: its precomputed race (see BotPlan) */
+    BotPlan bot;
 
     public GameSession(String code, int mapId, boolean ranked, long startedAt, List<Snap> challenges, Slot[] slots) {
         this.code = code;
@@ -35,10 +37,12 @@ public class GameSession {
     public static class Snap {
         public final long id;
         public final String title, description, inputDescription, outputDescription, functionName, starterCode, examples, testsJson;
+        public final String difficulty;
 
         public Snap(long id, String title, String description, String inputDescription, String outputDescription,
-                    String functionName, String starterCode, String examples, String testsJson) {
+                    String functionName, String starterCode, String examples, String testsJson, String difficulty) {
             this.id = id;
+            this.difficulty = difficulty == null ? "EASY" : difficulty;
             this.title = title;
             this.description = description;
             this.inputDescription = inputDescription;

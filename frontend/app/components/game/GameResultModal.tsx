@@ -1,5 +1,6 @@
 // Match results screen (Figma: End game — Victory / Defeat / Technical Win / Technical Loss)
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import { SkinArt } from "~/components/skins";
 
@@ -20,6 +21,10 @@ interface GameResultModalProps {
   myRoomCode?: string;
   /** ranked queue match (false = private room: no rating change) */
   ranked?: boolean;
+  /** the opponent was PIXEL_BOT: no rating change, a small PIXELS reward, no rematch */
+  botMatch?: boolean;
+  /** PIXELS earned in a bot match */
+  botReward?: number;
   mapName?: string;
   /** the rival already asked for a rematch */
   rematchOffered?: boolean;
@@ -43,36 +48,39 @@ export default function GameResultModal({
   oppCheckpoints = 0,
   myRoomCode,
   ranked = true,
+  botMatch = false,
+  botReward = 0,
   mapName = "ARENA",
   rematchOffered = false,
   rematchBusy = false,
   onRematch,
 }: GameResultModalProps) {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   const newMmr = Math.max(0, oldMmr + mmrDelta);
-  const title = isDraw ? "Draw" : isTechnical ? (isWinner ? "Technical Win" : "Technical Loss") : isWinner ? "VICTORY!" : "DEFEAT";
+  const title = isDraw ? t("rs_draw") : isTechnical ? (isWinner ? t("rs_tech_win") : t("rs_tech_loss")) : isWinner ? t("rs_victory") : t("rs_defeat");
   const titleColor = isDraw || isWinner ? "text-yellow" : "text-pink";
   const subtitle = isDraw
-    ? "Nobody reached the exit in time."
+    ? t("rs_sub_draw")
     : isTechnical
       ? isWinner
-        ? "Opponent did not return in time"
-        : "You did not return in time"
+        ? t("rs_sub_opp_left")
+        : t("rs_sub_you_left")
       : isWinner
-        ? "Circuit conquered. You reached the exit first."
-        : `${opponentNickname} reached the exit first.`;
-  const banner = isDraw ? "THE DUEL IS A DRAW" : isWinner ? "YOU WIN THE DUEL" : "YOU LOSE THE DUEL";
+        ? t("rs_sub_win")
+        : t("rs_sub_loss", { name: opponentNickname });
+  const banner = isDraw ? t("rs_banner_draw") : isWinner ? t("rs_banner_win") : t("rs_banner_loss");
   const deltaTxt = `${mmrDelta >= 0 ? "+" : ""}${mmrDelta} MMR`;
   const tag = (mine: boolean) =>
-    isDraw ? "DRAW" : (mine ? isWinner : !isWinner) ? (isTechnical ? "WINNER / TECHNICAL WIN" : "WINNER / EXIT SECURED") : "DUEL COMPLETE";
+    isDraw ? t("rs_tag_draw") : (mine ? isWinner : !isWinner) ? (isTechnical ? t("rs_tag_tech") : t("rs_tag_exit")) : t("rs_tag_done");
 
   const Player = ({ mine }: { mine: boolean }) => {
     const color = mine ? "border-neon" : "border-pink";
     const sq = mine ? "bg-neon" : "bg-pink";
     return (
       <div className="flex flex-col items-center gap-2 w-72">
-        <span className={`text-xl ${mine ? "text-neon" : "text-pink"}`}>{mine ? "PLAYER 01 / YOU" : "PLAYER 02 / RIVAL"}</span>
+        <span className={`text-xl ${mine ? "text-neon" : "text-pink"}`}>{mine ? t("lb_you_label") : botMatch ? t("lb_bot_label") : t("lb_rival_label")}</span>
         <div className={`relative border-2 ${color} w-60 h-60 bg-[#0a0f24] flex items-center justify-center`}>
           <span className={`absolute -top-1 -right-1 w-3 h-3 ${sq}`} />
           <span className={`absolute -bottom-1 -left-1 w-3 h-3 ${sq}`} />
@@ -92,15 +100,15 @@ export default function GameResultModal({
     </div>
   );
 
-  const exitA = isWinner && !isDraw ? matchDuration : "NOT REACHED";
-  const exitB = !isWinner && !isDraw ? matchDuration : "NOT REACHED";
+  const exitA = isWinner && !isDraw ? matchDuration : t("rs_not_reached");
+  const exitB = !isWinner && !isDraw ? matchDuration : t("rs_not_reached");
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-[#050816] font-pixel select-none">
       <div className="grid-background" />
       <div className="relative mx-auto max-w-280 px-6 py-10 flex flex-col items-center gap-6">
         <p className="flex items-center gap-4 text-neon text-xl">
-          <span className="w-12 h-0.5 bg-neon" /> {ranked ? "RANKED DUEL" : "PRIVATE ROOM"} / MATCH COMPLETE <span className="w-12 h-0.5 bg-neon" />
+          <span className="w-12 h-0.5 bg-neon" /> {botMatch ? t("kind_bot") : ranked ? t("kind_ranked") : t("kind_private")} / {t("rs_complete")} <span className="w-12 h-0.5 bg-neon" />
         </p>
         <h1 className={`${titleColor} text-glow-sm text-[96px]/none text-center`}>{title}</h1>
         <p className="font-sans text-xl text-gray-300 -mt-2">{subtitle}</p>
@@ -110,22 +118,26 @@ export default function GameResultModal({
           <div className="flex flex-col items-center gap-3 w-full max-w-120 px-4 mt-8">
             <span className="text-neon text-2xl">{banner}</span>
             <div className="w-full border border-neon bg-[#060b1e] p-6 flex flex-col items-center gap-4">
-              <span className="text-neon text-xl">{isTechnical ? "YOUR MMR" : "YOUR MATCHMAKING RATING"}</span>
+              <span className="text-neon text-xl">{isTechnical ? t("rs_your_mmr") : t("rs_your_rating")}</span>
               <div className="flex items-center justify-between w-full px-2">
                 <div className="flex flex-col">
-                  <span className="font-sans text-gray-400 text-base">BEFORE</span>
+                  <span className="font-sans text-gray-400 text-base">{t("rs_before")}</span>
                   <span className="text-gray-400 text-[64px]/none">{oldMmr}</span>
                 </div>
                 <FaArrowRight className="text-neon text-2xl" />
                 <div className="flex flex-col items-end">
-                  <span className="font-sans text-gray-300 text-base">AFTER</span>
+                  <span className="font-sans text-gray-300 text-base">{t("rs_after")}</span>
                   <span className={`${mmrDelta >= 0 ? "text-yellow" : "text-pink"} text-[64px]/none`}>{newMmr}</span>
                 </div>
               </div>
               <div className="w-full border border-neon text-center text-neon text-3xl py-2">{deltaTxt}</div>
             </div>
             <span className="font-sans text-gray-400 text-base">
-              {ranked ? "RATING UPDATED · RANKED RESULT SAVED" : "PRIVATE ROOM · NOT RANKED, RATING UNCHANGED"}
+              {botMatch
+                ? t("rs_note_bot", { pixels: botReward })
+                : ranked
+                  ? t("rs_note_ranked")
+                  : t("rs_note_private")}
             </span>
           </div>
           <Player mine={false} />
@@ -133,40 +145,40 @@ export default function GameResultModal({
 
         <div className="w-full border border-neon/50 bg-[#060b1e]">
           <div className="flex items-center justify-between px-5 py-3 text-lg">
-            <span className="text-yellow">MATCH SUMMARY</span>
+            <span className="text-yellow">{t("rs_summary")}</span>
             <span className="font-sans text-gray-400 flex-1 ml-6">{mapName} · #{myRoomCode ?? "—"} · {matchDuration}</span>
-            <span className="text-neon w-48 text-left">{playerNickname} / YOU</span>
+            <span className="text-neon w-48 text-left">{playerNickname} / {t("tag_you")}</span>
             <span className="text-pink w-48 text-right truncate">{opponentNickname}</span>
           </div>
-          {row("Checkpoints secured", `${myCheckpoints} / 4`, `${oppCheckpoints} / 4`)}
-          {row("Exit time", exitA, exitB)}
+          {row(t("rs_checkpoints"), `${myCheckpoints} / 4`, `${oppCheckpoints} / 4`)}
+          {row(t("rs_exit_time"), exitA, exitB)}
         </div>
 
-        <p className="font-sans text-gray-400 text-lg">Keep the momentum. Your next rival is waiting.</p>
+        <p className="font-sans text-gray-400 text-lg">{t("rs_momentum")}</p>
         <div className="flex gap-6 w-full">
           <Link to="/play" className="flex-[1.4] text-center py-4 text-2xl bg-pink border-2 border-yellow text-black">
-            FIND A NEW MATCH
+            {t("rs_find_new")}
           </Link>
-          <button
+          {!botMatch && <button
             type="button"
             onClick={onRematch}
             disabled={!onRematch || rematchBusy}
-            title="A friendly rematch with the same rival in a private room (not ranked)"
+            title={t("rs_rematch_hint")}
             className={`flex-1 text-center py-4 text-2xl border-2 disabled:opacity-50 ${
               rematchOffered ? "border-yellow text-black bg-yellow animate-pulse" : "border-neon text-yellow"
             }`}
           >
-            {rematchBusy ? "OPENING..." : rematchOffered ? "ACCEPT REMATCH" : "REMATCH"}
-          </button>
+            {rematchBusy ? t("rs_opening") : rematchOffered ? t("rs_accept_rematch") : t("rs_rematch")}
+          </button>}
           <Link
             to={myRoomCode ? `/results?match=${encodeURIComponent(myRoomCode)}` : "/results"}
             className="flex-1 text-center py-4 text-2xl border-2 border-neon text-yellow"
           >
-            SEE MY RESULTS
+            {t("rs_see_results")}
           </Link>
         </div>
         <Link to="/" className="flex items-center gap-2 text-neon text-xl">
-          <FaArrowLeft /> BACK TO MAIN PAGE
+          <FaArrowLeft /> {t("rs_back_main")}
         </Link>
       </div>
     </div>

@@ -5,12 +5,13 @@ import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useNavigate } from "react-router";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
+import i18n from "~/language-config/languages";
 import { SkinArt } from "~/components/skins";
 import { getCurrentUser, refreshUser } from "~/api/auth";
 import { buySkin, equipSkin, getStore, type StoreState } from "~/api/store";
 import { onlineLabel, useLiveStats } from "~/lib/liveStats";
 import PingBadge from "~/components/PingBadge";
-import EnglishOnly from "~/components/EnglishOnly";
 
 type Skin = {
   id: string;
@@ -56,9 +57,12 @@ const BASE_SKINS: Skin[] = [
   },
 ];
 
-const priceLabel = (n: number) => (n === 0 ? "FREE" : `${n.toLocaleString()} PIXELS`);
+// "1 200 PIXELS" is wrapped in Unicode isolates (LRI ... PDI) so it never turns into "PIXELS 1 200" in Arabic / Urdu
+const pixels = (n: number) => `\u2066${n.toLocaleString()} PIXELS\u2069`;
+const priceLabel = (n: number) => (n === 0 ? i18n.t("st_free") : pixels(n));
 
 function StoreRouteScreen() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const liveStats = useLiveStats();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -74,7 +78,7 @@ function StoreRouteScreen() {
     }
     getStore()
       .then(setStore)
-      .catch((e) => showToast(e instanceof Error ? e.message : "Could not load the store"));
+      .catch((e) => showToast(e instanceof Error ? e.message : t("st_err_load")));
   }, [navigate]);
 
   const balance = store?.balance ?? 0;
@@ -124,11 +128,11 @@ function StoreRouteScreen() {
     try {
       setStore(await buySkin(currentSkin.id));
       setConfirming(false);
-      showToast(price === 0 ? `${currentSkin.name} UNLOCKED & EQUIPPED!` : `${currentSkin.name} PURCHASED & EQUIPPED!`);
+      showToast(price === 0 ? t("st_toast_free", { name: currentSkin.name }) : t("st_toast_bought", { name: currentSkin.name }));
       void refreshUser();
     } catch (e) {
       setConfirming(false);
-      showToast(e instanceof Error ? e.message : "Something went wrong");
+      showToast(e instanceof Error ? e.message : t("unexpected_error"));
     } finally {
       setBusy(false);
     }
@@ -140,10 +144,10 @@ function StoreRouteScreen() {
       setBusy(true);
       try {
         setStore(await equipSkin(currentSkin.id));
-        showToast(`${currentSkin.name} EQUIPPED!`);
+        showToast(t("st_toast_equipped", { name: currentSkin.name }));
         void refreshUser();
       } catch (e) {
-        showToast(e instanceof Error ? e.message : "Something went wrong");
+        showToast(e instanceof Error ? e.message : t("unexpected_error"));
       } finally {
         setBusy(false);
       }
@@ -177,11 +181,11 @@ function StoreRouteScreen() {
           to="/"
           className="flex items-center gap-2 border-2 border-pink px-4 py-1.5 text-xs text-pink uppercase hover:bg-pink/10 transition-colors"
         >
-          &lt; MENU
+          &lt; {t("menu")}
         </Link>
 
         <div className="flex items-center gap-3 text-xs">
-          <span className="text-[#01E4FF]">SERVER: KAZAKHSTAN</span>
+          <span className="text-[#01E4FF]">{t("server")}</span>
           <span className="w-2 h-2 rounded-full bg-yellow animate-pulse" />
           <PingBadge />
           <span className="w-2 h-2 rounded-full bg-yellow animate-pulse" />
@@ -198,10 +202,10 @@ function StoreRouteScreen() {
             — PIXELCODE ARENA —
           </div>
           <h1 className="text-yellow text-4xl sm:text-5xl tracking-widest text-glow-sm">
-            STORE
+            {t("store").toUpperCase()}
           </h1>
           <div className="text-[10px] text-gray-400 tracking-wider mt-1 uppercase">
-            A NEW LOOK. THE SAME FIGHT.
+            {t("st_tagline")}
           </div>
         </div>
 
@@ -212,8 +216,8 @@ function StoreRouteScreen() {
           <div className="bg-[#070c1e]/90 border-2 border-[#01E4FF] p-6 shadow-[0_0_25px_rgba(1,228,255,0.2)] flex flex-col justify-between relative min-h-[420px]">
             {/* Header inside Preview */}
             <div className="flex justify-between items-center text-xs tracking-wider text-[#01E4FF]">
-              <span>SKIN PREVIEW</span>
-              <span className="text-gray-400">{String(currentIndex + 1).padStart(2, "0")} / {String(SKINS.length).padStart(2, "0")}</span>
+              <span>{t("st_preview")}</span>
+              <span dir="ltr" className="text-gray-400">{String(currentIndex + 1).padStart(2, "0")} / {String(SKINS.length).padStart(2, "0")}</span>
             </div>
 
             {/* Character Stage with Working Chevrons */}
@@ -224,7 +228,7 @@ function StoreRouteScreen() {
                 className="w-10 h-10 border-2 border-[#01E4FF] bg-[#02050f] text-yellow flex items-center justify-center text-sm hover:border-glow-neon hover:text-white active:scale-95 transition-all cursor-pointer z-10"
                 title="Previous Skin (Arrow Left)"
               >
-                <FaChevronLeft />
+                <FaChevronLeft className="rtl:-scale-x-100" />
               </button>
 
               {/* Character Figure & Glowing Podium */}
@@ -242,7 +246,7 @@ function StoreRouteScreen() {
                 className="w-10 h-10 border-2 border-[#01E4FF] bg-[#02050f] text-yellow flex items-center justify-center text-sm hover:border-glow-neon hover:text-white active:scale-95 transition-all cursor-pointer z-10"
                 title="Next Skin (Arrow Right)"
               >
-                <FaChevronRight />
+                <FaChevronRight className="rtl:-scale-x-100" />
               </button>
             </div>
 
@@ -273,29 +277,29 @@ function StoreRouteScreen() {
             {/* Header info */}
             <div>
               <div className="flex justify-between items-center text-xs tracking-wider mb-1">
-                <span className="text-pink">{currentSkin.category}</span>
-                <span className="text-[#01E4FF]">{isEquipped ? "EQUIPPED" : isOwned ? "OWNED" : "AVAILABLE"}</span>
+                <span dir="ltr" className="text-pink">{currentSkin.category}</span>
+                <span className="text-[#01E4FF]">{isEquipped ? t("st_equipped") : isOwned ? t("st_owned") : t("st_available")}</span>
               </div>
               <h2 className="text-yellow text-3xl sm:text-4xl tracking-wider mb-4">
                 {currentSkin.name}
               </h2>
 
-              <div className="mb-2 text-[#01E4FF] text-xs">&gt; SKIN_HISTORY</div>
+              <div className="mb-2 text-[#01E4FF] text-xs">&gt; {t("st_history")}</div>
               <p className="text-gray-300 text-xs leading-relaxed font-sans max-w-lg">
-                {currentSkin.lore}
+                <span dir="auto" className="block">{currentSkin.lore}</span>
               </p>
             </div>
 
             {/* UNLOCK_SKIN Box */}
             <div className="bg-[#070c1e]/90 border-2 border-[#01E4FF] p-6 shadow-[0_0_20px_rgba(1,228,255,0.15)] flex flex-col gap-4">
               <div className="flex items-center justify-between pb-2 border-b border-[#01E4FF]/30">
-                <span className="text-sm text-[#01E4FF]">&gt; UNLOCK_SKIN</span>
+                <span className="text-sm text-[#01E4FF]">&gt; {t("st_unlock")}</span>
                 <span className="w-2.5 h-2.5 rounded-full bg-pink animate-pulse" />
               </div>
 
               {/* Price Row */}
               <div className="flex flex-col gap-1.5">
-                <span className="text-[10px] text-yellow tracking-wider uppercase">PRICE</span>
+                <span className="text-[10px] text-yellow tracking-wider uppercase">{t("st_price")}</span>
                 <div className="w-full bg-[#02050f] border border-[#01E4FF] px-4 py-2.5 text-xs text-yellow tracking-wider">
                   {priceLabel(price)}
                 </div>
@@ -303,9 +307,9 @@ function StoreRouteScreen() {
 
               {/* Balance Row */}
               <div className="flex flex-col gap-1.5">
-                <span className="text-[10px] text-yellow tracking-wider uppercase">YOUR BALANCE</span>
+                <span className="text-[10px] text-yellow tracking-wider uppercase">{t("st_balance")}</span>
                 <div className="w-full bg-[#02050f] border border-[#01E4FF] px-4 py-2.5 text-xs text-[#01E4FF] tracking-wider">
-                  {balance.toLocaleString()} PIXELS
+                  {pixels(balance)}
                 </div>
               </div>
 
@@ -323,18 +327,18 @@ function StoreRouteScreen() {
                     : "bg-[#FE2C96] text-black border-2 border-yellow hover:brightness-110 cursor-pointer shadow-[0_0_12px_rgba(254,44,150,0.4)]"
                 }`}
               >
-                {isEquipped ? "EQUIPPED" : isOwned ? "EQUIP SKIN" : price === 0 ? "GET FREE SKIN" : "BUY SKIN"}
+                {isEquipped ? t("st_equipped") : isOwned ? t("st_equip") : price === 0 ? t("st_get_free") : t("st_buy")}
               </button>
 
               {cantAfford ? (
                 <div className="text-center text-[10px] leading-tight">
-                  <div className="text-pink">Not enough PIXELS</div>
+                  <div className="text-pink">{t("st_not_enough")}</div>
                   <div className="mt-1 text-gray-300">{missing.toLocaleString()} PIXELS MORE REQUIRED</div>
                 </div>
               ) : (
                 <div className="text-center text-[9px] text-gray-400 leading-tight">
-                  {!isOwned && price > 0 && <div>AFTER PURCHASE: {afterPurchase.toLocaleString()} PIXELS</div>}
-                  <div className="mt-1">PERMANENT UNLOCK // COSMETIC ONLY</div>
+                  {!isOwned && price > 0 && <div>{t("st_after")}: {pixels(afterPurchase)}</div>}
+                  <div className="mt-1">{t("st_permanent")}</div>
                 </div>
               )}
             </div>
@@ -346,8 +350,8 @@ function StoreRouteScreen() {
         {/* Bottom Selector Carousel (Thumbnails) */}
         <div className="w-full mt-8">
           <div className="flex justify-between items-center text-xs text-[#01E4FF] mb-3">
-            <span>ARENA ORIGINALS + SEASONAL</span>
-            <span className="text-gray-400 text-[10px]">{SKINS.length} SKINS // USE CHEVRONS TO BROWSE</span>
+            <span>{t("st_collection")}</span>
+            <span className="text-gray-400 text-[10px]">{t("st_count", { n: SKINS.length })}</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -368,7 +372,7 @@ function StoreRouteScreen() {
                   </div>
                   <div className="flex flex-col justify-between overflow-hidden">
                     <div className="text-yellow text-xs tracking-wider truncate">{skin.name}</div>
-                    <div className="text-gray-400 text-[9px] truncate">{skin.shortDesc}</div>
+                    <div dir="auto" className="text-gray-400 text-[9px] truncate">{skin.shortDesc}</div>
                     <div className="text-[#01E4FF] text-[10px] mt-1">{priceLabel(priceOf(skin.id))}</div>
                   </div>
                 </div>
@@ -385,7 +389,7 @@ function StoreRouteScreen() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between pb-3 border-b-2 border-[#01E4FF]">
-                <span className="text-xl text-[#01E4FF] tracking-wider">&gt; CONFIRM PURCHASE</span>
+                <span className="text-xl text-[#01E4FF] tracking-wider">&gt; {t("st_confirm_title")}</span>
                 <span className="w-2.5 h-2.5 bg-pink" />
               </div>
 
@@ -395,7 +399,7 @@ function StoreRouteScreen() {
                 </div>
                 <div className="flex flex-col justify-center gap-3">
                   <h3 className="text-yellow text-3xl tracking-wider">{currentSkin.name}</h3>
-                  <div className="text-pink text-[11px] tracking-wider">{currentSkin.category}</div>
+                  <div dir="ltr" className="text-pink text-[11px] tracking-wider">{currentSkin.category}</div>
                   <p className="text-gray-300 text-xs font-sans leading-relaxed">
                     Unlock this skin permanently. Cosmetics do not affect gameplay.
                   </p>
@@ -405,12 +409,12 @@ function StoreRouteScreen() {
 
               <div className="border border-[#01E4FF]/50 p-4 flex flex-col gap-3 text-xs">
                 <div className="flex justify-between text-gray-300">
-                  <span className="font-sans">Your balance</span>
-                  <span className="text-[#01E4FF] tracking-wider">{balance.toLocaleString()} PIXELS</span>
+                  <span className="font-sans">{t("st_your_balance")}</span>
+                  <span className="text-[#01E4FF] tracking-wider">{pixels(balance)}</span>
                 </div>
                 <div className="flex justify-between text-gray-300">
-                  <span className="font-sans">Balance after purchase</span>
-                  <span className="text-yellow tracking-wider">{afterPurchase.toLocaleString()} PIXELS</span>
+                  <span className="font-sans">{t("st_after")}</span>
+                  <span className="text-yellow tracking-wider">{pixels(afterPurchase)}</span>
                 </div>
               </div>
 
@@ -420,18 +424,18 @@ function StoreRouteScreen() {
                   disabled={busy}
                   className="flex-1 py-3 bg-[#FE2C96] text-black border-2 border-yellow text-sm tracking-widest hover:brightness-110 disabled:opacity-50 cursor-pointer"
                 >
-                  {busy ? "..." : "Confirm"}
+                  {busy ? "..." : t("st_confirm")}
                 </button>
                 <button
                   onClick={() => setConfirming(false)}
                   disabled={busy}
                   className="flex-1 py-3 bg-[#02050f] text-white border-2 border-[#01E4FF] text-sm tracking-widest hover:bg-[#0c1533] cursor-pointer"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
               </div>
 
-              <div className="text-[10px] text-gray-400 tracking-wider">PERMANENT UNLOCK / COSMETIC ONLY</div>
+              <div className="text-[10px] text-gray-400 tracking-wider">{t("st_permanent")}</div>
             </div>
           </div>
         )}
@@ -460,9 +464,5 @@ function StoreRouteScreen() {
 }
 
 export default function StoreRoute() {
-  return <ClientOnly fallback={<ScreenLoading />}>{() => (
-        <EnglishOnly>
-          <StoreRouteScreen />
-        </EnglishOnly>
-      )}</ClientOnly>;
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <StoreRouteScreen />}</ClientOnly>;
 }

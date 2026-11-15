@@ -1,0 +1,2290 @@
+[
+ {
+  "title": "GATE // PARITY LOCK",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(n)` that returns true if the integer is even, otherwise false.",
+  "inputDescription": "An integer `n` (-1000 <= n <= 1000).",
+  "outputDescription": "Boolean true or false.",
+  "functionName": "solve",
+  "params": "n",
+  "examples": "solve(4) -> true\nsolve(7) -> false",
+  "tests": [
+   {
+    "input": [
+     4
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     7
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     0
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     -3
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     -8
+    ],
+    "expected": true
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static boolean solve(int n) {\n        return n % 2 == 0;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // FIZZ PROTOCOL",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(n)` that returns \"FizzBuzz\" if n is divisible by 3 and 5, \"Fizz\" if divisible by 3, \"Buzz\" if divisible by 5, otherwise the number as a string.",
+  "inputDescription": "A positive integer `n`.",
+  "outputDescription": "A string.",
+  "functionName": "solve",
+  "params": "n",
+  "examples": "solve(15) -> \"FizzBuzz\"\nsolve(7) -> \"7\"",
+  "tests": [
+   {
+    "input": [
+     15
+    ],
+    "expected": "FizzBuzz"
+   },
+   {
+    "input": [
+     7
+    ],
+    "expected": "7"
+   },
+   {
+    "input": [
+     9
+    ],
+    "expected": "Fizz"
+   },
+   {
+    "input": [
+     10
+    ],
+    "expected": "Buzz"
+   },
+   {
+    "input": [
+     1
+    ],
+    "expected": "1"
+   },
+   {
+    "input": [
+     30
+    ],
+    "expected": "FizzBuzz"
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static String solve(int n) {\n        if (n % 15 == 0) return \"FizzBuzz\";\n        if (n % 3 == 0) return \"Fizz\";\n        if (n % 5 == 0) return \"Buzz\";\n        return String.valueOf(n);\n    }\n}\n"
+ },
+ {
+  "title": "GATE // FACTORIAL CORE",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(n)` that returns n! (the factorial of n). 0! is 1.",
+  "inputDescription": "An integer `n` (0 <= n <= 10).",
+  "outputDescription": "The factorial of n.",
+  "functionName": "solve",
+  "params": "n",
+  "examples": "solve(5) -> 120\nsolve(0) -> 1",
+  "tests": [
+   {
+    "input": [
+     5
+    ],
+    "expected": 120
+   },
+   {
+    "input": [
+     0
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     1
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     3
+    ],
+    "expected": 6
+   },
+   {
+    "input": [
+     10
+    ],
+    "expected": 3628800
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int n) {\n        int r = 1;\n        for (int i = 2; i <= n; i++) r *= i;\n        return r;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // SQUARE GRID",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(nums)` that returns a new array with every number squared.",
+  "inputDescription": "An array of integers `nums` (may be empty).",
+  "outputDescription": "An array of the squares, in the same order.",
+  "functionName": "solve",
+  "params": "nums",
+  "examples": "solve([1, 2, 3]) -> [1,4,9]\nsolve([]) -> []",
+  "tests": [
+   {
+    "input": [
+     [
+      1,
+      2,
+      3
+     ]
+    ],
+    "expected": [
+     1,
+     4,
+     9
+    ]
+   },
+   {
+    "input": [
+     []
+    ],
+    "expected": []
+   },
+   {
+    "input": [
+     [
+      -2,
+      5
+     ]
+    ],
+    "expected": [
+     4,
+     25
+    ]
+   },
+   {
+    "input": [
+     [
+      10
+     ]
+    ],
+    "expected": [
+     100
+    ]
+   },
+   {
+    "input": [
+     [
+      0,
+      0
+     ]
+    ],
+    "expected": [
+     0,
+     0
+    ]
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int[] solve(int[] nums) {\n        int[] r = new int[nums.length];\n        for (int i = 0; i < nums.length; i++) r[i] = nums[i] * nums[i];\n        return r;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // NEURAL SUM",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(a, b)` that returns the sum of two integers.",
+  "inputDescription": "Two integers `a` and `b` (-1000 <= a, b <= 1000).",
+  "outputDescription": "The integer a + b.",
+  "functionName": "solve",
+  "params": "a, b",
+  "examples": "solve(3, 7) -> 10\nsolve(-5, 12) -> 7",
+  "tests": [
+   {
+    "input": [
+     3,
+     7
+    ],
+    "expected": 10
+   },
+   {
+    "input": [
+     -5,
+     12
+    ],
+    "expected": 7
+   },
+   {
+    "input": [
+     0,
+     0
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     99,
+     -99
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     1000,
+     1000
+    ],
+    "expected": 2000
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int a, int b) {\n        return a + b;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // CYBER MIRROR",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(str)` that returns true if the string reads the same forwards and backwards, otherwise false.",
+  "inputDescription": "A lowercase alphanumeric string `str`.",
+  "outputDescription": "Boolean true or false.",
+  "functionName": "solve",
+  "params": "str",
+  "examples": "solve(\"racecar\") -> true\nsolve(\"neon\") -> false",
+  "tests": [
+   {
+    "input": [
+     "racecar"
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     "neon"
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     "radar"
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     "pixelcode"
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     "a"
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     "ab"
+    ],
+    "expected": false
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static boolean solve(String str) {\n        return new StringBuilder(str).reverse().toString().equals(str);\n    }\n}\n"
+ },
+ {
+  "title": "GATE // MAX SIGNAL",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(nums)` that returns the largest number in an array.",
+  "inputDescription": "An array of numbers `nums` (length >= 1).",
+  "outputDescription": "The maximum number in the array.",
+  "functionName": "solve",
+  "params": "nums",
+  "examples": "solve([1, 5, 3, 9, 2]) -> 9\nsolve([-10, -50, -2, -99]) -> -2",
+  "tests": [
+   {
+    "input": [
+     [
+      1,
+      5,
+      3,
+      9,
+      2
+     ]
+    ],
+    "expected": 9
+   },
+   {
+    "input": [
+     [
+      -10,
+      -50,
+      -2,
+      -99
+     ]
+    ],
+    "expected": -2
+   },
+   {
+    "input": [
+     [
+      42
+     ]
+    ],
+    "expected": 42
+   },
+   {
+    "input": [
+     [
+      7,
+      7,
+      7
+     ]
+    ],
+    "expected": 7
+   },
+   {
+    "input": [
+     [
+      0,
+      -1,
+      100,
+      99
+     ]
+    ],
+    "expected": 100
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int[] nums) {\n        int m = nums[0];\n        for (int n : nums) m = Math.max(m, n);\n        return m;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // DATA REVERSAL",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(str)` that returns the string reversed.",
+  "inputDescription": "A string `str`.",
+  "outputDescription": "The reversed string.",
+  "functionName": "solve",
+  "params": "str",
+  "examples": "solve(\"cyber\") -> \"rebyc\"\nsolve(\"12345\") -> \"54321\"",
+  "tests": [
+   {
+    "input": [
+     "cyber"
+    ],
+    "expected": "rebyc"
+   },
+   {
+    "input": [
+     "12345"
+    ],
+    "expected": "54321"
+   },
+   {
+    "input": [
+     "a"
+    ],
+    "expected": "a"
+   },
+   {
+    "input": [
+     "world"
+    ],
+    "expected": "dlrow"
+   },
+   {
+    "input": [
+     ""
+    ],
+    "expected": ""
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static String solve(String str) {\n        return new StringBuilder(str).reverse().toString();\n    }\n}\n"
+ },
+ {
+  "title": "GATE // VOWEL SCAN",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(str)` that counts the vowels (a, e, i, o, u) in a lowercase string.",
+  "inputDescription": "A lowercase string `str`.",
+  "outputDescription": "The number of vowels.",
+  "functionName": "solve",
+  "params": "str",
+  "examples": "solve(\"pixel\") -> 2\nsolve(\"rhythm\") -> 0",
+  "tests": [
+   {
+    "input": [
+     "pixel"
+    ],
+    "expected": 2
+   },
+   {
+    "input": [
+     "rhythm"
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     "aeiou"
+    ],
+    "expected": 5
+   },
+   {
+    "input": [
+     ""
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     "neon code"
+    ],
+    "expected": 4
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(String str) {\n        int c = 0;\n        for (char ch : str.toCharArray()) if (\"aeiou\".indexOf(ch) >= 0) c++;\n        return c;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // ARRAY TOTAL",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(nums)` that returns the sum of all numbers in an array.",
+  "inputDescription": "An array of integers `nums` (may be empty).",
+  "outputDescription": "The sum of all elements (0 for an empty array).",
+  "functionName": "solve",
+  "params": "nums",
+  "examples": "solve([1, 2, 3]) -> 6\nsolve([]) -> 0",
+  "tests": [
+   {
+    "input": [
+     [
+      1,
+      2,
+      3
+     ]
+    ],
+    "expected": 6
+   },
+   {
+    "input": [
+     []
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     [
+      -4,
+      4
+     ]
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     [
+      10,
+      20,
+      30,
+      40
+     ]
+    ],
+    "expected": 100
+   },
+   {
+    "input": [
+     [
+      5
+     ]
+    ],
+    "expected": 5
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int[] nums) {\n        int s = 0;\n        for (int n : nums) s += n;\n        return s;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // MIN SIGNAL",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(nums)` that returns the smallest number in an array.",
+  "inputDescription": "An array of integers `nums` (length >= 1).",
+  "outputDescription": "The minimum.",
+  "functionName": "solve",
+  "params": "nums",
+  "examples": "solve([4, 2, 9]) -> 2\nsolve([-1, -7]) -> -7",
+  "tests": [
+   {
+    "input": [
+     [
+      4,
+      2,
+      9
+     ]
+    ],
+    "expected": 2
+   },
+   {
+    "input": [
+     [
+      -1,
+      -7
+     ]
+    ],
+    "expected": -7
+   },
+   {
+    "input": [
+     [
+      5
+     ]
+    ],
+    "expected": 5
+   },
+   {
+    "input": [
+     [
+      3,
+      3,
+      3
+     ]
+    ],
+    "expected": 3
+   },
+   {
+    "input": [
+     [
+      100,
+      -100,
+      0
+     ]
+    ],
+    "expected": -100
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int[] nums) {\n        int m = nums[0];\n        for (int n : nums) m = Math.min(m, n);\n        return m;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // NEGATIVE SCAN",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(nums)` that counts how many numbers in the array are negative.",
+  "inputDescription": "An array of integers `nums` (may be empty).",
+  "outputDescription": "How many elements are below zero.",
+  "functionName": "solve",
+  "params": "nums",
+  "examples": "solve([1, -2, -3]) -> 2\nsolve([]) -> 0",
+  "tests": [
+   {
+    "input": [
+     [
+      1,
+      -2,
+      -3
+     ]
+    ],
+    "expected": 2
+   },
+   {
+    "input": [
+     []
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     [
+      0,
+      0
+     ]
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     [
+      -1
+     ]
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     [
+      -5,
+      5,
+      -5,
+      5
+     ]
+    ],
+    "expected": 2
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int[] nums) {\n        int c = 0;\n        for (int n : nums) if (n < 0) c++;\n        return c;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // CAPS LOCK",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(str)` that returns the string in upper case.",
+  "inputDescription": "A string `str` of letters, digits and spaces.",
+  "outputDescription": "The same string in upper case.",
+  "functionName": "solve",
+  "params": "str",
+  "examples": "solve(\"neon\") -> \"NEON\"\nsolve(\"Arena 7\") -> \"ARENA 7\"",
+  "tests": [
+   {
+    "input": [
+     "neon"
+    ],
+    "expected": "NEON"
+   },
+   {
+    "input": [
+     "Arena 7"
+    ],
+    "expected": "ARENA 7"
+   },
+   {
+    "input": [
+     ""
+    ],
+    "expected": ""
+   },
+   {
+    "input": [
+     "ABC"
+    ],
+    "expected": "ABC"
+   },
+   {
+    "input": [
+     "mIxEd"
+    ],
+    "expected": "MIXED"
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static String solve(String str) {\n        return str.toUpperCase();\n    }\n}\n"
+ },
+ {
+  "title": "GATE // ABSOLUTE ZERO",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(n)` that returns the absolute value of n (its distance from zero).",
+  "inputDescription": "An integer `n` (-10000 <= n <= 10000).",
+  "outputDescription": "The absolute value of n.",
+  "functionName": "solve",
+  "params": "n",
+  "examples": "solve(-5) -> 5\nsolve(3) -> 3",
+  "tests": [
+   {
+    "input": [
+     -5
+    ],
+    "expected": 5
+   },
+   {
+    "input": [
+     3
+    ],
+    "expected": 3
+   },
+   {
+    "input": [
+     0
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     -10000
+    ],
+    "expected": 10000
+   },
+   {
+    "input": [
+     1
+    ],
+    "expected": 1
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int n) {\n        return n < 0 ? -n : n;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // LAST BYTE",
+  "difficulty": "EASY",
+  "description": "Write a method `solve(str)` that returns the last character of the string, as a string.",
+  "inputDescription": "A non-empty string `str`.",
+  "outputDescription": "A string of length 1.",
+  "functionName": "solve",
+  "params": "str",
+  "examples": "solve(\"pixel\") -> \"l\"\nsolve(\"A\") -> \"A\"",
+  "tests": [
+   {
+    "input": [
+     "pixel"
+    ],
+    "expected": "l"
+   },
+   {
+    "input": [
+     "A"
+    ],
+    "expected": "A"
+   },
+   {
+    "input": [
+     "code!"
+    ],
+    "expected": "!"
+   },
+   {
+    "input": [
+     "42"
+    ],
+    "expected": "2"
+   },
+   {
+    "input": [
+     "neon gate"
+    ],
+    "expected": "e"
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static String solve(String str) {\n        return str.substring(str.length() - 1);\n    }\n}\n"
+ },
+ {
+  "title": "GATE // FIBONACCI STREAM",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(n)` that returns the n-th Fibonacci number. F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2).",
+  "inputDescription": "An integer `n` (0 <= n <= 40).",
+  "outputDescription": "F(n).",
+  "functionName": "solve",
+  "params": "n",
+  "examples": "solve(10) -> 55\nsolve(1) -> 1",
+  "tests": [
+   {
+    "input": [
+     10
+    ],
+    "expected": 55
+   },
+   {
+    "input": [
+     1
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     0
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     2
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     20
+    ],
+    "expected": 6765
+   },
+   {
+    "input": [
+     40
+    ],
+    "expected": 102334155
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int n) {\n        int a = 0, b = 1;\n        for (int i = 0; i < n; i++) { int t = a + b; a = b; b = t; }\n        return a;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // PRIME SENTRY",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(n)` that returns true if n is a prime number.",
+  "inputDescription": "An integer `n` (0 <= n <= 100000).",
+  "outputDescription": "true if n is prime, otherwise false.",
+  "functionName": "solve",
+  "params": "n",
+  "examples": "solve(7) -> true\nsolve(9) -> false",
+  "tests": [
+   {
+    "input": [
+     7
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     9
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     2
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     1
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     0
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     97
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     99991
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     100000
+    ],
+    "expected": false
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static boolean solve(int n) {\n        if (n < 2) return false;\n        for (int i = 2; (long) i * i <= n; i++) if (n % i == 0) return false;\n        return true;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // DIGIT CRUSHER",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(n)` that returns the sum of the digits of n.",
+  "inputDescription": "An integer `n` (0 <= n <= 1000000000).",
+  "outputDescription": "The digit sum.",
+  "functionName": "solve",
+  "params": "n",
+  "examples": "solve(1234) -> 10\nsolve(0) -> 0",
+  "tests": [
+   {
+    "input": [
+     1234
+    ],
+    "expected": 10
+   },
+   {
+    "input": [
+     0
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     9
+    ],
+    "expected": 9
+   },
+   {
+    "input": [
+     1000000000
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     987654321
+    ],
+    "expected": 45
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int n) {\n        int s = 0;\n        while (n > 0) { s += n % 10; n /= 10; }\n        return s;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // WORD COUNTER",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(text)` that counts the words in the text. Words are separated by one or more spaces; leading and trailing spaces may appear.",
+  "inputDescription": "A string `text`.",
+  "outputDescription": "The number of words.",
+  "functionName": "solve",
+  "params": "text",
+  "examples": "solve(\"hello neon world\") -> 3\nsolve(\"   \") -> 0",
+  "tests": [
+   {
+    "input": [
+     "hello neon world"
+    ],
+    "expected": 3
+   },
+   {
+    "input": [
+     "   "
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     ""
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     "one"
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     "  two   spaces  "
+    ],
+    "expected": 2
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(String text) {\n        String t = text.trim();\n        return t.isEmpty() ? 0 : t.split(\" +\").length;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // ANAGRAM LOCK",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(a, b)` that returns true if `b` is an anagram of `a` (the same letters, each the same number of times).",
+  "inputDescription": "Two lowercase strings `a` and `b`.",
+  "outputDescription": "true or false.",
+  "functionName": "solve",
+  "params": "a, b",
+  "examples": "solve(\"listen\", \"silent\") -> true\nsolve(\"code\", \"coed\") -> true",
+  "tests": [
+   {
+    "input": [
+     "listen",
+     "silent"
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     "code",
+     "coed"
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     "neon",
+     "none"
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     "abc",
+     "abd"
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     "aab",
+     "abb"
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     "",
+     ""
+    ],
+    "expected": true
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static boolean solve(String a, String b) {\n        char[] x = a.toCharArray(), y = b.toCharArray();\n        java.util.Arrays.sort(x);\n        java.util.Arrays.sort(y);\n        return java.util.Arrays.equals(x, y);\n    }\n}\n"
+ },
+ {
+  "title": "GATE // RUNNER-UP",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(nums)` that returns the second largest DISTINCT value in the array.",
+  "inputDescription": "An array `nums` with at least two different values.",
+  "outputDescription": "The second largest distinct value.",
+  "functionName": "solve",
+  "params": "nums",
+  "examples": "solve([3, 9, 5]) -> 5\nsolve([7, 7, 2]) -> 2",
+  "tests": [
+   {
+    "input": [
+     [
+      3,
+      9,
+      5
+     ]
+    ],
+    "expected": 5
+   },
+   {
+    "input": [
+     [
+      7,
+      7,
+      2
+     ]
+    ],
+    "expected": 2
+   },
+   {
+    "input": [
+     [
+      1,
+      2
+     ]
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     [
+      -1,
+      -5,
+      -1,
+      -3
+     ]
+    ],
+    "expected": -3
+   },
+   {
+    "input": [
+     [
+      10,
+      10,
+      10,
+      9
+     ]
+    ],
+    "expected": 9
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int[] nums) {\n        java.util.TreeSet<Integer> s = new java.util.TreeSet<>();\n        for (int n : nums) s.add(n);\n        s.pollLast();\n        return s.last();\n    }\n}\n"
+ },
+ {
+  "title": "GATE // ARRAY FLIP",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(nums)` that returns a new array with the elements in reverse order.",
+  "inputDescription": "An array of integers `nums` (may be empty).",
+  "outputDescription": "The reversed array.",
+  "functionName": "solve",
+  "params": "nums",
+  "examples": "solve([1, 2, 3]) -> [3,2,1]\nsolve([]) -> []",
+  "tests": [
+   {
+    "input": [
+     [
+      1,
+      2,
+      3
+     ]
+    ],
+    "expected": [
+     3,
+     2,
+     1
+    ]
+   },
+   {
+    "input": [
+     []
+    ],
+    "expected": []
+   },
+   {
+    "input": [
+     [
+      5
+     ]
+    ],
+    "expected": [
+     5
+    ]
+   },
+   {
+    "input": [
+     [
+      4,
+      -4,
+      0,
+      9
+     ]
+    ],
+    "expected": [
+     9,
+     0,
+     -4,
+     4
+    ]
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int[] solve(int[] nums) {\n        int[] r = new int[nums.length];\n        for (int i = 0; i < nums.length; i++) r[i] = nums[nums.length - 1 - i];\n        return r;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // FREQUENCY SCAN",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(str)` that returns the letter that appears most often. If several letters tie, return the one that comes first in the alphabet.",
+  "inputDescription": "A non-empty lowercase string `str` (letters only).",
+  "outputDescription": "A string of one letter.",
+  "functionName": "solve",
+  "params": "str",
+  "examples": "solve(\"banana\") -> \"a\"\nsolve(\"abcabc\") -> \"a\"",
+  "tests": [
+   {
+    "input": [
+     "banana"
+    ],
+    "expected": "a"
+   },
+   {
+    "input": [
+     "abcabc"
+    ],
+    "expected": "a"
+   },
+   {
+    "input": [
+     "z"
+    ],
+    "expected": "z"
+   },
+   {
+    "input": [
+     "mississippi"
+    ],
+    "expected": "i"
+   },
+   {
+    "input": [
+     "neonneon"
+    ],
+    "expected": "n"
+   },
+   {
+    "input": [
+     "zzyy"
+    ],
+    "expected": "y"
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static String solve(String str) {\n        int[] c = new int[26];\n        for (char ch : str.toCharArray()) c[ch - 'a']++;\n        int best = 0;\n        for (int i = 1; i < 26; i++) if (c[i] > c[best]) best = i;\n        return String.valueOf((char) ('a' + best));\n    }\n}\n"
+ },
+ {
+  "title": "GATE // BINARY ENCODER",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(n)` that returns n written in binary (base 2), without leading zeros.",
+  "inputDescription": "An integer `n` (0 <= n <= 1000000).",
+  "outputDescription": "The binary representation as a string.",
+  "functionName": "solve",
+  "params": "n",
+  "examples": "solve(5) -> \"101\"\nsolve(0) -> \"0\"",
+  "tests": [
+   {
+    "input": [
+     5
+    ],
+    "expected": "101"
+   },
+   {
+    "input": [
+     0
+    ],
+    "expected": "0"
+   },
+   {
+    "input": [
+     1
+    ],
+    "expected": "1"
+   },
+   {
+    "input": [
+     8
+    ],
+    "expected": "1000"
+   },
+   {
+    "input": [
+     255
+    ],
+    "expected": "11111111"
+   },
+   {
+    "input": [
+     1000000
+    ],
+    "expected": "11110100001001000000"
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static String solve(int n) {\n        return Integer.toBinaryString(n);\n    }\n}\n"
+ },
+ {
+  "title": "GATE // GCD CIPHER",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(a, b)` that returns the greatest common divisor of a and b.",
+  "inputDescription": "Two positive integers `a` and `b` (<= 1000000).",
+  "outputDescription": "gcd(a, b).",
+  "functionName": "solve",
+  "params": "a, b",
+  "examples": "solve(12, 18) -> 6\nsolve(7, 13) -> 1",
+  "tests": [
+   {
+    "input": [
+     12,
+     18
+    ],
+    "expected": 6
+   },
+   {
+    "input": [
+     7,
+     13
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     100,
+     10
+    ],
+    "expected": 10
+   },
+   {
+    "input": [
+     1,
+     1
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     1000000,
+     999999
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     48,
+     180
+    ],
+    "expected": 12
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int a, int b) {\n        while (b != 0) { int t = a % b; a = b; b = t; }\n        return a;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // DUPLICATE PURGE",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(nums)` that removes repeated values, keeping the first occurrence of each, in the original order.",
+  "inputDescription": "An array of integers `nums` (may be empty).",
+  "outputDescription": "The array without duplicates.",
+  "functionName": "solve",
+  "params": "nums",
+  "examples": "solve([1, 2, 1, 3, 2]) -> [1,2,3]\nsolve([]) -> []",
+  "tests": [
+   {
+    "input": [
+     [
+      1,
+      2,
+      1,
+      3,
+      2
+     ]
+    ],
+    "expected": [
+     1,
+     2,
+     3
+    ]
+   },
+   {
+    "input": [
+     []
+    ],
+    "expected": []
+   },
+   {
+    "input": [
+     [
+      5,
+      5,
+      5
+     ]
+    ],
+    "expected": [
+     5
+    ]
+   },
+   {
+    "input": [
+     [
+      3,
+      -1,
+      3,
+      -1,
+      0
+     ]
+    ],
+    "expected": [
+     3,
+     -1,
+     0
+    ]
+   },
+   {
+    "input": [
+     [
+      1,
+      2,
+      3
+     ]
+    ],
+    "expected": [
+     1,
+     2,
+     3
+    ]
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int[] solve(int[] nums) {\n        java.util.LinkedHashSet<Integer> s = new java.util.LinkedHashSet<>();\n        for (int n : nums) s.add(n);\n        return s.stream().mapToInt(Integer::intValue).toArray();\n    }\n}\n"
+ },
+ {
+  "title": "GATE // ORDER CHECK",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(nums)` that returns true if the array is sorted in non-decreasing order.",
+  "inputDescription": "An array of integers `nums` (may be empty).",
+  "outputDescription": "true or false.",
+  "functionName": "solve",
+  "params": "nums",
+  "examples": "solve([1, 2, 2, 5]) -> true\nsolve([3, 1]) -> false",
+  "tests": [
+   {
+    "input": [
+     [
+      1,
+      2,
+      2,
+      5
+     ]
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     [
+      3,
+      1
+     ]
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     []
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     [
+      7
+     ]
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     [
+      1,
+      3,
+      2,
+      4
+     ]
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     [
+      -5,
+      -5,
+      0
+     ]
+    ],
+    "expected": true
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static boolean solve(int[] nums) {\n        for (int i = 1; i < nums.length; i++) if (nums[i] < nums[i - 1]) return false;\n        return true;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // CAESAR SHIFT",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(text, k)` that shifts every lowercase letter k places forward in the alphabet, wrapping from z back to a. Other characters stay the same.",
+  "inputDescription": "A string `text` and an integer `k` (0 <= k <= 25).",
+  "outputDescription": "The shifted string.",
+  "functionName": "solve",
+  "params": "text, k",
+  "examples": "solve(\"abc\", 1) -> \"bcd\"\nsolve(\"xyz\", 3) -> \"abc\"",
+  "tests": [
+   {
+    "input": [
+     "abc",
+     1
+    ],
+    "expected": "bcd"
+   },
+   {
+    "input": [
+     "xyz",
+     3
+    ],
+    "expected": "abc"
+   },
+   {
+    "input": [
+     "neon gate!",
+     13
+    ],
+    "expected": "arba tngr!"
+   },
+   {
+    "input": [
+     "hello",
+     0
+    ],
+    "expected": "hello"
+   },
+   {
+    "input": [
+     "",
+     5
+    ],
+    "expected": ""
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static String solve(String text, int k) {\n        StringBuilder sb = new StringBuilder();\n        for (char c : text.toCharArray()) sb.append(c >= 'a' && c <= 'z' ? (char) ('a' + (c - 'a' + k) % 26) : c);\n        return sb.toString();\n    }\n}\n"
+ },
+ {
+  "title": "GATE // EVEN COUNTER",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(nums)` that counts the even numbers in the array.",
+  "inputDescription": "An array of integers `nums` (may be empty).",
+  "outputDescription": "How many elements are even.",
+  "functionName": "solve",
+  "params": "nums",
+  "examples": "solve([1, 2, 4]) -> 2\nsolve([]) -> 0",
+  "tests": [
+   {
+    "input": [
+     [
+      1,
+      2,
+      4
+     ]
+    ],
+    "expected": 2
+   },
+   {
+    "input": [
+     []
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     [
+      0
+     ]
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     [
+      -2,
+      -3,
+      5
+     ]
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     [
+      1,
+      3,
+      5
+     ]
+    ],
+    "expected": 0
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int[] nums) {\n        int c = 0;\n        for (int n : nums) if (n % 2 == 0) c++;\n        return c;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // MIRROR NUMBER",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(n)` that returns true if the number reads the same forwards and backwards (no strings needed, but allowed).",
+  "inputDescription": "An integer `n` (0 <= n <= 1000000000).",
+  "outputDescription": "true or false.",
+  "functionName": "solve",
+  "params": "n",
+  "examples": "solve(121) -> true\nsolve(123) -> false",
+  "tests": [
+   {
+    "input": [
+     121
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     123
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     0
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     10
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     1234554321
+    ],
+    "expected": true
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static boolean solve(int n) {\n        String s = String.valueOf(n);\n        return new StringBuilder(s).reverse().toString().equals(s);\n    }\n}\n"
+ },
+ {
+  "title": "GATE // TITLE CASE",
+  "difficulty": "MEDIUM",
+  "description": "Write a method `solve(text)` that capitalises the first letter of every word. Words are separated by single spaces; the other letters stay as they are.",
+  "inputDescription": "A string `text` of lowercase words and single spaces.",
+  "outputDescription": "The title-cased string.",
+  "functionName": "solve",
+  "params": "text",
+  "examples": "solve(\"neon city\") -> \"Neon City\"\nsolve(\"a\") -> \"A\"",
+  "tests": [
+   {
+    "input": [
+     "neon city"
+    ],
+    "expected": "Neon City"
+   },
+   {
+    "input": [
+     "a"
+    ],
+    "expected": "A"
+   },
+   {
+    "input": [
+     ""
+    ],
+    "expected": ""
+   },
+   {
+    "input": [
+     "pixel code arena"
+    ],
+    "expected": "Pixel Code Arena"
+   },
+   {
+    "input": [
+     "x y z"
+    ],
+    "expected": "X Y Z"
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static String solve(String text) {\n        StringBuilder sb = new StringBuilder();\n        boolean start = true;\n        for (char c : text.toCharArray()) {\n            sb.append(start ? Character.toUpperCase(c) : c);\n            start = c == ' ';\n        }\n        return sb.toString();\n    }\n}\n"
+ },
+ {
+  "title": "GATE // TWIN SUM",
+  "difficulty": "HARD",
+  "description": "Write a method `solve(nums, target)` that returns the indices [i, j] (i < j) of the two numbers that add up to target. There is exactly one answer.",
+  "inputDescription": "An array `nums` (2 <= length <= 10000) and an integer `target`.",
+  "outputDescription": "An array of two indices.",
+  "functionName": "solve",
+  "params": "nums, target",
+  "examples": "solve([2, 7, 11, 15], 9) -> [0,1]\nsolve([3, 2, 4], 6) -> [1,2]",
+  "tests": [
+   {
+    "input": [
+     [
+      2,
+      7,
+      11,
+      15
+     ],
+     9
+    ],
+    "expected": [
+     0,
+     1
+    ]
+   },
+   {
+    "input": [
+     [
+      3,
+      2,
+      4
+     ],
+     6
+    ],
+    "expected": [
+     1,
+     2
+    ]
+   },
+   {
+    "input": [
+     [
+      3,
+      3
+     ],
+     6
+    ],
+    "expected": [
+     0,
+     1
+    ]
+   },
+   {
+    "input": [
+     [
+      -1,
+      -2,
+      -3,
+      -4,
+      -5
+     ],
+     -8
+    ],
+    "expected": [
+     2,
+     4
+    ]
+   },
+   {
+    "input": [
+     [
+      0,
+      4,
+      3,
+      0
+     ],
+     0
+    ],
+    "expected": [
+     0,
+     3
+    ]
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int[] solve(int[] nums, int target) {\n        java.util.Map<Integer, Integer> seen = new java.util.HashMap<>();\n        for (int j = 0; j < nums.length; j++) {\n            Integer i = seen.get(target - nums[j]);\n            if (i != null) return new int[]{i, j};\n            seen.putIfAbsent(nums[j], j);\n        }\n        return new int[0];\n    }\n}\n"
+ },
+ {
+  "title": "GATE // BRACKET VAULT",
+  "difficulty": "HARD",
+  "description": "Write a method `solve(s)` that returns true if every bracket ( [ { is closed by the matching ) ] } in the right order.",
+  "inputDescription": "A string `s` containing only the characters ()[]{}.",
+  "outputDescription": "true or false.",
+  "functionName": "solve",
+  "params": "s",
+  "examples": "solve(\"([]{})\") -> true\nsolve(\"([)]\") -> false",
+  "tests": [
+   {
+    "input": [
+     "([]{})"
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     "([)]"
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     ""
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     "((("
+    ],
+    "expected": false
+   },
+   {
+    "input": [
+     "{[()()]}"
+    ],
+    "expected": true
+   },
+   {
+    "input": [
+     "}"
+    ],
+    "expected": false
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static boolean solve(String s) {\n        java.util.ArrayDeque<Character> st = new java.util.ArrayDeque<>();\n        for (char c : s.toCharArray()) {\n            if (c == '(' || c == '[' || c == '{') st.push(c);\n            else {\n                if (st.isEmpty()) return false;\n                char o = st.pop();\n                if ((c == ')' && o != '(') || (c == ']' && o != '[') || (c == '}' && o != '{')) return false;\n            }\n        }\n        return st.isEmpty();\n    }\n}\n"
+ },
+ {
+  "title": "GATE // LONGEST STREAK",
+  "difficulty": "HARD",
+  "description": "Write a method `solve(s)` that returns the length of the longest run of the same character in a row.",
+  "inputDescription": "A string `s` (may be empty).",
+  "outputDescription": "The length of the longest run.",
+  "functionName": "solve",
+  "params": "s",
+  "examples": "solve(\"aaabbbbcc\") -> 4\nsolve(\"\") -> 0",
+  "tests": [
+   {
+    "input": [
+     "aaabbbbcc"
+    ],
+    "expected": 4
+   },
+   {
+    "input": [
+     ""
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     "a"
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     "abcde"
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     "xxyyyyyzz"
+    ],
+    "expected": 5
+   },
+   {
+    "input": [
+     "zzzz"
+    ],
+    "expected": 4
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(String s) {\n        int best = 0, run = 0;\n        for (int i = 0; i < s.length(); i++) {\n            run = i > 0 && s.charAt(i) == s.charAt(i - 1) ? run + 1 : 1;\n            best = Math.max(best, run);\n        }\n        return best;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // LOST PACKET",
+  "difficulty": "HARD",
+  "description": "Write a method `solve(nums)` that returns the one number missing from the range 0..n. The array has n distinct numbers from that range.",
+  "inputDescription": "An array of n distinct integers between 0 and n.",
+  "outputDescription": "The missing number.",
+  "functionName": "solve",
+  "params": "nums",
+  "examples": "solve([3, 0, 1]) -> 2\nsolve([0]) -> 1",
+  "tests": [
+   {
+    "input": [
+     [
+      3,
+      0,
+      1
+     ]
+    ],
+    "expected": 2
+   },
+   {
+    "input": [
+     [
+      0
+     ]
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     [
+      1
+     ]
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     [
+      9,
+      6,
+      4,
+      2,
+      3,
+      5,
+      7,
+      0,
+      1
+     ]
+    ],
+    "expected": 8
+   },
+   {
+    "input": [
+     []
+    ],
+    "expected": 0
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int[] nums) {\n        int n = nums.length;\n        long want = (long) n * (n + 1) / 2;\n        for (int x : nums) want -= x;\n        return (int) want;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // ROMAN DECODER",
+  "difficulty": "HARD",
+  "description": "Write a method `solve(roman)` that converts a Roman numeral (I, V, X, L, C, D, M) to an integer.",
+  "inputDescription": "A valid Roman numeral between 1 and 3999.",
+  "outputDescription": "Its value.",
+  "functionName": "solve",
+  "params": "roman",
+  "examples": "solve(\"XIV\") -> 14\nsolve(\"MCMXCIV\") -> 1994",
+  "tests": [
+   {
+    "input": [
+     "XIV"
+    ],
+    "expected": 14
+   },
+   {
+    "input": [
+     "MCMXCIV"
+    ],
+    "expected": 1994
+   },
+   {
+    "input": [
+     "I"
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     "IX"
+    ],
+    "expected": 9
+   },
+   {
+    "input": [
+     "MMMCMXCIX"
+    ],
+    "expected": 3999
+   },
+   {
+    "input": [
+     "LVIII"
+    ],
+    "expected": 58
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(String roman) {\n        String sym = \"IVXLCDM\";\n        int[] val = {1, 5, 10, 50, 100, 500, 1000};\n        int total = 0;\n        for (int i = 0; i < roman.length(); i++) {\n            int v = val[sym.indexOf(roman.charAt(i))];\n            int next = i + 1 < roman.length() ? val[sym.indexOf(roman.charAt(i + 1))] : 0;\n            total += v < next ? -v : v;\n        }\n        return total;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // MATRIX TRACE",
+  "difficulty": "HARD",
+  "description": "Write a method `solve(grid)` that returns the sum of the main diagonal (top-left to bottom-right) of a square matrix.",
+  "inputDescription": "A square matrix `grid` (1 <= size <= 50).",
+  "outputDescription": "The sum of grid[i][i].",
+  "functionName": "solve",
+  "params": "grid",
+  "examples": "solve([[1,2],[3,4]]) -> 5\nsolve([[7]]) -> 7",
+  "tests": [
+   {
+    "input": [
+     [
+      [
+       1,
+       2
+      ],
+      [
+       3,
+       4
+      ]
+     ]
+    ],
+    "expected": 5
+   },
+   {
+    "input": [
+     [
+      [
+       7
+      ]
+     ]
+    ],
+    "expected": 7
+   },
+   {
+    "input": [
+     [
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    ],
+    "expected": 3
+   },
+   {
+    "input": [
+     [
+      [
+       -5,
+       2
+      ],
+      [
+       9,
+       5
+      ]
+     ]
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     [
+      [
+       2,
+       4,
+       6
+      ],
+      [
+       8,
+       10,
+       12
+      ],
+      [
+       14,
+       16,
+       18
+      ]
+     ]
+    ],
+    "expected": 30
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int[][] grid) {\n        int s = 0;\n        for (int i = 0; i < grid.length; i++) s += grid[i][i];\n        return s;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // RUN-LENGTH PACK",
+  "difficulty": "HARD",
+  "description": "Write a method `solve(s)` that compresses the string: every run of the same character becomes the character followed by the run length.",
+  "inputDescription": "A lowercase string `s` (may be empty).",
+  "outputDescription": "The compressed string.",
+  "functionName": "solve",
+  "params": "s",
+  "examples": "solve(\"aaabcc\") -> \"a3b1c2\"\nsolve(\"\") -> \"\"",
+  "tests": [
+   {
+    "input": [
+     "aaabcc"
+    ],
+    "expected": "a3b1c2"
+   },
+   {
+    "input": [
+     ""
+    ],
+    "expected": ""
+   },
+   {
+    "input": [
+     "a"
+    ],
+    "expected": "a1"
+   },
+   {
+    "input": [
+     "abc"
+    ],
+    "expected": "a1b1c1"
+   },
+   {
+    "input": [
+     "zzzzzzzzzzzz"
+    ],
+    "expected": "z12"
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static String solve(String s) {\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < s.length(); ) {\n            int j = i;\n            while (j < s.length() && s.charAt(j) == s.charAt(i)) j++;\n            sb.append(s.charAt(i)).append(j - i);\n            i = j;\n        }\n        return sb.toString();\n    }\n}\n"
+ },
+ {
+  "title": "GATE // PEAK SEGMENT",
+  "difficulty": "HARD",
+  "description": "Write a method `solve(nums)` that returns the largest possible sum of a contiguous, non-empty part of the array.",
+  "inputDescription": "An array of integers `nums` (length >= 1).",
+  "outputDescription": "The maximum subarray sum.",
+  "functionName": "solve",
+  "params": "nums",
+  "examples": "solve([-2, 1, -3, 4, -1, 2, 1, -5, 4]) -> 6\nsolve([-3, -1]) -> -1",
+  "tests": [
+   {
+    "input": [
+     [
+      -2,
+      1,
+      -3,
+      4,
+      -1,
+      2,
+      1,
+      -5,
+      4
+     ]
+    ],
+    "expected": 6
+   },
+   {
+    "input": [
+     [
+      -3,
+      -1
+     ]
+    ],
+    "expected": -1
+   },
+   {
+    "input": [
+     [
+      5
+     ]
+    ],
+    "expected": 5
+   },
+   {
+    "input": [
+     [
+      1,
+      2,
+      3
+     ]
+    ],
+    "expected": 6
+   },
+   {
+    "input": [
+     [
+      2,
+      -1,
+      2,
+      -1,
+      2
+     ]
+    ],
+    "expected": 4
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int[] nums) {\n        int best = nums[0], cur = nums[0];\n        for (int i = 1; i < nums.length; i++) {\n            cur = Math.max(nums[i], cur + nums[i]);\n            best = Math.max(best, cur);\n        }\n        return best;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // PRIME FIELD",
+  "difficulty": "HARD",
+  "description": "Write a method `solve(n)` that returns how many prime numbers are less than or equal to n.",
+  "inputDescription": "An integer `n` (0 <= n <= 1000000).",
+  "outputDescription": "The count of primes <= n.",
+  "functionName": "solve",
+  "params": "n",
+  "examples": "solve(10) -> 4\nsolve(1) -> 0",
+  "tests": [
+   {
+    "input": [
+     10
+    ],
+    "expected": 4
+   },
+   {
+    "input": [
+     1
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     2
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     100
+    ],
+    "expected": 25
+   },
+   {
+    "input": [
+     1000000
+    ],
+    "expected": 78498
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(int n) {\n        if (n < 2) return 0;\n        boolean[] composite = new boolean[n + 1];\n        int c = 0;\n        for (int i = 2; i <= n; i++) {\n            if (composite[i]) continue;\n            c++;\n            for (long j = (long) i * i; j <= n; j += i) composite[(int) j] = true;\n        }\n        return c;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // UNIQUE WINDOW",
+  "difficulty": "HARD",
+  "description": "Write a method `solve(s)` that returns the length of the longest part of the string (contiguous) with no repeated characters.",
+  "inputDescription": "A string `s` (may be empty).",
+  "outputDescription": "The length of the longest substring without repeats.",
+  "functionName": "solve",
+  "params": "s",
+  "examples": "solve(\"abcabcbb\") -> 3\nsolve(\"bbbb\") -> 1",
+  "tests": [
+   {
+    "input": [
+     "abcabcbb"
+    ],
+    "expected": 3
+   },
+   {
+    "input": [
+     "bbbb"
+    ],
+    "expected": 1
+   },
+   {
+    "input": [
+     ""
+    ],
+    "expected": 0
+   },
+   {
+    "input": [
+     "pwwkew"
+    ],
+    "expected": 3
+   },
+   {
+    "input": [
+     "abcdef"
+    ],
+    "expected": 6
+   },
+   {
+    "input": [
+     "dvdf"
+    ],
+    "expected": 3
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int solve(String s) {\n        java.util.Map<Character, Integer> last = new java.util.HashMap<>();\n        int best = 0, start = 0;\n        for (int i = 0; i < s.length(); i++) {\n            Integer p = last.put(s.charAt(i), i);\n            if (p != null && p >= start) start = p + 1;\n            best = Math.max(best, i - start + 1);\n        }\n        return best;\n    }\n}\n"
+ },
+ {
+  "title": "GATE // ROTATION DRIVE",
+  "difficulty": "HARD",
+  "description": "Write a method `solve(nums, k)` that rotates the array k steps to the right (the last element moves to the front, k times).",
+  "inputDescription": "An array `nums` (may be empty) and an integer `k` (0 <= k <= 1000000).",
+  "outputDescription": "The rotated array.",
+  "functionName": "solve",
+  "params": "nums, k",
+  "examples": "solve([1, 2, 3, 4, 5], 2) -> [4,5,1,2,3]\nsolve([1, 2], 3) -> [2,1]",
+  "tests": [
+   {
+    "input": [
+     [
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     2
+    ],
+    "expected": [
+     4,
+     5,
+     1,
+     2,
+     3
+    ]
+   },
+   {
+    "input": [
+     [
+      1,
+      2
+     ],
+     3
+    ],
+    "expected": [
+     2,
+     1
+    ]
+   },
+   {
+    "input": [
+     [],
+     4
+    ],
+    "expected": []
+   },
+   {
+    "input": [
+     [
+      7
+     ],
+     1000000
+    ],
+    "expected": [
+     7
+    ]
+   },
+   {
+    "input": [
+     [
+      1,
+      2,
+      3
+     ],
+     0
+    ],
+    "expected": [
+     1,
+     2,
+     3
+    ]
+   }
+  ],
+  "referenceSolution": "class Solution {\n    public static int[] solve(int[] nums, int k) {\n        int n = nums.length;\n        int[] r = new int[n];\n        for (int i = 0; i < n; i++) r[(int) ((i + (long) k) % n)] = nums[i];\n        return r;\n    }\n}\n"
+ }
+]

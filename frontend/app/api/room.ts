@@ -21,6 +21,8 @@ export type Room = {
   status?: RoomStatus;
   /** created by the ranked queue: starts automatically */
   ranked?: boolean;
+  /** Quick Play found nobody in time: the opponent is PIXEL_BOT (no MMR change) */
+  botMatch?: boolean;
   players: Player[];
   /** server time (ms) when an unjoined player loses the match (5-minute window) */
   joinDeadline: number | null;

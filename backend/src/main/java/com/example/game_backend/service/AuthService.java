@@ -77,7 +77,8 @@ public class AuthService {
         String username = req.getUsername() == null ? "" : req.getUsername().trim();
         String password = req.getPassword() == null ? "" : req.getPassword();
         User user = users.findByUsernameIgnoreCase(username).orElse(null);
-        if (user == null || !encoder.matches(password, user.getPassword())) {
+        // PIXEL_BOT is a system account: its password is random and unknown, and it is refused here anyway
+        if (user == null || user.isBot() || !encoder.matches(password, user.getPassword())) {
             throw new ApiException(401, "Invalid username or password");
         }
         return toResponse(user, "Login successful");

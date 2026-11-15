@@ -30,6 +30,12 @@ public class GameScheduler {
         try { matchmaking.pair(); } catch (RuntimeException e) { log.error("matchmaking.pair failed", e); }
     }
 
+    /** PIXEL_BOT moves four times a second, so its sprite glides instead of jumping once per second. */
+    @Scheduled(fixedDelay = 250)
+    public void botTick() {
+        try { games.botTick(); } catch (RuntimeException e) { log.error("games.botTick failed", e); }
+    }
+
     @Scheduled(fixedDelay = 60000, initialDelay = 60000)
     public void cleanup() {
         try { rooms.cleanupStale(); } catch (RuntimeException e) { log.error("cleanupStale failed", e); }

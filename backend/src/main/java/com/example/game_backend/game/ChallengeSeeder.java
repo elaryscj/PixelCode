@@ -2,89 +2,82 @@ package com.example.game_backend.game;
 
 import com.example.game_backend.entity.Challenge;
 import com.example.game_backend.repository.ChallengeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.json.JsonMapper;
 
-/** Publishes a starter catalog of EASY challenges when the table is empty. */
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Publishes the built-in challenge catalog (resources/challenges/catalog.json). Every start adds the catalog
+ * entries whose title is not in the database yet, so existing installations receive new challenges too;
+ * challenges an admin edited or withdrew are left alone. Each entry carries a reference solution that
+ * ChallengeCatalogTest runs through the real evaluator, so a wrong expected value never ships.
+ */
 @Component
 public class ChallengeSeeder implements ApplicationRunner {
+    private static final Logger log = LoggerFactory.getLogger(ChallengeSeeder.class);
+    static final String CATALOG = "/challenges/catalog.json";
+    private static final JsonMapper JSON = JsonMapper.builder().build();
     private final ChallengeRepository repository;
 
     public ChallengeSeeder(ChallengeRepository repository) {
         this.repository = repository;
     }
 
-    @Override
-    public void run(ApplicationArguments args) {
-        if (repository.count() > 0) {
-            return;
+    /** One catalog entry, as stored in catalog.json. */
+    public record Entry(String title, String difficulty, String description, String inputDescription,
+                        String outputDescription, String functionName, String params, String examples,
+                        List<Map<String, Object>> tests, String referenceSolution) {
+        public String testsJson() {
+            return JSON.writeValueAsString(tests);
         }
-        add("GATE // NEURAL SUM", "Write a method `solve(a, b)` that returns the sum of two integers.",
-                "Two integers `a` and `b` (-1000 <= a, b <= 1000).", "The integer a + b.",
-                "a, b",
-                "solve(3, 7) -> 10\nsolve(-5, 12) -> 7",
-                "[{\"input\":[3,7],\"expected\":10},{\"input\":[-5,12],\"expected\":7},{\"input\":[0,0],\"expected\":0},{\"input\":[99,-99],\"expected\":0},{\"input\":[1000,1000],\"expected\":2000}]");
-        add("GATE // CYBER MIRROR", "Write a method `solve(str)` that returns true if the string reads the same forwards and backwards, otherwise false.",
-                "A lowercase alphanumeric string `str`.", "Boolean true or false.",
-                "str",
-                "solve(\"racecar\") -> true\nsolve(\"neon\") -> false",
-                "[{\"input\":[\"racecar\"],\"expected\":true},{\"input\":[\"neon\"],\"expected\":false},{\"input\":[\"radar\"],\"expected\":true},{\"input\":[\"pixelcode\"],\"expected\":false},{\"input\":[\"a\"],\"expected\":true},{\"input\":[\"ab\"],\"expected\":false}]");
-        add("GATE // MAX SIGNAL", "Write a method `solve(nums)` that returns the largest number in an array.",
-                "An array of numbers `nums` (length >= 1).", "The maximum number in the array.",
-                "nums",
-                "solve([1, 5, 3, 9, 2]) -> 9\nsolve([-10, -50, -2, -99]) -> -2",
-                "[{\"input\":[[1,5,3,9,2]],\"expected\":9},{\"input\":[[-10,-50,-2,-99]],\"expected\":-2},{\"input\":[[42]],\"expected\":42},{\"input\":[[7,7,7]],\"expected\":7},{\"input\":[[0,-1,100,99]],\"expected\":100}]");
-        add("GATE // DATA REVERSAL", "Write a method `solve(str)` that returns the string reversed.",
-                "A string `str`.", "The reversed string.",
-                "str",
-                "solve(\"cyber\") -> \"rebyc\"\nsolve(\"12345\") -> \"54321\"",
-                "[{\"input\":[\"cyber\"],\"expected\":\"rebyc\"},{\"input\":[\"12345\"],\"expected\":\"54321\"},{\"input\":[\"a\"],\"expected\":\"a\"},{\"input\":[\"world\"],\"expected\":\"dlrow\"},{\"input\":[\"\"],\"expected\":\"\"}]");
-        add("GATE // VOWEL SCAN", "Write a method `solve(str)` that counts the vowels (a, e, i, o, u) in a lowercase string.",
-                "A lowercase string `str`.", "The number of vowels.",
-                "str",
-                "solve(\"pixel\") -> 2\nsolve(\"rhythm\") -> 0",
-                "[{\"input\":[\"pixel\"],\"expected\":2},{\"input\":[\"rhythm\"],\"expected\":0},{\"input\":[\"aeiou\"],\"expected\":5},{\"input\":[\"\"],\"expected\":0},{\"input\":[\"neon code\"],\"expected\":4}]");
-        add("GATE // ARRAY TOTAL", "Write a method `solve(nums)` that returns the sum of all numbers in an array.",
-                "An array of integers `nums` (may be empty).", "The sum of all elements (0 for an empty array).",
-                "nums",
-                "solve([1, 2, 3]) -> 6\nsolve([]) -> 0",
-                "[{\"input\":[[1,2,3]],\"expected\":6},{\"input\":[[]],\"expected\":0},{\"input\":[[-4,4]],\"expected\":0},{\"input\":[[10,20,30,40]],\"expected\":100},{\"input\":[[5]],\"expected\":5}]");
-        add("GATE // PARITY LOCK", "Write a method `solve(n)` that returns true if the integer is even, otherwise false.",
-                "An integer `n` (-1000 <= n <= 1000).", "Boolean true or false.",
-                "n",
-                "solve(4) -> true\nsolve(7) -> false",
-                "[{\"input\":[4],\"expected\":true},{\"input\":[7],\"expected\":false},{\"input\":[0],\"expected\":true},{\"input\":[-3],\"expected\":false},{\"input\":[-8],\"expected\":true}]");
-        add("GATE // FIZZ PROTOCOL", "Write a method `solve(n)` that returns \"FizzBuzz\" if n is divisible by 3 and 5, \"Fizz\" if divisible by 3, \"Buzz\" if divisible by 5, otherwise the number as a string.",
-                "A positive integer `n`.", "A string.",
-                "n",
-                "solve(15) -> \"FizzBuzz\"\nsolve(7) -> \"7\"",
-                "[{\"input\":[15],\"expected\":\"FizzBuzz\"},{\"input\":[7],\"expected\":\"7\"},{\"input\":[9],\"expected\":\"Fizz\"},{\"input\":[10],\"expected\":\"Buzz\"},{\"input\":[1],\"expected\":\"1\"},{\"input\":[30],\"expected\":\"FizzBuzz\"}]");
-        add("GATE // FACTORIAL CORE", "Write a method `solve(n)` that returns n! (the factorial of n). 0! is 1.",
-                "An integer `n` (0 <= n <= 10).", "The factorial of n.",
-                "n",
-                "solve(5) -> 120\nsolve(0) -> 1",
-                "[{\"input\":[5],\"expected\":120},{\"input\":[0],\"expected\":1},{\"input\":[1],\"expected\":1},{\"input\":[3],\"expected\":6},{\"input\":[10],\"expected\":3628800}]");
-        add("GATE // SQUARE GRID", "Write a method `solve(nums)` that returns a new array with every number squared.",
-                "An array of integers `nums` (may be empty).", "An array of the squares, in the same order.",
-                "nums",
-                "solve([1, 2, 3]) -> [1,4,9]\nsolve([]) -> []",
-                "[{\"input\":[[1,2,3]],\"expected\":[1,4,9]},{\"input\":[[]],\"expected\":[]},{\"input\":[[-2,5]],\"expected\":[4,25]},{\"input\":[[10]],\"expected\":[100]},{\"input\":[[0,0]],\"expected\":[0,0]}]");
+
+        public String starterCode() {
+            return JavaStarter.buildWithNames(functionName, testsJson(), params);
+        }
     }
 
-    private void add(String title, String description, String in, String out, String params, String examples, String tests) {
-        Challenge c = new Challenge();
-        c.setTitle(title);
-        c.setDescription(description);
-        c.setInputDescription(in);
-        c.setOutputDescription(out);
-        c.setFunctionName("solve");
-        // Java starter: types come from the tests, names from params ("a, b")
-        c.setStarterCode(JavaStarter.build("solve", tests, "function solve(" + params + ")"));
-        c.setExamples(examples);
-        c.setTestsJson(tests);
-        c.setDifficulty("EASY");
-        c.setPublished(true);
-        repository.save(c);
+    public static List<Entry> catalog() {
+        try (InputStream in = ChallengeSeeder.class.getResourceAsStream(CATALOG)) {
+            if (in == null) {
+                throw new IllegalStateException(CATALOG + " is missing");
+            }
+            return List.of(JSON.readValue(in, Entry[].class));
+        } catch (IOException e) {
+            throw new IllegalStateException("Cannot read " + CATALOG, e);
+        }
+    }
+
+    @Override
+    public void run(ApplicationArguments args) {
+        int added = 0;
+        for (Entry e : catalog()) {
+            if (repository.existsByTitle(e.title())) {
+                continue;
+            }
+            Challenge c = new Challenge();
+            c.setTitle(e.title());
+            c.setDescription(e.description());
+            c.setInputDescription(e.inputDescription());
+            c.setOutputDescription(e.outputDescription());
+            c.setFunctionName(e.functionName());
+            c.setStarterCode(e.starterCode());
+            c.setExamples(e.examples());
+            c.setTestsJson(e.testsJson());
+            c.setDifficulty(e.difficulty());
+            c.setPublished(true);
+            repository.save(c);
+            added++;
+        }
+        if (added > 0) {
+            log.info("Added {} challenge(s) from the built-in catalog", added);
+        }
     }
 }

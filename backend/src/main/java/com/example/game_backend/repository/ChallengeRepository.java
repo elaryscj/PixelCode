@@ -9,4 +9,6 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
     List<Challenge> findByPublishedTrueAndDifficulty(String difficulty);
 
     List<Challenge> findAllByOrderByIdDesc();
+    boolean existsByTitle(String title);
+    List<Challenge> findByPublishedTrue();
 }

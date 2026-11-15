@@ -10,7 +10,6 @@ import { getRoom, leaveRoom, readyRoom, voteMap, type Room } from "~/api/room";
 import MapVote from "~/components/game/MapVote";
 import { getCurrentUser } from "~/api/auth";
 import { getClient, useRoomSocket } from "~/api/socket";
-import EnglishOnly from "~/components/EnglishOnly";
 
 // The socket pushes every lobby change; polling is only the safety net. Fast while the socket is down.
 const POLL_MS = 1000;
@@ -161,7 +160,7 @@ const LobbyScreen = () => {
       <div className="flex flex-col items-center gap-4 font-pixel py-12">
         <p className="text-pink text-xl text-center">{error}</p>
         <button onClick={() => navigate("/play")} className="text-neon text-xl uppercase hover:text-yellow">
-          Back
+          {t("back")}
         </button>
       </div>
     ) : (
@@ -169,11 +168,13 @@ const LobbyScreen = () => {
     );
   }
 
-  if (room.ranked) {
+  // a duel against PIXEL_BOT runs like a ranked one (match found, vote, join), just without rating
+  if (room.ranked || room.botMatch) {
+    const bot = !!room.botMatch;
     const card = (p: (typeof players)[number] | undefined, mine: boolean) => (
       <div className="flex flex-col items-center gap-2 sm:gap-3 w-36 sm:w-64">
         <span className={`font-pixel text-xs sm:text-xl text-center ${mine ? "text-neon" : "text-pink"}`}>
-          {mine ? "PLAYER 01 / YOU" : "PLAYER 02 / RIVAL"}
+          {mine ? t("lb_you_label") : bot ? t("lb_bot_label") : t("lb_rival_label")}
         </span>
         <div className={`relative p-3 border-2 ${mine ? "border-neon shadow-neon" : "border-pink"}`}>
           {["-top-1.5 -left-1.5", "-top-1.5 -right-1.5", "-bottom-1.5 -left-1.5", "-bottom-1.5 -right-1.5"].map((c) => (
@@ -187,15 +188,19 @@ const LobbyScreen = () => {
         </div>
         <span className="font-pixel text-yellow text-xl sm:text-3xl truncate max-w-full">{p?.nickname ?? "..."}</span>
         <span className="font-pixel text-pink text-xl">MMR {p?.rating ?? "---"}</span>
-        <span className="font-pixel text-gray-400 text-xs sm:text-base text-center">{p ? `CONNECTED \u00B7 ${p.ready ? "READY" : "AWAITING JOIN"}` : "WAITING"}</span>
+        <span className="font-pixel text-gray-400 text-xs sm:text-base text-center">
+          {!mine && bot ? t("lb_bot_status") : p ? `${t("lb_connected")} \u00B7 ${p.ready ? t("ready").toUpperCase() : t("lb_awaiting")}` : t("lb_waiting")}
+        </span>
       </div>
     );
     return (
       <>
         <div className="star-background" />
         <div className="flex flex-col items-center gap-6 sm:gap-8 mx-auto w-full px-4 font-pixel py-6 enter-up">
-          <h1 className="text-yellow text-[12vw]/none sm:text-[80px]/none lg:text-[112px]/none text-glow-sm text-center">WAITING TO JOIN</h1>
-          <p className="text-neon text-base sm:text-2xl text-center">MATCH FOUND / RANKED DUEL / 1 VS 1</p>
+          <h1 className="text-yellow text-[12vw]/none sm:text-[80px]/none lg:text-[112px]/none text-glow-sm text-center">{t("lb_title")}</h1>
+          <p className="text-neon text-base sm:text-2xl text-center">
+            {bot ? t("lb_bot_sub") : t("lb_ranked_sub")}
+          </p>
           <div className="flex items-center gap-3 sm:gap-10">
             {card(me, true)}
             <div className="flex flex-col items-center gap-2 self-stretch justify-center">
@@ -207,25 +212,25 @@ const LobbyScreen = () => {
           </div>
           <div className="w-full max-w-180">{vote}</div>
           <div className="w-full max-w-150 border border-neon bg-[#060b1e] p-4 sm:p-6 flex flex-col items-center gap-4">
-            <p className="text-yellow text-2xl sm:text-4xl text-center">{me?.ready ? "Joined" : `Join within ${mm || "05:00"}`}</p>
+            <p className="text-yellow text-2xl sm:text-4xl text-center">{me?.ready ? t("lb_joined") : t("lb_join_within", { time: mm || "05:00" })}</p>
             <div className="w-full h-1 bg-neon" />
             {me?.ready ? (
-              <p className="text-neon text-2xl text-center">WAITING FOR YOUR RIVAL<span className="blink-caret">...</span></p>
+              <p className="text-neon text-2xl text-center">{t("lb_waiting_rival")}<span className="blink-caret">...</span></p>
             ) : (
               <button
                 onClick={handleReady}
                 disabled={busy || !me || !voted || status !== "READY"}
                 className="btn-arcade w-full py-3 bg-pink border-2 border-yellow text-black text-2xl sm:text-3xl disabled:opacity-40 disabled:pointer-events-none"
               >
-                {busy ? "Joining..." : voted ? "Join Match" : "Pick a map first"}
+                {busy ? t("lb_joining") : voted ? t("lb_join_match") : t("lb_pick_map")}
               </button>
             )}
             <p className="font-sans text-gray-400 text-base text-center">
               {me?.ready
-                ? "Your duel begins as soon as both players have joined."
+                ? t("lb_hint_joined")
                 : voted
-                  ? "Confirm before the timer ends to enter the arena."
-                  : "Vote for a map above, then join before the timer ends."}
+                  ? t("lb_hint_voted")
+                  : t("lb_hint_vote")}
             </p>
           </div>
           {error && <p className="text-pink text-xl text-center">{error}</p>}
@@ -238,19 +243,19 @@ const LobbyScreen = () => {
     <>
       <div className="star-background" />
       <div className="flex flex-col items-center gap-6 sm:gap-8 mx-auto w-full max-w-175 px-4 py-6 font-pixel enter-up">
-        <h1 className="text-yellow text-[14vw]/none sm:text-[96px]/none lg:text-[136px]/none text-glow-sm text-center">Room Code</h1>
+        <h1 className="text-yellow text-[14vw]/none sm:text-[96px]/none lg:text-[136px]/none text-glow-sm text-center">{t("room_code")}</h1>
         <div className="flex items-center gap-4">
           <span className="text-pink text-[13vw]/none sm:text-[96px]/none tracking-widest text-glow-sm">{code}</span>
-          <button onClick={copyCode} className="p-2 border border-pink text-pink text-3xl" title="Copy">
+          <button onClick={copyCode} className="p-2 border border-pink text-pink text-3xl" title={t("copy")}>
             {copied ? <FaCheck /> : <FaCopy />}
           </button>
         </div>
 
-        <p className="text-neon/80 text-sm sm:text-xl -mt-4 text-center">PRIVATE ROOM · FRIENDLY MATCH, RATING UNCHANGED</p>
+        <p className="text-neon/80 text-sm sm:text-xl -mt-4 text-center">{t("lb_private_sub")}</p>
 
         {left !== null && (
           <p className="text-center text-2xl text-yellow">
-            JOIN WITHIN <span className={left < 60 ? "text-pink" : "text-neon"}>{mm}</span>
+            {t("lb_join_within_caps")} <span className={left < 60 ? "text-pink" : "text-neon"}>{mm}</span>
           </p>
         )}
 
@@ -297,15 +302,15 @@ const LobbyScreen = () => {
           {me?.ready
             ? rival?.ready
               ? t("ready")
-              : "Waiting for rival..."
+              : t("lb_waiting_rival_btn")
             : status !== "READY"
-              ? "Waiting for player..."
+              ? t("waiting_player")
               : voted
-                ? "READY"
-                : "Pick a map first"}
+                ? t("ready")
+                : t("lb_pick_map")}
         </button>
         <button onClick={handleLeave} className="uppercase text-xl text-neon hover:text-yellow">
-          LEAVE ROOM
+          {t("lb_leave")}
         </button>
 
         {error && <p className="text-pink text-xl text-center">{error}</p>}
@@ -315,9 +320,5 @@ const LobbyScreen = () => {
 };
 
 export default function Lobby() {
-  return <ClientOnly fallback={<ScreenLoading />}>{() => (
-        <EnglishOnly>
-          <LobbyScreen />
-        </EnglishOnly>
-      )}</ClientOnly>;
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <LobbyScreen />}</ClientOnly>;
 }
