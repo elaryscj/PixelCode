@@ -107,7 +107,7 @@ export default function GameResultModal({
 
         <div className="flex items-start justify-between w-full mt-4">
           <Player mine />
-          <div className="flex flex-col items-center gap-3 w-120 mt-8">
+          <div className="flex flex-col items-center gap-3 w-full max-w-120 px-4 mt-8">
             <span className="text-neon text-2xl">{banner}</span>
             <div className="w-full border border-neon bg-[#060b1e] p-6 flex flex-col items-center gap-4">
               <span className="text-neon text-xl">{isTechnical ? "YOUR MMR" : "YOUR MATCHMAKING RATING"}</span>

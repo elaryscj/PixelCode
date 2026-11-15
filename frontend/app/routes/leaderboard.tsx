@@ -10,11 +10,11 @@ const LeaderBoard = () => {
   return (
     <>
       <div className="star-background" />
-      <div className="lg:block sm:hidden">
+      <div className="w-full px-3 sm:px-4 py-6 enter-up">
 
         <TitleLine text={"PIXELCODE ARENA"} />
         
-        <h1 className="font-pixel text-yellow text-8xl/none text-center text-glow-sm">{t("leaderboard").toUpperCase()}</h1>
+        <h1 className="font-pixel text-yellow text-[13vw]/none sm:text-7xl/none lg:text-8xl/none text-center text-glow-sm my-4">{t("leaderboard").toUpperCase()}</h1>
 
         <div className="container max-w-200 mx-auto font-pixel">
           <PersonalRating />
@@ -22,7 +22,6 @@ const LeaderBoard = () => {
           <TopRating />
         </div>
       </div>
-      <h3 className="font-pixel text-4xl text-yellow hover:text-glow-sm text-center lg:hidden">Sorry, the game is not yet available for your device...</h3>
     </>
   );
 }

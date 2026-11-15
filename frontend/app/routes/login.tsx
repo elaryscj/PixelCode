@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { FaEye, FaEyeSlash, FaGamepad, FaTwitch, FaWifi, FaYoutube } from "react-icons/fa";
 import { loginUser, registerUser, AuthError } from "~/api/auth";
-import { pingLabel, usePing } from "~/lib/liveStats";
+import { pingColor, pingLabel, usePing } from "~/lib/liveStats";
 
 export default function LoginRoute() {
   const navigate = useNavigate();
@@ -86,20 +86,20 @@ export default function LoginRoute() {
       <div className="star-background pointer-events-none" />
 
       {/* Top Header */}
-      <header className="relative z-10 w-full px-8 py-5 border-b border-[#01E4FF]/40 flex items-center justify-between bg-[#040714]/80 backdrop-blur-sm">
+      <header className="relative z-10 w-full px-4 sm:px-8 py-4 sm:py-5 border-b border-[#01E4FF]/40 flex items-center justify-between bg-[#040714]/80 backdrop-blur-sm">
         <Link to="/" className="flex items-center gap-3 text-[#01E4FF] hover:brightness-120 transition-all">
           <FaGamepad className="text-xl" />
-          <span className="text-yellow text-3xl tracking-wider">PIXELCODE</span>
-          <span className="text-[#01E4FF] text-[20px]">| • KAZAKHSTAN</span>
+          <span className="text-yellow text-2xl sm:text-3xl tracking-wider">PIXELCODE</span>
+          <span className="hidden md:inline text-[#01E4FF] text-[20px]">| • KAZAKHSTAN</span>
         </Link>
 
         <div className="flex items-center gap-4 text-[20px]">
           <div className="flex items-center gap-2 text-[#01E4FF]">
             <FaWifi className="text-2xl" />
-            <span>{pingLabel(ping)}</span>
+            <span className={pingColor(ping)}>{pingLabel(ping)}</span>
           </div>
-          <span className="text-gray-600">|</span>
-          <div className="text-right text-[18px] leading-tight">
+          <span className="hidden sm:inline text-gray-600">|</span>
+          <div className="hidden sm:block text-right text-[18px] leading-tight">
             <span className="text-gray-400">SECURE TERMINAL</span>
             <br />
             <span className="text-pink">STATUS: {loading ? "CONNECTING..." : "UNKNOWN"}</span>

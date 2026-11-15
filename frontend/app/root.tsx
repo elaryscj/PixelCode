@@ -53,7 +53,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <html lang={i18n.resolvedLanguage === "kz" ? "kk-Latn" : "en"}>
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="theme-color" content="#060814" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="PixelCode" />
+        <meta property="og:title" content="PixelCode Arena" />
+        <meta property="og:description" content="Real-time 1v1 coding duels. Race, crack the code doors, climb the ranks." />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
         <Meta />
         <Links />
       </head>
@@ -75,6 +84,7 @@ export default function App() {
     <AudioProvider>
       <BackgroundMusic />
       <Outlet />
+      <div className="crt-overlay" aria-hidden />
     </AudioProvider>
   );
 }

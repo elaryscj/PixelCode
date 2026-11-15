@@ -39,6 +39,7 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
     localStorage.removeItem("pixelcode.user");
     localStorage.removeItem("pixelcode.nickname");
     window.dispatchEvent(new Event("pixelcode:nickname-change"));
+    window.dispatchEvent(new Event("pixelcode:user-change"));
   }
   if (!res.ok) {
     throw new ApiError(res.status, data?.message ?? `Request failed (${res.status})`, data ?? {});

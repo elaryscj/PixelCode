@@ -9,7 +9,7 @@ export default function MusicSlider() {
 
   return (
     <div>
-      <label htmlFor="music-volume" className="font-pixel text-3xl">{t("music_volume")}</label>
+      <label htmlFor="music-volume" className="font-pixel text-xl sm:text-3xl">{t("music_volume")}</label>
 
       <div className="flex items-center justify-center gap-4">
         <input
@@ -25,7 +25,7 @@ export default function MusicSlider() {
             background: `linear-gradient(to right, #5fd0ea 0% ${pct}%, #16233c ${pct}% 100%)`,
           }}
         />
-        <h3 className="font-pixel text-yellow text-2xl">{val}%</h3>
+        <h3 className="font-pixel text-yellow text-xl sm:text-2xl w-14 text-right">{val}%</h3>
       </div>
     </div>
   );

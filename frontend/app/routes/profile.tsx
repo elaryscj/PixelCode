@@ -1,6 +1,8 @@
 // app/routes/profile.tsx
 // Comprehensive Cyberpunk Profile & Account Management Terminal
 import { useState, useEffect, type FormEvent, type ChangeEvent } from "react";
+import { ClientOnly } from "~/lib/currentUser";
+import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useNavigate } from "react-router";
 import { FaUser, FaCamera, FaLock, FaTrash, FaSignOutAlt, FaShieldAlt, FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 import { getCurrentUser, logoutUser, refreshUser, updateStoredToken } from "~/api/auth";
@@ -16,7 +18,7 @@ import {
   type ProfileError,
 } from "~/api/profile";
 
-export default function ProfileRoute() {
+function ProfileRouteScreen() {
   const navigate = useNavigate();
   const currentUser = getCurrentUser();
 
@@ -531,4 +533,8 @@ export default function ProfileRoute() {
       </footer>
     </div>
   );
+}
+
+export default function ProfileRoute() {
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <ProfileRouteScreen />}</ClientOnly>;
 }

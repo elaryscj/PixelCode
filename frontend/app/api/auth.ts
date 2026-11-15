@@ -2,6 +2,7 @@
 // Client for AuthController (/api/auth/register, /api/auth/login)
 import { saveNickname } from "~/lib/nickname";
 import { saveAvatar } from "~/lib/avatar";
+import { notifyUserChanged } from "~/lib/currentUser";
 
 export type AuthResponse = {
   id: number;
@@ -22,6 +23,7 @@ function persistUser(data: AuthResponse) {
   const { avatarUrl, ...rest } = data;
   localStorage.setItem("pixelcode.user", JSON.stringify(rest));
   saveAvatar(avatarUrl ?? null);
+  notifyUserChanged();
 }
 
 export class AuthError extends Error {
@@ -84,12 +86,14 @@ export function updateStoredToken(token: string): void {
   const u = getCurrentUser();
   if (!u) return;
   localStorage.setItem("pixelcode.user", JSON.stringify({ ...u, token }));
+  notifyUserChanged();
 }
 
 export function logoutUser(): void {
   if (typeof window === "undefined") return;
   localStorage.removeItem("pixelcode.user");
   localStorage.removeItem("pixelcode.nickname");
+  notifyUserChanged();
   saveAvatar(null);
   window.dispatchEvent(new Event("pixelcode:nickname-change"));
 }

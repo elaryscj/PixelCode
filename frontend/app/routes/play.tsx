@@ -1,5 +1,7 @@
 // app/routes/play.tsx  —  /play : ranked matchmaking, or create / join a private room
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { ClientOnly } from "~/lib/currentUser";
+import ScreenLoading from "~/components/ScreenLoading";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import { ApiError, createRoom, getRoom, joinRoom, myRoom, type Room } from "~/api/room";
@@ -8,9 +10,9 @@ import { getCurrentUser, refreshUser } from "~/api/auth";
 import Avatar from "~/components/Avatar";
 
 const btn =
-  "uppercase w-full text-3xl font-pixel py-2 px-6 text-center border-2 disabled:opacity-40 disabled:pointer-events-none";
+  "btn-arcade uppercase w-full text-2xl sm:text-3xl font-pixel py-3 sm:py-2 px-6 text-center border-2 disabled:opacity-40 disabled:pointer-events-none";
 
-const Play = () => {
+const PlayScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [user, setUser] = useState(() => getCurrentUser());
@@ -158,18 +160,18 @@ const Play = () => {
     return (
       <>
         <div className="grid-background" />
-        <div className="mx-auto w-150 border-2 border-pink bg-[#090d1f] p-8 flex flex-col gap-6 font-pixel shadow-[0_0_30px_rgba(254,44,150,0.3)]">
+        <div className="mx-4 sm:mx-auto sm:w-150 border-2 border-pink bg-[#090d1f] p-5 sm:p-8 flex flex-col gap-6 font-pixel shadow-[0_0_30px_rgba(254,44,150,0.3)]">
           <div className="flex items-center justify-between border-b-2 border-pink pb-3 text-pink text-3xl">
             <span>&gt; MATCHMAKING BLOCKED</span>
             <span className="w-3 h-3 bg-pink" />
           </div>
-          <h2 className="text-white text-5xl/tight">You are banned from matchmaking</h2>
+          <h2 className="text-white text-3xl/tight sm:text-5xl/tight">You are banned from matchmaking</h2>
           <p className="font-sans text-gray-400 text-lg">
             Matchmaking is temporarily unavailable for your account. You can play again when the restriction expires.
           </p>
           <div className="border border-pink p-5 flex items-center justify-between">
             <span className="font-sans text-gray-400 text-base">REMAINING DURATION</span>
-            <span className="text-pink text-5xl">{hms}</span>
+            <span className="text-pink text-3xl sm:text-5xl">{hms}</span>
           </div>
           <p className="font-sans text-gray-500 text-sm">Restriction applies to ranked matchmaking only.</p>
           <Link to="/" className="text-center py-3 bg-pink border-2 border-yellow text-black text-2xl">
@@ -207,8 +209,8 @@ const Play = () => {
               <div className="text-pink text-xl">MMR {user.rating}</div>
             </div>
           </div>
-          <h1 className="text-yellow/80 text-[88px]/none md:text-[136px]/none text-glow-sm text-center">Finding a match</h1>
-          <p className="text-pink text-4xl text-center">Warm your fingers)</p>
+          <h1 className="text-yellow/80 text-[14vw]/none sm:text-[88px]/none md:text-[136px]/none text-glow-sm text-center px-4">Finding a match</h1>
+          <p className="text-pink text-2xl sm:text-4xl text-center">Warm up your fingers...</p>
           <p className="text-neon text-xl text-center">
             {waited}s · {inQueue} in queue
           </p>
@@ -225,10 +227,10 @@ const Play = () => {
     <>
       <div className="grid-background" />
       <div className="star-background" />
-      <div className="flex flex-col gap-6 mx-auto w-130 mt-4">
+      <div className="flex flex-col gap-5 sm:gap-6 mx-auto w-full max-w-130 px-4 py-6 enter-up">
         <h1 className="font-pixel text-center text-glow-sm leading-none flex flex-col gap-4">
-          <span className="text-yellow text-[104px]/none">CHOOSE</span>
-          <span className="text-pink text-[104px]/none">MODE</span>
+          <span className="text-yellow text-[17vw]/none sm:text-[104px]/none">CHOOSE</span>
+          <span className="text-pink text-[17vw]/none sm:text-[104px]/none">MODE</span>
         </h1>
 
         {current && current.roomStatus !== "FINISHED" && (
@@ -272,4 +274,6 @@ const Play = () => {
   );
 };
 
-export default Play;
+export default function Play() {
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <PlayScreen />}</ClientOnly>;
+}

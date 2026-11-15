@@ -1,12 +1,15 @@
 // app/routes/store.tsx
 // PixelCode Arena Store: skins are bought with PIXELS (balance, ownership and prices are kept on the server)
 import { useState, useEffect, useCallback } from "react";
+import { ClientOnly } from "~/lib/currentUser";
+import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useNavigate } from "react-router";
 import { FaChevronLeft, FaChevronRight, FaTwitch, FaYoutube } from "react-icons/fa";
 import { SkinArt } from "~/components/skins";
 import { getCurrentUser, refreshUser } from "~/api/auth";
 import { buySkin, equipSkin, getStore, type StoreState } from "~/api/store";
 import { onlineLabel, useLiveStats } from "~/lib/liveStats";
+import PingBadge from "~/components/PingBadge";
 
 type Skin = {
   id: string;
@@ -54,7 +57,7 @@ const BASE_SKINS: Skin[] = [
 
 const priceLabel = (n: number) => (n === 0 ? "FREE" : `${n.toLocaleString()} PIXELS`);
 
-export default function StoreRoute() {
+function StoreRouteScreen() {
   const navigate = useNavigate();
   const liveStats = useLiveStats();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -178,6 +181,8 @@ export default function StoreRoute() {
 
         <div className="flex items-center gap-3 text-xs">
           <span className="text-[#01E4FF]">SERVER: KAZAKHSTAN</span>
+          <span className="w-2 h-2 rounded-full bg-yellow animate-pulse" />
+          <PingBadge />
           <span className="w-2 h-2 rounded-full bg-yellow animate-pulse" />
           <span className="text-gray-300">{onlineLabel(liveStats)}</span>
         </div>
@@ -458,4 +463,8 @@ export default function StoreRoute() {
       </footer>
     </div>
   );
+}
+
+export default function StoreRoute() {
+  return <ClientOnly fallback={<ScreenLoading />}>{() => <StoreRouteScreen />}</ClientOnly>;
 }

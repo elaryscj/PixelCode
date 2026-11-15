@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import Rank from "./Rank";
-import { getCurrentUser } from "~/api/auth";
+import { useCurrentUser } from "~/lib/currentUser";
 import { getLeaderboard, type LeaderboardEntry } from "~/api/leaderboard";
 
 const WIDTHS = ["w-60", "w-48", "w-60", "w-48", "w-60"];
@@ -25,7 +25,7 @@ const TopRating = () => {
   const { t } = useTranslation();
   const [rows, setRows] = useState<LeaderboardEntry[] | null>(null);
   const [failed, setFailed] = useState(false);
-  const me = getCurrentUser()?.username;
+  const me = useCurrentUser()?.username;
 
   const load = useCallback(() => {
     setFailed(false);
@@ -43,15 +43,15 @@ const TopRating = () => {
   const empty = rows !== null && rows.length === 0;
   const showTable = rows !== null && rows.length > 0;
 
-  const panel = "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] max-w-[560px] bg-[#0a0f25] border-2 p-8 text-center";
-  const btn = "inline-block mt-5 px-12 py-2 bg-[#ff2d96] border-2 border-yellow text-black text-xl";
+  const panel = "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[70%] max-w-[560px] bg-[#0a0f25] border-2 p-5 sm:p-8 text-center";
+  const btn = "inline-block mt-5 btn-arcade px-8 sm:px-12 py-2 bg-[#ff2d96] border-2 border-yellow text-black text-xl";
 
   return (
     <div className="mt-8 border-2 border-pink">
-      <div className="flex items-center px-6 py-3 border-b-2 border-pink text-xl bg-[#060816] uppercase text-yellow">
-        <div className="w-32">{t("place")}</div>
+      <div className="flex items-center px-3 sm:px-6 py-3 border-b-2 border-pink text-sm sm:text-xl bg-[#060816] uppercase text-yellow">
+        <div className="w-16 sm:w-32">{t("place")}</div>
         <div className="flex-1">{t("combatant")}</div>
-        <div className="w-40 text-right">{t("score")}</div>
+        <div className="w-24 sm:w-40 text-right">{t("score")}</div>
       </div>
       {showTable ? (
         <div className="max-h-[45vh] overflow-y-auto scrollbar-none">
@@ -70,14 +70,14 @@ const TopRating = () => {
         <div className="relative">
           <Skeleton pulse={loading} />
           {loading && (
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] bg-[#050816] border border-neon p-6 text-center">
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] sm:w-[50%] bg-[#050816] border border-neon p-6 text-center">
               <p className="text-yellow text-xl">LOADING RANKINGS...</p>
               <div className="mt-3 h-1.5 bg-[repeating-linear-gradient(90deg,#0b3b4a_0_16px,transparent_16px_24px)] animate-pulse" />
             </div>
           )}
           {empty && (
             <div className={`${panel} border-neon`}>
-              <h3 className="text-yellow text-3xl">NO RANKINGS YET</h3>
+              <h3 className="text-yellow text-2xl sm:text-3xl">NO RANKINGS YET</h3>
               <p className="font-sans text-base text-white mt-4">
                 There are no ranked results to display. Your saved rank is shown above.
               </p>
@@ -88,7 +88,7 @@ const TopRating = () => {
           )}
           {failed && (
             <div className={`${panel} border-pink`}>
-              <h3 className="text-pink text-3xl">RANKINGS UNAVAILABLE</h3>
+              <h3 className="text-pink text-2xl sm:text-3xl">RANKINGS UNAVAILABLE</h3>
               <p className="font-sans text-base text-white mt-4">
                 We couldn&apos;t load the top 10. Your saved rank is still shown above.
               </p>

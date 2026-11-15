@@ -7,7 +7,7 @@ import { getCurrentUser } from "~/api/auth";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "PixelCode Arena" },
-    { name: "description", content: "Welcome to PixelCode Arena" },
+    { name: "description", content: "Real-time 1v1 coding duels: race through the arena, crack code doors, climb the ranks." },
   ];
 }
 
@@ -26,9 +26,6 @@ export default function Home() {
     <>
       <div className="star-background"></div>
       <Hero />
-      <h3 className="font-pixel text-4xl text-yellow hover:text-glow-sm text-center lg:hidden">
-        Sorry, the game is not yet available for your device...
-      </h3>
     </>
   );
 }
