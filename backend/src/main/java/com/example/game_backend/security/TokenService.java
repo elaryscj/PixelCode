@@ -91,7 +91,9 @@ public class TokenService {
             }
             lastActive.put(userId, System.currentTimeMillis());
             return userId;
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) {
+            // a malformed token (bad base64 / numbers). Database errors from currentVersion() are NOT caught
+            // here on purpose: they become a 503 "try again", not a 401 that would log the player out.
             return null;
         }
     }

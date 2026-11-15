@@ -7,7 +7,7 @@ const base =
   "btn-arcade uppercase w-full font-pixel text-3xl sm:text-4xl py-3 sm:py-2 px-6 text-center";
 const secondary = `${base} border-2 border-neon text-yellow hover:text-glow-sm hover:border-glow-neon`;
 
-const HeroNavigation = () => {
+const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useCurrentUser();
@@ -20,9 +20,14 @@ const HeroNavigation = () => {
       >
         ▶ {t("play")}
       </Link>
-      <Link to={"/practice"} className={secondary}>
-        PRACTICE
-      </Link>
+      <div className="grid grid-cols-[1fr_auto] gap-4">
+        <Link to={"/practice"} className={secondary}>
+          PRACTICE
+        </Link>
+        <button onClick={onHowToPlay} className={`${secondary} !px-4`} title="How to play" aria-label="How to play">
+          ?
+        </button>
+      </div>
       <div className="grid grid-cols-2 gap-4">
         <Link to={"/leaderboard"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
           {t("leaderboard")}

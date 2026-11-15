@@ -21,6 +21,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getStatus()).body(body);
     }
 
+    /** Database down, slow or a lock wait timed out: a temporary problem, so tell the client to retry. */
+    @ExceptionHandler({org.springframework.dao.DataAccessException.class,
+            org.springframework.transaction.TransactionException.class})
+    public ResponseEntity<Map<String, Object>> handleDatabase(Exception e) {
+        log.error("Database error", e);
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("message", "The server is busy right now, please try again in a moment");
+        return ResponseEntity.status(503).header("Retry-After", "2").body(body);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleOther(Exception e) {
         log.error("Unhandled error", e);

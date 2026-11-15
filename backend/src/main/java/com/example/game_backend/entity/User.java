@@ -12,6 +12,8 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "users")
+// UPDATE only the columns that changed: saving a profile edit can never write back a stale balance or rating
+@org.hibernate.annotations.DynamicUpdate
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
