@@ -2,22 +2,12 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import MusicSlider from "../components/MusicSlider";
 import { getSfxVolume, setSfxVolume, sfx } from "~/lib/sfx";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { logoutUser } from "~/api/auth";
-import { useNickname, saveNickname, isValidNickname, NICKNAME_MAX } from "~/lib/nickname";
 
 const Settings = () => {
 
   const { t, i18n } = useTranslation();
-
-    const nickname = useNickname();
-    const [draft, setDraft] = useState("");
-
-    useEffect(() => {
-      if (nickname) setDraft(nickname);
-    }, [nickname]);
-
-  const canSave = isValidNickname(draft) && draft.trim() !== nickname;
 
   // sound effects volume (separate from music); read after mount so SSR matches
   const [fxVol, setFxVol] = useState(60);
@@ -93,22 +83,19 @@ const Settings = () => {
             </div>
           </section>
 
+          {/* Nickname, e-mail, password and account deletion all live on one page: /profile */}
           <section className={card}>
-            <label htmlFor="nickname" className={heading}>
-              [ {t("nickname")} ]
-            </label>
-            <div className="flex items-center gap-3">
-              <input
-                id="nickname"
-                value={draft}
-                onChange={(e) => setDraft(e.target.value)}
-                maxLength={NICKNAME_MAX}
-                placeholder="Player"
-                className="min-w-0 flex-1 py-2 px-3 text-xl sm:text-2xl bg-transparent border border-neon font-pixel text-yellow outline-none focus:border-glow-sm-neon"
-              />
-              <button onClick={() => saveNickname(draft)} disabled={!canSave} className={btnCls}>
-                Save
-              </button>
+            <h3 className={heading}>[ ACCOUNT ]</h3>
+            <p className="font-sans text-gray-400 text-sm mb-3">
+              Nickname, avatar, e-mail, password and account deletion.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link to="/profile" className={btnCls}>
+                Manage account
+              </Link>
+              <Link to="/results" className={btnCls}>
+                Match history
+              </Link>
             </div>
           </section>
 

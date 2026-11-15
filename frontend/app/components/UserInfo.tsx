@@ -6,7 +6,8 @@ import { useCurrentUser } from "~/lib/currentUser";
 const UserInfo = () => {
   const nickname = useNickname();
   const currentUser = useCurrentUser();
-  const displayName = nickname ?? currentUser?.username ?? "Guest";
+  // The server username is the real, unique name; the cached nickname is only a fallback.
+  const displayName = currentUser?.username ?? nickname ?? "Guest";
   const displayRating = currentUser?.rating ? `MMR ${currentUser.rating}` : "MMR 1500";
   const targetRoute = currentUser ? "/profile" : "/login";
 

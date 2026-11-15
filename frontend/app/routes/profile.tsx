@@ -49,6 +49,7 @@ function ProfileRouteScreen() {
   const [deleteAcknowledged, setDeleteAcknowledged] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [showDelete, setShowDelete] = useState(false);
 
   // Load profile on mount
   useEffect(() => {
@@ -219,7 +220,7 @@ function ProfileRouteScreen() {
       <div className="star-background pointer-events-none" />
 
       {/* Top Header */}
-      <header className="relative z-10 w-full px-8 py-5 border-b border-[#01E4FF]/40 flex items-center justify-between bg-[#040714]/80 backdrop-blur-sm">
+      <header className="relative z-10 w-full px-4 sm:px-8 py-5 border-b border-[#01E4FF]/40 flex items-center justify-between gap-3 bg-[#040714]/80 backdrop-blur-sm">
         <Link
           to="/"
           className="flex items-center gap-2 border-2 border-pink px-4 py-1.5 text-xs text-pink uppercase hover:bg-pink/10 transition-colors"
@@ -228,10 +229,10 @@ function ProfileRouteScreen() {
         </Link>
 
         <div className="flex items-center gap-4 text-xs">
-          <div className="flex items-center gap-2 text-[#01E4FF]">
+          <Link to="/results" className="flex items-center gap-2 text-[#01E4FF] hover:text-white uppercase">
             <FaShieldAlt className="text-sm" />
-            <span>TERMINAL SECURITY</span>
-          </div>
+            <span>MY RESULTS</span>
+          </Link>
           <span className="text-gray-600">|</span>
           <button
             onClick={handleLogout}
@@ -247,14 +248,11 @@ function ProfileRouteScreen() {
       <main className="relative z-10 flex-1 flex flex-col items-center px-4 py-8 max-w-[1100px] w-full mx-auto">
         {/* Title */}
         <div className="text-center mb-8">
-          <div className="text-[11px] text-[#01E4FF] tracking-widest uppercase mb-1">
-            — SECURE USER PROFILE & SETTINGS —
-          </div>
           <h1 className="text-yellow text-4xl sm:text-5xl tracking-wider text-glow-sm">
-            TERMINAL IDENTITY
+            MY ACCOUNT
           </h1>
-          <div className="text-[10px] text-gray-400 mt-1 uppercase">
-            COMBATANT RECORD // MMR & CREDENTIALS
+          <div className="text-xs text-gray-400 mt-2 uppercase">
+            Profile · password · account
           </div>
         </div>
 
@@ -264,8 +262,8 @@ function ProfileRouteScreen() {
           {/* Card 1: Identity & Avatar */}
           <div className="bg-[#070c1e]/90 border-2 border-[#01E4FF] p-6 shadow-[0_0_20px_rgba(1,228,255,0.15)] flex flex-col gap-6">
             <div className="flex items-center justify-between pb-3 border-b border-[#01E4FF]/30">
-              <span className="text-sm text-[#01E4FF]">&gt; COMBATANT_IDENTITY</span>
-              <span className="text-[10px] px-2 py-0.5 bg-yellow/10 border border-yellow text-yellow uppercase">
+              <span className="text-sm text-[#01E4FF]">&gt; PROFILE</span>
+              <span className="text-xs px-2 py-0.5 bg-yellow/10 border border-yellow text-yellow uppercase">
                 {profile?.rankTitle || "CODE RUNNER"}
               </span>
             </div>
@@ -288,7 +286,7 @@ function ProfileRouteScreen() {
                 {/* Upload overlay */}
                 <label
                   htmlFor="avatar-upload"
-                  className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-[9px] text-[#01E4FF]"
+                  className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-[11px] text-[#01E4FF]"
                 >
                   <FaCamera className="text-lg mb-1" />
                   CHANGE
@@ -308,16 +306,16 @@ function ProfileRouteScreen() {
                 <div className="text-pink text-2xl tracking-widest font-bold">
                   MMR {profile?.mmr || 1500}
                 </div>
-                <div className="text-[9px] text-gray-500">
+                <div className="text-[11px] text-gray-500">
                   PNG, JPEG, WebP • MAX 2MB
                 </div>
                 {avatarUploading && (
-                  <div className="text-[10px] text-yellow animate-pulse">
+                  <div className="text-xs text-yellow animate-pulse">
                     UPLOADING AVATAR...
                   </div>
                 )}
                 {avatarError && (
-                  <div className="text-[10px] text-pink">[!] {avatarError}</div>
+                  <div className="text-xs text-pink">[!] {avatarError}</div>
                 )}
               </div>
             </div>
@@ -325,8 +323,8 @@ function ProfileRouteScreen() {
             {/* Form: Name & Email */}
             <form onSubmit={handleProfileSubmit} className="flex flex-col gap-4 mt-2">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-yellow tracking-wider uppercase">
-                  PLAYER NAME / NICKNAME
+                <label className="text-xs text-yellow tracking-wider uppercase">
+                  NICKNAME
                 </label>
                 <input
                   type="text"
@@ -334,21 +332,24 @@ function ProfileRouteScreen() {
                   onChange={(e) => setPlayerName(e.target.value)}
                   maxLength={16}
                   required
-                  className="w-full bg-[#02050f] border border-[#01E4FF] text-white px-3.5 py-2 text-xs outline-none focus:border-glow-neon-sm"
+                  className="w-full bg-[#02050f] border border-[#01E4FF] text-white px-3.5 py-2.5 text-sm outline-none focus:border-glow-neon-sm"
                 />
+                <span className="font-sans text-[11px] text-gray-400">
+                  Unique. 2-16 letters, digits or _. Other players see this name and you log in with it.
+                </span>
               </div>
 
               <div className="flex flex-col gap-1.5">
                 <div className="flex justify-between items-center">
-                  <label className="text-[10px] text-yellow tracking-wider uppercase">
+                  <label className="text-xs text-yellow tracking-wider uppercase">
                     EMAIL ADDRESS
                   </label>
                   {profile?.emailVerified ? (
-                    <span className="flex items-center gap-1 text-[9px] text-emerald-400">
+                    <span className="flex items-center gap-1 text-[11px] text-emerald-400">
                       <FaCheckCircle /> VERIFIED
                     </span>
                   ) : profile?.email ? (
-                    <span className="flex items-center gap-1 text-[9px] text-yellow">
+                    <span className="flex items-center gap-1 text-[11px] text-yellow">
                       <FaExclamationTriangle /> UNVERIFIED
                     </span>
                   ) : null}
@@ -358,22 +359,25 @@ function ProfileRouteScreen() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="player@example.com"
-                  className="w-full bg-[#02050f] border border-[#01E4FF] text-white px-3.5 py-2 text-xs outline-none focus:border-glow-neon-sm"
+                  className="w-full bg-[#02050f] border border-[#01E4FF] text-white px-3.5 py-2.5 text-sm outline-none focus:border-glow-neon-sm"
                 />
+                <span className="font-sans text-[11px] text-gray-400">
+                  Used only to reset a forgotten password.
+                </span>
                 {profile?.pendingEmail && (
-                  <div className="text-[9px] text-yellow bg-yellow/10 border border-yellow/30 p-2 mt-1 leading-normal">
+                  <div className="text-[11px] text-yellow bg-yellow/10 border border-yellow/30 p-2 mt-1 leading-normal">
                     Pending verification link sent to: <strong>{profile.pendingEmail}</strong>
                   </div>
                 )}
               </div>
 
               {profileError && (
-                <div className="text-pink text-[10px] border border-pink/40 bg-pink/10 px-3 py-2">
+                <div className="text-pink text-xs border border-pink/40 bg-pink/10 px-3 py-2">
                   [!] ERROR: {profileError}
                 </div>
               )}
               {profileSuccess && (
-                <div className="text-[#01E4FF] text-[10px] border border-[#01E4FF]/40 bg-[#01E4FF]/10 px-3 py-2">
+                <div className="text-[#01E4FF] text-xs border border-[#01E4FF]/40 bg-[#01E4FF]/10 px-3 py-2">
                   [✓] {profileSuccess}
                 </div>
               )}
@@ -395,14 +399,14 @@ function ProfileRouteScreen() {
             <div className="bg-[#070c1e]/90 border-2 border-[#01E4FF] p-6 shadow-[0_0_20px_rgba(1,228,255,0.15)] flex flex-col gap-4">
               <div className="flex items-center justify-between pb-3 border-b border-[#01E4FF]/30">
                 <span className="text-sm text-[#01E4FF] flex items-center gap-2">
-                  <FaLock className="text-xs" /> &gt; CHANGE_PASSWORD
+                  <FaLock className="text-xs" /> &gt; CHANGE PASSWORD
                 </span>
-                <span className="text-[9px] text-gray-400">6+ CHARACTERS</span>
+                <span className="text-[11px] text-gray-400">8+ CHARS · LETTER + NUMBER</span>
               </div>
 
               <form onSubmit={handlePasswordSubmit} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] text-yellow tracking-wider uppercase">
+                  <label className="text-xs text-yellow tracking-wider uppercase">
                     CURRENT PASSWORD
                   </label>
                   <input
@@ -411,12 +415,12 @@ function ProfileRouteScreen() {
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     required
                     placeholder="••••••••••••"
-                    className="w-full bg-[#02050f] border border-[#01E4FF] text-white px-3.5 py-2 text-xs outline-none focus:border-glow-neon-sm"
+                    className="w-full bg-[#02050f] border border-[#01E4FF] text-white px-3.5 py-2.5 text-sm outline-none focus:border-glow-neon-sm"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] text-yellow tracking-wider uppercase">
+                  <label className="text-xs text-yellow tracking-wider uppercase">
                     NEW PASSWORD
                   </label>
                   <input
@@ -425,12 +429,12 @@ function ProfileRouteScreen() {
                     onChange={(e) => setNewPassword(e.target.value)}
                     required
                     placeholder="••••••••••••"
-                    className="w-full bg-[#02050f] border border-[#01E4FF] text-white px-3.5 py-2 text-xs outline-none focus:border-glow-neon-sm"
+                    className="w-full bg-[#02050f] border border-[#01E4FF] text-white px-3.5 py-2.5 text-sm outline-none focus:border-glow-neon-sm"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] text-yellow tracking-wider uppercase">
+                  <label className="text-xs text-yellow tracking-wider uppercase">
                     CONFIRM NEW PASSWORD
                   </label>
                   <input
@@ -439,17 +443,17 @@ function ProfileRouteScreen() {
                     onChange={(e) => setConfirmNewPassword(e.target.value)}
                     required
                     placeholder="••••••••••••"
-                    className="w-full bg-[#02050f] border border-[#01E4FF] text-white px-3.5 py-2 text-xs outline-none focus:border-glow-neon-sm"
+                    className="w-full bg-[#02050f] border border-[#01E4FF] text-white px-3.5 py-2.5 text-sm outline-none focus:border-glow-neon-sm"
                   />
                 </div>
 
                 {passwordError && (
-                  <div className="text-pink text-[10px] border border-pink/40 bg-pink/10 px-3 py-2">
+                  <div className="text-pink text-xs border border-pink/40 bg-pink/10 px-3 py-2">
                     [!] ERROR: {passwordError}
                   </div>
                 )}
                 {passwordSuccess && (
-                  <div className="text-emerald-400 text-[10px] border border-emerald-400/40 bg-emerald-400/10 px-3 py-2">
+                  <div className="text-emerald-400 text-xs border border-emerald-400/40 bg-emerald-400/10 px-3 py-2">
                     [✓] {passwordSuccess}
                   </div>
                 )}
@@ -468,28 +472,37 @@ function ProfileRouteScreen() {
             <div className="bg-[#1a0510]/90 border-2 border-pink p-6 shadow-[0_0_20px_rgba(255,42,133,0.2)] flex flex-col gap-4">
               <div className="flex items-center justify-between pb-3 border-b border-pink/30 text-pink">
                 <span className="text-sm flex items-center gap-2">
-                  <FaTrash className="text-xs" /> &gt; DANGER_ZONE
+                  <FaTrash className="text-xs" /> &gt; DELETE ACCOUNT
                 </span>
-                <span className="text-[9px] uppercase">PERMANENT ACTION</span>
+                <span className="text-[11px] uppercase">CANNOT BE UNDONE</span>
               </div>
 
-              <p className="text-[10px] text-gray-300 leading-relaxed font-sans">
-                Deleting your account will permanently erase your username, MMR rating, avatar, and match history. This action cannot be reversed.
+              <p className="text-xs text-gray-300 leading-relaxed font-sans">
+                Deleting your account permanently erases your nickname, MMR, pixels, skins, avatar and match history.
               </p>
 
+              {!showDelete ? (
+                <button
+                  type="button"
+                  onClick={() => setShowDelete(true)}
+                  className="w-full py-2.5 border border-pink text-pink text-xs uppercase tracking-widest hover:bg-pink/10 transition-colors cursor-pointer"
+                >
+                  Delete my account...
+                </button>
+              ) : (
               <form onSubmit={handleDeleteSubmit} className="flex flex-col gap-3">
-                <label className="flex items-center gap-2 text-[10px] text-yellow cursor-pointer">
+                <label className="flex items-center gap-2 text-xs text-yellow cursor-pointer">
                   <input
                     type="checkbox"
                     checked={deleteAcknowledged}
                     onChange={(e) => setDeleteAcknowledged(e.target.checked)}
                     className="accent-pink"
                   />
-                  <span>I understand my combatant account will be destroyed.</span>
+                  <span>I understand this deletes my account for good.</span>
                 </label>
 
                 <div className="flex flex-col gap-1">
-                  <span className="text-[9px] text-gray-400">
+                  <span className="text-[11px] text-gray-400">
                     Type <strong className="text-pink">DELETE</strong> to confirm:
                   </span>
                   <input
@@ -497,12 +510,12 @@ function ProfileRouteScreen() {
                     value={deleteConfirmation}
                     onChange={(e) => setDeleteConfirmation(e.target.value)}
                     placeholder="DELETE"
-                    className="w-full bg-[#02050f] border border-pink text-pink px-3.5 py-1.5 text-xs outline-none focus:border-glow-pink"
+                    className="w-full bg-[#02050f] border border-pink text-pink px-3.5 py-2 text-sm outline-none focus:border-glow-pink"
                   />
                 </div>
 
                 {deleteError && (
-                  <div className="text-pink text-[10px] border border-pink/40 bg-pink/10 px-3 py-2">
+                  <div className="text-pink text-xs border border-pink/40 bg-pink/10 px-3 py-2">
                     [!] ERROR: {deleteError}
                   </div>
                 )}
@@ -512,9 +525,22 @@ function ProfileRouteScreen() {
                   disabled={deleting || deleteConfirmation !== "DELETE" || !deleteAcknowledged}
                   className="w-full py-2.5 bg-red-600 border border-yellow text-white text-xs uppercase tracking-widest hover:bg-red-700 active:scale-[0.99] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  {deleting ? "DELETING..." : "DELETE ACCOUNT"}
+                  {deleting ? "DELETING..." : "DELETE ACCOUNT FOREVER"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowDelete(false);
+                    setDeleteConfirmation("");
+                    setDeleteAcknowledged(false);
+                    setDeleteError(null);
+                  }}
+                  className="text-xs text-gray-400 hover:text-white uppercase cursor-pointer"
+                >
+                  Cancel
                 </button>
               </form>
+              )}
             </div>
 
           </div>
@@ -523,7 +549,7 @@ function ProfileRouteScreen() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 w-full px-8 py-3.5 border-t border-[#01E4FF]/40 flex items-center justify-between text-[10px] text-[#01E4FF] bg-[#040714]/80">
+      <footer className="relative z-10 w-full px-8 py-3.5 border-t border-[#01E4FF]/40 flex items-center justify-between text-xs text-[#01E4FF] bg-[#040714]/80">
         <div>
           <span className="text-yellow">CLIENT VERSION v1.4.2-BETA</span>
           <span className="mx-3 text-gray-600">|</span>

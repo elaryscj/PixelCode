@@ -11,7 +11,7 @@ import { burst, confetti, flash, shake } from "~/components/game/fx";
 import { sfx } from "~/lib/sfx";
 import { SkinArt } from "~/components/skins";
 import { getCurrentUser, refreshUser } from "~/api/auth";
-import { rematchRoom } from "~/api/room";
+import { getRoom, rematchRoom } from "~/api/room";
 import { pingColor, pingLabel, usePing } from "~/lib/liveStats";
 import { getToken } from "~/api/http";
 import { onGameEvent, sendMove } from "~/api/socket";
@@ -296,6 +296,18 @@ function GameScreen() {
     },
     [],
   );
+
+  // Ranked queue match or private room (only for the header label)
+  const [ranked, setRanked] = useState<boolean | null>(null);
+  useEffect(() => {
+    let alive = true;
+    getRoom(code)
+      .then((r) => alive && setRanked(r.ranked ?? true))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [code]);
 
   // First load (also the reconnect path): restores doors, timers and position from the server
   useEffect(() => {
@@ -605,7 +617,7 @@ function GameScreen() {
         <div className="flex items-center gap-3">
           <div className="text-gray-400 text-[10px] md:text-xs flex items-center gap-2 uppercase border border-pink/40 px-3 py-1 bg-pink/5">
             <span className="w-2 h-2 bg-pink inline-block animate-pulse"></span>
-            RANKED DUEL #{code}
+            {ranked === false ? "PRIVATE ROOM" : "RANKED DUEL"} #{code}
           </div>
           <Link
             to="/play"

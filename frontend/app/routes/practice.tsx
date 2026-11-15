@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
-import { Link, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { MapLayer, animateMap } from "~/components/game/MapLayer";
 import { SkinArt } from "~/components/skins";
 import { getCurrentUser } from "~/api/auth";
@@ -19,6 +19,7 @@ export function meta() {
 
 function PracticeScreen() {
   const [params, setParams] = useSearchParams();
+  const navigate = useNavigate();
   const mapId = Math.min(MAPS.length - 1, Math.max(0, Number(params.get("map") ?? 0) || 0));
   const map = getMap(mapId);
   const skin = getCurrentUser()?.activeSkin ?? "neon_ronin";
@@ -74,6 +75,7 @@ function PracticeScreen() {
         }
       }
       if (e.code === "KeyR") respawn(player.current);
+      if (e.code === "Escape") navigate("/");
       if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) e.preventDefault();
     };
     const up = (e: KeyboardEvent) => {
@@ -173,10 +175,19 @@ function PracticeScreen() {
         <p className="font-sans text-gray-400 text-sm">The arena is played in landscape.</p>
       </div>
       <header className="flex flex-wrap short:flex-nowrap justify-between items-center gap-3 border-b border-neon/30 pb-3 mb-4 short:pb-1 short:mb-1">
-        <Link to="/play" className="text-yellow text-xl short:text-sm leading-none shrink-0">
-          PIXELCODE<br />
-          <span className="text-pink text-xs">PRACTICE</span>
-        </Link>
+        <div className="flex items-center gap-3 shrink-0">
+          {/* clear way back: this used to be only the logo, which also led to /play instead of the menu */}
+          <Link
+            to="/"
+            className="border-2 border-pink text-pink px-3 py-1.5 text-xs short:text-[10px] short:py-1 hover:bg-pink/10 relative z-50"
+          >
+            &lt; MENU
+          </Link>
+          <div className="text-yellow text-xl short:text-sm leading-none">
+            PIXELCODE<br />
+            <span className="text-pink text-xs">PRACTICE</span>
+          </div>
+        </div>
         <div className="flex flex-wrap short:flex-nowrap short:overflow-x-auto scrollbar-none gap-2 min-w-0">
           {MAPS.map((m) => (
             <button
@@ -226,9 +237,14 @@ function PracticeScreen() {
           <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/75">
             <div className="text-yellow text-3xl">CLEARED</div>
             <div className="text-white">{finished.toFixed(1)}s · {deaths} falls</div>
-            <button onClick={reset} className="border-2 border-neon text-neon px-4 py-2 text-xs hover:bg-neon/10">
-              RUN AGAIN
-            </button>
+            <div className="flex gap-3">
+              <button onClick={reset} className="border-2 border-neon text-neon px-4 py-2 text-xs hover:bg-neon/10">
+                RUN AGAIN
+              </button>
+              <Link to="/" className="border-2 border-pink text-pink px-4 py-2 text-xs hover:bg-pink/10">
+                MENU
+              </Link>
+            </div>
           </div>
         )}
       </div>
@@ -238,6 +254,7 @@ function PracticeScreen() {
         <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">SPACE</kbd> JUMP</span>
         <span><kbd className="border border-neon text-neon px-2 py-0.5">E</kbd> OPEN DOOR (NO CHALLENGE IN PRACTICE)</span>
         <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">R</kbd> RESPAWN</span>
+        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">ESC</kbd> MENU</span>
       </footer>
     </div>
   );
