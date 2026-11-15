@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 
@@ -46,7 +47,10 @@ public class User {
     @Column(nullable = false, columnDefinition = "text default 'neon_ronin'")
     private String ownedSkins = "neon_ronin";
 
-    @Column(nullable = false, columnDefinition = "varchar(64) default 'neon_ronin'")
+    // Length and default are kept separate: a combined columnDefinition makes ddl-auto=update
+    // emit an invalid "alter column ... set data type varchar(64) default ..." on every start.
+    @Column(nullable = false, length = 64)
+    @ColumnDefault("'neon_ronin'")
     private String activeSkin = "neon_ronin";
 
     /** Admin rights belong to this account (not to whoever holds the name). See AdminAccess. */
