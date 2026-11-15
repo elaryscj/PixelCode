@@ -14,7 +14,7 @@ const Greeting = () => {
         ARENA
       </h3>
       <p className="font-pixel text-neon/80 text-center text-base sm:text-xl">
-        CODE FASTER. RUN HARDER. WIN<span className="blink-caret">_</span>
+        {t("tagline")}<span className="blink-caret">_</span>
       </p>
     </div>
   );

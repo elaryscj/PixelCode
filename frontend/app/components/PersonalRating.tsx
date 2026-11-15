@@ -25,7 +25,7 @@ const PersonalRating = () => {
       <div className="flex items-center gap-3 sm:gap-4 min-w-0 bg-[#060816]">
         <div className="px-1 sm:px-2 shrink-0">
           <p className="font-pixel text-neon text-xs sm:text-base whitespace-nowrap">{t("your_rank")}</p>
-          <p className="font-pixel text-yellow text-3xl/none">
+          <p dir="ltr" className="font-pixel text-yellow text-3xl/none">
             # <span className="text-4xl">{mine ? mine.place : "-"}</span>
           </p>
         </div>
@@ -40,7 +40,7 @@ const PersonalRating = () => {
           <p className="hidden sm:block uppercase font-pixel text-2xl text-yellow">{t("current_mmr")}</p>
           <p className="text-pink font-pixel text-xl">MMR {mine?.rating ?? user?.rating ?? 1500}</p>
           {mine && (
-            <p className="text-neon font-pixel text-sm">
+            <p dir="ltr" className="text-neon font-pixel text-sm">
               W {mine.wins} · L {mine.losses}
             </p>
           )}

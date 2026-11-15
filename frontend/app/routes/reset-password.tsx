@@ -3,8 +3,9 @@ import { Link, useSearchParams } from "react-router";
 import { FaCheckCircle, FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 import { resetPassword } from "~/api/auth";
 import RecoveryShell, { CardTitle, cardCls, inputCls, primaryBtn } from "~/components/RecoveryShell";
+import EnglishOnly from "~/components/EnglishOnly";
 
-export default function ResetPassword() {
+function ResetPasswordScreen() {
   const [params] = useSearchParams();
   const token = params.get("token") ?? "";
   const [pw, setPw] = useState("");
@@ -98,5 +99,14 @@ export default function ResetPassword() {
         {!token && <p className="text-pink text-sm mt-3 font-sans">This link is incomplete. Request a new one.</p>}
       </form>
     </RecoveryShell>
+  );
+}
+
+// not translated yet: keep it left-to-right English in Arabic / Urdu
+export default function ResetPassword() {
+  return (
+    <EnglishOnly>
+      <ResetPasswordScreen />
+    </EnglishOnly>
   );
 }

@@ -199,6 +199,7 @@ export default function ChallengeModal({
                 <span>UTF-8</span>
               </div>
               <textarea
+                dir="ltr"
                 ref={textareaRef}
                 value={code}
                 onChange={(e) => setCode(e.target.value)}

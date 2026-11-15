@@ -4,12 +4,13 @@ import { useState, useEffect, useCallback } from "react";
 import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useNavigate } from "react-router";
-import { FaChevronLeft, FaChevronRight, FaTwitch, FaYoutube } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { SkinArt } from "~/components/skins";
 import { getCurrentUser, refreshUser } from "~/api/auth";
 import { buySkin, equipSkin, getStore, type StoreState } from "~/api/store";
 import { onlineLabel, useLiveStats } from "~/lib/liveStats";
 import PingBadge from "~/components/PingBadge";
+import EnglishOnly from "~/components/EnglishOnly";
 
 type Skin = {
   id: string;
@@ -452,19 +453,16 @@ function StoreRouteScreen() {
           <span className="text-gray-400">SYSTEM_ENCRYPTION: ACTIVE (AES_256)</span>
         </div>
 
-        <div className="flex items-center gap-4 text-sm text-[#01E4FF]">
-          <a href="https://twitch.tv" target="_blank" rel="noreferrer" className="hover:text-pink transition-colors">
-            <FaTwitch />
-          </a>
-          <a href="https://youtube.com" target="_blank" rel="noreferrer" className="hover:text-pink transition-colors">
-            <FaYoutube />
-          </a>
-        </div>
+        {/* social links hidden until the project has its own accounts */}
       </footer>
     </div>
   );
 }
 
 export default function StoreRoute() {
-  return <ClientOnly fallback={<ScreenLoading />}>{() => <StoreRouteScreen />}</ClientOnly>;
+  return <ClientOnly fallback={<ScreenLoading />}>{() => (
+        <EnglishOnly>
+          <StoreRouteScreen />
+        </EnglishOnly>
+      )}</ClientOnly>;
 }

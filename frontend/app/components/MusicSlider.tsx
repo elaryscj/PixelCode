@@ -21,11 +21,9 @@ export default function MusicSlider() {
           value={val}
           onChange={(e) => setVolume(+e.target.value / 100)}   // 0–100 → 0–1
           className="range-bar"
-          style={{
-            background: `linear-gradient(to right, #5fd0ea 0% ${pct}%, #16233c ${pct}% 100%)`,
-          }}
+          style={{ "--range-pct": `${pct}%`, "--range-fill": "#5fd0ea" } as React.CSSProperties}
         />
-        <h3 className="font-pixel text-yellow text-xl sm:text-2xl w-14 text-right">{val}%</h3>
+        <h3 className="font-pixel text-yellow text-xl sm:text-2xl w-14 text-end">{val}%</h3>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import { getRoom, leaveRoom, readyRoom, voteMap, type Room } from "~/api/room";
 import MapVote from "~/components/game/MapVote";
 import { getCurrentUser } from "~/api/auth";
 import { getClient, useRoomSocket } from "~/api/socket";
+import EnglishOnly from "~/components/EnglishOnly";
 
 // The socket pushes every lobby change; polling is only the safety net. Fast while the socket is down.
 const POLL_MS = 1000;
@@ -314,5 +315,9 @@ const LobbyScreen = () => {
 };
 
 export default function Lobby() {
-  return <ClientOnly fallback={<ScreenLoading />}>{() => <LobbyScreen />}</ClientOnly>;
+  return <ClientOnly fallback={<ScreenLoading />}>{() => (
+        <EnglishOnly>
+          <LobbyScreen />
+        </EnglishOnly>
+      )}</ClientOnly>;
 }

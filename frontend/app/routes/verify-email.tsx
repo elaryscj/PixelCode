@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 import { verifyEmailToken } from "~/api/profile";
+import EnglishOnly from "~/components/EnglishOnly";
 
-export default function VerifyEmailRoute() {
+function VerifyEmailRouteScreen() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
 
@@ -66,5 +67,14 @@ export default function VerifyEmailRoute() {
         )}
       </div>
     </div>
+  );
+}
+
+// not translated yet: keep it left-to-right English in Arabic / Urdu
+export default function VerifyEmailRoute() {
+  return (
+    <EnglishOnly>
+      <VerifyEmailRouteScreen />
+    </EnglishOnly>
   );
 }

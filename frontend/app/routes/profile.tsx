@@ -17,6 +17,7 @@ import {
   type ProfileResponse,
   type ProfileError,
 } from "~/api/profile";
+import EnglishOnly from "~/components/EnglishOnly";
 
 function ProfileRouteScreen() {
   const navigate = useNavigate();
@@ -562,5 +563,9 @@ function ProfileRouteScreen() {
 }
 
 export default function ProfileRoute() {
-  return <ClientOnly fallback={<ScreenLoading />}>{() => <ProfileRouteScreen />}</ClientOnly>;
+  return <ClientOnly fallback={<ScreenLoading />}>{() => (
+        <EnglishOnly>
+          <ProfileRouteScreen />
+        </EnglishOnly>
+      )}</ClientOnly>;
 }

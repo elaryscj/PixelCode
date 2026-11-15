@@ -29,6 +29,19 @@
   --color-surface-alt: #161E42;
 }
 
+/* The pixel and mono fonts only cover Latin/Cyrillic. Their monospace fallbacks draw Arabic and Urdu letters
+   unjoined, so those scripts (and Devanagari) get proportional system fonts that shape them correctly.
+   The game fonts stay first, so Latin letters and digits keep the pixel look; the browser only falls through
+   to the script font for characters the game fonts do not have. */
+:lang(ar), :lang(ur) {
+  --font-sans: "IBM Plex Mono", "Noto Naskh Arabic", "Geeza Pro", "Segoe UI", Tahoma, sans-serif;
+  --font-pixel: "Press Start 2P Scaled", "Press Start 2P", "Noto Naskh Arabic", "Geeza Pro", "Segoe UI", Tahoma, sans-serif;
+}
+:lang(hi) {
+  --font-sans: "IBM Plex Mono", "Noto Sans Devanagari", "Kohinoor Devanagari", "Nirmala UI", sans-serif;
+  --font-pixel: "Press Start 2P Scaled", "Press Start 2P", "Noto Sans Devanagari", "Kohinoor Devanagari", "Nirmala UI", sans-serif;
+}
+
 @utility text-glow {
   text-shadow:
     0 0 4px currentColor,
@@ -64,7 +77,12 @@
   outline: none;
   border-radius: 0;
   border: 2px solid #2e4468;
-  background: #16233c;          /* fallback — inline gradient overrides it */
+  /* filled part = --range-pct in --range-fill. The fill must start on the same side as the slider's minimum:
+     the left normally, the right in right-to-left languages (the browser mirrors the slider there). */
+  background: linear-gradient(to right, var(--range-fill, #5fd0ea) 0% var(--range-pct, 0%), #16233c var(--range-pct, 0%) 100%);
+  [dir="rtl"] & {
+    background: linear-gradient(to left, var(--range-fill, #5fd0ea) 0% var(--range-pct, 0%), #16233c var(--range-pct, 0%) 100%);
+  }
 
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
