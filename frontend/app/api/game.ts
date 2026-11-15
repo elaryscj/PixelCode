@@ -14,6 +14,8 @@ export type MatchResult = {
   code: string;
   /** ranked queue match; private rooms change no rating */
   ranked?: boolean;
+  /** the opponent was PIXEL_BOT */
+  botMatch?: boolean;
   /** map the match was played on (null for matches from before map voting) */
   mapId?: number | null;
   reason: string;
@@ -88,6 +90,7 @@ export const finishMatch = (code: string, x: number, y: number) =>
 /** One finished match in "See my results" (newest first). */
 export type MatchHistoryEntry = MatchResult & {
   ranked: boolean;
+  botMatch?: boolean;
   mapId: number | null;
   finishedAt: number | null;
 };

@@ -54,8 +54,15 @@ public class MatchmakingService {
     private final UserRepository users;
     private final RoomRepository rooms;
     private final RoomService roomService;
+    private final com.example.game_backend.game.BotAccount bot;
+    /** a player alone in the queue this long plays PIXEL_BOT instead (0 = never) */
+    private final long botAfterMs;
 
-    public MatchmakingService(UserRepository users, RoomRepository rooms, RoomService roomService) {
+    public MatchmakingService(UserRepository users, RoomRepository rooms, RoomService roomService,
+                              com.example.game_backend.game.BotAccount bot,
+                              @org.springframework.beans.factory.annotation.Value("${game.bot-after-seconds:20}") long botAfterSeconds) {
+        this.bot = bot;
+        this.botAfterMs = botAfterSeconds * 1000L;
         this.users = users;
         this.rooms = rooms;
         this.roomService = roomService;
@@ -176,6 +183,22 @@ public class MatchmakingService {
                         taken.add(best.userId);
                     } catch (RuntimeException ex) {
                         log.error("Could not create a matched room", ex);
+                    }
+                }
+            }
+            // nobody to play with: after a while, face the bot rather than wait forever
+            if (botAfterMs > 0) {
+                for (Entry e : list) {
+                    if (taken.contains(e.userId) || now - e.joinedAt < botAfterMs) {
+                        continue;
+                    }
+                    try {
+                        String code = roomService.createBotRoom(e.userId, bot.id());
+                        matched.put(e.userId, new Assignment(code, now));
+                        queue.remove(e.userId);
+                        taken.add(e.userId);
+                    } catch (RuntimeException ex) {
+                        log.error("Could not create a bot room", ex);
                     }
                 }
             }

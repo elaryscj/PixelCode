@@ -2,11 +2,12 @@
 // Email Verification confirmation screen
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
+import { useTranslation } from "react-i18next";
 import { FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 import { verifyEmailToken } from "~/api/profile";
-import EnglishOnly from "~/components/EnglishOnly";
 
-function VerifyEmailRouteScreen() {
+export default function VerifyEmailRoute() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
 
@@ -16,7 +17,7 @@ function VerifyEmailRouteScreen() {
 
   useEffect(() => {
     if (!token) {
-      setErrorMessage("No verification token found in URL.");
+      setErrorMessage(t("ve_no_token"));
       setLoading(false);
       return;
     }
@@ -26,7 +27,7 @@ function VerifyEmailRouteScreen() {
         setSuccess(true);
       })
       .catch((err) => {
-        setErrorMessage(err.message || "Invalid or expired verification link.");
+        setErrorMessage(err.message || t("ve_invalid"));
       })
       .finally(() => setLoading(false));
   }, [token]);
@@ -34,47 +35,38 @@ function VerifyEmailRouteScreen() {
   return (
     <div className="min-h-screen bg-[#040714] text-white flex flex-col items-center justify-center p-6 select-none font-pixel">
       <div className="w-full max-w-md bg-[#070c1e]/90 border-2 border-[#01E4FF] p-8 shadow-[0_0_25px_rgba(1,228,255,0.25)] text-center flex flex-col items-center gap-6">
-        <h1 className="text-yellow text-2xl tracking-wider">EMAIL VERIFICATION</h1>
+        <h1 className="text-yellow text-2xl tracking-wider">{t("ve_title")}</h1>
 
         {loading ? (
-          <div className="text-neon text-sm animate-pulse">VERIFYING TOKEN...</div>
+          <div className="text-neon text-sm animate-pulse">{t("ve_verifying")}</div>
         ) : success ? (
           <>
             <FaCheckCircle className="text-5xl text-emerald-400" />
             <div className="text-emerald-400 text-sm">
-              [✓] Your email address has been verified successfully!
+              [✓] {t("ve_ok")}
             </div>
             <Link
               to="/profile"
               className="mt-4 px-6 py-2.5 bg-[#01E4FF] border border-yellow text-black text-xs uppercase tracking-wider hover:brightness-110"
             >
-              RETURN TO PROFILE
+              {t("ve_return")}
             </Link>
           </>
         ) : (
           <>
             <FaExclamationTriangle className="text-5xl text-pink" />
             <div className="text-pink text-xs leading-relaxed">
-              [!] ERROR: {errorMessage}
+              [!] {t("error").toUpperCase()}: {errorMessage}
             </div>
             <Link
               to="/profile"
               className="mt-4 px-6 py-2.5 bg-pink border border-yellow text-black text-xs uppercase tracking-wider hover:brightness-110"
             >
-              RETURN TO PROFILE
+              {t("ve_return")}
             </Link>
           </>
         )}
       </div>
     </div>
-  );
-}
-
-// not translated yet: keep it left-to-right English in Arabic / Urdu
-export default function VerifyEmailRoute() {
-  return (
-    <EnglishOnly>
-      <VerifyEmailRouteScreen />
-    </EnglishOnly>
   );
 }

@@ -177,6 +177,13 @@ final class SourcePolicy {
             if (isOwn(type)) {
                 return null;
             }
+            // javac models array members (nums.length, nums.clone()) as members of a synthetic class "Array"
+            // without a package; nothing else can name it, so these two are plain array operations.
+            if (isArrayPseudoClass(type)) {
+                return (name.equals("length") && e.getKind() == ElementKind.FIELD)
+                        || (name.equals("clone") && e.getKind() == ElementKind.METHOD)
+                        ? null : "array." + name + " is not allowed";
+            }
             String typeWhy = typeVerdict(type);
             if (typeWhy != null) {
                 return typeWhy;
@@ -219,6 +226,11 @@ final class SourcePolicy {
                 return null;
             }
             return simple(q) + " is not available";
+        }
+
+        private boolean isArrayPseudoClass(TypeElement type) {
+            return type.getQualifiedName().contentEquals("Array") && !ownTopLevel.contains("Array")
+                    && !(type.getEnclosingElement() instanceof TypeElement);
         }
 
         private boolean isOwn(TypeElement type) {

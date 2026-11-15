@@ -2,12 +2,13 @@
 // Secure Authorization Screen matching PixelCode Arena Cyberpunk Terminal
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash, FaGamepad, FaWifi } from "react-icons/fa";
 import { loginUser, registerUser, AuthError } from "~/api/auth";
 import { pingColor, pingLabel, usePing } from "~/lib/liveStats";
-import EnglishOnly from "~/components/EnglishOnly";
 
-function LoginRouteScreen() {
+export default function LoginRoute() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const ping = usePing();
 
@@ -32,12 +33,12 @@ function LoginRouteScreen() {
     const fe: Record<string, string> = {};
     if (isRegister) {
       if (trimmedUser.length < 2 || trimmedUser.length > 16) fe.username = "Username must be 2-16 characters.";
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) fe.email = "Enter a valid email address.";
-      if (password.length < 8 || password.length > 72) fe.password = "Password must be 8-72 characters.";
-      else if (!/[A-Za-z]/.test(password) || !/\d/.test(password)) fe.password = "Password must contain a letter and a number.";
-      if (password !== confirmPassword) fe.confirm = "Passwords do not match.";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) fe.email = t("au_email_invalid");
+      if (password.length < 8 || password.length > 72) fe.password = t("pf_pw_len");
+      else if (!/[A-Za-z]/.test(password) || !/\d/.test(password)) fe.password = t("pf_pw_mix");
+      if (password !== confirmPassword) fe.confirm = t("pf_pw_match");
     } else if (!trimmedUser || !password) {
-      setErrorMessage("Please enter both username and password.");
+      setErrorMessage(t("au_need_both"));
       return;
     }
     setFieldErrors(fe);
@@ -47,7 +48,7 @@ function LoginRouteScreen() {
     try {
       if (isRegister) {
         const res = await registerUser(trimmedUser, password, email.trim());
-        setSuccessMessage(res.message || "Registration successful! Logging in...");
+        setSuccessMessage(t("au_registered"));
         setTimeout(() => {
           navigate("/");
         }, 800);
@@ -64,7 +65,7 @@ function LoginRouteScreen() {
       } else if (err instanceof Error) {
         setErrorMessage(err.message);
       } else {
-        setErrorMessage("Connection to auth terminal failed.");
+        setErrorMessage(t("au_conn_failed"));
       }
     } finally {
       setLoading(false);
@@ -91,7 +92,7 @@ function LoginRouteScreen() {
         <Link to="/" className="flex items-center gap-3 text-[#01E4FF] hover:brightness-120 transition-all">
           <FaGamepad className="text-xl" />
           <span className="text-yellow text-2xl sm:text-3xl tracking-wider">PIXELCODE</span>
-          <span className="hidden md:inline text-[#01E4FF] text-[20px]">| • KAZAKHSTAN</span>
+          <span className="hidden md:inline text-[#01E4FF] text-[20px]">| • {t("au_kazakhstan")}</span>
         </Link>
 
         <div className="flex items-center gap-4 text-[20px]">
@@ -103,7 +104,7 @@ function LoginRouteScreen() {
           <div className="hidden sm:block text-right text-[18px] leading-tight">
             <span className="text-gray-400">SECURE TERMINAL</span>
             <br />
-            <span className="text-pink">STATUS: {loading ? "CONNECTING..." : "UNKNOWN"}</span>
+            <span className="text-pink">STATUS: {loading ? t("au_connecting") : "UNKNOWN"}</span>
           </div>
         </div>
       </header>
@@ -130,7 +131,7 @@ function LoginRouteScreen() {
           <div className="flex items-center justify-between pb-3 border-b border-[#01E4FF]/40 mb-6">
             <div className="flex items-center gap-2 text-2xl text-[#01E4FF] tracking-wider">
               <span>&gt;</span>
-              <span>{isRegister ? "NEW_COMBATANT" : "USER_LOGIN"}</span>
+              <span>{isRegister ? t("au_new_player") : t("au_sign_in")}</span>
             </div>
             <div className="w-2.5 h-2.5 rounded-full bg-pink animate-pulse shadow-[0_0_8px_#FE2C96]" />
           </div>
@@ -140,9 +141,10 @@ function LoginRouteScreen() {
             {/* Username Field */}
             <div className="flex flex-col gap-2">
               <label htmlFor="auth-username" className="text-[18px] text-yellow tracking-wider uppercase">
-                {isRegister ? "USERNAME / CODENAME" : "USERNAME / PLAYER ID"}
+                {t("au_username")}
               </label>
               <input
+                dir="ltr"
                 id="auth-username"
                 type="text"
                 autoComplete="username"
@@ -159,9 +161,10 @@ function LoginRouteScreen() {
             {isRegister && (
               <div className="flex flex-col gap-2">
                 <label htmlFor="auth-email" className="text-[18px] text-yellow tracking-wider uppercase">
-                  EMAIL ADDRESS
+                  {t("pf_email")}
                 </label>
                 <input
+                  dir="ltr"
                   id="auth-email"
                   type="email"
                   autoComplete="email"
@@ -178,10 +181,11 @@ function LoginRouteScreen() {
             {/* Password Field */}
             <div className="flex flex-col gap-2">
               <label htmlFor="auth-password" className="text-[18px] text-yellow tracking-wider uppercase">
-                PASSWORD
+                {t("au_password")}
               </label>
               <div className="relative w-full">
                 <input
+                  dir="ltr"
                   id="auth-password"
                   type={showPassword ? "text" : "password"}
                   autoComplete={isRegister ? "new-password" : "current-password"}
@@ -196,7 +200,7 @@ function LoginRouteScreen() {
                   tabIndex={-1}
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-[#01E4FF] hover:text-white transition-colors"
-                  title={showPassword ? "Hide password" : "Show password"}
+                  title={showPassword ? t("au_hide_pw") : t("au_show_pw")}
                 >
                   {showPassword ? <FaEyeSlash className="text-2xl" /> : <FaEye className="text-2xl" />}
                 </button>
@@ -208,10 +212,11 @@ function LoginRouteScreen() {
             {isRegister && (
               <div className="flex flex-col gap-2">
                 <label htmlFor="auth-confirm-password" className="text-[18px] text-yellow tracking-wider uppercase">
-                  CONFIRM PASSWORD
+                  {t("au_confirm_pw")}
                 </label>
                 <div className="relative w-full">
                   <input
+                    dir="ltr"
                     id="auth-confirm-password"
                     type={showPassword ? "text" : "password"}
                     autoComplete="new-password"
@@ -244,24 +249,24 @@ function LoginRouteScreen() {
               disabled={loading}
               className="w-full mt-2 py-3 bg-[#FE2C96] border-2 border-yellow text-black text-2xl tracking-widest uppercase hover:brightness-110 active:scale-[0.99] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_12px_rgba(254,44,150,0.5)]"
             >
-              {loading ? "AUTHENTICATING..." : isRegister ? "REGISTER" : "LOG IN"}
+              {loading ? t("au_authenticating") : isRegister ? t("au_register") : t("au_login")}
             </button>
 
             {isRegister && (
               <p className="text-center text-[16px] text-gray-500">
-                By registering you accept the <span className="text-[#01E4FF]">ARENA RULES</span>
+                {t("au_accept_rules")} <span className="text-[#01E4FF]">{t("au_rules")}</span>
               </p>
             )}
             {/* Sub-links */}
             <div className="flex flex-col items-center gap-2 mt-2 text-[18px] text-gray-400">
               {!isRegister && (
                 <Link to="/forgot-password" className="text-gray-400 hover:text-gray-200 transition-colors">
-                  Forgot terminal password?
+                  {t("au_forgot")}
                 </Link>
               )}
 
               <div className="flex items-center gap-1">
-                <span>{isRegister ? "Already have an account?" : "Are you new?"}</span>
+                <span>{isRegister ? t("au_have_account") : t("au_are_new")}</span>
                 <button
                   type="button"
                   onClick={() => {
@@ -274,7 +279,7 @@ function LoginRouteScreen() {
                   }}
                   className="text-[#01E4FF] underline hover:text-glow-sm transition-colors cursor-pointer"
                 >
-                  {isRegister ? "Log in" : "Register"}
+                  {isRegister ? t("au_login_link") : t("au_register_link")}
                 </button>
               </div>
             </div>
@@ -293,14 +298,5 @@ function LoginRouteScreen() {
         {/* social links hidden until the project has its own accounts */}
       </footer>
     </div>
-  );
-}
-
-// not translated yet: keep it left-to-right English in Arabic / Urdu
-export default function LoginRoute() {
-  return (
-    <EnglishOnly>
-      <LoginRouteScreen />
-    </EnglishOnly>
   );
 }

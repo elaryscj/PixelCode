@@ -20,7 +20,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUsernameIgnoreCase(String username);
 
-    List<User> findTop50ByOrderByRatingDescIdAsc();
+    /** Leaderboard: real players only (PIXEL_BOT is excluded). */
+    List<User> findTop50ByBotFalseOrderByRatingDescIdAsc();
+    Optional<User> findFirstByBotTrue();
 
     /**
      * Reads the row with SELECT ... FOR UPDATE: every change to pixels, rating or owned skins goes through this,
@@ -31,5 +33,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @org.springframework.data.jpa.repository.Query("select u from User u where u.id = :id")
     Optional<User> findByIdForUpdate(@org.springframework.data.repository.query.Param("id") Long id);
 
-    long countByRatingGreaterThan(int rating);
+    long countByBotFalseAndRatingGreaterThan(int rating);
 }

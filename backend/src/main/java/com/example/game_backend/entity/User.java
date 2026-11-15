@@ -63,6 +63,11 @@ public class User {
     @Column
     private String adminGrant;
 
+    /** The built-in opponent PIXEL_BOT: cannot log in, never listed on the leaderboard. */
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private boolean bot = false;
+
     /** Bumped on password change/reset: every login token issued before that stops working. */
     @Column(nullable = false, columnDefinition = "integer default 0")
     private int tokenVersion = 0;
@@ -106,6 +111,9 @@ public class User {
     public void setAdminGrant(String adminGrant) { this.adminGrant = adminGrant; }
     public int getTokenVersion() { return tokenVersion; }
     public void setTokenVersion(int tokenVersion) { this.tokenVersion = tokenVersion; }
+
+    public boolean isBot() { return bot; }
+    public void setBot(boolean bot) { this.bot = bot; }
 
     public boolean isBanned() {
         return bannedUntil != null && bannedUntil.isAfter(Instant.now());

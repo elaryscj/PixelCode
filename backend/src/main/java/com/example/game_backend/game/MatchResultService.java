@@ -83,6 +83,13 @@ public class MatchResultService {
                         p.setRatingDelta(0);
                         boolean cancelled = "VOID".equals(reason) || "SERVER_RESTART".equals(reason);
                         p.setResult(draw ? (cancelled ? "VOID" : "DRAW") : (winnerUserId.equals(p.getUserId()) ? "WIN" : "LOSS"));
+                        // a duel against PIXEL_BOT: no MMR, but a small PIXELS reward so the session still counts
+                        if (room.isBotMatch() && !cancelled && p.getUserId() != null) {
+                            users.findByIdForUpdate(p.getUserId()).filter(u -> !u.isBot()).ifPresent(u -> {
+                                u.setPixels(u.getPixels() + botReward(p.getResult()));
+                                users.save(u);
+                            });
+                        }
                     }
                 }
                 if (bannedUsers != null) {
@@ -96,6 +103,16 @@ public class MatchResultService {
                 rooms.save(room);
                 return ResultViews.of(room);
             });
+        }
+    }
+
+    /** PIXELS for a match against the bot: far below a ranked match (150 / 50 / 25), so it cannot be farmed. */
+    static int botReward(String result) {
+        switch (result) {
+            case "WIN": return 40;
+            case "DRAW": return 20;
+            case "LOSS": return 10;
+            default: return 0;
         }
     }
 

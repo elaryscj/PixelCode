@@ -62,6 +62,10 @@ public class Room {
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean ranked = false;
 
+    /** Quick Play found no human in time: the opponent is PIXEL_BOT (no MMR change, small PIXELS reward). */
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean botMatch = false;
+
     public Room() {
     }
 
@@ -77,6 +81,8 @@ public class Room {
     public void setMapId(Integer mapId) { this.mapId = mapId; }
     public boolean isRanked() { return ranked; }
     public void setRanked(boolean ranked) { this.ranked = ranked; }
+    public boolean isBotMatch() { return botMatch; }
+    public void setBotMatch(boolean botMatch) { this.botMatch = botMatch; }
     public Long getId() { return id; }
     public String getCode() { return code; }
     public void setCode(String code) { this.code = code; }

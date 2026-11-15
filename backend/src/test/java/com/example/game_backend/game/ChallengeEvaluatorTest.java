@@ -73,6 +73,16 @@ class ChallengeEvaluatorTest {
     }
 
     @Test
+    void arrayLengthAndCloneWork() {
+        // javac treats these as members of a synthetic "Array" class: they must not be caught by the allowlist
+        String code = "class Solution {\n"
+                + "  static int[] solve(int[] nums) { int[] c = nums.clone(); for (int i = 0; i < c.length; i++) c[i] *= 2; return c; }\n}";
+        EvalResult r = evaluator.evaluate(code, "solve", "[{\"input\":[[1,2]],\"expected\":[2,4]},{\"input\":[[]],\"expected\":[]}]");
+        assertNull(r.errorMessage);
+        assertTrue(r.passed);
+    }
+
+    @Test
     void compileErrorsAreReportedWithLineNumbers() {
         EvalResult r = sum("public static int solve(int a, int b) { return a + b }");
         assertFalse(r.passed);

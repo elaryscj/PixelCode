@@ -17,6 +17,10 @@ public final class AccountRules {
         if (!USERNAME.matcher(name).matches()) {
             throw new ApiException(400, "Username must be 2-16 characters: letters, digits or underscore").with("field", "username");
         }
+        // the built-in opponent's name must not be impersonated
+        if (name.toUpperCase(java.util.Locale.ROOT).startsWith("PIXEL_BOT")) {
+            throw new ApiException(400, "This username is reserved").with("field", "username");
+        }
         return name;
     }
 

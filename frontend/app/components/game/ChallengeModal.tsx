@@ -2,6 +2,7 @@
 // Cyberpunk Modal for Checkpoint Door Challenges (US-16, US-17, US-18, US-19, US-20, US-21)
 import { useState, useEffect, useRef } from "react";
 import { sfx } from "~/lib/sfx";
+import { useTranslation } from "react-i18next";
 import { FaCode, FaCheck, FaTimes, FaClock, FaTerminal, FaPlay, FaLockOpen } from "react-icons/fa";
 import { submitDoor, type DoorChallenge, type SubmitResult } from "~/api/game";
 
@@ -23,6 +24,7 @@ export default function ChallengeModal({
   onClose,
   onSuccess,
 }: ChallengeModalProps) {
+  const { t } = useTranslation();
   const [code, setCode] = useState<string>(challenge.initialCode);
   const [evaluating, setEvaluating] = useState(false);
   const [result, setResult] = useState<SubmitResult | null>(null);
@@ -78,7 +80,7 @@ export default function ChallengeModal({
         setTimeout(() => onSuccess(challenge.cpNum), 1200);
       }
     } catch (e) {
-      setSubmitError(e instanceof Error ? e.message : "Evaluator unavailable");
+      setSubmitError(e instanceof Error ? e.message : t("cm_unavailable"));
       sfx.wrong();
     } finally {
       setEvaluating(false);
@@ -124,13 +126,13 @@ export default function ChallengeModal({
               secondsRemaining < 60 ? "border-pink text-pink animate-pulse" : "border-yellow text-yellow"
             }`}>
               <FaClock />
-              <span>DOOR TIMER: {timeFormatted}</span>
+              <span>{t("cm_door_timer")}: {timeFormatted}</span>
             </div>
 
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-pink transition-colors px-2 py-1 border border-transparent hover:border-pink text-sm"
-              title="Close Terminal"
+              title={t("cm_close")}
             >
               ✕
             </button>
@@ -144,7 +146,7 @@ export default function ChallengeModal({
           <div className="flex flex-col gap-4 border-r border-neon/20 pr-4">
             <div>
               <h3 className="text-neon uppercase tracking-wide text-[11px] mb-2 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-neon inline-block"></span> TASK BRIEFING
+                <span className="w-1.5 h-1.5 bg-neon inline-block"></span> {t("cm_task")}
               </h3>
               <p className="text-gray-300 font-sans text-sm leading-relaxed whitespace-pre-line bg-[#040814] p-3 border border-gray-800 rounded">
                 {challenge.description}
@@ -153,18 +155,18 @@ export default function ChallengeModal({
 
             <div className="grid grid-cols-2 gap-2 text-[10px]">
               <div className="bg-[#050b18] p-2.5 border border-gray-800">
-                <div className="text-yellow mb-1 uppercase font-bold">INPUT FORMAT:</div>
+                <div className="text-yellow mb-1 uppercase font-bold">{t("cm_input")}:</div>
                 <div className="text-gray-400 font-sans">{challenge.inputDescription}</div>
               </div>
               <div className="bg-[#050b18] p-2.5 border border-gray-800">
-                <div className="text-yellow mb-1 uppercase font-bold">OUTPUT FORMAT:</div>
+                <div className="text-yellow mb-1 uppercase font-bold">{t("cm_output")}:</div>
                 <div className="text-gray-400 font-sans">{challenge.outputDescription}</div>
               </div>
             </div>
 
             {/* Examples (the hidden checks are run on the server) */}
             <div>
-              <h4 className="text-gray-400 text-[10px] uppercase mb-2">EXAMPLES:</h4>
+              <h4 className="text-gray-400 text-[10px] uppercase mb-2">{t("cm_examples")}:</h4>
               <div className="space-y-1.5 font-mono text-[11px]">
                 {challenge.examples.map((ex, idx) => (
                   <div key={idx} className="bg-[#040814] border border-gray-800 px-3 py-1.5 text-gray-300">
@@ -178,7 +180,7 @@ export default function ChallengeModal({
             {autoUnlocked && (
               <div className="p-3 bg-neon/10 border-2 border-neon text-neon text-center flex items-center justify-center gap-2 animate-bounce">
                 <FaLockOpen className="text-lg" />
-                <span>4-MINUTE THRESHOLD REACHED! DOOR AUTO-UNLOCKED!</span>
+                <span>{t("cm_auto_unlocked")}</span>
               </div>
             )}
           </div>
@@ -187,9 +189,9 @@ export default function ChallengeModal({
           <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center text-[10px] text-gray-400">
               <span className="flex items-center gap-2 text-neon">
-                <FaCode /> JAVA 21 (CHECKED ON SERVER)
+                <FaCode /> {t("cm_java")}
               </span>
-              <span>PRESS CTRL+ENTER TO RUN</span>
+              <span>{t("cm_ctrl_enter")}</span>
             </div>
 
             {/* Terminal Code Editor */}
@@ -209,7 +211,7 @@ export default function ChallengeModal({
                 autoCorrect="off"
                 autoComplete="off"
                 className="w-full flex-1 bg-transparent text-emerald-400 font-mono text-[16px] md:text-xs focus:outline-none resize-none leading-relaxed selection:bg-neon/30 selection:text-white"
-                placeholder="Write your code here..."
+                placeholder={t("cm_placeholder")}
               />
             </div>
 
@@ -225,15 +227,15 @@ export default function ChallengeModal({
                   {result.passed ? <FaCheck className="text-neon" /> : <FaTimes className="text-pink" />}
                   <span>
                     {result.passed
-                      ? `ACCEPTED! (${result.passedCount}/${result.total} TESTS PASSED) - UNLOCKING DOOR...`
+                      ? t("cm_accepted", { passed: result.passedCount, total: result.total })
                       : result.errorMessage
-                        ? "REJECTED"
-                        : `REJECTED (${result.passedCount}/${result.total} TESTS PASSED)`}
+                        ? t("cm_rejected")
+                        : t("cm_rejected_count", { passed: result.passedCount, total: result.total })}
                   </span>
                 </div>
 
                 {result.errorMessage && (
-                  <div className="text-[11px] text-pink/90 font-mono mt-1">Error: {result.errorMessage}</div>
+                  <div className="text-[11px] text-pink/90 font-mono mt-1">{t("error")}: {result.errorMessage}</div>
                 )}
 
                 {!result.passed && result.details.length > 0 && (
@@ -242,10 +244,10 @@ export default function ChallengeModal({
                       <div key={i} className={d.passed ? "text-emerald-400" : "text-pink"}>
                         #{d.index}:{" "}
                         {d.passed
-                          ? "PASSED"
+                          ? t("cm_passed")
                           : d.visible
-                            ? `FAILED | Input: ${d.input} | Expected: ${d.expected} | Got: ${d.actual}`
-                            : "FAILED (hidden test)"}
+                            ? t("cm_failed_detail", { input: d.input, expected: d.expected, actual: d.actual })
+                            : t("cm_failed_hidden")}
                       </div>
                     ))}
                   </div>
@@ -266,7 +268,7 @@ export default function ChallengeModal({
                 }`}
               >
                 <FaPlay className="text-[10px]" />
-                {evaluating ? "SERVER IS CHECKING..." : "SUBMIT SOLUTION [RUN]"}
+                {evaluating ? t("cm_checking") : t("cm_submit")}
               </button>
             </div>
 

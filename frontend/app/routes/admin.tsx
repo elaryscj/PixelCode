@@ -51,6 +51,7 @@ const empty: ChallengeForm = {
   starterCode: "", // empty: the server builds a Java starter whose types match the tests
   examples: "solve(1, 2) -> 3",
   testsJson: '[{"input":[1,2],"expected":3},{"input":[0,0],"expected":0}]',
+  difficulty: "EASY",
   referenceSolution: "class Solution {\n    public static int solve(int a, int b) {\n        return a + b;\n    }\n}\n",
 };
 
@@ -181,6 +182,16 @@ function AdminScreen() {
               <input className={field} value={form.outputDescription} onChange={set("outputDescription")} />
             </div>
           </div>
+          <label className={label}>DIFFICULTY (players see EASY gates first, HARD ones at higher MMR)</label>
+          <select
+            className={`${field} ${bad("difficulty")}`}
+            value={form.difficulty}
+            onChange={(e) => setForm((f) => ({ ...f, difficulty: e.target.value as ChallengeForm["difficulty"] }))}
+          >
+            <option value="EASY">EASY</option>
+            <option value="MEDIUM">MEDIUM</option>
+            <option value="HARD">HARD</option>
+          </select>
           <label className={label}>METHOD NAME</label>
           <input className={`${field} ${bad("functionName")}`} value={form.functionName} onChange={set("functionName")} />
           <label className={label}>STARTER CODE (Java, optional: leave empty to generate it from the tests)</label>

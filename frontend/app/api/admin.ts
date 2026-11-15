@@ -19,6 +19,7 @@ export type ChallengeForm = {
   examples: string;
   testsJson: string;
   referenceSolution: string;
+  difficulty: "EASY" | "MEDIUM" | "HARD";
 };
 
 export const listChallenges = () => api<AdminChallenge[]>("/admin/challenges");

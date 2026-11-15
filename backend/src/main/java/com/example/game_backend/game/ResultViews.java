@@ -19,6 +19,7 @@ public final class ResultViews {
         Map<String, Object> m = new LinkedHashMap<>();
         m.put("code", room.getCode());
         m.put("ranked", room.isRanked());
+        m.put("botMatch", room.isBotMatch());
         m.put("mapId", room.getMapId());
         m.put("reason", room.getResultReason());
         m.put("technical", room.getResultReason() != null && TECHNICAL.contains(room.getResultReason()));

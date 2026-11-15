@@ -219,6 +219,9 @@ public class RoomService {
             if (me == null) {
                 throw new ApiException(403, "You did not play in this match");
             }
+            if (old.isBotMatch()) {
+                throw new ApiException(409, "Rematch is not available against the bot: use Quick Play again");
+            }
             if (old.getRoomStatus() != RoomStatus.FINISHED) {
                 throw new ApiException(409, "The match is not over yet");
             }
@@ -278,6 +281,31 @@ public class RoomService {
             });
         }
         broadcast(code, closed ? "ROOM_CLOSED" : "PLAYER_LEFT");
+    }
+
+    /**
+     * Quick Play found nobody in time: a room against PIXEL_BOT. The bot is ready at once; the player votes and
+     * joins like in a ranked match (same five-minute window). Not ranked: no MMR change, no absence bans.
+     */
+    public String createBotRoom(long userId, long botId) {
+        Room room;
+        synchronized (lock) {
+            room = tx.execute(st -> {
+                User human = requireUser(userId);
+                User bot = requireUser(botId);
+                Room r = new Room(generateCode(), RoomStatus.READY);
+                r.setRanked(false);
+                r.setBotMatch(true);
+                r.setAssignedAt(Instant.now());
+                r.getPlayers().add(new Player(human.getId(), human.getUsername(), human.getRating()));
+                // shown with the player's own MMR: the bot adapts its pace to that level
+                Player b = new Player(bot.getId(), bot.getUsername(), human.getRating());
+                b.setReady(true);
+                r.getPlayers().add(b);
+                return rooms.save(r);
+            });
+        }
+        return room.getCode();
     }
 
     public String createMatchedRoom(long userA, long userB) {
@@ -390,6 +418,7 @@ public class RoomService {
         m.put("roomStatus", r.getRoomStatus().name());
         m.put("status", r.getRoomStatus().name());
         m.put("ranked", r.isRanked());
+        m.put("botMatch", r.isBotMatch());
         List<Map<String, Object>> ps = new ArrayList<>();
         for (Player p : r.getPlayers()) {
             Map<String, Object> pm = new LinkedHashMap<>();

@@ -26,19 +26,20 @@ Live: https://pixelcode-frontend.onrender.com (frontend) / backend on Render, Po
 | US-33 Reconnect within 5 min | Done | returns to match, timers kept |
 | US-34 Ban for absence | Done | BAN_MINUTES (30) |
 | US-35 Technical loss / win once | Done | |
-| US-36 Easy challenges only | Done | |
+| US-36 Challenge difficulty | Changed | 42 built-in Java challenges (EASY / MEDIUM / HARD); doors get harder with the players' average MMR |
 
 ## Should (10)
 US-03 Reset password: done (/forgot-password, /reset-password; e-mail needs SMTP, otherwise link in backend log).
 US-04 Sign out: done (menu QUIT, Settings).
 US-10 Cancel matchmaking: done.
+Quick Play bot: nobody in the queue for 20 s -> a duel against PIXEL_BOT (no MMR change, +40 / +10 PIXELS; game.bot-after-seconds, 0 = off).
 US-23 Withdraw challenge: done (/admin).
 US-26 Leaderboard: done. US-27 My position: done.
 US-28 Browse skins, US-29 Equip, US-31 Buy: done (/store, server-side balance).
 US-30 Publish cosmetic (admin): done (/admin: name, price, picture; appears in /store and in matches).
 
 ## Could / Won't
-US-05 Language EN / KZ: done (Settings). US-06 Music volume: done. US-07 Fullscreen: done.
+US-05 Languages: 14 (en, kz, ru, es, fr, de, pt, id, zh, ja, ko, hi, ar, ur; Arabic / Urdu right-to-left). Admin page, challenge texts and server error messages are English. US-06 Music volume: done. US-07 Fullscreen: done.
 US-08 Close account: excluded by SRS (a delete-account action exists in the profile anyway).
 
 ## Open items
