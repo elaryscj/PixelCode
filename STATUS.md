@@ -14,7 +14,7 @@ Live: https://pixelcode-frontend.onrender.com (frontend) / backend on Render, Po
 | US-14 Opponent progress | Done | right panel, server-confirmed |
 | US-15 First finish ends match | Done | server decides |
 | US-16 Open door challenge (E) | Done | game |
-| US-17 Submit solution (server-side check) | Done | Rhino sandbox |
+| US-17 Submit solution (server-side check) | Done | Java 21: javac + allowlist, separate locked-down JVM |
 | US-18 Unlock on verified solution | Done | |
 | US-19 Rejection feedback | Done | |
 | US-20 Door timer (4 min, no reset) | Done | server time |

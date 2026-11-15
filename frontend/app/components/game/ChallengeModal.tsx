@@ -86,15 +86,15 @@ export default function ChallengeModal({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // Tab key inserts 2 spaces instead of leaving textarea
+    // Tab key inserts 4 spaces (Java style) instead of leaving textarea
     if (e.key === "Tab") {
       e.preventDefault();
       const target = e.currentTarget;
       const start = target.selectionStart;
       const end = target.selectionEnd;
       const val = target.value;
-      target.value = val.substring(0, start) + "  " + val.substring(end);
-      target.selectionStart = target.selectionEnd = start + 2;
+      target.value = val.substring(0, start) + "    " + val.substring(end);
+      target.selectionStart = target.selectionEnd = start + 4;
       setCode(target.value);
     }
     // Ctrl + Enter or Cmd + Enter to submit code
@@ -187,7 +187,7 @@ export default function ChallengeModal({
           <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center text-[10px] text-gray-400">
               <span className="flex items-center gap-2 text-neon">
-                <FaCode /> JAVASCRIPT (CHECKED ON SERVER)
+                <FaCode /> JAVA 21 (CHECKED ON SERVER)
               </span>
               <span>PRESS CTRL+ENTER TO RUN</span>
             </div>
@@ -195,7 +195,7 @@ export default function ChallengeModal({
             {/* Terminal Code Editor */}
             <div className="relative flex-1 min-h-[220px] bg-[#02050f] border border-neon/40 p-2 flex flex-col font-mono">
               <div className="text-[10px] text-gray-500 pb-1 border-b border-gray-800 mb-2 flex justify-between">
-                <span>// solution.js</span>
+                <span>// Solution.java</span>
                 <span>UTF-8</span>
               </div>
               <textarea
