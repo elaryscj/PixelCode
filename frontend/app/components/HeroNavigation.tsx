@@ -30,6 +30,13 @@ const HeroNavigation = () => {
         <Link to={"/store"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
           {t("store")}
         </Link>
+        {/* match history used to be reachable only from the post-match screen */}
+        <Link to={"/results"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
+          MY RESULTS
+        </Link>
+        <Link to={"/profile"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
+          PROFILE
+        </Link>
       </div>
       <Link to={"/settings"} className={secondary}>
         {t("settings")}

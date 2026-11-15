@@ -1,0 +1,8 @@
+Lo-fi tracks (lofi-*.mp3) are from Open Lo-Fi by btahir
+https://github.com/btahir/open-lofi
+License: CC0 1.0 Universal (public domain). No attribution required.
+
+  lofi-2-am-debug-loop.mp3          "2 AM Debug Loop"          (menu)
+  lofi-cursor-after-midnight.mp3    "Cursor After Midnight"    (menu)
+  lofi-pixel-quest-save-point.mp3   "Pixel Quest Save Point"   (lobby / match)
+  lofi-rain-off-the-neon-signs.mp3  "Rain Off the Neon Signs"  (lobby / match)

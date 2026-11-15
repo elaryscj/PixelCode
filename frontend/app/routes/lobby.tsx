@@ -25,20 +25,30 @@ const LobbyScreen = () => {
   const [busy, setBusy] = useState(false);
   const [left, setLeft] = useState<number | null>(null);
   const offset = useRef(0); // server time - local time
+  // Polls, socket refreshes and button calls overlap: only the newest answer may update the screen,
+  // otherwise an older poll lands after "Join Match" and the button flickers back.
+  const seq = useRef(0);
   const { lastEvent } = useRoomSocket(code);
 
+  const applyRoom = useCallback((r: Room, ticket: number) => {
+    if (ticket < seq.current) return;
+    seq.current = ticket;
+    offset.current = r.serverTime - Date.now();
+    setRoom(r);
+  }, []);
+
   const load = useCallback(async () => {
+    const ticket = ++seq.current;
     try {
       const r = await getRoom(code);
-      offset.current = r.serverTime - Date.now();
-      setRoom(r);
+      applyRoom(r, ticket);
       setError(null);
       if (r.roomStatus === "FINISHED") navigate("/play");
     } catch (e) {
       if ((e as { status?: number })?.status === 404) navigate("/play");
       setError(e instanceof Error ? e.message : t("unexpected_error"));
     }
-  }, [code, t, navigate]);
+  }, [code, t, navigate, applyRoom]);
 
   useEffect(() => {
     if (!user) navigate("/login");
@@ -86,8 +96,9 @@ const LobbyScreen = () => {
 
   const handleReady = async () => {
     setBusy(true);
+    const ticket = ++seq.current;
     try {
-      setRoom(await readyRoom(code));
+      applyRoom(await readyRoom(code), ticket);
       setError(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : t("unexpected_error"));
@@ -98,11 +109,12 @@ const LobbyScreen = () => {
 
   const handleVote = async (mapId: number | null) => {
     // optimistic: show the pick at once, the server echoes it back
+    const ticket = ++seq.current;
     setRoom((r) =>
       r ? { ...r, players: r.players.map((p) => (p.userId === user?.id ? { ...p, mapVote: mapId } : p)) } : r,
     );
     try {
-      setRoom(await voteMap(code, mapId));
+      applyRoom(await voteMap(code, mapId), ticket);
       setError(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : t("unexpected_error"));
@@ -124,12 +136,29 @@ const LobbyScreen = () => {
   const me = players.find((p) => p.userId === user?.id);
   const rival = players.find((p) => p.userId !== user?.id);
   const canVote = !!me && (status === "WAITING" || status === "READY");
+  // Vote first, then join: the join button only unlocks once you have picked a map.
+  const voted = me?.mapVote != null;
   const vote = (
     <MapVote myVote={me?.mapVote} rivalVote={rival?.mapVote} disabled={!canVote} onVote={handleVote} />
   );
   const mm = left === null ? "" : `${String(Math.floor(left / 60)).padStart(2, "0")}:${String(left % 60).padStart(2, "0")}`;
 
-  if (room?.ranked) {
+  // Until the first answer arrives we do not know if this is a ranked or a private room:
+  // show a loader instead of flashing the private-room screen.
+  if (!room) {
+    return error ? (
+      <div className="flex flex-col items-center gap-4 font-pixel py-12">
+        <p className="text-pink text-xl text-center">{error}</p>
+        <button onClick={() => navigate("/play")} className="text-neon text-xl uppercase hover:text-yellow">
+          Back
+        </button>
+      </div>
+    ) : (
+      <ScreenLoading />
+    );
+  }
+
+  if (room.ranked) {
     const card = (p: (typeof players)[number] | undefined, mine: boolean) => (
       <div className="flex flex-col items-center gap-2 sm:gap-3 w-36 sm:w-64">
         <span className={`font-pixel text-xs sm:text-xl text-center ${mine ? "text-neon" : "text-pink"}`}>
@@ -142,7 +171,7 @@ const LobbyScreen = () => {
           <Avatar
             className="w-28 h-28 sm:w-52 sm:h-52"
             iconClass={`text-8xl ${mine ? "text-neon" : "text-pink"}`}
-            userId={p?.userId ?? null}
+            {...(p ? { userId: p.userId } : { src: null })}
           />
         </div>
         <span className="font-pixel text-yellow text-xl sm:text-3xl truncate max-w-full">{p?.nickname ?? "..."}</span>
@@ -170,18 +199,22 @@ const LobbyScreen = () => {
             <p className="text-yellow text-2xl sm:text-4xl text-center">{me?.ready ? "Joined" : `Join within ${mm || "05:00"}`}</p>
             <div className="w-full h-1 bg-neon" />
             {me?.ready ? (
-              <p className="text-neon text-2xl">WAITING FOR YOUR RIVAL...</p>
+              <p className="text-neon text-2xl text-center">WAITING FOR YOUR RIVAL<span className="blink-caret">...</span></p>
             ) : (
               <button
                 onClick={handleReady}
-                disabled={busy || !me || status !== "READY"}
-                className="btn-arcade w-full py-3 bg-pink border-2 border-yellow text-black text-2xl sm:text-3xl disabled:opacity-50"
+                disabled={busy || !me || !voted || status !== "READY"}
+                className="btn-arcade w-full py-3 bg-pink border-2 border-yellow text-black text-2xl sm:text-3xl disabled:opacity-40 disabled:pointer-events-none"
               >
-                Join Match
+                {busy ? "Joining..." : voted ? "Join Match" : "Pick a map first"}
               </button>
             )}
-            <p className="font-sans text-gray-400 text-base">
-              {me?.ready ? "Your duel begins as soon as both players have joined." : "Confirm before the timer ends to enter the arena."}
+            <p className="font-sans text-gray-400 text-base text-center">
+              {me?.ready
+                ? "Your duel begins as soon as both players have joined."
+                : voted
+                  ? "Confirm before the timer ends to enter the arena."
+                  : "Vote for a map above, then join before the timer ends."}
             </p>
           </div>
           {error && <p className="text-pink text-xl text-center">{error}</p>}
@@ -221,8 +254,13 @@ const LobbyScreen = () => {
                 }`}
               >
                 <span className="flex items-center gap-3 text-xl sm:text-3xl text-yellow min-w-0 truncate">
-                  <span className="border border-neon p-0.5">
-                    <Avatar className="w-10 h-10" iconClass="text-xl text-neon" userId={p?.userId ?? null} />
+                  <span className={`border p-0.5 ${p ? "border-neon" : "border-dashed border-neon/40"}`}>
+                    {p ? (
+                      <Avatar className="w-10 h-10" iconClass="text-xl text-neon" userId={p.userId} />
+                    ) : (
+                      // empty seat: a neutral placeholder, never the viewer's own picture
+                      <span className="w-10 h-10 flex items-center justify-center text-neon/40 text-2xl">?</span>
+                    )}
                   </span>
                   {p ? (
                     <>
@@ -242,10 +280,18 @@ const LobbyScreen = () => {
 
         <button
           onClick={handleReady}
-          disabled={busy || !me || me.ready || status !== "READY"}
+          disabled={busy || !me || me.ready || !voted || status !== "READY"}
           className="btn-arcade w-full uppercase text-3xl sm:text-4xl py-3 bg-pink border-2 border-yellow text-black disabled:opacity-40 disabled:pointer-events-none"
         >
-          {me?.ready ? t("ready") : "READY"}
+          {me?.ready
+            ? rival?.ready
+              ? t("ready")
+              : "Waiting for rival..."
+            : status !== "READY"
+              ? "Waiting for player..."
+              : voted
+                ? "READY"
+                : "Pick a map first"}
         </button>
         <button onClick={handleLeave} className="uppercase text-xl text-neon hover:text-yellow">
           LEAVE ROOM

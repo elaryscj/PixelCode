@@ -30,11 +30,23 @@ const PlayScreen = () => {
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, [bannedUntil]);
-  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [found, setFound] = useState(false);
+  // One poll at a time: the next status request is scheduled only after the previous answer,
+  // so slow responses never pile up (that is what made the search screen stutter).
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const polling = useRef(false);
 
   const stopPolling = () => {
-    if (timer.current) clearInterval(timer.current);
+    polling.current = false;
+    if (timer.current) clearTimeout(timer.current);
     timer.current = null;
+  };
+
+  // A match was found: say so at once, then move into the lobby / running game.
+  const enterMatch = async (roomCode: string) => {
+    setFound(true);
+    const room = await getRoom(roomCode).catch(() => null);
+    navigate(room?.roomStatus === "PLAYING" ? `/play/${roomCode}/game` : `/play/${roomCode}`);
   };
 
   // Fresh rating + "return to my match" (reconnect, US-33)
@@ -71,26 +83,31 @@ const PlayScreen = () => {
   };
 
   const poll = useCallback(async () => {
+    if (!polling.current) return;
     try {
       const s = await queueStatus();
+      if (!polling.current) return; // cancelled while the request was in flight
       setInQueue(s.playersInQueue);
       setWaited(s.waitedSeconds ?? 0);
       if (s.state === "MATCHED" && s.roomCode) {
         stopPolling();
-        setSearching(false);
         // a running match goes straight into the game, otherwise into the lobby
-        const room = await getRoom(s.roomCode).catch(() => null);
-        navigate(room?.roomStatus === "PLAYING" ? `/play/${s.roomCode}/game` : `/play/${s.roomCode}`);
-      } else if (s.state === "IDLE") {
+        await enterMatch(s.roomCode);
+        return;
+      }
+      if (s.state === "IDLE") {
         stopPolling();
         setSearching(false);
+        return;
       }
+      timer.current = setTimeout(poll, 1000);
     } catch (e) {
+      if (!polling.current) return;
       stopPolling();
       setSearching(false);
       fail(e);
     }
-  }, [navigate]);
+  }, [navigate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFind = async () => {
     setError(null);
@@ -98,16 +115,17 @@ const PlayScreen = () => {
     try {
       const s = await joinQueue();
       if (s.state === "MATCHED" && s.roomCode) {
-        const room = await getRoom(s.roomCode).catch(() => null);
-        navigate(room?.roomStatus === "PLAYING" ? `/play/${s.roomCode}/game` : `/play/${s.roomCode}`);
+        setSearching(true);
+        await enterMatch(s.roomCode);
         return;
       }
       setSearching(true);
+      setFound(false);
       setWaited(0);
       setInQueue(s.playersInQueue);
       stopPolling();
-      timer.current = setInterval(poll, 1000);
-      void poll();
+      polling.current = true;
+      timer.current = setTimeout(poll, 1000);
     } catch (e) {
       fail(e);
     } finally {
@@ -209,14 +227,25 @@ const PlayScreen = () => {
               <div className="text-pink text-xl">MMR {user.rating}</div>
             </div>
           </div>
-          <h1 className="text-yellow/80 text-[14vw]/none sm:text-[88px]/none md:text-[136px]/none text-glow-sm text-center px-4">Finding a match</h1>
-          <p className="text-pink text-2xl sm:text-4xl text-center">Warm up your fingers...</p>
-          <p className="text-neon text-xl text-center">
-            {waited}s · {inQueue} in queue
-          </p>
-          <button onClick={handleCancel} className={`${btn} max-w-80 border-pink text-yellow`}>
-            CANCEL
-          </button>
+          {found ? (
+            <>
+              <h1 className="text-neon text-[14vw]/none sm:text-[88px]/none md:text-[136px]/none text-glow-sm text-center px-4">Match found!</h1>
+              <p className="text-yellow text-2xl sm:text-4xl text-center">
+                Entering the lobby<span className="blink-caret">...</span>
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-yellow/80 text-[14vw]/none sm:text-[88px]/none md:text-[136px]/none text-glow-sm text-center px-4">Finding a match</h1>
+              <p className="text-pink text-2xl sm:text-4xl text-center">Warm up your fingers...</p>
+              <p className="text-neon text-xl text-center">
+                {waited}s · {inQueue} in queue
+              </p>
+              <button onClick={handleCancel} className={`${btn} max-w-80 border-pink text-yellow`}>
+                CANCEL
+              </button>
+            </>
+          )}
           {error && <p className="text-pink text-xl text-center">{error}</p>}
         </div>
       </>
