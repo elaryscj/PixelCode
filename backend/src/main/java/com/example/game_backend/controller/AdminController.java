@@ -4,6 +4,7 @@ import com.example.game_backend.entity.Challenge;
 import com.example.game_backend.entity.User;
 import com.example.game_backend.error.ApiException;
 import com.example.game_backend.game.ChallengeEvaluator;
+import com.example.game_backend.game.JavaStarter;
 import com.example.game_backend.game.EvalResult;
 import com.example.game_backend.repository.ChallengeRepository;
 import com.example.game_backend.repository.UserRepository;
@@ -83,8 +84,9 @@ public class AdminController {
         c.setInputDescription(f.inputDescription);
         c.setOutputDescription(f.outputDescription);
         c.setFunctionName(f.functionName.trim());
+        // no starter given: build a Java one whose types match the tests
         c.setStarterCode(f.starterCode == null || f.starterCode.isBlank()
-                ? "function " + f.functionName.trim() + "() {\n  // TODO\n\n}\n" : f.starterCode);
+                ? JavaStarter.build(f.functionName.trim(), f.testsJson, null) : f.starterCode);
         c.setExamples(f.examples);
         c.setTestsJson(f.testsJson);
         c.setDifficulty("EASY");

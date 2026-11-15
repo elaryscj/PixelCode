@@ -5,7 +5,8 @@ RUN mvn -q -B dependency:go-offline
 COPY src ./src
 RUN mvn -q -B package -DskipTests
 
-FROM eclipse-temurin:21-jre
+# JDK, not JRE: player solutions are compiled with javac at runtime (ChallengeEvaluator)
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
 COPY --from=build /src/target/*.jar app.jar
 EXPOSE 8080

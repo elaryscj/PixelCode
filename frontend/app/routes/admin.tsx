@@ -43,14 +43,14 @@ function readImage(file: File): Promise<string> {
 
 const empty: ChallengeForm = {
   title: "GATE // ",
-  description: "Write a function `solve(a, b)` that ...",
+  description: "Write a method `solve(a, b)` that ...",
   inputDescription: "",
   outputDescription: "",
   functionName: "solve",
-  starterCode: "function solve(a, b) {\n  // TODO\n\n}\n",
+  starterCode: "", // empty: the server builds a Java starter whose types match the tests
   examples: "solve(1, 2) -> 3",
   testsJson: '[{"input":[1,2],"expected":3},{"input":[0,0],"expected":0}]',
-  referenceSolution: "function solve(a, b) {\n  return a + b;\n}\n",
+  referenceSolution: "class Solution {\n    public static int solve(int a, int b) {\n        return a + b;\n    }\n}\n",
 };
 
 const field = "w-full bg-[#02050f] border border-neon text-white px-3 py-2 font-sans text-lg outline-none focus:border-glow-neon-sm";
@@ -180,15 +180,15 @@ function AdminScreen() {
               <input className={field} value={form.outputDescription} onChange={set("outputDescription")} />
             </div>
           </div>
-          <label className={label}>FUNCTION NAME</label>
+          <label className={label}>METHOD NAME</label>
           <input className={`${field} ${bad("functionName")}`} value={form.functionName} onChange={set("functionName")} />
-          <label className={label}>STARTER CODE</label>
+          <label className={label}>STARTER CODE (Java, optional: leave empty to generate it from the tests)</label>
           <textarea className={`${field} font-mono`} rows={4} value={form.starterCode} onChange={set("starterCode")} />
           <label className={label}>EXAMPLES (shown to players)</label>
           <textarea className={field} rows={2} value={form.examples} onChange={set("examples")} />
           <label className={label}>TESTS (JSON: input array + expected)</label>
           <textarea className={`${field} font-mono ${bad("testsJson")}`} rows={4} value={form.testsJson} onChange={set("testsJson")} />
-          <label className={label}>REFERENCE SOLUTION (must pass all tests)</label>
+          <label className={label}>REFERENCE SOLUTION (Java: class Solution, must pass all tests)</label>
           <textarea className={`${field} font-mono ${bad("referenceSolution")}`} rows={5} value={form.referenceSolution} onChange={set("referenceSolution")} />
 
           {error && <p className="text-pink text-xl mt-4 border border-pink/40 bg-pink/10 px-3 py-2 font-sans">[!] {error.text}</p>}
