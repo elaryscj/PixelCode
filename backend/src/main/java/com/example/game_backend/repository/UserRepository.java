@@ -22,5 +22,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findTop50ByOrderByRatingDescIdAsc();
 
+    /**
+     * Reads the row with SELECT ... FOR UPDATE: every change to pixels, rating or owned skins goes through this,
+     * so two simultaneous requests (two purchases, a purchase and a match reward) cannot overwrite each other.
+     * Must be called inside a transaction.
+     */
+    @org.springframework.data.jpa.repository.Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+    @org.springframework.data.jpa.repository.Query("select u from User u where u.id = :id")
+    Optional<User> findByIdForUpdate(@org.springframework.data.repository.query.Param("id") Long id);
+
     long countByRatingGreaterThan(int rating);
 }

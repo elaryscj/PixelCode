@@ -23,6 +23,34 @@ export function getToken(): string | null {
   }
 }
 
+const RETRY_DELAYS_MS = [600, 1500];
+
+/**
+ * Reads (GET) are retried when the server is briefly unreachable or answers 502/503/504 (a restart, a cold
+ * start on the free hosting). Writes are never retried automatically: a purchase must not happen twice.
+ */
+async function fetchWithRetry(url: string, init: RequestInit): Promise<Response> {
+  const idempotent = (init.method ?? "GET").toUpperCase() === "GET";
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const res = await fetch(url, init);
+      if (idempotent && [502, 503, 504].includes(res.status) && attempt < RETRY_DELAYS_MS.length) {
+        await new Promise((r) => setTimeout(r, RETRY_DELAYS_MS[attempt]));
+        continue;
+      }
+      return res;
+    } catch (e) {
+      if ((e as Error)?.name === "AbortError") throw e;
+      if (idempotent && attempt < RETRY_DELAYS_MS.length) {
+        await new Promise((r) => setTimeout(r, RETRY_DELAYS_MS[attempt]));
+        continue;
+      }
+      // fetch() only throws on network problems: say so instead of "Failed to fetch"
+      throw new ApiError(0, "Can't reach the server. Check your connection and try again.", {});
+    }
+  }
+}
+
 export async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {
@@ -31,7 +59,7 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...((options.headers as Record<string, string>) ?? {}),
   };
-  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  const res = await fetchWithRetry(`${API_BASE}${path}`, { ...options, headers });
   if (res.status === 204) return null as T;
   const data = await res.json().catch(() => null);
   if (res.status === 401 && token && typeof window !== "undefined") {

@@ -58,8 +58,12 @@ public class MatchResultService {
                 if (rated && ps.size() == 2) {
                     Player a = ps.get(0);
                     Player b = ps.get(1);
-                    User ua = users.findById(a.getUserId()).orElse(null);
-                    User ub = users.findById(b.getUserId()).orElse(null);
+                    // lock both rows (lower id first, so two matches never wait on each other in a circle)
+                    boolean aFirst = a.getUserId() < b.getUserId();
+                    User first = users.findByIdForUpdate(aFirst ? a.getUserId() : b.getUserId()).orElse(null);
+                    User second = users.findByIdForUpdate(aFirst ? b.getUserId() : a.getUserId()).orElse(null);
+                    User ua = aFirst ? first : second;
+                    User ub = aFirst ? second : first;
                     if (ua != null && ub != null) {
                         int ra = ua.getRating();
                         int rb = ub.getRating();

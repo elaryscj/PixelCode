@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import Greeting from "./Greeting";
+import HowToPlay, { hasSeenHowToPlay } from "./HowToPlay";
 import HeroNavigation from "./HeroNavigation";
 import { useLiveStats } from "~/lib/liveStats";
 
@@ -19,11 +21,18 @@ const LiveStrip = () => {
 };
 
 const Hero = () => {
+  // first visit: open the rules once (decided after mount, so the server render matches)
+  const [showRules, setShowRules] = useState(false);
+  useEffect(() => {
+    if (!hasSeenHowToPlay()) setShowRules(true);
+  }, []);
+
   return (
     <div className="flex flex-col gap-6 sm:gap-10 px-4 py-8 sm:py-10">
       <Greeting />
       <LiveStrip />
-      <HeroNavigation />
+      <HeroNavigation onHowToPlay={() => setShowRules(true)} />
+      {showRules && <HowToPlay onClose={() => setShowRules(false)} />}
     </div>
   );
 };

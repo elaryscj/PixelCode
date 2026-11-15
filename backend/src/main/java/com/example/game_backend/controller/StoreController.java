@@ -48,14 +48,16 @@ public class StoreController {
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> state(@RequestHeader(value = "Authorization", required = false) String auth) {
-        return ResponseEntity.ok(view(load(tokens.requireUserId(auth))));
+        // read-only view: a plain read, no lock (and no transaction needed)
+        User u = users.findById(tokens.requireUserId(auth)).orElseThrow(() -> new ApiException(401, "Please log in again"));
+        return ResponseEntity.ok(view(u));
     }
 
     @PostMapping("/buy/{skinId}")
     @Transactional
     public ResponseEntity<Map<String, Object>> buy(@PathVariable String skinId,
                                                    @RequestHeader(value = "Authorization", required = false) String auth) {
-        User u = load(tokens.requireUserId(auth));
+        User u = loadForUpdate(tokens.requireUserId(auth));
         Integer found = priceOf(skinId);
         if (found == null) {
             throw new ApiException(404, "Unknown skin");
@@ -80,7 +82,7 @@ public class StoreController {
     @Transactional
     public ResponseEntity<Map<String, Object>> equip(@PathVariable String skinId,
                                                      @RequestHeader(value = "Authorization", required = false) String auth) {
-        User u = load(tokens.requireUserId(auth));
+        User u = loadForUpdate(tokens.requireUserId(auth));
         if (!owned(u).contains(skinId)) {
             throw new ApiException(403, "You do not own this skin");
         }
@@ -89,8 +91,12 @@ public class StoreController {
         return ResponseEntity.ok(view(u));
     }
 
-    private User load(long id) {
-        return users.findById(id).orElseThrow(() -> new ApiException(401, "Please log in again"));
+    /**
+     * Locked read for buy / equip (both @Transactional): concurrent purchases are applied one after another,
+     * never on a stale balance.
+     */
+    private User loadForUpdate(long id) {
+        return users.findByIdForUpdate(id).orElseThrow(() -> new ApiException(401, "Please log in again"));
     }
 
     private static Set<String> owned(User u) {

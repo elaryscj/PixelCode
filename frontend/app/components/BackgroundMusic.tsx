@@ -5,12 +5,12 @@ import { useAudio } from "../context/AudioContex";
 // Lo-fi tracks from Open Lo-Fi (CC0, public domain) - see public/soundtracks/CREDITS.txt.
 // Each list plays its tracks one after another and starts over at the end.
 const MENU_TRACKS = [
-  "/soundtracks/lofi-2-am-debug-loop.mp3",
-  "/soundtracks/lofi-cursor-after-midnight.mp3",
+  "/soundtracks/lofi-2-am-debug-loop.m4a",
+  "/soundtracks/lofi-cursor-after-midnight.m4a",
 ];
 const PLAY_TRACKS = [
-  "/soundtracks/lofi-pixel-quest-save-point.mp3",
-  "/soundtracks/lofi-rain-off-the-neon-signs.mp3",
+  "/soundtracks/lofi-pixel-quest-save-point.m4a",
+  "/soundtracks/lofi-rain-off-the-neon-signs.m4a",
 ];
 
 export function BackgroundMusic() {
@@ -66,7 +66,7 @@ export function BackgroundMusic() {
       <audio
         ref={menuRef}
         src={MENU_TRACKS[0]}
-        preload="auto"
+        preload="metadata"
         onEnded={() => next(menuRef.current, MENU_TRACKS, menuIndex)}
       />
       <audio

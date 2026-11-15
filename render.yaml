@@ -10,6 +10,7 @@ services:
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
+    healthCheckPath: /api/health/deep
     plan: free
     envVars:
       - key: DB_HOST

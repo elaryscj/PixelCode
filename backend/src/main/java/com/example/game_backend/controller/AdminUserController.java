@@ -47,10 +47,11 @@ public class AdminUserController {
 
     /** body: {"mode":"set"|"add", "amount": 500}  (add accepts negative numbers) */
     @PostMapping("/{id}/balance")
+    @org.springframework.transaction.annotation.Transactional
     public ResponseEntity<Map<String, Object>> balance(@PathVariable long id, @RequestBody Map<String, Object> body,
                                                        @RequestHeader(value = "Authorization", required = false) String auth) {
         requireAdmin(auth);
-        User u = users.findById(id).orElseThrow(() -> new ApiException(404, "Player not found"));
+        User u = users.findByIdForUpdate(id).orElseThrow(() -> new ApiException(404, "Player not found"));
         long amount;
         try {
             amount = Long.parseLong(String.valueOf(body.get("amount")).trim());
