@@ -156,7 +156,7 @@ function PracticeScreen() {
   }, [map]);
 
   return (
-    <div className="min-h-screen bg-[#050814] flex flex-col p-2 sm:p-4 md:p-6 short:p-1.5 font-pixel select-none">
+    <div dir="ltr" className="min-h-screen bg-[#050814] flex flex-col p-2 sm:p-4 md:p-6 short:p-1.5 font-pixel select-none">
       <TouchControls
         keys={keys.current}
         canInteract={near !== null}

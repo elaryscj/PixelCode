@@ -22,9 +22,9 @@ const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
       </Link>
       <div className="grid grid-cols-[1fr_auto] gap-4">
         <Link to={"/practice"} className={secondary}>
-          PRACTICE
+          {t("menu_practice")}
         </Link>
-        <button onClick={onHowToPlay} className={`${secondary} !px-4`} title="How to play" aria-label="How to play">
+        <button onClick={onHowToPlay} className={`${secondary} !px-4`} title={t("how_to_play")} aria-label={t("how_to_play")}>
           ?
         </button>
       </div>
@@ -37,10 +37,10 @@ const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
         </Link>
         {/* match history used to be reachable only from the post-match screen */}
         <Link to={"/results"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
-          MY RESULTS
+          {t("menu_results")}
         </Link>
         <Link to={"/profile"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
-          PROFILE
+          {t("menu_profile")}
         </Link>
       </div>
       <Link to={"/settings"} className={secondary}>
@@ -58,7 +58,7 @@ const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
         }}
         className={`${base} border-2 border-pink text-pink hover:text-glow-sm`}
       >
-        QUIT
+        {t("menu_quit")}
       </button>
     </nav>
   );

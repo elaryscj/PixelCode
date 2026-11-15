@@ -1,4 +1,3 @@
-import { SiInstagram, SiTwitch, SiGmail } from "react-icons/si";
 import { useTranslation } from "react-i18next";
 
 const Footer = () => {
@@ -14,17 +13,7 @@ const Footer = () => {
             <p className="uppercase text-md font-pixel text-yellow">v1.0-beta</p>
           </div>
         </div>
-        <div className="flex gap-2 items-center justify-center">
-          <a href="" className="border p-2 border-neon hover:border-glow-sm-neon hover:text-glow-sm">
-            <SiInstagram  className="text-yellow"/>
-          </a>
-          <a href="" className="border p-2 border-neon hover:border-glow-sm-neon hover:text-glow-sm">
-            <SiTwitch  className="text-yellow"/>
-          </a>
-          <a href="" className="border p-2 border-neon hover:border-glow-sm-neon hover:text-glow-sm">
-            <SiGmail  className="text-yellow"/>
-          </a>
-        </div>
+        {/* Instagram / Twitch / e-mail icons hidden until the project has its own accounts */}
       </div>
     </footer>
   );

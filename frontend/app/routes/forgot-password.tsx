@@ -3,8 +3,9 @@ import { Link } from "react-router";
 import { FaArrowLeft, FaEnvelope, FaInbox } from "react-icons/fa";
 import { requestPasswordReset } from "~/api/auth";
 import RecoveryShell, { CardTitle, cardCls, inputCls, primaryBtn } from "~/components/RecoveryShell";
+import EnglishOnly from "~/components/EnglishOnly";
 
-export default function ForgotPassword() {
+function ForgotPasswordScreen() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -85,5 +86,14 @@ export default function ForgotPassword() {
       </form>
       <p className="font-sans text-gray-500 text-sm mt-6">For your security, reset links expire after 30 minutes.</p>
     </RecoveryShell>
+  );
+}
+
+// not translated yet: keep it left-to-right English in Arabic / Urdu
+export default function ForgotPassword() {
+  return (
+    <EnglishOnly>
+      <ForgotPasswordScreen />
+    </EnglishOnly>
   );
 }

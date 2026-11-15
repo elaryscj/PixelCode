@@ -1,6 +1,7 @@
 // app/components/HowToPlay.tsx — the short rules screen: opens once on the first visit, then from the menu.
 import { useEffect } from "react";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const SEEN_KEY = "pixelcode.howto.seen";
 
@@ -20,30 +21,16 @@ function markSeen() {
   }
 }
 
-const STEPS: { title: string; text: string; color: string }[] = [
-  {
-    title: "1 · RACE",
-    text: "You and your rival run the same map side by side. Move with A / D or the arrows, jump with Space.",
-    color: "text-neon",
-  },
-  {
-    title: "2 · CRACK THE DOORS",
-    text: "Four locked doors block the way. Walk up to one and press E: a short Java task opens. Solve it and the door unlocks. Stuck? It opens by itself after 4 minutes.",
-    color: "text-yellow",
-  },
-  {
-    title: "3 · REACH THE EXIT",
-    text: "Whoever gets through all four doors and reaches the exit first wins. Ranked wins give MMR and +150 pixels (a loss still gives +25).",
-    color: "text-pink",
-  },
-  {
-    title: "4 · SPEND YOUR PIXELS",
-    text: "Buy and equip skins in the Store. Your rival sees them in the match.",
-    color: "text-neon",
-  },
+// translation keys howto_N_title / howto_N (see language-config/locales)
+const STEPS = [
+  { n: 1, color: "text-neon" },
+  { n: 2, color: "text-yellow" },
+  { n: 3, color: "text-pink" },
+  { n: 4, color: "text-neon" },
 ];
 
 export default function HowToPlay({ onClose }: { onClose: () => void }) {
+  const { t } = useTranslation();
   const close = () => {
     markSeen();
     onClose();
@@ -68,13 +55,13 @@ export default function HowToPlay({ onClose }: { onClose: () => void }) {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 id="howto-title" className="text-yellow text-3xl sm:text-5xl text-center text-glow-sm">
-          HOW TO PLAY
+          {t("howto_title")}
         </h2>
         <ol className="flex flex-col gap-4">
           {STEPS.map((s) => (
-            <li key={s.title} className="border border-neon/30 bg-[#02050f] px-4 py-3">
-              <div className={`${s.color} text-lg sm:text-2xl`}>{s.title}</div>
-              <p className="font-sans text-gray-300 text-sm sm:text-base mt-1 leading-snug">{s.text}</p>
+            <li key={s.n} className="border border-neon/30 bg-[#02050f] px-4 py-3">
+              <div className={`${s.color} text-lg sm:text-2xl`}>{t(`howto_${s.n}_title`)}</div>
+              <p className="font-sans text-gray-300 text-sm sm:text-base mt-1 leading-snug">{t(`howto_${s.n}`)}</p>
             </li>
           ))}
         </ol>
@@ -84,13 +71,13 @@ export default function HowToPlay({ onClose }: { onClose: () => void }) {
             onClick={markSeen}
             className="btn-arcade flex-1 text-center py-3 border-2 border-neon text-yellow text-xl sm:text-2xl"
           >
-            TRY PRACTICE
+            {t("try_practice")}
           </Link>
           <button
             onClick={close}
             className="btn-arcade flex-1 py-3 bg-pink border-2 border-yellow text-black text-xl sm:text-2xl"
           >
-            GOT IT
+            {t("got_it")}
           </button>
         </div>
       </div>

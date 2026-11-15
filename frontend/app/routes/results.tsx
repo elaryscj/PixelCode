@@ -6,6 +6,7 @@ import { Link, useNavigate, useSearchParams } from "react-router";
 import { getCurrentUser, refreshUser } from "~/api/auth";
 import { getMatchHistory, type MatchHistoryEntry } from "~/api/game";
 import { getMap } from "~/game/maps";
+import EnglishOnly from "~/components/EnglishOnly";
 
 export function meta() {
   return [{ title: "My Results | PixelCode Arena" }];
@@ -155,5 +156,9 @@ function ResultsScreen() {
 }
 
 export default function Results() {
-  return <ClientOnly fallback={<ScreenLoading />}>{() => <ResultsScreen />}</ClientOnly>;
+  return <ClientOnly fallback={<ScreenLoading />}>{() => (
+        <EnglishOnly>
+          <ResultsScreen />
+        </EnglishOnly>
+      )}</ClientOnly>;
 }

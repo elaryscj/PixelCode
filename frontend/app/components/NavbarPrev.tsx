@@ -18,14 +18,14 @@ const NavbarPrev = () => {
           to={inLobby ? "/play" : "/"}
           className="flex items-center gap-2 font-pixel text-yellow btn-arcade shrink-0 px-3 sm:px-4 py-1.5 border-2 border-pink rounded-sm text-xl sm:text-2xl hover:bg-pink/10"
         >
-          <FaChevronLeft className="text-sm" /> {inLobby ? "BACK" : t("menu")}
+          <FaChevronLeft className="text-sm rtl:-scale-x-100" /> {inLobby ? "BACK" : t("menu")}
         </Link>
         <div className="flex items-center gap-2 sm:gap-4 font-pixel text-base sm:text-xl min-w-0">
           <span className="hidden lg:inline text-neon">{t("server")}</span>
           <span className="hidden lg:inline-block w-2 h-2 rounded-full bg-yellow" />
           <PingBadge />
           <span className="w-2 h-2 rounded-full bg-yellow" />
-          <span className="text-white truncate">{onlineLabel(stats)}</span>
+          <span dir="ltr" className="text-white truncate">{onlineLabel(stats)}</span>
         </div>
       </div>
     </header>

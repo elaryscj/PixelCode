@@ -4,6 +4,7 @@ import MusicSlider from "../components/MusicSlider";
 import { getSfxVolume, setSfxVolume, sfx } from "~/lib/sfx";
 import { Link, useNavigate } from "react-router";
 import { logoutUser } from "~/api/auth";
+import { LANGUAGES } from "~/language-config/languages";
 
 const Settings = () => {
 
@@ -43,7 +44,7 @@ const Settings = () => {
           <section className={card}>
             <h3 className={heading}>[ {t("music_audio")} ]</h3>
             <MusicSlider />
-            <label htmlFor="sfx-volume" className="block font-pixel text-xl sm:text-3xl mt-4">Sound Effects</label>
+            <label htmlFor="sfx-volume" className="block font-pixel text-xl sm:text-3xl mt-4">{t("sound_effects")}</label>
             <div className="flex items-center justify-center gap-4">
               <input
                 id="sfx-volume"
@@ -58,26 +59,25 @@ const Settings = () => {
                 onPointerUp={() => sfx.doorOpen()}
                 onKeyUp={() => sfx.jump()}
                 className="range-bar"
-                style={{ background: `linear-gradient(to right, #FE2C96 0% ${fxVol}%, #16233c ${fxVol}% 100%)` }}
+                style={{ "--range-pct": `${fxVol}%`, "--range-fill": "#FE2C96" } as React.CSSProperties}
               />
-              <h3 className="font-pixel text-yellow text-xl sm:text-2xl w-14 text-right">{fxVol}%</h3>
+              <h3 className="font-pixel text-yellow text-xl sm:text-2xl w-14 text-end">{fxVol}%</h3>
             </div>
           </section>
 
           <section className={card}>
             <h3 className={heading}>[ {t("language")} ]</h3>
-            <div className="flex flex-wrap items-center gap-3">
-              {[
-                ["en", "English"],
-                ["kz", "Qazaqsha"],
-              ].map(([code, label]) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {LANGUAGES.map((l) => (
                 <button
-                  key={code}
-                  lang={code}
-                  onClick={() => i18n.changeLanguage(code)}
-                  className={`${btnCls} ${current === code ? "bg-neon/15 border-glow-sm-neon" : ""}`}
+                  key={l.code}
+                  lang={l.htmlLang}
+                  dir={l.rtl ? "rtl" : "ltr"}
+                  onClick={() => i18n.changeLanguage(l.code)}
+                  aria-pressed={current === l.code}
+                  className={`${btnCls} !text-base sm:!text-lg !px-2 font-sans ${current === l.code ? "bg-neon/15 border-glow-sm-neon" : ""}`}
                 >
-                  {label}
+                  {l.label}
                 </button>
               ))}
             </div>
@@ -85,26 +85,26 @@ const Settings = () => {
 
           {/* Nickname, e-mail, password and account deletion all live on one page: /profile */}
           <section className={card}>
-            <h3 className={heading}>[ ACCOUNT ]</h3>
+            <h3 className={heading}>[ {t("account")} ]</h3>
             <p className="font-sans text-gray-400 text-sm mb-3">
-              Nickname, avatar, e-mail, password and account deletion.
+              {t("account_hint")}
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/profile" className={btnCls}>
-                Manage account
+                {t("manage_account")}
               </Link>
               <Link to="/results" className={btnCls}>
-                Match history
+                {t("match_history")}
               </Link>
             </div>
           </section>
 
           <section className={card}>
-            <h3 className={heading}>[ FULLSCREEN ]</h3>
+            <h3 className={heading}>[ {t("fullscreen")} ]</h3>
             <button onClick={toggleFullscreen} className={btnCls}>
-              Toggle fullscreen
+              {t("toggle_fullscreen")}
             </button>
-            {fsDenied && <p className="font-pixel text-pink text-xl mt-2">Fullscreen was blocked by the browser.</p>}
+            {fsDenied && <p className="font-pixel text-pink text-xl mt-2">{t("fullscreen_blocked")}</p>}
           </section>
         </div>
 
@@ -112,7 +112,7 @@ const Settings = () => {
           onClick={() => { logoutUser(); navigate("/login"); }}
           className="btn-arcade mt-6 w-full sm:w-auto py-2 px-6 text-2xl border-2 border-pink font-pixel text-pink hover:text-glow-sm"
         >
-          Log out
+          {t("log_out")}
         </button>
       </div>
     </>

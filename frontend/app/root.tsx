@@ -15,7 +15,7 @@ import "@fontsource/ibm-plex-mono/500.css";
 import "@fontsource/ibm-plex-mono/600.css";
 import "./app.css";
 import { BackgroundMusic } from "./components/BackgroundMusic";
-import "./language-config/languages";
+import { LANGUAGE_CODES, languageInfo } from "./language-config/languages";
 
 
 export const links: Route.LinksFunction = () => [
@@ -34,7 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     // Restore after hydration so the server and initial client markup agree.
     try {
       const saved = localStorage.getItem("pixelcodeLanguage");
-      if (saved === "en" || saved === "kz") void i18n.changeLanguage(saved);
+      if (saved && LANGUAGE_CODES.includes(saved)) void i18n.changeLanguage(saved);
     } catch {
       // Language switching still works when browser storage is unavailable.
     }
@@ -50,7 +50,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     return () => { i18n.off("languageChanged", saveLanguage); };
   }, [i18n]);
   return (
-    <html lang={i18n.resolvedLanguage === "kz" ? "kk-Latn" : "en"}>
+    <html lang={languageInfo(i18n.resolvedLanguage).htmlLang} dir={languageInfo(i18n.resolvedLanguage).rtl ? "rtl" : "ltr"}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />

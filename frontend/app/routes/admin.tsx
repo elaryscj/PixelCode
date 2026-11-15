@@ -21,6 +21,7 @@ import {
   type AdminUser,
 } from "~/api/admin";
 import { SkinArt } from "~/components/skins";
+import EnglishOnly from "~/components/EnglishOnly";
 
 /** Shrinks the picked picture to at most 320px and returns a PNG data URL. */
 function readImage(file: File): Promise<string> {
@@ -183,13 +184,13 @@ function AdminScreen() {
           <label className={label}>METHOD NAME</label>
           <input className={`${field} ${bad("functionName")}`} value={form.functionName} onChange={set("functionName")} />
           <label className={label}>STARTER CODE (Java, optional: leave empty to generate it from the tests)</label>
-          <textarea className={`${field} font-mono`} rows={4} value={form.starterCode} onChange={set("starterCode")} />
+          <textarea dir="ltr" className={`${field} font-mono`} rows={4} value={form.starterCode} onChange={set("starterCode")} />
           <label className={label}>EXAMPLES (shown to players)</label>
           <textarea className={field} rows={2} value={form.examples} onChange={set("examples")} />
           <label className={label}>TESTS (JSON: input array + expected)</label>
-          <textarea className={`${field} font-mono ${bad("testsJson")}`} rows={4} value={form.testsJson} onChange={set("testsJson")} />
+          <textarea dir="ltr" className={`${field} font-mono ${bad("testsJson")}`} rows={4} value={form.testsJson} onChange={set("testsJson")} />
           <label className={label}>REFERENCE SOLUTION (Java: class Solution, must pass all tests)</label>
-          <textarea className={`${field} font-mono ${bad("referenceSolution")}`} rows={5} value={form.referenceSolution} onChange={set("referenceSolution")} />
+          <textarea dir="ltr" className={`${field} font-mono ${bad("referenceSolution")}`} rows={5} value={form.referenceSolution} onChange={set("referenceSolution")} />
 
           {error && <p className="text-pink text-xl mt-4 border border-pink/40 bg-pink/10 px-3 py-2 font-sans">[!] {error.text}</p>}
           {ok && <p className="text-neon text-xl mt-4 border border-neon/40 bg-neon/10 px-3 py-2 font-sans">[OK] {ok}</p>}
@@ -305,5 +306,9 @@ function AdminScreen() {
 }
 
 export default function Admin() {
-  return <ClientOnly fallback={<ScreenLoading />}>{() => <AdminScreen />}</ClientOnly>;
+  return <ClientOnly fallback={<ScreenLoading />}>{() => (
+        <EnglishOnly>
+          <AdminScreen />
+        </EnglishOnly>
+      )}</ClientOnly>;
 }

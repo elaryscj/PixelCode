@@ -598,7 +598,8 @@ function GameScreen() {
   const timerDisplay = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
   return (
-    <div className={`min-h-screen bg-[#050814] flex flex-col p-2 sm:p-4 md:p-6 short:p-1.5 font-pixel select-none relative ${
+    // the arena, HUD and code stay left-to-right even when the menus are in Arabic / Urdu
+    <div dir="ltr" className={`min-h-screen bg-[#050814] flex flex-col p-2 sm:p-4 md:p-6 short:p-1.5 font-pixel select-none relative ${
       hazardHit ? "shadow-[inset_0_0_120px_rgba(254,44,150,0.55)]" : ""
     }`}>
       

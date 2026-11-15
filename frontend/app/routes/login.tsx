@@ -2,11 +2,12 @@
 // Secure Authorization Screen matching PixelCode Arena Cyberpunk Terminal
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
-import { FaEye, FaEyeSlash, FaGamepad, FaTwitch, FaWifi, FaYoutube } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaGamepad, FaWifi } from "react-icons/fa";
 import { loginUser, registerUser, AuthError } from "~/api/auth";
 import { pingColor, pingLabel, usePing } from "~/lib/liveStats";
+import EnglishOnly from "~/components/EnglishOnly";
 
-export default function LoginRoute() {
+function LoginRouteScreen() {
   const navigate = useNavigate();
   const ping = usePing();
 
@@ -289,15 +290,17 @@ export default function LoginRoute() {
           <span className="text-gray-400">SYSTEM_ENCRYPTION: ACTIVE (AES_256)</span>
         </div>
 
-        <div className="flex items-center gap-4 text-2xl text-[#01E4FF]">
-          <a href="https://twitch.tv" target="_blank" rel="noreferrer" className="hover:text-pink transition-colors">
-            <FaTwitch />
-          </a>
-          <a href="https://youtube.com" target="_blank" rel="noreferrer" className="hover:text-pink transition-colors">
-            <FaYoutube />
-          </a>
-        </div>
+        {/* social links hidden until the project has its own accounts */}
       </footer>
     </div>
+  );
+}
+
+// not translated yet: keep it left-to-right English in Arabic / Urdu
+export default function LoginRoute() {
+  return (
+    <EnglishOnly>
+      <LoginRouteScreen />
+    </EnglishOnly>
   );
 }

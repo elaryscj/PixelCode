@@ -204,9 +204,9 @@ const PlayScreen = () => {
     return (
       <div className="flex flex-col items-center gap-6">
         <div className="star-background" />
-        <h2 className="font-pixel text-4xl text-yellow text-glow-sm text-center">PLEASE LOG IN FIRST</h2>
+        <h2 className="font-pixel text-4xl text-yellow text-glow-sm text-center">{t("login_first")}</h2>
         <Link to="/login" className={`${btn} max-w-100 bg-pink border-yellow text-black`}>
-          LOG IN / REGISTER
+          {t("login_register")}
         </Link>
       </div>
     );
@@ -229,20 +229,20 @@ const PlayScreen = () => {
           </div>
           {found ? (
             <>
-              <h1 className="text-neon text-[14vw]/none sm:text-[88px]/none md:text-[136px]/none text-glow-sm text-center px-4">Match found!</h1>
+              <h1 className="text-neon text-[14vw]/none sm:text-[88px]/none md:text-[136px]/none text-glow-sm text-center px-4">{t("match_found")}</h1>
               <p className="text-yellow text-2xl sm:text-4xl text-center">
-                Entering the lobby<span className="blink-caret">...</span>
+                {t("entering_lobby")}<span className="blink-caret">...</span>
               </p>
             </>
           ) : (
             <>
-              <h1 className="text-yellow/80 text-[14vw]/none sm:text-[88px]/none md:text-[136px]/none text-glow-sm text-center px-4">Finding a match</h1>
-              <p className="text-pink text-2xl sm:text-4xl text-center">Warm up your fingers...</p>
+              <h1 className="text-yellow/80 text-[14vw]/none sm:text-[88px]/none md:text-[136px]/none text-glow-sm text-center px-4">{t("finding_match")}</h1>
+              <p className="text-pink text-2xl sm:text-4xl text-center">{t("warm_up")}</p>
               <p className="text-neon text-xl text-center">
-                {waited}s · {inQueue} in queue
+                {waited}s · {inQueue} {t("in_queue")}
               </p>
               <button onClick={handleCancel} className={`${btn} max-w-80 border-pink text-yellow`}>
-                CANCEL
+                {t("cancel")}
               </button>
             </>
           )}
@@ -258,18 +258,18 @@ const PlayScreen = () => {
       <div className="star-background" />
       <div className="flex flex-col gap-5 sm:gap-6 mx-auto w-full max-w-130 px-4 py-6 enter-up">
         <h1 className="font-pixel text-center text-glow-sm leading-none flex flex-col gap-4">
-          <span className="text-yellow text-[17vw]/none sm:text-[104px]/none">CHOOSE</span>
-          <span className="text-pink text-[17vw]/none sm:text-[104px]/none">MODE</span>
+          <span className="text-yellow text-[17vw]/none sm:text-[104px]/none">{t("choose")}</span>
+          <span className="text-pink text-[17vw]/none sm:text-[104px]/none">{t("mode")}</span>
         </h1>
 
         {current && current.roomStatus !== "FINISHED" && (
           <button onClick={() => goToRoom(current)} className={`${btn} bg-neon border-yellow text-black`}>
-            {current.roomStatus === "PLAYING" ? "Return to match" : "Return to lobby"} {current.code}
+            {current.roomStatus === "PLAYING" ? t("return_match") : t("return_lobby")} {current.code}
           </button>
         )}
 
         <button onClick={handleFind} disabled={loading} className={`${btn} bg-pink border-yellow text-black`}>
-          QUICK PLAY
+          {t("quick_play")}
         </button>
         <button onClick={handleCreate} disabled={loading} className={`${btn} border-neon text-yellow`}>
           {t("create_room")}
