@@ -58,6 +58,7 @@ public class FriendController {
         Map<String, Object> m = new LinkedHashMap<>();
         m.put("invites", friends.invitesFor(me));
         m.put("requests", friends.pendingFor(me));
+        m.put("channel", tokens.inboxChannel(me));
         return ResponseEntity.ok(m);
     }
 

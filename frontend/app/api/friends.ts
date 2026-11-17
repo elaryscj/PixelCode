@@ -24,7 +24,8 @@ export const acceptFriend = (requestId: number) => api<null>(`/friends/requests/
 /** decline a request, cancel your own, or remove a friend */
 export const removeFriend = (requestId: number) => api<null>(`/friends/requests/${requestId}`, { method: "DELETE" });
 export const challengeFriend = (userId: number) => api<Room>(`/friends/${userId}/challenge`, { method: "POST" });
-export const getInvites = () => api<{ invites: DuelInvite[]; requests: number }>("/friends/invites");
+/** channel: this player's private WebSocket topic (/topic/inbox/{channel}) */
+export const getInvites = () => api<{ invites: DuelInvite[]; requests: number; channel?: string }>("/friends/invites");
 export const dismissInvite = (code: string) => api<null>(`/friends/invites/${enc(code)}/dismiss`, { method: "POST" });
 
 /** daily login streak reward (once per UTC day, the server ignores repeats) */

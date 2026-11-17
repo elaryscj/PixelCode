@@ -24,6 +24,8 @@ public class GameSession {
     public Map<String, Object> result;
     /** set when the opponent is PIXEL_BOT: its precomputed race (see BotPlan) */
     BotPlan bot;
+    /** everything needed to watch the match again afterwards */
+    public final ReplayRecorder replay;
 
     public GameSession(String code, int mapId, boolean ranked, long startedAt, List<Snap> challenges, Slot[] slots) {
         this.code = code;
@@ -32,6 +34,7 @@ public class GameSession {
         this.startedAt = startedAt;
         this.challenges = challenges;
         this.slots = slots;
+        this.replay = new ReplayRecorder(startedAt);
     }
 
     public static class Snap {
@@ -65,6 +68,7 @@ public class GameSession {
         public long lastSeen;
         /** emotes are limited to one every EMOTE_GAP_MS so they cannot be spammed at the opponent */
         public long lastEmoteAt;
+        public long lastPhraseAt;
         public double x;
         public double y;
         /** when the last position was accepted (0 = none yet) */

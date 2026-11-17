@@ -7,6 +7,7 @@ import com.example.game_backend.repository.FriendshipRepository;
 import com.example.game_backend.repository.UserRepository;
 import com.example.game_backend.security.TokenService;
 import com.example.game_backend.service.RoomService;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -38,12 +39,14 @@ public class FriendService {
     private final TokenService tokens;
     private final RoomService rooms;
     private final TransactionTemplate tx;
+    private final SimpMessagingTemplate messaging;
     /** invited user id -> open invitations */
     private final Map<Long, List<Invite>> invites = new ConcurrentHashMap<>();
     private final Object lock = new Object();
 
     public FriendService(FriendshipRepository friendships, UserRepository users, TokenService tokens, RoomService rooms,
-                         PlatformTransactionManager tm) {
+                         PlatformTransactionManager tm, SimpMessagingTemplate messaging) {
+        this.messaging = messaging;
         this.friendships = friendships;
         this.users = users;
         this.tokens = tokens;
@@ -132,6 +135,7 @@ public class FriendService {
                     // they asked first: this is a yes
                     existing.setAccepted(true);
                     friendships.save(existing);
+                    poke(target.getId(), "FRIEND_ACCEPTED");
                     return Map.<String, Object>of("accepted", true, "username", target.getUsername());
                 }
                 List<Friendship> mine = friendships.findAllFor(me);
@@ -142,6 +146,7 @@ public class FriendService {
                     throw new ApiException(409, "Too many requests are waiting for an answer").with("field", "username");
                 }
                 friendships.save(new Friendship(me, target.getId()));
+                poke(target.getId(), "FRIEND_REQUEST");
                 return Map.<String, Object>of("accepted", false, "username", target.getUsername());
             });
         }
@@ -155,6 +160,7 @@ public class FriendService {
                         .orElseThrow(() -> new ApiException(404, "Friend request not found"));
                 f.setAccepted(true);
                 friendships.save(f);
+                poke(f.getRequesterId(), "FRIEND_ACCEPTED");
             });
         }
     }
@@ -196,6 +202,7 @@ public class FriendService {
         List<Invite> list = invites.computeIfAbsent(friendId, k -> new CopyOnWriteArrayList<>());
         list.removeIf(i -> i.fromUserId() == me);
         list.add(new Invite(me, myName, code, System.currentTimeMillis() + INVITE_MS));
+        poke(friendId, "DUEL_INVITE");
         return room;
     }
 
@@ -225,6 +232,15 @@ public class FriendService {
             return "WAITING".equals(String.valueOf(room.get("roomStatus")));
         } catch (ApiException e) {
             return false;
+        }
+    }
+
+    /** Instant nudge on the player's private channel; the client then reloads what changed. */
+    void poke(long userId, String type) {
+        try {
+            messaging.convertAndSend("/topic/inbox/" + tokens.inboxChannel(userId), (Object) Map.of("type", type));
+        } catch (RuntimeException ignored) {
+            // the client also polls, so a lost nudge only delays things a little
         }
     }
 

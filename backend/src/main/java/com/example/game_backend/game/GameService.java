@@ -58,6 +58,7 @@ public class GameService {
     private final SimpMessagingTemplate messaging;
     private final TokenService tokens;
     private final ProgressService progress;
+    private final ReplayStore replays;
 
     private final long doorMs;
     private final long maxMatchMs;
@@ -66,7 +67,7 @@ public class GameService {
 
     public GameService(RoomRepository rooms, UserRepository users, ChallengeRepository challenges, MatchResultService results,
                        ChallengeEvaluator evaluator, SimpMessagingTemplate messaging, TokenService tokens,
-                       ProgressService progress,
+                       ProgressService progress, ReplayStore replays,
                        @Value("${game.door-seconds:240}") long doorSeconds,
                        @Value("${game.max-match-minutes:20}") long maxMatchMinutes,
                        @Value("${game.absence-seconds:300}") long absenceSeconds,
@@ -79,6 +80,7 @@ public class GameService {
         this.messaging = messaging;
         this.tokens = tokens;
         this.progress = progress;
+        this.replays = replays;
         this.doorMs = doorSeconds * 1000L;
         this.maxMatchMs = maxMatchMinutes * 60_000L;
         this.absenceMs = absenceSeconds * 1000L;
@@ -208,6 +210,9 @@ public class GameService {
             slot.markVisited(slot.x, slot.y);
         }
         GameSession session = new GameSession(room.getCode(), mapId, room.isRanked(), started, snaps, slots);
+        for (GameSession.Slot slot : slots) {
+            session.replay.position(slot.userId, slot.x, slot.y, Math.max(now, started));
+        }
         if (botSlot != null) {
             GameSession.Slot human = session.other(botSlot.userId);
             List<String> levels = new ArrayList<>();
@@ -344,6 +349,7 @@ public class GameService {
             me.lastSeen = now;
             if (me.doorStartedAt[cp] == 0) {
                 me.doorStartedAt[cp] = now;
+                s.replay.event(me.userId, "OPEN", cp, null, now);
             }
             GameSession.Snap sn = s.challenges.get(cp - 1);
             Map<String, Object> m = new LinkedHashMap<>();
@@ -399,6 +405,9 @@ public class GameService {
         Map<String, Object> m;
         synchronized (s) {
             long after = System.currentTimeMillis();
+            if (!s.over && !me.unlocked[cp]) {
+                s.replay.attempt(me.userId, cp, source, r.passed, r.passedCount, r.total, after);
+            }
             if (r.passed && !s.over && !me.unlocked[cp]) {
                 unlock(s, me, cp, "SOLVED");
                 solvedNow = true;
@@ -416,6 +425,7 @@ public class GameService {
 
     private void unlock(GameSession s, GameSession.Slot slot, int cp, String reason) {
         slot.unlocked[cp] = true;
+        s.replay.event(slot.userId, "UNLOCK", cp, reason, System.currentTimeMillis());
         Map<String, Object> msg = new LinkedHashMap<>();
         msg.put("type", "DOOR_UNLOCKED");
         msg.put("sender", slot.nickname);
@@ -448,6 +458,42 @@ public class GameService {
                 msg.put("userId", me.userId);
                 msg.put("emote", emote);
                 emit(s.code, msg);
+                s.replay.event(me.userId, "EMOTE", null, emote, now);
+                sent = true;
+            }
+        }
+        return Map.of("sent", sent);
+    }
+
+    /** Quick phrases (no free text, so nothing to moderate). The client shows them translated. */
+    public static final java.util.Set<String> PHRASES = java.util.Set.of("gl", "gg", "rematch", "nice", "oops", "wow");
+    private static final long PHRASE_GAP_MS = 2000;
+    /** "GG" after the end is fine: phrases still work for this long after the match is over */
+    private static final long PHRASE_AFTER_MS = 3 * 60_000L;
+
+    public Map<String, Object> phrase(String code, long userId, String phrase) {
+        if (phrase == null || !PHRASES.contains(phrase)) {
+            throw new ApiException(400, "Unknown phrase");
+        }
+        GameSession s = sessions.get(code);
+        if (s == null) {
+            throw new ApiException(409, "This match is not active");
+        }
+        GameSession.Slot me = requireSlot(s, userId);
+        boolean sent = false;
+        synchronized (s) {
+            long now = System.currentTimeMillis();
+            boolean open = !s.over || now - s.overAt < PHRASE_AFTER_MS;
+            if (open && now - me.lastPhraseAt >= PHRASE_GAP_MS) {
+                me.lastPhraseAt = now;
+                Map<String, Object> msg = new LinkedHashMap<>();
+                msg.put("type", "PHRASE");
+                msg.put("userId", me.userId);
+                msg.put("phrase", phrase);
+                emit(s.code, msg);
+                if (!s.over) {
+                    s.replay.event(me.userId, "PHRASE", null, phrase, now);
+                }
                 sent = true;
             }
         }
@@ -486,6 +532,13 @@ public class GameService {
         s.result = result;
         s.over = true;
         s.overAt = System.currentTimeMillis();
+        if (!"VOID".equals(reason)) {
+            try {
+                replays.save(s.code, s.replay.snapshot(s, result));
+            } catch (RuntimeException e) {
+                log.error("Could not save the replay of {}", s.code, e);
+            }
+        }
         Map<String, Object> msg = new LinkedHashMap<>();
         msg.put("type", "GAME_OVER");
         msg.put("result", result);
@@ -559,6 +612,7 @@ public class GameService {
         me.x = x;
         me.y = y;
         me.posAt = now;
+        s.replay.position(me.userId, x, y, now);
         Map<String, Object> msg = new LinkedHashMap<>();
         msg.put("type", "MOVE");
         msg.put("sender", me.nickname);
@@ -673,6 +727,7 @@ public class GameService {
             bot.x = p[0];
             bot.y = p[1];
             bot.posAt = now;
+            s.replay.position(bot.userId, bot.x, bot.y, now);
             Map<String, Object> msg = new LinkedHashMap<>();
             msg.put("type", "MOVE");
             msg.put("sender", bot.nickname);

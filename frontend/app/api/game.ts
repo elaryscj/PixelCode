@@ -87,6 +87,9 @@ export const submitDoor = (code: string, cp: number, source: string) =>
 /** wave / dance: shown to the opponent too (the server limits it to one every 1.5 s) */
 export const sendEmote = (code: string, emote: string) =>
   api<{ sent: boolean }>(`/games/${enc(code)}/emote`, { method: "POST", body: JSON.stringify({ emote }) });
+/** quick phrase ("gl", "gg", ...): shown over your head on both screens (also for a while after the end) */
+export const sendPhrase = (code: string, phrase: string) =>
+  api<{ sent: boolean }>(`/games/${enc(code)}/phrase`, { method: "POST", body: JSON.stringify({ phrase }) });
 export const finishMatch = (code: string, x: number, y: number) =>
   api<{ status: string; result: MatchResult }>(`/games/${enc(code)}/finish`, { method: "POST", body: JSON.stringify({ x, y }) });
 
@@ -96,6 +99,8 @@ export type MatchHistoryEntry = MatchResult & {
   botMatch?: boolean;
   mapId: number | null;
   finishedAt: number | null;
+  /** a recording exists (kept for 14 days) */
+  replay?: boolean;
 };
 
 export const getMatchHistory = (limit = 20) => api<MatchHistoryEntry[]>(`/games/history?limit=${limit}`);

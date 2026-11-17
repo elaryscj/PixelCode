@@ -7,6 +7,7 @@ import { Link, useParams, useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import ChallengeModal from "~/components/game/ChallengeModal";
 import GameResultModal from "~/components/game/GameResultModal";
+import PhraseBar, { Bubble, PHRASES, isPhrase, type PhraseId } from "~/components/game/PhraseBar";
 import TouchControls from "~/components/game/TouchControls";
 import { burst, confetti, flash, floatIcon, shake } from "~/components/game/fx";
 import { sfx } from "~/lib/sfx";
@@ -20,6 +21,7 @@ import { onGameEvent, sendMove } from "~/api/socket";
 import {
   finishMatch,
   sendEmote,
+  sendPhrase,
   getGameState,
   openDoor,
   type DoorChallenge,
@@ -192,6 +194,15 @@ function GameScreen() {
   // an emote plays for a moment unless the figure moves (then the movement animation wins)
   const myEmote = useRef<{ anim: EmoteId | null; until: number; sentAt: number }>({ anim: null, until: 0, sentAt: 0 });
   const oppEmote = useRef<{ anim: EmoteId | null; until: number }>({ anim: null, until: 0 });
+  // quick phrases: a speech bubble over each figure for a moment
+  const [myBubble, setMyBubble] = useState<{ p: PhraseId; id: number } | null>(null);
+  const [oppBubble, setOppBubble] = useState<{ p: PhraseId; id: number } | null>(null);
+  const lastPhraseAt = useRef(0);
+  const showBubble = (who: "me" | "opp", p: PhraseId) => {
+    const b = { p, id: Date.now() };
+    (who === "me" ? setMyBubble : setOppBubble)(b);
+    setTimeout(() => (who === "me" ? setMyBubble : setOppBubble)((cur) => (cur?.id === b.id ? null : cur)), 2600);
+  };
   const opponentState = useRef({
     x: 100 - getMap(0).start.x - CHAR_W,
     y: getMap(0).start.y,
@@ -424,6 +435,9 @@ function GameScreen() {
         floatIcon(oppArenaRef.current, o.x + CHAR_W / 2, o.y + CHAR_H + 1, data.emote === "wave" ? "heart" : "notes");
         if (data.emote === "wave") sfx.wave(true);
         else sfx.dance(true);
+      } else if (data.type === "PHRASE" && data.userId !== myId && isPhrase(data.phrase)) {
+        showBubble("opp", data.phrase);
+        sfx.wave(true);
       } else if (data.type === "REMATCH" && data.userId !== myId && data.code) {
         setRematchOffer(String(data.code));
       } else if (data.type === "GAME_OVER" && data.result) {
@@ -525,6 +539,16 @@ function GameScreen() {
   const emoteRef = useRef(emote);
   emoteRef.current = emote;
 
+  const phrase = (p: PhraseId) => {
+    const now = performance.now();
+    if (now - lastPhraseAt.current < 2000) return; // the server allows one every 2 s
+    lastPhraseAt.current = now;
+    showBubble("me", p);
+    void sendPhrase(code, p).catch(() => {});
+  };
+  const phraseRef = useRef(phrase);
+  phraseRef.current = phrase;
+
   // ---------------------------------------------------------------- keyboard
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -532,6 +556,8 @@ function GameScreen() {
       keysPressed.current[e.code] = true;
       if (e.code === "Digit1" && !e.repeat) emoteRef.current("wave");
       if (e.code === "Digit2" && !e.repeat) emoteRef.current("dance");
+      const digit = /^Digit([3-8])$/.exec(e.code);
+      if (digit && !e.repeat) phraseRef.current(PHRASES[Number(digit[1]) - 3]);
       if ((e.code === "KeyE" || e.code === "Enter") && nearRef.current) {
         void openChallenge(nearRef.current);
       }
@@ -833,6 +859,7 @@ function GameScreen() {
               <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-0.5 text-[8px] text-neon whitespace-nowrap max-w-[90px] truncate bg-black/60 px-1 border border-neon/40">
                 {localPlayerName}
               </div>
+              {myBubble && <Bubble text={t(`ph_${myBubble.p}`)} tone="neon" />}
               <div ref={playerSpriteRef} className="w-full h-full">
                 <AnimatedSkin ref={mySkinRef} id={mySkin} className="w-full h-full" />
               </div>
@@ -870,6 +897,7 @@ function GameScreen() {
               <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-0.5 text-[8px] text-pink whitespace-nowrap max-w-[90px] truncate bg-black/60 px-1 border border-pink/40">
                 {opponentName}
               </div>
+              {oppBubble && <Bubble text={t(`ph_${oppBubble.p}`)} tone="pink" />}
               <div ref={opponentSpriteRef} className="w-full h-full">
                 <AnimatedSkin ref={oppSkinRef} id={oppSkin} className="w-full h-full" />
               </div>
@@ -899,6 +927,7 @@ function GameScreen() {
           <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-yellow"></div> {t("k_exit")}</span>
         </div>
       </footer>
+      <PhraseBar onPhrase={phrase} keys className="mt-2 text-[10px] uppercase pointer-coarse:hidden" />
 
       {banner && (
         <div key={banner.id} className="fixed inset-x-0 top-[28%] z-45 flex justify-center pointer-events-none px-4">
@@ -919,6 +948,7 @@ function GameScreen() {
         onInteract={() => nearRef.current && void openChallenge(nearRef.current)}
         onRespawn={triggerRespawn}
         onEmote={emote}
+        onPhrase={phrase}
         emoteLabels={{ wave: t("g_emote_wave"), dance: t("g_emote_dance") }}
       />
       <div className="hidden pointer-coarse:portrait:flex fixed inset-0 z-[55] flex-col items-center justify-center gap-6 bg-[#050814]/95 text-center px-8">
@@ -1001,6 +1031,8 @@ function GameScreen() {
             rematchOffered={!!rematchOffer}
             rematchBusy={rematchBusy}
             onRematch={requestRematch}
+            onPhrase={phrase}
+            incomingPhrase={oppBubble ? t(`ph_${oppBubble.p}`) : null}
           />
         );
       })()}

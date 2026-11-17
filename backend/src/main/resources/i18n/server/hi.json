@@ -99,5 +99,8 @@
  "Friend request not found": "फ़्रेंड रिक्वेस्ट नहीं मिली",
  "This player is not your friend": "यह खिलाड़ी आपका दोस्त नहीं है",
  "Your friend is in a match right now": "आपका दोस्त अभी मैच में है",
- "Your friend is offline": "आपका दोस्त ऑफ़लाइन है"
+ "Your friend is offline": "आपका दोस्त ऑफ़लाइन है",
+ "Unknown phrase": "अज्ञात वाक्य",
+ "Replay not found": "रीप्ले नहीं मिला",
+ "Only friends can see this profile": "यह प्रोफ़ाइल सिर्फ़ दोस्त देख सकते हैं"
 }

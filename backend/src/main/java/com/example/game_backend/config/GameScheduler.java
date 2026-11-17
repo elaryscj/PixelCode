@@ -1,6 +1,7 @@
 package com.example.game_backend.config;
 
 import com.example.game_backend.game.GameService;
+import com.example.game_backend.game.ReplayStore;
 import com.example.game_backend.progress.SeasonService;
 import com.example.game_backend.service.MatchmakingService;
 import com.example.game_backend.service.RoomService;
@@ -18,8 +19,11 @@ public class GameScheduler {
     private final RoomService rooms;
     private final MatchmakingService matchmaking;
     private final SeasonService seasons;
+    private final ReplayStore replays;
 
-    public GameScheduler(GameService games, RoomService rooms, MatchmakingService matchmaking, SeasonService seasons) {
+    public GameScheduler(GameService games, RoomService rooms, MatchmakingService matchmaking, SeasonService seasons,
+                         ReplayStore replays) {
+        this.replays = replays;
         this.games = games;
         this.rooms = rooms;
         this.matchmaking = matchmaking;
@@ -43,5 +47,6 @@ public class GameScheduler {
     public void cleanup() {
         try { rooms.cleanupStale(); } catch (RuntimeException e) { log.error("cleanupStale failed", e); }
         try { seasons.rollover(); } catch (RuntimeException e) { log.error("season rollover failed", e); }
+        try { replays.cleanup(); } catch (RuntimeException e) { log.error("replay cleanup failed", e); }
     }
 }

@@ -99,5 +99,8 @@
  "Friend request not found": "Freundschaftsanfrage nicht gefunden",
  "This player is not your friend": "Dieser Spieler ist nicht dein Freund",
  "Your friend is in a match right now": "Dein Freund ist gerade in einem Match",
- "Your friend is offline": "Dein Freund ist offline"
+ "Your friend is offline": "Dein Freund ist offline",
+ "Unknown phrase": "Unbekannter Satz",
+ "Replay not found": "Wiederholung nicht gefunden",
+ "Only friends can see this profile": "Nur Freunde können dieses Profil sehen"
 }

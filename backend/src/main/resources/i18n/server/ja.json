@@ -99,5 +99,8 @@
  "Friend request not found": "フレンド申請が見つかりません",
  "This player is not your friend": "このプレイヤーはフレンドではありません",
  "Your friend is in a match right now": "フレンドは今マッチ中です",
- "Your friend is offline": "フレンドはオフラインです"
+ "Your friend is offline": "フレンドはオフラインです",
+ "Unknown phrase": "不明な定型文",
+ "Replay not found": "リプレイが見つかりません",
+ "Only friends can see this profile": "このプロフィールはフレンドだけが見られます"
 }

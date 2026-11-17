@@ -99,5 +99,8 @@
  "Friend request not found": "Dostyq otinishi tabylmady",
  "This player is not your friend": "Bul oiynshy sizdin dosynyz emes",
  "Your friend is in a match right now": "Dosynyz qazir matchta",
- "Your friend is offline": "Dosynyz jelide emes"
+ "Your friend is offline": "Dosynyz jelide emes",
+ "Unknown phrase": "Belgisiz soz tirkesi",
+ "Replay not found": "Qaitalau tabylmady",
+ "Only friends can see this profile": "Bul profildi tek dostar koredi"
 }

@@ -99,5 +99,8 @@
  "Friend request not found": "طلب الصداقة غير موجود",
  "This player is not your friend": "هذا اللاعب ليس صديقك",
  "Your friend is in a match right now": "صديقك في مباراة الآن",
- "Your friend is offline": "صديقك غير متصل"
+ "Your friend is offline": "صديقك غير متصل",
+ "Unknown phrase": "عبارة غير معروفة",
+ "Replay not found": "الإعادة غير موجودة",
+ "Only friends can see this profile": "يمكن للأصدقاء فقط رؤية هذا الملف الشخصي"
 }

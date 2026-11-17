@@ -99,5 +99,8 @@
  "Friend request not found": "Permintaan pertemanan tidak ditemukan",
  "This player is not your friend": "Pemain ini bukan temanmu",
  "Your friend is in a match right now": "Temanmu sedang bertanding",
- "Your friend is offline": "Temanmu sedang offline"
+ "Your friend is offline": "Temanmu sedang offline",
+ "Unknown phrase": "Frasa tidak dikenal",
+ "Replay not found": "Tayangan ulang tidak ditemukan",
+ "Only friends can see this profile": "Hanya teman yang bisa melihat profil ini"
 }

@@ -180,6 +180,11 @@ function ResultsScreen() {
                     {delta} MMR
                   </span>
                   <span className="font-sans text-xs text-gray-500 w-20 text-right">{ago(m.finishedAt, t)}</span>
+                  {m.replay && (
+                    <Link to={`/replay/${encodeURIComponent(m.code)}`} className="border border-yellow/70 text-yellow text-xs px-2 py-1 hover:bg-yellow/10">
+                      ▶ {t("rp_short")}
+                    </Link>
+                  )}
                 </li>
               );
             })}

@@ -1,7 +1,8 @@
 // app/components/game/TouchControls.tsx
 // On-screen gamepad for phones and tablets. It writes into the same key map the keyboard uses,
 // so the physics loop does not know (or care) whether input came from a finger or a key.
-import { useCallback, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
+import { useCallback, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
+import PhraseBar, { type PhraseId } from "./PhraseBar";
 
 type Props = {
   /** The game's pressed-keys map (keysPressed.current). */
@@ -12,6 +13,8 @@ type Props = {
   /** wave / dance buttons (match only) */
   onEmote?: (emote: "wave" | "dance") => void;
   emoteLabels?: { wave: string; dance: string };
+  /** quick phrases (match only) */
+  onPhrase?: (p: PhraseId) => void;
 };
 
 function Pad({
@@ -57,8 +60,21 @@ function Pad({
   );
 }
 
-export default function TouchControls({ keys, canInteract, onInteract, onRespawn, onEmote, emoteLabels }: Props) {
+export default function TouchControls({ keys, canInteract, onInteract, onRespawn, onEmote, emoteLabels, onPhrase }: Props) {
+  const [phrasesOpen, setPhrasesOpen] = useState(false);
   return (
+    <>
+    {onPhrase && phrasesOpen && (
+      <div className="hidden pointer-coarse:flex fixed inset-x-0 bottom-28 z-40 justify-center px-3 font-pixel">
+        <PhraseBar
+          onPhrase={(p) => {
+            onPhrase(p);
+            setPhrasesOpen(false);
+          }}
+          className="max-w-md justify-center bg-black/70 border border-neon/40 p-2"
+        />
+      </div>
+    )}
     <div
       className="hidden pointer-coarse:flex fixed inset-x-0 bottom-0 z-40 justify-between items-end px-3 pointer-events-none font-pixel"
       style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
@@ -77,6 +93,16 @@ export default function TouchControls({ keys, canInteract, onInteract, onRespawn
       <div className="flex items-end gap-3">
         {onEmote && (
           <div className="flex flex-col gap-2">
+            {onPhrase && (
+              <button
+                type="button"
+                onClick={() => setPhrasesOpen((v) => !v)}
+                aria-label="Quick phrases"
+                className={`pointer-events-auto w-11 h-11 border-2 bg-black/45 text-lg active:scale-95 ${phrasesOpen ? "border-yellow" : "border-neon/70"}`}
+              >
+                💬
+              </button>
+            )}
             <button
               type="button"
               onClick={() => onEmote("wave")}
@@ -118,5 +144,6 @@ export default function TouchControls({ keys, canInteract, onInteract, onRespawn
         </Pad>
       </div>
     </div>
+    </>
   );
 }

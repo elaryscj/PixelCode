@@ -99,5 +99,8 @@
  "Friend request not found": "未找到该好友请求",
  "This player is not your friend": "该玩家不是你的好友",
  "Your friend is in a match right now": "你的好友正在对局中",
- "Your friend is offline": "你的好友不在线"
+ "Your friend is offline": "你的好友不在线",
+ "Unknown phrase": "未知的快捷语",
+ "Replay not found": "未找到回放",
+ "Only friends can see this profile": "只有好友可以查看此资料"
 }

@@ -99,5 +99,8 @@
  "Friend request not found": "Demande d'ami introuvable",
  "This player is not your friend": "Ce joueur n'est pas ton ami",
  "Your friend is in a match right now": "Ton ami est en match en ce moment",
- "Your friend is offline": "Ton ami est hors ligne"
+ "Your friend is offline": "Ton ami est hors ligne",
+ "Unknown phrase": "Phrase inconnue",
+ "Replay not found": "Rediffusion introuvable",
+ "Only friends can see this profile": "Seuls les amis peuvent voir ce profil"
 }
