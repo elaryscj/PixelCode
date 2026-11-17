@@ -102,7 +102,9 @@ class StoreConcurrencyTest {
                 boolean knight = after.getOwnedSkins().contains("byte_knight");
                 assertTrue(after.getPixels() >= 0, "balance went negative");
                 assertFalse(crimson && knight, "bought both skins with money for one");
-                assertEquals((crimson ? 1500 : 0) + (knight ? 900 : 0), spent, "paid amount does not match owned skins");
+                // the first skin also earns the COLLECTOR achievement, paid exactly once
+                int collector = com.example.game_backend.progress.Achievements.get("COLLECTOR").reward();
+                assertEquals((crimson ? 1500 : 0) + (knight ? 900 : 0) - collector, spent, "paid amount does not match owned skins");
                 assertEquals(1, ok, "exactly one purchase can succeed, got " + ok);
             }
         } finally {

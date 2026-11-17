@@ -1,0 +1,212 @@
+{
+ "GATE // PARITY LOCK": {
+  "description": "整数が偶数なら true、そうでなければ false を返すメソッド `solve(n)` を書いてください。",
+  "inputDescription": "整数 `n`（-1000 <= n <= 1000）。",
+  "outputDescription": "boolean の true または false。"
+ },
+ "GATE // FIZZ PROTOCOL": {
+  "description": "n が 3 と 5 の両方で割り切れるなら \"FizzBuzz\"、3 で割り切れるなら \"Fizz\"、5 で割り切れるなら \"Buzz\"、それ以外は数値を文字列にして返すメソッド `solve(n)` を書いてください。",
+  "inputDescription": "正の整数 `n`。",
+  "outputDescription": "文字列。"
+ },
+ "GATE // FACTORIAL CORE": {
+  "description": "n!（n の階乗）を返すメソッド `solve(n)` を書いてください。0! は 1 です。",
+  "inputDescription": "整数 `n`（0 <= n <= 10）。",
+  "outputDescription": "n の階乗。"
+ },
+ "GATE // SQUARE GRID": {
+  "description": "各数値を 2 乗した新しい配列を返すメソッド `solve(nums)` を書いてください。",
+  "inputDescription": "整数の配列 `nums`（空の場合あり）。",
+  "outputDescription": "2 乗した値の配列（順序はそのまま）。"
+ },
+ "GATE // NEURAL SUM": {
+  "description": "2 つの整数の和を返すメソッド `solve(a, b)` を書いてください。",
+  "inputDescription": "2 つの整数 `a` と `b`（-1000 <= a, b <= 1000）。",
+  "outputDescription": "整数 a + b。"
+ },
+ "GATE // CYBER MIRROR": {
+  "description": "文字列が前から読んでも後ろから読んでも同じなら true、そうでなければ false を返すメソッド `solve(str)` を書いてください。",
+  "inputDescription": "小文字の英数字からなる文字列 `str`。",
+  "outputDescription": "boolean の true または false。"
+ },
+ "GATE // MAX SIGNAL": {
+  "description": "配列の中で最も大きい数を返すメソッド `solve(nums)` を書いてください。",
+  "inputDescription": "数値の配列 `nums`（長さ >= 1）。",
+  "outputDescription": "配列の最大値。"
+ },
+ "GATE // DATA REVERSAL": {
+  "description": "文字列を逆順にして返すメソッド `solve(str)` を書いてください。",
+  "inputDescription": "文字列 `str`。",
+  "outputDescription": "逆順にした文字列。"
+ },
+ "GATE // VOWEL SCAN": {
+  "description": "小文字の文字列に含まれる母音（a, e, i, o, u）の数を数えるメソッド `solve(str)` を書いてください。",
+  "inputDescription": "小文字の文字列 `str`。",
+  "outputDescription": "母音の数。"
+ },
+ "GATE // ARRAY TOTAL": {
+  "description": "配列のすべての数の合計を返すメソッド `solve(nums)` を書いてください。",
+  "inputDescription": "整数の配列 `nums`（空の場合あり）。",
+  "outputDescription": "全要素の合計（空の配列なら 0）。"
+ },
+ "GATE // MIN SIGNAL": {
+  "description": "配列の中で最も小さい数を返すメソッド `solve(nums)` を書いてください。",
+  "inputDescription": "整数の配列 `nums`（長さ >= 1）。",
+  "outputDescription": "最小値。"
+ },
+ "GATE // NEGATIVE SCAN": {
+  "description": "配列の中に負の数がいくつあるかを数えるメソッド `solve(nums)` を書いてください。",
+  "inputDescription": "整数の配列 `nums`（空の場合あり）。",
+  "outputDescription": "0 より小さい要素の数。"
+ },
+ "GATE // CAPS LOCK": {
+  "description": "文字列を大文字にして返すメソッド `solve(str)` を書いてください。",
+  "inputDescription": "英字・数字・空白からなる文字列 `str`。",
+  "outputDescription": "大文字にした同じ文字列。"
+ },
+ "GATE // ABSOLUTE ZERO": {
+  "description": "n の絶対値（0 からの距離）を返すメソッド `solve(n)` を書いてください。",
+  "inputDescription": "整数 `n`（-10000 <= n <= 10000）。",
+  "outputDescription": "n の絶対値。"
+ },
+ "GATE // LAST BYTE": {
+  "description": "文字列の最後の文字を文字列として返すメソッド `solve(str)` を書いてください。",
+  "inputDescription": "空でない文字列 `str`。",
+  "outputDescription": "長さ 1 の文字列。"
+ },
+ "GATE // FIBONACCI STREAM": {
+  "description": "n 番目のフィボナッチ数を返すメソッド `solve(n)` を書いてください。F(0) = 0、F(1) = 1、F(n) = F(n-1) + F(n-2)。",
+  "inputDescription": "整数 `n`（0 <= n <= 40）。",
+  "outputDescription": "F(n)。"
+ },
+ "GATE // PRIME SENTRY": {
+  "description": "n が素数なら true を返すメソッド `solve(n)` を書いてください。",
+  "inputDescription": "整数 `n`（0 <= n <= 100000）。",
+  "outputDescription": "n が素数なら true、そうでなければ false。"
+ },
+ "GATE // DIGIT CRUSHER": {
+  "description": "n の各桁の数字の和を返すメソッド `solve(n)` を書いてください。",
+  "inputDescription": "整数 `n`（0 <= n <= 1000000000）。",
+  "outputDescription": "各桁の和。"
+ },
+ "GATE // WORD COUNTER": {
+  "description": "テキスト中の単語の数を数えるメソッド `solve(text)` を書いてください。単語は 1 つ以上の空白で区切られ、先頭や末尾に空白があることもあります。",
+  "inputDescription": "文字列 `text`。",
+  "outputDescription": "単語の数。"
+ },
+ "GATE // ANAGRAM LOCK": {
+  "description": "`b` が `a` のアナグラム（同じ文字が同じ回数ずつ使われている）なら true を返すメソッド `solve(a, b)` を書いてください。",
+  "inputDescription": "小文字の文字列 `a` と `b`。",
+  "outputDescription": "true または false。"
+ },
+ "GATE // RUNNER-UP": {
+  "description": "配列の中で 2 番目に大きい【異なる】値を返すメソッド `solve(nums)` を書いてください。",
+  "inputDescription": "少なくとも 2 種類の値を含む配列 `nums`。",
+  "outputDescription": "2 番目に大きい異なる値。"
+ },
+ "GATE // ARRAY FLIP": {
+  "description": "要素を逆順に並べた新しい配列を返すメソッド `solve(nums)` を書いてください。",
+  "inputDescription": "整数の配列 `nums`（空の場合あり）。",
+  "outputDescription": "逆順にした配列。"
+ },
+ "GATE // FREQUENCY SCAN": {
+  "description": "最も多く出現する文字を返すメソッド `solve(str)` を書いてください。同数の文字が複数ある場合は、アルファベット順で最初のものを返します。",
+  "inputDescription": "空でない小文字の文字列 `str`（英字のみ）。",
+  "outputDescription": "1 文字の文字列。"
+ },
+ "GATE // BINARY ENCODER": {
+  "description": "n を先頭の 0 なしの 2 進数（基数 2）で表して返すメソッド `solve(n)` を書いてください。",
+  "inputDescription": "整数 `n`（0 <= n <= 1000000）。",
+  "outputDescription": "2 進数表記の文字列。"
+ },
+ "GATE // GCD CIPHER": {
+  "description": "a と b の最大公約数を返すメソッド `solve(a, b)` を書いてください。",
+  "inputDescription": "2 つの正の整数 `a` と `b`（<= 1000000）。",
+  "outputDescription": "gcd(a, b)。"
+ },
+ "GATE // DUPLICATE PURGE": {
+  "description": "重複した値を取り除き、各値の最初の出現を元の順序のまま残すメソッド `solve(nums)` を書いてください。",
+  "inputDescription": "整数の配列 `nums`（空の場合あり）。",
+  "outputDescription": "重複のない配列。"
+ },
+ "GATE // ORDER CHECK": {
+  "description": "配列が昇順（同じ値の連続も可）に並んでいれば true を返すメソッド `solve(nums)` を書いてください。",
+  "inputDescription": "整数の配列 `nums`（空の場合あり）。",
+  "outputDescription": "true または false。"
+ },
+ "GATE // CAESAR SHIFT": {
+  "description": "各小文字をアルファベット上で k 文字先にずらすメソッド `solve(text, k)` を書いてください。z の次は a に戻ります。それ以外の文字は変えません。",
+  "inputDescription": "文字列 `text` と整数 `k`（0 <= k <= 25）。",
+  "outputDescription": "ずらした文字列。"
+ },
+ "GATE // EVEN COUNTER": {
+  "description": "配列の中の偶数の数を数えるメソッド `solve(nums)` を書いてください。",
+  "inputDescription": "整数の配列 `nums`（空の場合あり）。",
+  "outputDescription": "偶数の要素の数。"
+ },
+ "GATE // MIRROR NUMBER": {
+  "description": "数が前から読んでも後ろから読んでも同じなら true を返すメソッド `solve(n)` を書いてください（文字列は不要ですが、使っても構いません）。",
+  "inputDescription": "整数 `n`（0 <= n <= 1000000000）。",
+  "outputDescription": "true または false。"
+ },
+ "GATE // TITLE CASE": {
+  "description": "各単語の最初の文字を大文字にするメソッド `solve(text)` を書いてください。単語は 1 つの空白で区切られ、他の文字はそのままです。",
+  "inputDescription": "小文字の単語と単一の空白からなる文字列 `text`。",
+  "outputDescription": "各単語の先頭を大文字にした文字列。"
+ },
+ "GATE // TWIN SUM": {
+  "description": "和が target になる 2 つの数のインデックス [i, j]（i < j）を返すメソッド `solve(nums, target)` を書いてください。答えはちょうど 1 つです。",
+  "inputDescription": "配列 `nums`（2 <= 長さ <= 10000）と整数 `target`。",
+  "outputDescription": "2 つのインデックスの配列。"
+ },
+ "GATE // BRACKET VAULT": {
+  "description": "すべての括弧 ( [ { が対応する ) ] } によって正しい順序で閉じられていれば true を返すメソッド `solve(s)` を書いてください。",
+  "inputDescription": "文字 ()[]{} だけを含む文字列 `s`。",
+  "outputDescription": "true または false。"
+ },
+ "GATE // LONGEST STREAK": {
+  "description": "同じ文字が連続する最も長い並びの長さを返すメソッド `solve(s)` を書いてください。",
+  "inputDescription": "文字列 `s`（空の場合あり）。",
+  "outputDescription": "最も長い並びの長さ。"
+ },
+ "GATE // LOST PACKET": {
+  "description": "0..n の範囲から欠けている 1 つの数を返すメソッド `solve(nums)` を書いてください。配列にはその範囲の異なる n 個の数が入っています。",
+  "inputDescription": "0 から n までの異なる n 個の整数の配列。",
+  "outputDescription": "欠けている数。"
+ },
+ "GATE // ROMAN DECODER": {
+  "description": "ローマ数字（I, V, X, L, C, D, M）を整数に変換するメソッド `solve(roman)` を書いてください。",
+  "inputDescription": "1 から 3999 までの正しいローマ数字。",
+  "outputDescription": "その値。"
+ },
+ "GATE // MATRIX TRACE": {
+  "description": "正方行列の主対角線（左上から右下）の合計を返すメソッド `solve(grid)` を書いてください。",
+  "inputDescription": "正方行列 `grid`（1 <= サイズ <= 50）。",
+  "outputDescription": "grid[i][i] の合計。"
+ },
+ "GATE // RUN-LENGTH PACK": {
+  "description": "文字列を圧縮するメソッド `solve(s)` を書いてください。同じ文字の連続は、その文字の後ろに連続の長さを付けたものになります。",
+  "inputDescription": "小文字の文字列 `s`（空の場合あり）。",
+  "outputDescription": "圧縮した文字列。"
+ },
+ "GATE // PEAK SEGMENT": {
+  "description": "配列の連続した空でない部分の和として可能な最大値を返すメソッド `solve(nums)` を書いてください。",
+  "inputDescription": "整数の配列 `nums`（長さ >= 1）。",
+  "outputDescription": "部分配列の和の最大値。"
+ },
+ "GATE // PRIME FIELD": {
+  "description": "n 以下の素数がいくつあるかを返すメソッド `solve(n)` を書いてください。",
+  "inputDescription": "整数 `n`（0 <= n <= 1000000）。",
+  "outputDescription": "n 以下の素数の個数。"
+ },
+ "GATE // UNIQUE WINDOW": {
+  "description": "文字列の中で、同じ文字を含まない最も長い連続部分の長さを返すメソッド `solve(s)` を書いてください。",
+  "inputDescription": "文字列 `s`（空の場合あり）。",
+  "outputDescription": "重複のない最長部分文字列の長さ。"
+ },
+ "GATE // ROTATION DRIVE": {
+  "description": "配列を右に k ステップ回転させるメソッド `solve(nums, k)` を書いてください（最後の要素を先頭に移す操作を k 回）。",
+  "inputDescription": "配列 `nums`（空の場合あり）と整数 `k`（0 <= k <= 1000000）。",
+  "outputDescription": "回転させた配列。"
+ }
+}

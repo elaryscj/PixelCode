@@ -1,6 +1,7 @@
 package com.example.game_backend.config;
 
 import com.example.game_backend.game.GameService;
+import com.example.game_backend.progress.SeasonService;
 import com.example.game_backend.service.MatchmakingService;
 import com.example.game_backend.service.RoomService;
 import org.slf4j.Logger;
@@ -16,11 +17,13 @@ public class GameScheduler {
     private final GameService games;
     private final RoomService rooms;
     private final MatchmakingService matchmaking;
+    private final SeasonService seasons;
 
-    public GameScheduler(GameService games, RoomService rooms, MatchmakingService matchmaking) {
+    public GameScheduler(GameService games, RoomService rooms, MatchmakingService matchmaking, SeasonService seasons) {
         this.games = games;
         this.rooms = rooms;
         this.matchmaking = matchmaking;
+        this.seasons = seasons;
     }
 
     @Scheduled(fixedDelay = 1000)
@@ -39,5 +42,6 @@ public class GameScheduler {
     @Scheduled(fixedDelay = 60000, initialDelay = 60000)
     public void cleanup() {
         try { rooms.cleanupStale(); } catch (RuntimeException e) { log.error("cleanupStale failed", e); }
+        try { seasons.rollover(); } catch (RuntimeException e) { log.error("season rollover failed", e); }
     }
 }

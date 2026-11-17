@@ -6,6 +6,7 @@ import com.example.game_backend.entity.Room;
 import com.example.game_backend.entity.RoomStatus;
 import com.example.game_backend.entity.User;
 import com.example.game_backend.error.ApiException;
+import com.example.game_backend.progress.ProgressService;
 import com.example.game_backend.repository.ChallengeRepository;
 import com.example.game_backend.repository.RoomRepository;
 import com.example.game_backend.repository.UserRepository;
@@ -56,6 +57,7 @@ public class GameService {
     private final ChallengeEvaluator evaluator;
     private final SimpMessagingTemplate messaging;
     private final TokenService tokens;
+    private final ProgressService progress;
 
     private final long doorMs;
     private final long maxMatchMs;
@@ -64,6 +66,7 @@ public class GameService {
 
     public GameService(RoomRepository rooms, UserRepository users, ChallengeRepository challenges, MatchResultService results,
                        ChallengeEvaluator evaluator, SimpMessagingTemplate messaging, TokenService tokens,
+                       ProgressService progress,
                        @Value("${game.door-seconds:240}") long doorSeconds,
                        @Value("${game.max-match-minutes:20}") long maxMatchMinutes,
                        @Value("${game.absence-seconds:300}") long absenceSeconds,
@@ -75,6 +78,7 @@ public class GameService {
         this.evaluator = evaluator;
         this.messaging = messaging;
         this.tokens = tokens;
+        this.progress = progress;
         this.doorMs = doorSeconds * 1000L;
         this.maxMatchMs = maxMatchMinutes * 60_000L;
         this.absenceMs = absenceSeconds * 1000L;
@@ -391,17 +395,23 @@ public class GameService {
 
         EvalResult r = evaluator.evaluate(source, sn.functionName, sn.testsJson);
 
+        boolean solvedNow = false;
+        Map<String, Object> m;
         synchronized (s) {
             long after = System.currentTimeMillis();
             if (r.passed && !s.over && !me.unlocked[cp]) {
                 unlock(s, me, cp, "SOLVED");
+                solvedNow = true;
             }
-            Map<String, Object> m = r.toMap();
+            m = r.toMap();
             m.put("unlocked", me.unlocked[cp]);
             m.put("matchOver", s.over);
             m.put("secondsRemaining", me.unlocked[cp] ? 0 : secondsLeft(me, cp, after));
-            return m;
         }
+        if (solvedNow) {
+            progress.onDoorSolved(userId, sn.difficulty); // outside the session lock: it writes to the database
+        }
+        return m;
     }
 
     private void unlock(GameSession s, GameSession.Slot slot, int cp, String reason) {

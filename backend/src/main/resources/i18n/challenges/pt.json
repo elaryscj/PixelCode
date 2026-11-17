@@ -1,0 +1,212 @@
+{
+ "GATE // PARITY LOCK": {
+  "description": "Escreva um método `solve(n)` que retorne true se o inteiro for par, senão false.",
+  "inputDescription": "Um inteiro `n` (-1000 <= n <= 1000).",
+  "outputDescription": "Boolean true ou false."
+ },
+ "GATE // FIZZ PROTOCOL": {
+  "description": "Escreva um método `solve(n)` que retorne \"FizzBuzz\" se n for divisível por 3 e por 5, \"Fizz\" se for divisível por 3, \"Buzz\" se for divisível por 5, senão o próprio número como string.",
+  "inputDescription": "Um inteiro positivo `n`.",
+  "outputDescription": "Uma string."
+ },
+ "GATE // FACTORIAL CORE": {
+  "description": "Escreva um método `solve(n)` que retorne n! (o fatorial de n). 0! é 1.",
+  "inputDescription": "Um inteiro `n` (0 <= n <= 10).",
+  "outputDescription": "O fatorial de n."
+ },
+ "GATE // SQUARE GRID": {
+  "description": "Escreva um método `solve(nums)` que retorne um novo array com cada número elevado ao quadrado.",
+  "inputDescription": "Um array de inteiros `nums` (pode estar vazio).",
+  "outputDescription": "Um array com os quadrados, na mesma ordem."
+ },
+ "GATE // NEURAL SUM": {
+  "description": "Escreva um método `solve(a, b)` que retorne a soma de dois inteiros.",
+  "inputDescription": "Dois inteiros `a` e `b` (-1000 <= a, b <= 1000).",
+  "outputDescription": "O inteiro a + b."
+ },
+ "GATE // CYBER MIRROR": {
+  "description": "Escreva um método `solve(str)` que retorne true se a string for lida igual de frente para trás e de trás para frente, senão false.",
+  "inputDescription": "Uma string alfanumérica minúscula `str`.",
+  "outputDescription": "Boolean true ou false."
+ },
+ "GATE // MAX SIGNAL": {
+  "description": "Escreva um método `solve(nums)` que retorne o maior número de um array.",
+  "inputDescription": "Um array de números `nums` (tamanho >= 1).",
+  "outputDescription": "O maior número do array."
+ },
+ "GATE // DATA REVERSAL": {
+  "description": "Escreva um método `solve(str)` que retorne a string invertida.",
+  "inputDescription": "Uma string `str`.",
+  "outputDescription": "A string invertida."
+ },
+ "GATE // VOWEL SCAN": {
+  "description": "Escreva um método `solve(str)` que conte as vogais (a, e, i, o, u) de uma string minúscula.",
+  "inputDescription": "Uma string minúscula `str`.",
+  "outputDescription": "O número de vogais."
+ },
+ "GATE // ARRAY TOTAL": {
+  "description": "Escreva um método `solve(nums)` que retorne a soma de todos os números de um array.",
+  "inputDescription": "Um array de inteiros `nums` (pode estar vazio).",
+  "outputDescription": "A soma de todos os elementos (0 para um array vazio)."
+ },
+ "GATE // MIN SIGNAL": {
+  "description": "Escreva um método `solve(nums)` que retorne o menor número de um array.",
+  "inputDescription": "Um array de inteiros `nums` (tamanho >= 1).",
+  "outputDescription": "O mínimo."
+ },
+ "GATE // NEGATIVE SCAN": {
+  "description": "Escreva um método `solve(nums)` que conte quantos números do array são negativos.",
+  "inputDescription": "Um array de inteiros `nums` (pode estar vazio).",
+  "outputDescription": "Quantos elementos são menores que zero."
+ },
+ "GATE // CAPS LOCK": {
+  "description": "Escreva um método `solve(str)` que retorne a string em maiúsculas.",
+  "inputDescription": "Uma string `str` com letras, dígitos e espaços.",
+  "outputDescription": "A mesma string em maiúsculas."
+ },
+ "GATE // ABSOLUTE ZERO": {
+  "description": "Escreva um método `solve(n)` que retorne o valor absoluto de n (sua distância até o zero).",
+  "inputDescription": "Um inteiro `n` (-10000 <= n <= 10000).",
+  "outputDescription": "O valor absoluto de n."
+ },
+ "GATE // LAST BYTE": {
+  "description": "Escreva um método `solve(str)` que retorne o último caractere da string, como string.",
+  "inputDescription": "Uma string não vazia `str`.",
+  "outputDescription": "Uma string de tamanho 1."
+ },
+ "GATE // FIBONACCI STREAM": {
+  "description": "Escreva um método `solve(n)` que retorne o n-ésimo número de Fibonacci. F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2).",
+  "inputDescription": "Um inteiro `n` (0 <= n <= 40).",
+  "outputDescription": "F(n)."
+ },
+ "GATE // PRIME SENTRY": {
+  "description": "Escreva um método `solve(n)` que retorne true se n for um número primo.",
+  "inputDescription": "Um inteiro `n` (0 <= n <= 100000).",
+  "outputDescription": "true se n for primo, senão false."
+ },
+ "GATE // DIGIT CRUSHER": {
+  "description": "Escreva um método `solve(n)` que retorne a soma dos dígitos de n.",
+  "inputDescription": "Um inteiro `n` (0 <= n <= 1000000000).",
+  "outputDescription": "A soma dos dígitos."
+ },
+ "GATE // WORD COUNTER": {
+  "description": "Escreva um método `solve(text)` que conte as palavras do texto. As palavras são separadas por um ou mais espaços; pode haver espaços no início e no fim.",
+  "inputDescription": "Uma string `text`.",
+  "outputDescription": "O número de palavras."
+ },
+ "GATE // ANAGRAM LOCK": {
+  "description": "Escreva um método `solve(a, b)` que retorne true se `b` for um anagrama de `a` (as mesmas letras, cada uma o mesmo número de vezes).",
+  "inputDescription": "Duas strings minúsculas `a` e `b`.",
+  "outputDescription": "true ou false."
+ },
+ "GATE // RUNNER-UP": {
+  "description": "Escreva um método `solve(nums)` que retorne o segundo maior valor DISTINTO do array.",
+  "inputDescription": "Um array `nums` com pelo menos dois valores diferentes.",
+  "outputDescription": "O segundo maior valor distinto."
+ },
+ "GATE // ARRAY FLIP": {
+  "description": "Escreva um método `solve(nums)` que retorne um novo array com os elementos em ordem inversa.",
+  "inputDescription": "Um array de inteiros `nums` (pode estar vazio).",
+  "outputDescription": "O array invertido."
+ },
+ "GATE // FREQUENCY SCAN": {
+  "description": "Escreva um método `solve(str)` que retorne a letra que mais aparece. Em caso de empate, retorne a que vem primeiro no alfabeto.",
+  "inputDescription": "Uma string minúscula não vazia `str` (só letras).",
+  "outputDescription": "Uma string de uma letra."
+ },
+ "GATE // BINARY ENCODER": {
+  "description": "Escreva um método `solve(n)` que retorne n escrito em binário (base 2), sem zeros à esquerda.",
+  "inputDescription": "Um inteiro `n` (0 <= n <= 1000000).",
+  "outputDescription": "A representação binária como string."
+ },
+ "GATE // GCD CIPHER": {
+  "description": "Escreva um método `solve(a, b)` que retorne o máximo divisor comum de a e b.",
+  "inputDescription": "Dois inteiros positivos `a` e `b` (<= 1000000).",
+  "outputDescription": "mdc(a, b)."
+ },
+ "GATE // DUPLICATE PURGE": {
+  "description": "Escreva um método `solve(nums)` que remova os valores repetidos, mantendo a primeira ocorrência de cada um, na ordem original.",
+  "inputDescription": "Um array de inteiros `nums` (pode estar vazio).",
+  "outputDescription": "O array sem duplicatas."
+ },
+ "GATE // ORDER CHECK": {
+  "description": "Escreva um método `solve(nums)` que retorne true se o array estiver em ordem não decrescente.",
+  "inputDescription": "Um array de inteiros `nums` (pode estar vazio).",
+  "outputDescription": "true ou false."
+ },
+ "GATE // CAESAR SHIFT": {
+  "description": "Escreva um método `solve(text, k)` que avance cada letra minúscula k posições no alfabeto, voltando de z para a. Os outros caracteres não mudam.",
+  "inputDescription": "Uma string `text` e um inteiro `k` (0 <= k <= 25).",
+  "outputDescription": "A string deslocada."
+ },
+ "GATE // EVEN COUNTER": {
+  "description": "Escreva um método `solve(nums)` que conte os números pares do array.",
+  "inputDescription": "Um array de inteiros `nums` (pode estar vazio).",
+  "outputDescription": "Quantos elementos são pares."
+ },
+ "GATE // MIRROR NUMBER": {
+  "description": "Escreva um método `solve(n)` que retorne true se o número for lido igual nos dois sentidos (strings não são necessárias, mas são permitidas).",
+  "inputDescription": "Um inteiro `n` (0 <= n <= 1000000000).",
+  "outputDescription": "true ou false."
+ },
+ "GATE // TITLE CASE": {
+  "description": "Escreva um método `solve(text)` que coloque em maiúscula a primeira letra de cada palavra. As palavras são separadas por um único espaço; as outras letras ficam como estão.",
+  "inputDescription": "Uma string `text` com palavras minúsculas e espaços simples.",
+  "outputDescription": "A string com cada palavra iniciando em maiúscula."
+ },
+ "GATE // TWIN SUM": {
+  "description": "Escreva um método `solve(nums, target)` que retorne os índices [i, j] (i < j) dos dois números que somam target. Existe exatamente uma resposta.",
+  "inputDescription": "Um array `nums` (2 <= tamanho <= 10000) e um inteiro `target`.",
+  "outputDescription": "Um array com dois índices."
+ },
+ "GATE // BRACKET VAULT": {
+  "description": "Escreva um método `solve(s)` que retorne true se cada parêntese ( [ { for fechado pelo ) ] } correspondente na ordem certa.",
+  "inputDescription": "Uma string `s` contendo apenas os caracteres ()[]{}.",
+  "outputDescription": "true ou false."
+ },
+ "GATE // LONGEST STREAK": {
+  "description": "Escreva um método `solve(s)` que retorne o tamanho da maior sequência do mesmo caractere seguido.",
+  "inputDescription": "Uma string `s` (pode estar vazia).",
+  "outputDescription": "O tamanho da maior sequência."
+ },
+ "GATE // LOST PACKET": {
+  "description": "Escreva um método `solve(nums)` que retorne o único número que falta no intervalo 0..n. O array tem n números distintos desse intervalo.",
+  "inputDescription": "Um array de n inteiros distintos entre 0 e n.",
+  "outputDescription": "O número que falta."
+ },
+ "GATE // ROMAN DECODER": {
+  "description": "Escreva um método `solve(roman)` que converta um numeral romano (I, V, X, L, C, D, M) em inteiro.",
+  "inputDescription": "Um numeral romano válido entre 1 e 3999.",
+  "outputDescription": "O seu valor."
+ },
+ "GATE // MATRIX TRACE": {
+  "description": "Escreva um método `solve(grid)` que retorne a soma da diagonal principal (do canto superior esquerdo ao inferior direito) de uma matriz quadrada.",
+  "inputDescription": "Uma matriz quadrada `grid` (1 <= tamanho <= 50).",
+  "outputDescription": "A soma de grid[i][i]."
+ },
+ "GATE // RUN-LENGTH PACK": {
+  "description": "Escreva um método `solve(s)` que comprima a string: cada sequência do mesmo caractere vira o caractere seguido do tamanho da sequência.",
+  "inputDescription": "Uma string minúscula `s` (pode estar vazia).",
+  "outputDescription": "A string comprimida."
+ },
+ "GATE // PEAK SEGMENT": {
+  "description": "Escreva um método `solve(nums)` que retorne a maior soma possível de uma parte contígua e não vazia do array.",
+  "inputDescription": "Um array de inteiros `nums` (tamanho >= 1).",
+  "outputDescription": "A soma máxima de um subarray."
+ },
+ "GATE // PRIME FIELD": {
+  "description": "Escreva um método `solve(n)` que retorne quantos números primos são menores ou iguais a n.",
+  "inputDescription": "Um inteiro `n` (0 <= n <= 1000000).",
+  "outputDescription": "A quantidade de primos <= n."
+ },
+ "GATE // UNIQUE WINDOW": {
+  "description": "Escreva um método `solve(s)` que retorne o tamanho da maior parte contígua da string sem caracteres repetidos.",
+  "inputDescription": "Uma string `s` (pode estar vazia).",
+  "outputDescription": "O tamanho da maior substring sem repetições."
+ },
+ "GATE // ROTATION DRIVE": {
+  "description": "Escreva um método `solve(nums, k)` que gire o array k passos para a direita (o último elemento vai para o início, k vezes).",
+  "inputDescription": "Um array `nums` (pode estar vazio) e um inteiro `k` (0 <= k <= 1000000).",
+  "outputDescription": "O array girado."
+ }
+}

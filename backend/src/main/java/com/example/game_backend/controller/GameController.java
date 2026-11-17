@@ -3,6 +3,9 @@ package com.example.game_backend.controller;
 import com.example.game_backend.dto.SubmitRequest;
 import com.example.game_backend.game.GameService;
 import com.example.game_backend.game.ResultViews;
+import com.example.game_backend.i18n.ChallengeText;
+import com.example.game_backend.i18n.Lang;
+import com.example.game_backend.i18n.ServerText;
 import com.example.game_backend.entity.Room;
 import com.example.game_backend.repository.RoomRepository;
 import org.springframework.data.domain.PageRequest;
@@ -58,13 +61,19 @@ public class GameController {
     public ResponseEntity<Map<String, Object>> open(@PathVariable String code, @PathVariable int cp,
                                                     @RequestBody(required = false) Map<String, Object> body,
                                                     @RequestHeader(value = "Authorization", required = false) String auth) {
-        return ResponseEntity.ok(games.openDoor(code.toUpperCase(), tokens.requireUserId(auth), cp, num(body, "x"), num(body, "y")));
+        Map<String, Object> view = games.openDoor(code.toUpperCase(), tokens.requireUserId(auth), cp, num(body, "x"), num(body, "y"));
+        ChallengeText.localize(view, Lang.current());
+        return ResponseEntity.ok(view);
     }
 
     @PostMapping("/{code}/doors/{cp}/submit")
     public ResponseEntity<Map<String, Object>> submit(@PathVariable String code, @PathVariable int cp,
                                                       @RequestBody SubmitRequest body, @RequestHeader(value = "Authorization", required = false) String auth) {
-        return ResponseEntity.ok(games.submit(code.toUpperCase(), tokens.requireUserId(auth), cp, body == null ? null : body.code));
+        Map<String, Object> result = games.submit(code.toUpperCase(), tokens.requireUserId(auth), cp, body == null ? null : body.code);
+        if (result.get("errorMessage") instanceof String msg) {
+            result.put("errorMessage", ServerText.tr(msg));
+        }
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/{code}/finish")

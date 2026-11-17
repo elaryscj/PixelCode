@@ -39,8 +39,14 @@ US-28 Browse skins, US-29 Equip, US-31 Buy: done (/store, server-side balance).
 US-30 Publish cosmetic (admin): done (/admin: name, price, picture; appears in /store and in matches).
 
 ## Could / Won't
-US-05 Languages: 14 (en, kz, ru, es, fr, de, pt, id, zh, ja, ko, hi, ar, ur; Arabic / Urdu right-to-left). Admin page, challenge texts and server error messages are English. US-06 Music volume: done. US-07 Fullscreen: done.
+US-05 Languages: 14 (en, kz, ru, es, fr, de, pt, id, zh, ja, ko, hi, ar, ur; Arabic / Urdu right-to-left). Texts of the 42 built-in challenges and the server's error / checker messages are translated too (the frontend sends Accept-Language; backend i18n/, resources/i18n/). Challenge titles, the admin page and challenges added by an admin stay English. US-06 Music volume: done. US-07 Fullscreen: done.
 US-08 Close account: excluded by SRS (a delete-account action exists in the profile anyway).
+
+## Progress (beyond the SRS)
+- Invite link: a private room shows INVITE A FRIEND -> /join/CODE (sign-in first if needed, then straight into the room).
+- Daily quests: 3 per player per UTC day, PIXELS paid on completion; count Quick Play (bot) and ranked matches, not private rooms.
+- Achievements: 12, one-time PIXELS reward each (/progress).
+- Seasons: one per calendar month (UTC). At the end the top 10 with at least 3 ranked matches get 1000/700/500/200 PIXELS and a badge; every rating moves halfway back to 1500. Shown on /progress and above the leaderboard.
 
 ## Open items
 - Full end-to-end test in several browsers (NFR-08) and the 50-match load test (NFR-02/03) are not done.

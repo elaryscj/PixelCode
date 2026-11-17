@@ -1,0 +1,212 @@
+{
+ "GATE // PARITY LOCK": {
+  "description": "Tulis metode `solve(n)` yang mengembalikan true jika bilangan bulat itu genap, selain itu false.",
+  "inputDescription": "Bilangan bulat `n` (-1000 <= n <= 1000).",
+  "outputDescription": "Boolean true atau false."
+ },
+ "GATE // FIZZ PROTOCOL": {
+  "description": "Tulis metode `solve(n)` yang mengembalikan \"FizzBuzz\" jika n habis dibagi 3 dan 5, \"Fizz\" jika habis dibagi 3, \"Buzz\" jika habis dibagi 5, selain itu angkanya sebagai string.",
+  "inputDescription": "Bilangan bulat positif `n`.",
+  "outputDescription": "Sebuah string."
+ },
+ "GATE // FACTORIAL CORE": {
+  "description": "Tulis metode `solve(n)` yang mengembalikan n! (faktorial dari n). 0! adalah 1.",
+  "inputDescription": "Bilangan bulat `n` (0 <= n <= 10).",
+  "outputDescription": "Faktorial dari n."
+ },
+ "GATE // SQUARE GRID": {
+  "description": "Tulis metode `solve(nums)` yang mengembalikan array baru berisi setiap angka yang dikuadratkan.",
+  "inputDescription": "Array bilangan bulat `nums` (boleh kosong).",
+  "outputDescription": "Array kuadrat, dengan urutan yang sama."
+ },
+ "GATE // NEURAL SUM": {
+  "description": "Tulis metode `solve(a, b)` yang mengembalikan jumlah dua bilangan bulat.",
+  "inputDescription": "Dua bilangan bulat `a` dan `b` (-1000 <= a, b <= 1000).",
+  "outputDescription": "Bilangan bulat a + b."
+ },
+ "GATE // CYBER MIRROR": {
+  "description": "Tulis metode `solve(str)` yang mengembalikan true jika string terbaca sama dari depan dan belakang, selain itu false.",
+  "inputDescription": "String alfanumerik huruf kecil `str`.",
+  "outputDescription": "Boolean true atau false."
+ },
+ "GATE // MAX SIGNAL": {
+  "description": "Tulis metode `solve(nums)` yang mengembalikan angka terbesar dalam array.",
+  "inputDescription": "Array angka `nums` (panjang >= 1).",
+  "outputDescription": "Angka terbesar dalam array."
+ },
+ "GATE // DATA REVERSAL": {
+  "description": "Tulis metode `solve(str)` yang mengembalikan string secara terbalik.",
+  "inputDescription": "String `str`.",
+  "outputDescription": "String yang dibalik."
+ },
+ "GATE // VOWEL SCAN": {
+  "description": "Tulis metode `solve(str)` yang menghitung huruf vokal (a, e, i, o, u) dalam string huruf kecil.",
+  "inputDescription": "String huruf kecil `str`.",
+  "outputDescription": "Jumlah huruf vokal."
+ },
+ "GATE // ARRAY TOTAL": {
+  "description": "Tulis metode `solve(nums)` yang mengembalikan jumlah semua angka dalam array.",
+  "inputDescription": "Array bilangan bulat `nums` (boleh kosong).",
+  "outputDescription": "Jumlah semua elemen (0 untuk array kosong)."
+ },
+ "GATE // MIN SIGNAL": {
+  "description": "Tulis metode `solve(nums)` yang mengembalikan angka terkecil dalam array.",
+  "inputDescription": "Array bilangan bulat `nums` (panjang >= 1).",
+  "outputDescription": "Nilai minimum."
+ },
+ "GATE // NEGATIVE SCAN": {
+  "description": "Tulis metode `solve(nums)` yang menghitung berapa banyak angka negatif dalam array.",
+  "inputDescription": "Array bilangan bulat `nums` (boleh kosong).",
+  "outputDescription": "Berapa banyak elemen yang di bawah nol."
+ },
+ "GATE // CAPS LOCK": {
+  "description": "Tulis metode `solve(str)` yang mengembalikan string dalam huruf besar.",
+  "inputDescription": "String `str` berisi huruf, angka, dan spasi.",
+  "outputDescription": "String yang sama dalam huruf besar."
+ },
+ "GATE // ABSOLUTE ZERO": {
+  "description": "Tulis metode `solve(n)` yang mengembalikan nilai mutlak n (jaraknya dari nol).",
+  "inputDescription": "Bilangan bulat `n` (-10000 <= n <= 10000).",
+  "outputDescription": "Nilai mutlak n."
+ },
+ "GATE // LAST BYTE": {
+  "description": "Tulis metode `solve(str)` yang mengembalikan karakter terakhir dari string, sebagai string.",
+  "inputDescription": "String tidak kosong `str`.",
+  "outputDescription": "String dengan panjang 1."
+ },
+ "GATE // FIBONACCI STREAM": {
+  "description": "Tulis metode `solve(n)` yang mengembalikan bilangan Fibonacci ke-n. F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2).",
+  "inputDescription": "Bilangan bulat `n` (0 <= n <= 40).",
+  "outputDescription": "F(n)."
+ },
+ "GATE // PRIME SENTRY": {
+  "description": "Tulis metode `solve(n)` yang mengembalikan true jika n bilangan prima.",
+  "inputDescription": "Bilangan bulat `n` (0 <= n <= 100000).",
+  "outputDescription": "true jika n prima, selain itu false."
+ },
+ "GATE // DIGIT CRUSHER": {
+  "description": "Tulis metode `solve(n)` yang mengembalikan jumlah digit dari n.",
+  "inputDescription": "Bilangan bulat `n` (0 <= n <= 1000000000).",
+  "outputDescription": "Jumlah digit."
+ },
+ "GATE // WORD COUNTER": {
+  "description": "Tulis metode `solve(text)` yang menghitung kata dalam teks. Kata dipisahkan oleh satu spasi atau lebih; bisa ada spasi di awal dan di akhir.",
+  "inputDescription": "String `text`.",
+  "outputDescription": "Jumlah kata."
+ },
+ "GATE // ANAGRAM LOCK": {
+  "description": "Tulis metode `solve(a, b)` yang mengembalikan true jika `b` adalah anagram dari `a` (huruf yang sama, masing-masing dengan jumlah yang sama).",
+  "inputDescription": "Dua string huruf kecil `a` dan `b`.",
+  "outputDescription": "true atau false."
+ },
+ "GATE // RUNNER-UP": {
+  "description": "Tulis metode `solve(nums)` yang mengembalikan nilai BERBEDA terbesar kedua dalam array.",
+  "inputDescription": "Array `nums` dengan setidaknya dua nilai berbeda.",
+  "outputDescription": "Nilai berbeda terbesar kedua."
+ },
+ "GATE // ARRAY FLIP": {
+  "description": "Tulis metode `solve(nums)` yang mengembalikan array baru dengan elemen dalam urutan terbalik.",
+  "inputDescription": "Array bilangan bulat `nums` (boleh kosong).",
+  "outputDescription": "Array yang dibalik."
+ },
+ "GATE // FREQUENCY SCAN": {
+  "description": "Tulis metode `solve(str)` yang mengembalikan huruf yang paling sering muncul. Jika ada beberapa yang sama, kembalikan yang paling awal dalam alfabet.",
+  "inputDescription": "String huruf kecil tidak kosong `str` (hanya huruf).",
+  "outputDescription": "String berisi satu huruf."
+ },
+ "GATE // BINARY ENCODER": {
+  "description": "Tulis metode `solve(n)` yang mengembalikan n dalam bentuk biner (basis 2), tanpa nol di depan.",
+  "inputDescription": "Bilangan bulat `n` (0 <= n <= 1000000).",
+  "outputDescription": "Representasi biner sebagai string."
+ },
+ "GATE // GCD CIPHER": {
+  "description": "Tulis metode `solve(a, b)` yang mengembalikan faktor persekutuan terbesar dari a dan b.",
+  "inputDescription": "Dua bilangan bulat positif `a` dan `b` (<= 1000000).",
+  "outputDescription": "FPB(a, b)."
+ },
+ "GATE // DUPLICATE PURGE": {
+  "description": "Tulis metode `solve(nums)` yang menghapus nilai berulang, menyisakan kemunculan pertama masing-masing, dalam urutan asli.",
+  "inputDescription": "Array bilangan bulat `nums` (boleh kosong).",
+  "outputDescription": "Array tanpa duplikat."
+ },
+ "GATE // ORDER CHECK": {
+  "description": "Tulis metode `solve(nums)` yang mengembalikan true jika array terurut tidak menurun.",
+  "inputDescription": "Array bilangan bulat `nums` (boleh kosong).",
+  "outputDescription": "true atau false."
+ },
+ "GATE // CAESAR SHIFT": {
+  "description": "Tulis metode `solve(text, k)` yang menggeser setiap huruf kecil sejauh k posisi ke depan dalam alfabet, kembali dari z ke a. Karakter lain tetap sama.",
+  "inputDescription": "String `text` dan bilangan bulat `k` (0 <= k <= 25).",
+  "outputDescription": "String yang sudah digeser."
+ },
+ "GATE // EVEN COUNTER": {
+  "description": "Tulis metode `solve(nums)` yang menghitung angka genap dalam array.",
+  "inputDescription": "Array bilangan bulat `nums` (boleh kosong).",
+  "outputDescription": "Berapa banyak elemen yang genap."
+ },
+ "GATE // MIRROR NUMBER": {
+  "description": "Tulis metode `solve(n)` yang mengembalikan true jika angka terbaca sama dari depan dan belakang (tidak perlu string, tapi boleh).",
+  "inputDescription": "Bilangan bulat `n` (0 <= n <= 1000000000).",
+  "outputDescription": "true atau false."
+ },
+ "GATE // TITLE CASE": {
+  "description": "Tulis metode `solve(text)` yang mengubah huruf pertama setiap kata menjadi huruf besar. Kata dipisahkan oleh satu spasi; huruf lainnya tetap.",
+  "inputDescription": "String `text` berisi kata huruf kecil dan spasi tunggal.",
+  "outputDescription": "String dengan setiap kata berawalan huruf besar."
+ },
+ "GATE // TWIN SUM": {
+  "description": "Tulis metode `solve(nums, target)` yang mengembalikan indeks [i, j] (i < j) dari dua angka yang jumlahnya sama dengan target. Ada tepat satu jawaban.",
+  "inputDescription": "Array `nums` (2 <= panjang <= 10000) dan bilangan bulat `target`.",
+  "outputDescription": "Array berisi dua indeks."
+ },
+ "GATE // BRACKET VAULT": {
+  "description": "Tulis metode `solve(s)` yang mengembalikan true jika setiap kurung ( [ { ditutup oleh pasangannya ) ] } dalam urutan yang benar.",
+  "inputDescription": "String `s` yang hanya berisi karakter ()[]{}.",
+  "outputDescription": "true atau false."
+ },
+ "GATE // LONGEST STREAK": {
+  "description": "Tulis metode `solve(s)` yang mengembalikan panjang deretan terpanjang karakter yang sama secara berurutan.",
+  "inputDescription": "String `s` (boleh kosong).",
+  "outputDescription": "Panjang deretan terpanjang."
+ },
+ "GATE // LOST PACKET": {
+  "description": "Tulis metode `solve(nums)` yang mengembalikan satu angka yang hilang dari rentang 0..n. Array berisi n angka berbeda dari rentang itu.",
+  "inputDescription": "Array berisi n bilangan bulat berbeda antara 0 dan n.",
+  "outputDescription": "Angka yang hilang."
+ },
+ "GATE // ROMAN DECODER": {
+  "description": "Tulis metode `solve(roman)` yang mengubah angka Romawi (I, V, X, L, C, D, M) menjadi bilangan bulat.",
+  "inputDescription": "Angka Romawi yang valid antara 1 dan 3999.",
+  "outputDescription": "Nilainya."
+ },
+ "GATE // MATRIX TRACE": {
+  "description": "Tulis metode `solve(grid)` yang mengembalikan jumlah diagonal utama (dari kiri atas ke kanan bawah) sebuah matriks persegi.",
+  "inputDescription": "Matriks persegi `grid` (1 <= ukuran <= 50).",
+  "outputDescription": "Jumlah grid[i][i]."
+ },
+ "GATE // RUN-LENGTH PACK": {
+  "description": "Tulis metode `solve(s)` yang memampatkan string: setiap deretan karakter yang sama menjadi karakter itu diikuti panjang deretannya.",
+  "inputDescription": "String huruf kecil `s` (boleh kosong).",
+  "outputDescription": "String yang dimampatkan."
+ },
+ "GATE // PEAK SEGMENT": {
+  "description": "Tulis metode `solve(nums)` yang mengembalikan jumlah terbesar yang mungkin dari bagian array yang bersambung dan tidak kosong.",
+  "inputDescription": "Array bilangan bulat `nums` (panjang >= 1).",
+  "outputDescription": "Jumlah subarray maksimum."
+ },
+ "GATE // PRIME FIELD": {
+  "description": "Tulis metode `solve(n)` yang mengembalikan berapa banyak bilangan prima yang kurang dari atau sama dengan n.",
+  "inputDescription": "Bilangan bulat `n` (0 <= n <= 1000000).",
+  "outputDescription": "Banyaknya bilangan prima <= n."
+ },
+ "GATE // UNIQUE WINDOW": {
+  "description": "Tulis metode `solve(s)` yang mengembalikan panjang bagian bersambung terpanjang dari string tanpa karakter berulang.",
+  "inputDescription": "String `s` (boleh kosong).",
+  "outputDescription": "Panjang substring terpanjang tanpa pengulangan."
+ },
+ "GATE // ROTATION DRIVE": {
+  "description": "Tulis metode `solve(nums, k)` yang memutar array sejauh k langkah ke kanan (elemen terakhir pindah ke depan, k kali).",
+  "inputDescription": "Array `nums` (boleh kosong) dan bilangan bulat `k` (0 <= k <= 1000000).",
+  "outputDescription": "Array yang sudah diputar."
+ }
+}

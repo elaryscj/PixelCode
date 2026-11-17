@@ -1,0 +1,212 @@
+{
+ "GATE // PARITY LOCK": {
+  "description": "编写方法 `solve(n)`：如果整数是偶数返回 true，否则返回 false。",
+  "inputDescription": "整数 `n`（-1000 <= n <= 1000）。",
+  "outputDescription": "布尔值 true 或 false。"
+ },
+ "GATE // FIZZ PROTOCOL": {
+  "description": "编写方法 `solve(n)`：如果 n 同时能被 3 和 5 整除返回 \"FizzBuzz\"，能被 3 整除返回 \"Fizz\"，能被 5 整除返回 \"Buzz\"，否则返回该数字的字符串形式。",
+  "inputDescription": "正整数 `n`。",
+  "outputDescription": "一个字符串。"
+ },
+ "GATE // FACTORIAL CORE": {
+  "description": "编写方法 `solve(n)`：返回 n!（n 的阶乘）。0! 等于 1。",
+  "inputDescription": "整数 `n`（0 <= n <= 10）。",
+  "outputDescription": "n 的阶乘。"
+ },
+ "GATE // SQUARE GRID": {
+  "description": "编写方法 `solve(nums)`：返回一个新数组，其中每个数字都取平方。",
+  "inputDescription": "整数数组 `nums`（可以为空）。",
+  "outputDescription": "平方组成的数组，顺序不变。"
+ },
+ "GATE // NEURAL SUM": {
+  "description": "编写方法 `solve(a, b)`：返回两个整数之和。",
+  "inputDescription": "两个整数 `a` 和 `b`（-1000 <= a, b <= 1000）。",
+  "outputDescription": "整数 a + b。"
+ },
+ "GATE // CYBER MIRROR": {
+  "description": "编写方法 `solve(str)`：如果字符串正读和反读都一样返回 true，否则返回 false。",
+  "inputDescription": "由小写字母和数字组成的字符串 `str`。",
+  "outputDescription": "布尔值 true 或 false。"
+ },
+ "GATE // MAX SIGNAL": {
+  "description": "编写方法 `solve(nums)`：返回数组中最大的数。",
+  "inputDescription": "数字数组 `nums`（长度 >= 1）。",
+  "outputDescription": "数组中的最大值。"
+ },
+ "GATE // DATA REVERSAL": {
+  "description": "编写方法 `solve(str)`：返回反转后的字符串。",
+  "inputDescription": "字符串 `str`。",
+  "outputDescription": "反转后的字符串。"
+ },
+ "GATE // VOWEL SCAN": {
+  "description": "编写方法 `solve(str)`：统计小写字符串中元音字母（a, e, i, o, u）的个数。",
+  "inputDescription": "小写字符串 `str`。",
+  "outputDescription": "元音的个数。"
+ },
+ "GATE // ARRAY TOTAL": {
+  "description": "编写方法 `solve(nums)`：返回数组中所有数字的和。",
+  "inputDescription": "整数数组 `nums`（可以为空）。",
+  "outputDescription": "所有元素之和（空数组为 0）。"
+ },
+ "GATE // MIN SIGNAL": {
+  "description": "编写方法 `solve(nums)`：返回数组中最小的数。",
+  "inputDescription": "整数数组 `nums`（长度 >= 1）。",
+  "outputDescription": "最小值。"
+ },
+ "GATE // NEGATIVE SCAN": {
+  "description": "编写方法 `solve(nums)`：统计数组中负数的个数。",
+  "inputDescription": "整数数组 `nums`（可以为空）。",
+  "outputDescription": "小于零的元素个数。"
+ },
+ "GATE // CAPS LOCK": {
+  "description": "编写方法 `solve(str)`：返回全部转为大写的字符串。",
+  "inputDescription": "由字母、数字和空格组成的字符串 `str`。",
+  "outputDescription": "转为大写后的同一字符串。"
+ },
+ "GATE // ABSOLUTE ZERO": {
+  "description": "编写方法 `solve(n)`：返回 n 的绝对值（到零的距离）。",
+  "inputDescription": "整数 `n`（-10000 <= n <= 10000）。",
+  "outputDescription": "n 的绝对值。"
+ },
+ "GATE // LAST BYTE": {
+  "description": "编写方法 `solve(str)`：以字符串形式返回字符串的最后一个字符。",
+  "inputDescription": "非空字符串 `str`。",
+  "outputDescription": "长度为 1 的字符串。"
+ },
+ "GATE // FIBONACCI STREAM": {
+  "description": "编写方法 `solve(n)`：返回第 n 个斐波那契数。F(0) = 0，F(1) = 1，F(n) = F(n-1) + F(n-2)。",
+  "inputDescription": "整数 `n`（0 <= n <= 40）。",
+  "outputDescription": "F(n)。"
+ },
+ "GATE // PRIME SENTRY": {
+  "description": "编写方法 `solve(n)`：如果 n 是质数返回 true。",
+  "inputDescription": "整数 `n`（0 <= n <= 100000）。",
+  "outputDescription": "n 是质数返回 true，否则返回 false。"
+ },
+ "GATE // DIGIT CRUSHER": {
+  "description": "编写方法 `solve(n)`：返回 n 的各位数字之和。",
+  "inputDescription": "整数 `n`（0 <= n <= 1000000000）。",
+  "outputDescription": "各位数字之和。"
+ },
+ "GATE // WORD COUNTER": {
+  "description": "编写方法 `solve(text)`：统计文本中的单词数。单词之间用一个或多个空格分隔；开头和结尾也可能有空格。",
+  "inputDescription": "字符串 `text`。",
+  "outputDescription": "单词个数。"
+ },
+ "GATE // ANAGRAM LOCK": {
+  "description": "编写方法 `solve(a, b)`：如果 `b` 是 `a` 的变位词（字母相同，且每个字母出现次数相同）返回 true。",
+  "inputDescription": "两个小写字符串 `a` 和 `b`。",
+  "outputDescription": "true 或 false。"
+ },
+ "GATE // RUNNER-UP": {
+  "description": "编写方法 `solve(nums)`：返回数组中第二大的【不同】值。",
+  "inputDescription": "至少包含两个不同值的数组 `nums`。",
+  "outputDescription": "第二大的不同值。"
+ },
+ "GATE // ARRAY FLIP": {
+  "description": "编写方法 `solve(nums)`：返回一个元素顺序反转的新数组。",
+  "inputDescription": "整数数组 `nums`（可以为空）。",
+  "outputDescription": "反转后的数组。"
+ },
+ "GATE // FREQUENCY SCAN": {
+  "description": "编写方法 `solve(str)`：返回出现次数最多的字母。如果有多个字母并列，返回字母表中最靠前的那个。",
+  "inputDescription": "非空的小写字符串 `str`（仅含字母）。",
+  "outputDescription": "只含一个字母的字符串。"
+ },
+ "GATE // BINARY ENCODER": {
+  "description": "编写方法 `solve(n)`：返回 n 的二进制（基数 2）表示，不含前导零。",
+  "inputDescription": "整数 `n`（0 <= n <= 1000000）。",
+  "outputDescription": "以字符串表示的二进制形式。"
+ },
+ "GATE // GCD CIPHER": {
+  "description": "编写方法 `solve(a, b)`：返回 a 和 b 的最大公约数。",
+  "inputDescription": "两个正整数 `a` 和 `b`（<= 1000000）。",
+  "outputDescription": "gcd(a, b)。"
+ },
+ "GATE // DUPLICATE PURGE": {
+  "description": "编写方法 `solve(nums)`：去除重复的值，每个值保留第一次出现，并保持原来的顺序。",
+  "inputDescription": "整数数组 `nums`（可以为空）。",
+  "outputDescription": "去重后的数组。"
+ },
+ "GATE // ORDER CHECK": {
+  "description": "编写方法 `solve(nums)`：如果数组按非递减顺序排列返回 true。",
+  "inputDescription": "整数数组 `nums`（可以为空）。",
+  "outputDescription": "true 或 false。"
+ },
+ "GATE // CAESAR SHIFT": {
+  "description": "编写方法 `solve(text, k)`：把每个小写字母在字母表中向后移动 k 位，z 之后回到 a。其他字符保持不变。",
+  "inputDescription": "字符串 `text` 和整数 `k`（0 <= k <= 25）。",
+  "outputDescription": "移位后的字符串。"
+ },
+ "GATE // EVEN COUNTER": {
+  "description": "编写方法 `solve(nums)`：统计数组中偶数的个数。",
+  "inputDescription": "整数数组 `nums`（可以为空）。",
+  "outputDescription": "偶数元素的个数。"
+ },
+ "GATE // MIRROR NUMBER": {
+  "description": "编写方法 `solve(n)`：如果这个数正读和反读都一样返回 true（不需要用字符串，但可以用）。",
+  "inputDescription": "整数 `n`（0 <= n <= 1000000000）。",
+  "outputDescription": "true 或 false。"
+ },
+ "GATE // TITLE CASE": {
+  "description": "编写方法 `solve(text)`：把每个单词的首字母改为大写。单词之间用单个空格分隔；其他字母保持不变。",
+  "inputDescription": "由小写单词和单个空格组成的字符串 `text`。",
+  "outputDescription": "每个单词首字母大写后的字符串。"
+ },
+ "GATE // TWIN SUM": {
+  "description": "编写方法 `solve(nums, target)`：返回和为 target 的两个数的下标 [i, j]（i < j）。答案恰好有一个。",
+  "inputDescription": "数组 `nums`（2 <= 长度 <= 10000）和整数 `target`。",
+  "outputDescription": "包含两个下标的数组。"
+ },
+ "GATE // BRACKET VAULT": {
+  "description": "编写方法 `solve(s)`：如果每个括号 ( [ { 都按正确顺序被对应的 ) ] } 闭合，返回 true。",
+  "inputDescription": "只包含字符 ()[]{} 的字符串 `s`。",
+  "outputDescription": "true 或 false。"
+ },
+ "GATE // LONGEST STREAK": {
+  "description": "编写方法 `solve(s)`：返回连续相同字符组成的最长片段的长度。",
+  "inputDescription": "字符串 `s`（可以为空）。",
+  "outputDescription": "最长片段的长度。"
+ },
+ "GATE // LOST PACKET": {
+  "description": "编写方法 `solve(nums)`：返回 0..n 范围内缺失的那个数。数组包含该范围内 n 个互不相同的数。",
+  "inputDescription": "由 0 到 n 之间 n 个互不相同的整数组成的数组。",
+  "outputDescription": "缺失的数。"
+ },
+ "GATE // ROMAN DECODER": {
+  "description": "编写方法 `solve(roman)`：把罗马数字（I, V, X, L, C, D, M）转换为整数。",
+  "inputDescription": "1 到 3999 之间的有效罗马数字。",
+  "outputDescription": "它的值。"
+ },
+ "GATE // MATRIX TRACE": {
+  "description": "编写方法 `solve(grid)`：返回方阵主对角线（从左上到右下）上元素之和。",
+  "inputDescription": "方阵 `grid`（1 <= 边长 <= 50）。",
+  "outputDescription": "grid[i][i] 之和。"
+ },
+ "GATE // RUN-LENGTH PACK": {
+  "description": "编写方法 `solve(s)`：压缩字符串：每段连续相同的字符变成该字符加上这段的长度。",
+  "inputDescription": "小写字符串 `s`（可以为空）。",
+  "outputDescription": "压缩后的字符串。"
+ },
+ "GATE // PEAK SEGMENT": {
+  "description": "编写方法 `solve(nums)`：返回数组中连续且非空的一段所能得到的最大和。",
+  "inputDescription": "整数数组 `nums`（长度 >= 1）。",
+  "outputDescription": "最大子数组和。"
+ },
+ "GATE // PRIME FIELD": {
+  "description": "编写方法 `solve(n)`：返回小于或等于 n 的质数个数。",
+  "inputDescription": "整数 `n`（0 <= n <= 1000000）。",
+  "outputDescription": "<= n 的质数个数。"
+ },
+ "GATE // UNIQUE WINDOW": {
+  "description": "编写方法 `solve(s)`：返回字符串中不含重复字符的最长连续部分的长度。",
+  "inputDescription": "字符串 `s`（可以为空）。",
+  "outputDescription": "无重复字符的最长子串长度。"
+ },
+ "GATE // ROTATION DRIVE": {
+  "description": "编写方法 `solve(nums, k)`：把数组向右旋转 k 步（最后一个元素移到最前面，重复 k 次）。",
+  "inputDescription": "数组 `nums`（可以为空）和整数 `k`（0 <= k <= 1000000）。",
+  "outputDescription": "旋转后的数组。"
+ }
+}

@@ -1,7 +1,7 @@
 // app/routes/login.tsx
 // Secure Authorization Screen matching PixelCode Arena Cyberpunk Terminal
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash, FaGamepad, FaWifi } from "react-icons/fa";
 import { loginUser, registerUser, AuthError } from "~/api/auth";
@@ -11,6 +11,10 @@ export default function LoginRoute() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const ping = usePing();
+  // where to go after signing in, e.g. an invite link (/join/CODE); only paths inside this site
+  const [params] = useSearchParams();
+  const rawNext = params.get("next") ?? "";
+  const next = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/";
 
   // Mode: "login" or "register"
   const [isRegister, setIsRegister] = useState(false);
@@ -50,11 +54,11 @@ export default function LoginRoute() {
         const res = await registerUser(trimmedUser, password, email.trim());
         setSuccessMessage(t("au_registered"));
         setTimeout(() => {
-          navigate("/");
+          navigate(next);
         }, 800);
       } else {
         await loginUser(trimmedUser, password);
-        navigate("/");
+        navigate(next);
       }
     } catch (err) {
       if (err instanceof AuthError) {
