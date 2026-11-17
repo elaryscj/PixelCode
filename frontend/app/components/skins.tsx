@@ -1,92 +1,164 @@
-// app/components/skins.tsx — skins shared by the store (large art) and the game (small art)
-import type { ReactElement } from "react";
+// app/components/skins.tsx — skins shared by the store, the game, practice, results and the admin page.
+// Every skin is a pixel texture (see game/skinRig.ts) animated in place: idle, walk, jump, fall, think, win, lose.
+// Built-in skins live in game/builtinSkins.ts; skins made by an administrator come from the server.
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState, type ReactElement } from "react";
 import { API_BASE } from "~/api/http";
+import { BUILTIN_SKINS, pixelSkinToCanvas } from "~/game/builtinSkins";
+import { FRAME_H, FRAME_W, TEX_H, TEX_W, buildSheet, type AnimId, type Sheet } from "~/game/skinRig";
 
 export type SkinId = "neon_ronin" | "crimson_cipher" | "byte_knight" | "pumpkin_phantom";
 export type SkinSize = "large" | "small";
+export type { AnimId };
 
-type ArtProps = { className?: string };
+const DEFAULT_SKIN = "neon_ronin";
 
-// Pixel art exported from the design: /public/skins/<id>-large.* (store) and <id>-small.* (match)
-const FILES: Record<string, string> = {
-  neon_ronin: "png",
-  crimson_cipher: "png",
-  pumpkin_phantom: "svg",
+export const textureUrl = (id: string) => `${API_BASE}/cosmetics/${encodeURIComponent(id)}/texture`;
+export const legacyImageUrl = (id: string) => `${API_BASE}/cosmetics/${encodeURIComponent(id)}/image`;
+
+/** null = an older admin skin that is only a picture (shown as it is, not animated) */
+const sheets = new Map<string, Promise<Sheet | null>>();
+
+function loadImage(src: string): Promise<HTMLImageElement | null> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
+export function loadSheet(id: string | null | undefined): Promise<Sheet | null> {
+  const key = id && (id in BUILTIN_SKINS || id.startsWith("c_")) ? id : DEFAULT_SKIN;
+  let p = sheets.get(key);
+  if (!p) {
+    p = key.startsWith("c_")
+      ? loadImage(textureUrl(key)).then((img) =>
+          img && img.naturalWidth === TEX_W && img.naturalHeight === TEX_H ? buildSheet(img) : null,
+        )
+      : Promise.resolve(buildSheet(pixelSkinToCanvas(BUILTIN_SKINS[key])));
+    sheets.set(key, p);
+  }
+  return p;
+}
+
+/** after an admin changes a skin: draw it again from the new texture */
+export function forgetSkin(id: string) {
+  sheets.delete(id);
+}
+
+export type SkinHandle = { setAnim: (anim: AnimId) => void };
+
+type AnimatedProps = {
+  id?: string | null;
+  /** animation to play; the game changes it every frame through the ref instead (no re-render) */
+  anim?: AnimId;
+  /** draw from this sheet instead of loading `id` (the editor's live preview) */
+  sheet?: Sheet | null;
+  className?: string;
+  title?: string;
 };
 
-const ByteKnight = ({ className }: ArtProps) => (
-  <svg viewBox="0 0 100 120" className={className} shapeRendering="crispEdges">
-    {/* Mecha Helmet / Crest */}
-    <path d="M 46 8 L 54 8 L 52 24 L 48 24 Z" fill="#eab308" />
-    <rect x="34" y="20" width="32" height="26" fill="#713f12" />
-    <rect x="36" y="22" width="28" height="22" fill="#a16207" />
-    
-    {/* Cyan Visor */}
-    <rect x="38" y="30" width="24" height="6" fill="#00f0ff" className="animate-pulse" />
-    
-    {/* Neck */}
-    <rect x="44" y="46" width="12" height="6" fill="#362208" />
+const reducedMotion = () =>
+  typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
-    {/* Armor Torso */}
-    <rect x="30" y="52" width="40" height="34" fill="#854d0e" />
-    <rect x="36" y="56" width="28" height="24" fill="#ca8a04" />
-    <rect x="46" y="60" width="8" height="16" fill="#facc15" />
+/** One skin, animated in a FRAME_W x FRAME_H canvas scaled up without blurring. */
+export const AnimatedSkin = forwardRef<SkinHandle, AnimatedProps>(function AnimatedSkin(
+  { id, anim = "idle", sheet: given, className, title },
+  ref,
+) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [sheet, setSheet] = useState<Sheet | null | undefined>(given ?? undefined);
+  const state = useRef({ anim, since: 0, drawn: "" });
 
-    {/* Pauldrons / Shoulders */}
-    <polygon points="18,52 32,52 30,66 20,66" fill="#ca8a04" />
-    <polygon points="82,52 68,52 70,66 80,66" fill="#ca8a04" />
+  useImperativeHandle(ref, () => ({
+    setAnim(a: AnimId) {
+      if (state.current.anim !== a) {
+        state.current.anim = a;
+        state.current.since = performance.now();
+      }
+    },
+  }));
 
-    {/* Arms */}
-    <rect x="20" y="66" width="10" height="20" fill="#713f12" />
-    <rect x="70" y="66" width="10" height="20" fill="#713f12" />
-    <rect x="20" y="84" width="10" height="8" fill="#ca8a04" />
-    <rect x="70" y="84" width="10" height="8" fill="#ca8a04" />
+  useEffect(() => {
+    if (state.current.anim !== anim) {
+      state.current.anim = anim;
+      state.current.since = performance.now();
+    }
+  }, [anim]);
 
-    {/* Legs */}
-    <rect x="34" y="86" width="14" height="24" fill="#713f12" />
-    <rect x="52" y="86" width="14" height="24" fill="#713f12" />
-    <rect x="36" y="90" width="10" height="16" fill="#ca8a04" />
-    <rect x="54" y="90" width="10" height="16" fill="#ca8a04" />
+  useEffect(() => {
+    if (given !== undefined) {
+      setSheet(given);
+      state.current.drawn = "";
+      return;
+    }
+    let alive = true;
+    setSheet(undefined);
+    loadSheet(id).then((s) => alive && setSheet(s));
+    return () => {
+      alive = false;
+    };
+  }, [id, given]);
 
-    {/* Boots */}
-    <rect x="32" y="108" width="16" height="6" fill="#362208" />
-    <rect x="52" y="108" width="16" height="6" fill="#362208" />
-    <rect x="34" y="108" width="12" height="2" fill="#facc15" />
-    <rect x="54" y="108" width="12" height="2" fill="#facc15" />
-  </svg>
-);
+  useEffect(() => {
+    if (!sheet) return;
+    const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) return;
+    ctx.imageSmoothingEnabled = false;
+    state.current.drawn = "";
+    const still = reducedMotion();
+    let raf = 0;
+    const tick = () => {
+      const { anim: a, since } = state.current;
+      const info = sheet.index[a];
+      const k = still ? 0 : Math.floor((performance.now() - since) / info.ms) % info.count;
+      const key = `${a}:${k}`;
+      if (key !== state.current.drawn) {
+        state.current.drawn = key;
+        ctx.clearRect(0, 0, FRAME_W, FRAME_H);
+        ctx.drawImage(sheet.canvas, (info.start + k) * FRAME_W, 0, FRAME_W, FRAME_H, 0, 0, FRAME_W, FRAME_H);
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    tick();
+    return () => cancelAnimationFrame(raf);
+  }, [sheet]);
 
-/** Draws a skin by id: the big version for the store, the small one for the match. */
-export function SkinArt({
-  id,
-  size = "small",
-  className,
-}: {
-  id?: string | null;
-  size?: SkinSize;
-  className?: string;
-}): ReactElement {
-  if (id && id.startsWith("c_")) {
-    // skin published by an administrator: the picture comes from the server
+  if (sheet === null && id) {
+    // an older admin skin made from a single picture
     return (
       <img
-        src={`${API_BASE}/cosmetics/${id}/image`}
+        src={legacyImageUrl(id)}
         alt=""
+        title={title}
         draggable={false}
         className={className}
         style={{ imageRendering: "pixelated", objectFit: "contain", objectPosition: "center bottom" }}
       />
     );
   }
-  const skin = id && (id in FILES || id === "byte_knight") ? id : "neon_ronin";
-  if (skin === "byte_knight") return <ByteKnight className={className} />;
   return (
-    <img
-      src={`/skins/${skin}-${size}.${FILES[skin]}`}
-      alt=""
-      draggable={false}
+    <canvas
+      ref={canvasRef}
+      width={FRAME_W}
+      height={FRAME_H}
+      title={title}
       className={className}
       style={{ imageRendering: "pixelated", objectFit: "contain", objectPosition: "center bottom" }}
     />
   );
+});
+
+/** Draws a skin by id (idle unless told otherwise). `size` is kept for older callers; the art is the same. */
+export function SkinArt({
+  id,
+  anim = "idle",
+  className,
+}: {
+  id?: string | null;
+  size?: SkinSize;
+  anim?: AnimId;
+  className?: string;
+}): ReactElement {
+  return <AnimatedSkin id={id} anim={anim} className={className} />;
 }

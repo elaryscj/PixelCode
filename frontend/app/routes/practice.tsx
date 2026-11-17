@@ -6,7 +6,7 @@ import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { MapLayer, animateMap } from "~/components/game/MapLayer";
-import { SkinArt } from "~/components/skins";
+import { AnimatedSkin, type SkinHandle } from "~/components/skins";
 import { getCurrentUser } from "~/api/auth";
 import { MAPS, getMap, worldTime } from "~/game/maps";
 import TouchControls from "~/components/game/TouchControls";
@@ -42,6 +42,7 @@ function PracticeScreen() {
   const arenaRef = useRef<HTMLDivElement | null>(null);
   const playerDom = useRef<HTMLDivElement | null>(null);
   const spriteDom = useRef<HTMLDivElement | null>(null);
+  const skinRef = useRef<SkinHandle | null>(null);
   unlockedRef.current = unlocked;
   nearRef.current = near;
 
@@ -146,10 +147,10 @@ function PracticeScreen() {
         playerDom.current.style.bottom = `${p.y}%`;
       }
       if (spriteDom.current) {
-        const bob = p.isGrounded && Math.abs(p.vx) > 0.08 ? Math.abs(Math.sin(now / 90)) * 3 : 0;
         const squash = p.bounced < 8 ? ` scaleY(${1.25 - p.bounced * 0.03})` : "";
-        spriteDom.current.style.transform = `translateY(${-bob}px) scaleX(${p.facingLeft ? -1 : 1})${squash}`;
+        spriteDom.current.style.transform = `scaleX(${p.facingLeft ? -1 : 1})${squash}`;
       }
+      skinRef.current?.setAnim(!p.isGrounded ? (p.vy > 0 ? "jump" : "fall") : Math.abs(p.vx) > 0.08 ? "walk" : "idle");
       tPrev = t;
       id = requestAnimationFrame(loop);
     };
@@ -230,7 +231,7 @@ function PracticeScreen() {
             style={{ left: `${map.start.x}%`, bottom: `${map.start.y}%`, width: `${CHAR_W}%`, height: `${CHAR_H}%` }}
           >
             <div ref={spriteDom} className="w-full h-full">
-              <SkinArt id={skin} size="small" className="w-full h-full" />
+              <AnimatedSkin ref={skinRef} id={skin} className="w-full h-full" />
             </div>
           </div>
         </div>

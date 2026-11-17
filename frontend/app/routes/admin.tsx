@@ -13,6 +13,8 @@ import {
   type AdminChallenge,
   type ChallengeForm,
   createCosmetic,
+  getCosmeticTexture,
+  updateCosmetic,
   listCosmetics,
   toggleCosmetic,
   type AdminCosmetic,
@@ -20,27 +22,9 @@ import {
   changeBalance,
   type AdminUser,
 } from "~/api/admin";
-import { SkinArt } from "~/components/skins";
+import { SkinArt, forgetSkin } from "~/components/skins";
+import SkinEditor, { builtinTexture, loadTextureFromUrl, textureToDataUrl } from "~/components/admin/SkinEditor";
 import EnglishOnly from "~/components/EnglishOnly";
-
-/** Shrinks the picked picture to at most 320px and returns a PNG data URL. */
-function readImage(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => {
-      const k = Math.min(1, 320 / Math.max(img.width, img.height));
-      const canvas = document.createElement("canvas");
-      canvas.width = Math.max(1, Math.round(img.width * k));
-      canvas.height = Math.max(1, Math.round(img.height * k));
-      canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height);
-      URL.revokeObjectURL(url);
-      resolve(canvas.toDataURL("image/png"));
-    };
-    img.onerror = () => reject(new Error("This file is not a readable image"));
-    img.src = url;
-  });
-}
 
 const empty: ChallengeForm = {
   title: "GATE // ",
@@ -84,7 +68,9 @@ function AdminScreen() {
   };
   const [skinName, setSkinName] = useState("");
   const [skinPrice, setSkinPrice] = useState("500");
-  const [skinImage, setSkinImage] = useState<string | null>(null);
+  const [skinPixels, setSkinPixels] = useState<Uint8ClampedArray>(() => builtinTexture("neon_ronin"));
+  /** the store item being edited (null = a new one) */
+  const [editingSkin, setEditingSkin] = useState<string | null>(null);
   const [skinMsg, setSkinMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const reloadSkins = () => listCosmetics().then(setSkins).catch(() => {});
@@ -92,15 +78,35 @@ function AdminScreen() {
   const publishSkin = async (e: FormEvent) => {
     e.preventDefault();
     setSkinMsg(null);
-    if (!skinImage) return setSkinMsg({ ok: false, text: "Choose a picture for the item" });
     try {
-      const c = await createCosmetic(skinName, Number(skinPrice), skinImage);
-      setSkinMsg({ ok: true, text: `Published "${c.name}" in the store` });
-      setSkinName("");
-      setSkinImage(null);
+      const texture = textureToDataUrl(skinPixels);
+      if (editingSkin) {
+        const c = await updateCosmetic(editingSkin, skinName, Number(skinPrice), texture);
+        forgetSkin(c.id);
+        setSkinMsg({ ok: true, text: `Saved "${c.name}"` });
+      } else {
+        const c = await createCosmetic(skinName, Number(skinPrice), texture);
+        setSkinMsg({ ok: true, text: `Published "${c.name}" in the store` });
+        setSkinName("");
+      }
       void reloadSkins();
     } catch (err) {
       setSkinMsg({ ok: false, text: err instanceof Error ? err.message : "Could not publish" });
+    }
+  };
+
+  const editSkin = async (id: string) => {
+    setSkinMsg(null);
+    try {
+      const c = await getCosmeticTexture(id);
+      if (!c.texture) return setSkinMsg({ ok: false, text: "This older item is a single picture and cannot be edited" });
+      setSkinPixels(await loadTextureFromUrl(c.texture));
+      setSkinName(c.name);
+      setSkinPrice(String(c.price));
+      setEditingSkin(id);
+      document.getElementById("skin-editor")?.scrollIntoView({ behavior: "smooth" });
+    } catch (err) {
+      setSkinMsg({ ok: false, text: err instanceof Error ? err.message : "Could not load the skin" });
     }
   };
 
@@ -227,34 +233,36 @@ function AdminScreen() {
           ))}
         </ul>
 
-        <h2 className="text-neon text-3xl mt-12 mb-3">&gt; NEW COSMETIC (STORE SKIN)</h2>
+        <h2 id="skin-editor" className="text-neon text-3xl mt-12 mb-3">
+          &gt; {editingSkin ? `EDIT STORE SKIN ${editingSkin}` : "NEW STORE SKIN"}
+        </h2>
         <form onSubmit={publishSkin} className="border-2 border-neon bg-[#070c1e]/90 p-6">
+          <SkinEditor pixels={skinPixels} onChange={setSkinPixels} />
           <label className={label}>ITEM NAME</label>
           <input className={field} value={skinName} onChange={(e) => setSkinName(e.target.value)} maxLength={40} />
           <label className={label}>PRICE (PIXELS)</label>
           <input className={field} type="number" min={0} value={skinPrice} onChange={(e) => setSkinPrice(e.target.value)} />
-          <label className={label}>PICTURE (PNG / JPEG / WebP / GIF)</label>
-          <input
-            type="file"
-            accept="image/png,image/jpeg,image/webp,image/gif"
-            className="font-sans text-white"
-            onChange={async (e) => {
-              const f = e.target.files?.[0];
-              if (!f) return;
-              try {
-                setSkinImage(await readImage(f));
-              } catch (err) {
-                setSkinMsg({ ok: false, text: err instanceof Error ? err.message : "Bad image" });
-              }
-            }}
-          />
-          {skinImage && <img src={skinImage} alt="" className="h-32 mt-3 border border-neon/50" style={{ imageRendering: "pixelated" }} />}
           {skinMsg && (
             <p className={`${skinMsg.ok ? "text-neon border-neon/40 bg-neon/10" : "text-pink border-pink/40 bg-pink/10"} text-xl mt-4 border px-3 py-2 font-sans`}>
               {skinMsg.text}
             </p>
           )}
-          <button className="w-full mt-6 py-3 bg-pink border-2 border-yellow text-black text-3xl">PUBLISH SKIN</button>
+          <button className="w-full mt-6 py-3 bg-pink border-2 border-yellow text-black text-3xl">
+            {editingSkin ? "SAVE CHANGES" : "PUBLISH SKIN"}
+          </button>
+          {editingSkin && (
+            <button
+              type="button"
+              onClick={() => {
+                setEditingSkin(null);
+                setSkinName("");
+                setSkinMsg(null);
+              }}
+              className="w-full mt-3 py-2 border-2 border-neon text-yellow text-xl"
+            >
+              CANCEL EDITING (MAKE A NEW SKIN)
+            </button>
+          )}
         </form>
 
         <ul className="flex flex-col gap-2 mt-4">
@@ -266,6 +274,11 @@ function AdminScreen() {
               </span>
               <span className="flex items-center gap-4">
                 <span className={c.published ? "text-neon text-xl" : "text-pink text-xl"}>{c.published ? "PUBLISHED" : "WITHDRAWN"}</span>
+                {c.animated && (
+                  <button onClick={() => editSkin(c.id)} className="border border-neon px-3 py-1 text-yellow text-xl hover:text-glow-sm">
+                    Edit
+                  </button>
+                )}
                 <button
                   onClick={() => toggleCosmetic(c.id, !c.published).then(reloadSkins)}
                   className="border border-neon px-3 py-1 text-yellow text-xl hover:text-glow-sm"
