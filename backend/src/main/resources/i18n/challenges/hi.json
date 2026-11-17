@@ -1,0 +1,212 @@
+{
+ "GATE // PARITY LOCK": {
+  "description": "एक मेथड `solve(n)` लिखें जो पूर्णांक सम हो तो true लौटाए, वरना false।",
+  "inputDescription": "एक पूर्णांक `n` (-1000 <= n <= 1000)।",
+  "outputDescription": "Boolean true या false।"
+ },
+ "GATE // FIZZ PROTOCOL": {
+  "description": "एक मेथड `solve(n)` लिखें जो n के 3 और 5 दोनों से भाग जाने पर \"FizzBuzz\", 3 से भाग जाने पर \"Fizz\", 5 से भाग जाने पर \"Buzz\", वरना संख्या को स्ट्रिंग के रूप में लौटाए।",
+  "inputDescription": "एक धनात्मक पूर्णांक `n`।",
+  "outputDescription": "एक स्ट्रिंग।"
+ },
+ "GATE // FACTORIAL CORE": {
+  "description": "एक मेथड `solve(n)` लिखें जो n! (n का फ़ैक्टोरियल) लौटाए। 0! = 1 है।",
+  "inputDescription": "एक पूर्णांक `n` (0 <= n <= 10)।",
+  "outputDescription": "n का फ़ैक्टोरियल।"
+ },
+ "GATE // SQUARE GRID": {
+  "description": "एक मेथड `solve(nums)` लिखें जो हर संख्या का वर्ग करके नई ऐरे लौटाए।",
+  "inputDescription": "पूर्णांकों की ऐरे `nums` (खाली हो सकती है)।",
+  "outputDescription": "वर्गों की ऐरे, उसी क्रम में।"
+ },
+ "GATE // NEURAL SUM": {
+  "description": "एक मेथड `solve(a, b)` लिखें जो दो पूर्णांकों का योग लौटाए।",
+  "inputDescription": "दो पूर्णांक `a` और `b` (-1000 <= a, b <= 1000)।",
+  "outputDescription": "पूर्णांक a + b।"
+ },
+ "GATE // CYBER MIRROR": {
+  "description": "एक मेथड `solve(str)` लिखें जो स्ट्रिंग आगे और पीछे से एक जैसी पढ़ी जाए तो true लौटाए, वरना false।",
+  "inputDescription": "छोटे अक्षरों और अंकों वाली स्ट्रिंग `str`।",
+  "outputDescription": "Boolean true या false।"
+ },
+ "GATE // MAX SIGNAL": {
+  "description": "एक मेथड `solve(nums)` लिखें जो ऐरे की सबसे बड़ी संख्या लौटाए।",
+  "inputDescription": "संख्याओं की ऐरे `nums` (लंबाई >= 1)।",
+  "outputDescription": "ऐरे की सबसे बड़ी संख्या।"
+ },
+ "GATE // DATA REVERSAL": {
+  "description": "एक मेथड `solve(str)` लिखें जो स्ट्रिंग को उल्टा करके लौटाए।",
+  "inputDescription": "एक स्ट्रिंग `str`।",
+  "outputDescription": "उल्टी स्ट्रिंग।"
+ },
+ "GATE // VOWEL SCAN": {
+  "description": "एक मेथड `solve(str)` लिखें जो छोटे अक्षरों वाली स्ट्रिंग में स्वर (a, e, i, o, u) गिने।",
+  "inputDescription": "छोटे अक्षरों वाली स्ट्रिंग `str`।",
+  "outputDescription": "स्वरों की संख्या।"
+ },
+ "GATE // ARRAY TOTAL": {
+  "description": "एक मेथड `solve(nums)` लिखें जो ऐरे की सभी संख्याओं का योग लौटाए।",
+  "inputDescription": "पूर्णांकों की ऐरे `nums` (खाली हो सकती है)।",
+  "outputDescription": "सभी तत्वों का योग (खाली ऐरे के लिए 0)।"
+ },
+ "GATE // MIN SIGNAL": {
+  "description": "एक मेथड `solve(nums)` लिखें जो ऐरे की सबसे छोटी संख्या लौटाए।",
+  "inputDescription": "पूर्णांकों की ऐरे `nums` (लंबाई >= 1)।",
+  "outputDescription": "न्यूनतम मान।"
+ },
+ "GATE // NEGATIVE SCAN": {
+  "description": "एक मेथड `solve(nums)` लिखें जो गिने कि ऐरे में कितनी संख्याएँ ऋणात्मक हैं।",
+  "inputDescription": "पूर्णांकों की ऐरे `nums` (खाली हो सकती है)।",
+  "outputDescription": "शून्य से छोटे तत्वों की संख्या।"
+ },
+ "GATE // CAPS LOCK": {
+  "description": "एक मेथड `solve(str)` लिखें जो स्ट्रिंग को बड़े अक्षरों में लौटाए।",
+  "inputDescription": "अक्षरों, अंकों और स्पेस वाली स्ट्रिंग `str`।",
+  "outputDescription": "वही स्ट्रिंग बड़े अक्षरों में।"
+ },
+ "GATE // ABSOLUTE ZERO": {
+  "description": "एक मेथड `solve(n)` लिखें जो n का निरपेक्ष मान (शून्य से उसकी दूरी) लौटाए।",
+  "inputDescription": "एक पूर्णांक `n` (-10000 <= n <= 10000)।",
+  "outputDescription": "n का निरपेक्ष मान।"
+ },
+ "GATE // LAST BYTE": {
+  "description": "एक मेथड `solve(str)` लिखें जो स्ट्रिंग का आख़िरी अक्षर स्ट्रिंग के रूप में लौटाए।",
+  "inputDescription": "एक खाली नहीं स्ट्रिंग `str`।",
+  "outputDescription": "लंबाई 1 की स्ट्रिंग।"
+ },
+ "GATE // FIBONACCI STREAM": {
+  "description": "एक मेथड `solve(n)` लिखें जो n-वाँ फ़िबोनाची नंबर लौटाए। F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2)।",
+  "inputDescription": "एक पूर्णांक `n` (0 <= n <= 40)।",
+  "outputDescription": "F(n)।"
+ },
+ "GATE // PRIME SENTRY": {
+  "description": "एक मेथड `solve(n)` लिखें जो n अभाज्य संख्या हो तो true लौटाए।",
+  "inputDescription": "एक पूर्णांक `n` (0 <= n <= 100000)।",
+  "outputDescription": "n अभाज्य हो तो true, वरना false।"
+ },
+ "GATE // DIGIT CRUSHER": {
+  "description": "एक मेथड `solve(n)` लिखें जो n के अंकों का योग लौटाए।",
+  "inputDescription": "एक पूर्णांक `n` (0 <= n <= 1000000000)।",
+  "outputDescription": "अंकों का योग।"
+ },
+ "GATE // WORD COUNTER": {
+  "description": "एक मेथड `solve(text)` लिखें जो टेक्स्ट में शब्द गिने। शब्द एक या ज़्यादा स्पेस से अलग होते हैं; शुरू और आख़िर में भी स्पेस हो सकते हैं।",
+  "inputDescription": "एक स्ट्रिंग `text`।",
+  "outputDescription": "शब्दों की संख्या।"
+ },
+ "GATE // ANAGRAM LOCK": {
+  "description": "एक मेथड `solve(a, b)` लिखें जो `b` अगर `a` का एनाग्राम हो (वही अक्षर, हर एक उतनी ही बार) तो true लौटाए।",
+  "inputDescription": "छोटे अक्षरों वाली दो स्ट्रिंग `a` और `b`।",
+  "outputDescription": "true या false।"
+ },
+ "GATE // RUNNER-UP": {
+  "description": "एक मेथड `solve(nums)` लिखें जो ऐरे का दूसरा सबसे बड़ा अलग (DISTINCT) मान लौटाए।",
+  "inputDescription": "कम से कम दो अलग मानों वाली ऐरे `nums`।",
+  "outputDescription": "दूसरा सबसे बड़ा अलग मान।"
+ },
+ "GATE // ARRAY FLIP": {
+  "description": "एक मेथड `solve(nums)` लिखें जो तत्वों को उल्टे क्रम में रखकर नई ऐरे लौटाए।",
+  "inputDescription": "पूर्णांकों की ऐरे `nums` (खाली हो सकती है)।",
+  "outputDescription": "उल्टी ऐरे।"
+ },
+ "GATE // FREQUENCY SCAN": {
+  "description": "एक मेथड `solve(str)` लिखें जो सबसे ज़्यादा बार आने वाला अक्षर लौटाए। बराबरी हो तो वर्णमाला में पहले आने वाला अक्षर लौटाएँ।",
+  "inputDescription": "छोटे अक्षरों वाली खाली नहीं स्ट्रिंग `str` (सिर्फ़ अक्षर)।",
+  "outputDescription": "एक अक्षर की स्ट्रिंग।"
+ },
+ "GATE // BINARY ENCODER": {
+  "description": "एक मेथड `solve(n)` लिखें जो n को बाइनरी (आधार 2) में, बिना शुरुआती शून्य के लौटाए।",
+  "inputDescription": "एक पूर्णांक `n` (0 <= n <= 1000000)।",
+  "outputDescription": "बाइनरी रूप, स्ट्रिंग के रूप में।"
+ },
+ "GATE // GCD CIPHER": {
+  "description": "एक मेथड `solve(a, b)` लिखें जो a और b का महत्तम समापवर्तक लौटाए।",
+  "inputDescription": "दो धनात्मक पूर्णांक `a` और `b` (<= 1000000)।",
+  "outputDescription": "gcd(a, b)।"
+ },
+ "GATE // DUPLICATE PURGE": {
+  "description": "एक मेथड `solve(nums)` लिखें जो दोहराए गए मान हटाए और हर मान की पहली उपस्थिति मूल क्रम में रखे।",
+  "inputDescription": "पूर्णांकों की ऐरे `nums` (खाली हो सकती है)।",
+  "outputDescription": "बिना दोहराव की ऐरे।"
+ },
+ "GATE // ORDER CHECK": {
+  "description": "एक मेथड `solve(nums)` लिखें जो ऐरे बढ़ते क्रम में (बराबर मान चल सकते हैं) हो तो true लौटाए।",
+  "inputDescription": "पूर्णांकों की ऐरे `nums` (खाली हो सकती है)।",
+  "outputDescription": "true या false।"
+ },
+ "GATE // CAESAR SHIFT": {
+  "description": "एक मेथड `solve(text, k)` लिखें जो हर छोटे अक्षर को वर्णमाला में k स्थान आगे खिसकाए, z के बाद फिर a आता है। बाकी अक्षर वैसे ही रहें।",
+  "inputDescription": "एक स्ट्रिंग `text` और एक पूर्णांक `k` (0 <= k <= 25)।",
+  "outputDescription": "खिसकाई गई स्ट्रिंग।"
+ },
+ "GATE // EVEN COUNTER": {
+  "description": "एक मेथड `solve(nums)` लिखें जो ऐरे में सम संख्याएँ गिने।",
+  "inputDescription": "पूर्णांकों की ऐरे `nums` (खाली हो सकती है)।",
+  "outputDescription": "सम तत्वों की संख्या।"
+ },
+ "GATE // MIRROR NUMBER": {
+  "description": "एक मेथड `solve(n)` लिखें जो संख्या आगे और पीछे से एक जैसी पढ़ी जाए तो true लौटाए (स्ट्रिंग ज़रूरी नहीं, पर इस्तेमाल कर सकते हैं)।",
+  "inputDescription": "एक पूर्णांक `n` (0 <= n <= 1000000000)।",
+  "outputDescription": "true या false।"
+ },
+ "GATE // TITLE CASE": {
+  "description": "एक मेथड `solve(text)` लिखें जो हर शब्द का पहला अक्षर बड़ा कर दे। शब्द एक स्पेस से अलग हैं; बाकी अक्षर वैसे ही रहें।",
+  "inputDescription": "छोटे अक्षरों वाले शब्दों और एकल स्पेस से बनी स्ट्रिंग `text`।",
+  "outputDescription": "हर शब्द बड़े पहले अक्षर के साथ।"
+ },
+ "GATE // TWIN SUM": {
+  "description": "एक मेथड `solve(nums, target)` लिखें जो उन दो संख्याओं के इंडेक्स [i, j] (i < j) लौटाए जिनका योग target है। ठीक एक ही उत्तर है।",
+  "inputDescription": "ऐरे `nums` (2 <= लंबाई <= 10000) और एक पूर्णांक `target`।",
+  "outputDescription": "दो इंडेक्स की ऐरे।"
+ },
+ "GATE // BRACKET VAULT": {
+  "description": "एक मेथड `solve(s)` लिखें जो हर ब्रैकेट ( [ { सही क्रम में अपने मिलते ) ] } से बंद हो तो true लौटाए।",
+  "inputDescription": "सिर्फ़ ()[]{} अक्षरों वाली स्ट्रिंग `s`।",
+  "outputDescription": "true या false।"
+ },
+ "GATE // LONGEST STREAK": {
+  "description": "एक मेथड `solve(s)` लिखें जो लगातार एक ही अक्षर की सबसे लंबी लड़ी की लंबाई लौटाए।",
+  "inputDescription": "एक स्ट्रिंग `s` (खाली हो सकती है)।",
+  "outputDescription": "सबसे लंबी लड़ी की लंबाई।"
+ },
+ "GATE // LOST PACKET": {
+  "description": "एक मेथड `solve(nums)` लिखें जो 0..n की रेंज से गायब एक संख्या लौटाए। ऐरे में उस रेंज की n अलग-अलग संख्याएँ हैं।",
+  "inputDescription": "0 और n के बीच n अलग-अलग पूर्णांकों की ऐरे।",
+  "outputDescription": "गायब संख्या।"
+ },
+ "GATE // ROMAN DECODER": {
+  "description": "एक मेथड `solve(roman)` लिखें जो रोमन अंक (I, V, X, L, C, D, M) को पूर्णांक में बदले।",
+  "inputDescription": "1 से 3999 के बीच एक सही रोमन अंक।",
+  "outputDescription": "उसका मान।"
+ },
+ "GATE // MATRIX TRACE": {
+  "description": "एक मेथड `solve(grid)` लिखें जो वर्ग मैट्रिक्स के मुख्य विकर्ण (ऊपर-बाएँ से नीचे-दाएँ) का योग लौटाए।",
+  "inputDescription": "वर्ग मैट्रिक्स `grid` (1 <= आकार <= 50)।",
+  "outputDescription": "grid[i][i] का योग।"
+ },
+ "GATE // RUN-LENGTH PACK": {
+  "description": "एक मेथड `solve(s)` लिखें जो स्ट्रिंग को छोटा करे: एक ही अक्षर की हर लड़ी वह अक्षर और उसके बाद लड़ी की लंबाई बन जाती है।",
+  "inputDescription": "छोटे अक्षरों वाली स्ट्रिंग `s` (खाली हो सकती है)।",
+  "outputDescription": "छोटी की गई स्ट्रिंग।"
+ },
+ "GATE // PEAK SEGMENT": {
+  "description": "एक मेथड `solve(nums)` लिखें जो ऐरे के किसी लगातार, खाली नहीं हिस्से का सबसे बड़ा संभव योग लौटाए।",
+  "inputDescription": "पूर्णांकों की ऐरे `nums` (लंबाई >= 1)।",
+  "outputDescription": "अधिकतम सबऐरे योग।"
+ },
+ "GATE // PRIME FIELD": {
+  "description": "एक मेथड `solve(n)` लिखें जो बताए कि n से छोटी या बराबर कितनी अभाज्य संख्याएँ हैं।",
+  "inputDescription": "एक पूर्णांक `n` (0 <= n <= 1000000)।",
+  "outputDescription": "<= n अभाज्य संख्याओं की गिनती।"
+ },
+ "GATE // UNIQUE WINDOW": {
+  "description": "एक मेथड `solve(s)` लिखें जो स्ट्रिंग के बिना दोहराए अक्षर वाले सबसे लंबे लगातार हिस्से की लंबाई लौटाए।",
+  "inputDescription": "एक स्ट्रिंग `s` (खाली हो सकती है)।",
+  "outputDescription": "बिना दोहराव वाली सबसे लंबी सबस्ट्रिंग की लंबाई।"
+ },
+ "GATE // ROTATION DRIVE": {
+  "description": "एक मेथड `solve(nums, k)` लिखें जो ऐरे को k कदम दाईं ओर घुमाए (आख़िरी तत्व सबसे आगे आता है, k बार)।",
+  "inputDescription": "ऐरे `nums` (खाली हो सकती है) और एक पूर्णांक `k` (0 <= k <= 1000000)।",
+  "outputDescription": "घुमाई गई ऐरे।"
+ }
+}

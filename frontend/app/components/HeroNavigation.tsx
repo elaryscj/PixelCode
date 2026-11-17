@@ -42,10 +42,13 @@ const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
         <Link to={"/profile"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
           {t("menu_profile")}
         </Link>
+        <Link to={"/progress"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
+          {t("menu_progress")}
+        </Link>
+        <Link to={"/settings"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
+          {t("settings")}
+        </Link>
       </div>
-      <Link to={"/settings"} className={secondary}>
-        {t("settings")}
-      </Link>
       {user?.admin && (
         <Link to={"/admin"} className={`${base} border-2 border-yellow text-yellow hover:text-glow-sm`}>
           ADMIN

@@ -34,4 +34,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByIdForUpdate(@org.springframework.data.repository.query.Param("id") Long id);
 
     long countByBotFalseAndRatingGreaterThan(int rating);
+
+    /** Season standings: real players with enough ranked matches this season, best rating first. */
+    List<User> findTop10ByBotFalseAndSeasonMatchesGreaterThanEqualOrderByRatingDescIdAsc(int minMatches);
+
+    long countByBotFalseAndSeasonMatchesGreaterThanEqualAndRatingGreaterThan(int minMatches, int rating);
+
+    /** New season: every rating moves halfway back to 1500 (1900 -> 1700, 1300 -> 1400). */
+    @org.springframework.data.jpa.repository.Modifying(clearAutomatically = true, flushAutomatically = true)
+    @org.springframework.data.jpa.repository.Query(
+            "update User u set u.rating = 1500 + (u.rating - 1500) / 2, u.seasonMatches = 0 where u.bot = false")
+    int softResetRatings();
 }

@@ -1,0 +1,212 @@
+{
+ "GATE // PARITY LOCK": {
+  "description": "اكتب دالة `solve(n)` تُرجع true إذا كان العدد زوجيًا، وإلا false.",
+  "inputDescription": "عدد صحيح `n` (-1000 <= n <= 1000).",
+  "outputDescription": "قيمة منطقية true أو false."
+ },
+ "GATE // FIZZ PROTOCOL": {
+  "description": "اكتب دالة `solve(n)` تُرجع \"FizzBuzz\" إذا كان n يقبل القسمة على 3 و5، و\"Fizz\" إذا كان يقبل القسمة على 3، و\"Buzz\" إذا كان يقبل القسمة على 5، وإلا العدد نفسه كنص.",
+  "inputDescription": "عدد صحيح موجب `n`.",
+  "outputDescription": "نص."
+ },
+ "GATE // FACTORIAL CORE": {
+  "description": "اكتب دالة `solve(n)` تُرجع n! (مضروب n). قيمة 0! هي 1.",
+  "inputDescription": "عدد صحيح `n` (0 <= n <= 10).",
+  "outputDescription": "مضروب n."
+ },
+ "GATE // SQUARE GRID": {
+  "description": "اكتب دالة `solve(nums)` تُرجع مصفوفة جديدة فيها مربع كل عدد.",
+  "inputDescription": "مصفوفة أعداد صحيحة `nums` (قد تكون فارغة).",
+  "outputDescription": "مصفوفة المربعات بالترتيب نفسه."
+ },
+ "GATE // NEURAL SUM": {
+  "description": "اكتب دالة `solve(a, b)` تُرجع مجموع عددين صحيحين.",
+  "inputDescription": "عددان صحيحان `a` و`b` (-1000 <= a, b <= 1000).",
+  "outputDescription": "العدد الصحيح a + b."
+ },
+ "GATE // CYBER MIRROR": {
+  "description": "اكتب دالة `solve(str)` تُرجع true إذا كان النص يُقرأ بالطريقة نفسها من الأمام ومن الخلف، وإلا false.",
+  "inputDescription": "نص `str` من أحرف لاتينية صغيرة وأرقام.",
+  "outputDescription": "قيمة منطقية true أو false."
+ },
+ "GATE // MAX SIGNAL": {
+  "description": "اكتب دالة `solve(nums)` تُرجع أكبر عدد في المصفوفة.",
+  "inputDescription": "مصفوفة أعداد `nums` (الطول >= 1).",
+  "outputDescription": "أكبر عدد في المصفوفة."
+ },
+ "GATE // DATA REVERSAL": {
+  "description": "اكتب دالة `solve(str)` تُرجع النص معكوسًا.",
+  "inputDescription": "نص `str`.",
+  "outputDescription": "النص المعكوس."
+ },
+ "GATE // VOWEL SCAN": {
+  "description": "اكتب دالة `solve(str)` تعدّ أحرف العلة (a, e, i, o, u) في نص بأحرف صغيرة.",
+  "inputDescription": "نص بأحرف صغيرة `str`.",
+  "outputDescription": "عدد أحرف العلة."
+ },
+ "GATE // ARRAY TOTAL": {
+  "description": "اكتب دالة `solve(nums)` تُرجع مجموع كل الأعداد في المصفوفة.",
+  "inputDescription": "مصفوفة أعداد صحيحة `nums` (قد تكون فارغة).",
+  "outputDescription": "مجموع كل العناصر (0 للمصفوفة الفارغة)."
+ },
+ "GATE // MIN SIGNAL": {
+  "description": "اكتب دالة `solve(nums)` تُرجع أصغر عدد في المصفوفة.",
+  "inputDescription": "مصفوفة أعداد صحيحة `nums` (الطول >= 1).",
+  "outputDescription": "القيمة الصغرى."
+ },
+ "GATE // NEGATIVE SCAN": {
+  "description": "اكتب دالة `solve(nums)` تعدّ كم عددًا سالبًا في المصفوفة.",
+  "inputDescription": "مصفوفة أعداد صحيحة `nums` (قد تكون فارغة).",
+  "outputDescription": "عدد العناصر الأصغر من صفر."
+ },
+ "GATE // CAPS LOCK": {
+  "description": "اكتب دالة `solve(str)` تُرجع النص بأحرف كبيرة.",
+  "inputDescription": "نص `str` من أحرف وأرقام ومسافات.",
+  "outputDescription": "النص نفسه بأحرف كبيرة."
+ },
+ "GATE // ABSOLUTE ZERO": {
+  "description": "اكتب دالة `solve(n)` تُرجع القيمة المطلقة لـ n (بُعده عن الصفر).",
+  "inputDescription": "عدد صحيح `n` (-10000 <= n <= 10000).",
+  "outputDescription": "القيمة المطلقة لـ n."
+ },
+ "GATE // LAST BYTE": {
+  "description": "اكتب دالة `solve(str)` تُرجع آخر حرف في النص، كنص.",
+  "inputDescription": "نص غير فارغ `str`.",
+  "outputDescription": "نص طوله 1."
+ },
+ "GATE // FIBONACCI STREAM": {
+  "description": "اكتب دالة `solve(n)` تُرجع عدد فيبوناتشي رقم n. F(0) = 0، F(1) = 1، F(n) = F(n-1) + F(n-2).",
+  "inputDescription": "عدد صحيح `n` (0 <= n <= 40).",
+  "outputDescription": "F(n)."
+ },
+ "GATE // PRIME SENTRY": {
+  "description": "اكتب دالة `solve(n)` تُرجع true إذا كان n عددًا أوليًا.",
+  "inputDescription": "عدد صحيح `n` (0 <= n <= 100000).",
+  "outputDescription": "true إذا كان n أوليًا، وإلا false."
+ },
+ "GATE // DIGIT CRUSHER": {
+  "description": "اكتب دالة `solve(n)` تُرجع مجموع أرقام n.",
+  "inputDescription": "عدد صحيح `n` (0 <= n <= 1000000000).",
+  "outputDescription": "مجموع الأرقام."
+ },
+ "GATE // WORD COUNTER": {
+  "description": "اكتب دالة `solve(text)` تعدّ الكلمات في النص. تفصل بين الكلمات مسافة واحدة أو أكثر، وقد توجد مسافات في البداية والنهاية.",
+  "inputDescription": "نص `text`.",
+  "outputDescription": "عدد الكلمات."
+ },
+ "GATE // ANAGRAM LOCK": {
+  "description": "اكتب دالة `solve(a, b)` تُرجع true إذا كان `b` جناسًا تامًا لـ `a` (الأحرف نفسها، وكل حرف بعدد المرات نفسه).",
+  "inputDescription": "نصان بأحرف صغيرة `a` و`b`.",
+  "outputDescription": "true أو false."
+ },
+ "GATE // RUNNER-UP": {
+  "description": "اكتب دالة `solve(nums)` تُرجع ثاني أكبر قيمة مختلفة (DISTINCT) في المصفوفة.",
+  "inputDescription": "مصفوفة `nums` فيها قيمتان مختلفتان على الأقل.",
+  "outputDescription": "ثاني أكبر قيمة مختلفة."
+ },
+ "GATE // ARRAY FLIP": {
+  "description": "اكتب دالة `solve(nums)` تُرجع مصفوفة جديدة عناصرها بترتيب معكوس.",
+  "inputDescription": "مصفوفة أعداد صحيحة `nums` (قد تكون فارغة).",
+  "outputDescription": "المصفوفة المعكوسة."
+ },
+ "GATE // FREQUENCY SCAN": {
+  "description": "اكتب دالة `solve(str)` تُرجع الحرف الأكثر تكرارًا. عند التعادل، أرجع الحرف الذي يأتي أولًا في الأبجدية.",
+  "inputDescription": "نص غير فارغ بأحرف صغيرة `str` (أحرف فقط).",
+  "outputDescription": "نص من حرف واحد."
+ },
+ "GATE // BINARY ENCODER": {
+  "description": "اكتب دالة `solve(n)` تُرجع n مكتوبًا بالنظام الثنائي (الأساس 2)، دون أصفار بادئة.",
+  "inputDescription": "عدد صحيح `n` (0 <= n <= 1000000).",
+  "outputDescription": "التمثيل الثنائي كنص."
+ },
+ "GATE // GCD CIPHER": {
+  "description": "اكتب دالة `solve(a, b)` تُرجع القاسم المشترك الأكبر لـ a وb.",
+  "inputDescription": "عددان صحيحان موجبان `a` و`b` (<= 1000000).",
+  "outputDescription": "gcd(a, b)."
+ },
+ "GATE // DUPLICATE PURGE": {
+  "description": "اكتب دالة `solve(nums)` تحذف القيم المكررة، مع الإبقاء على أول ظهور لكل قيمة بالترتيب الأصلي.",
+  "inputDescription": "مصفوفة أعداد صحيحة `nums` (قد تكون فارغة).",
+  "outputDescription": "المصفوفة دون تكرار."
+ },
+ "GATE // ORDER CHECK": {
+  "description": "اكتب دالة `solve(nums)` تُرجع true إذا كانت المصفوفة مرتبة ترتيبًا غير تنازلي.",
+  "inputDescription": "مصفوفة أعداد صحيحة `nums` (قد تكون فارغة).",
+  "outputDescription": "true أو false."
+ },
+ "GATE // CAESAR SHIFT": {
+  "description": "اكتب دالة `solve(text, k)` تزيح كل حرف صغير k مواضع للأمام في الأبجدية، مع العودة من z إلى a. تبقى الأحرف الأخرى كما هي.",
+  "inputDescription": "نص `text` وعدد صحيح `k` (0 <= k <= 25).",
+  "outputDescription": "النص بعد الإزاحة."
+ },
+ "GATE // EVEN COUNTER": {
+  "description": "اكتب دالة `solve(nums)` تعدّ الأعداد الزوجية في المصفوفة.",
+  "inputDescription": "مصفوفة أعداد صحيحة `nums` (قد تكون فارغة).",
+  "outputDescription": "عدد العناصر الزوجية."
+ },
+ "GATE // MIRROR NUMBER": {
+  "description": "اكتب دالة `solve(n)` تُرجع true إذا كان العدد يُقرأ بالطريقة نفسها من الأمام ومن الخلف (لا حاجة للنصوص، لكنها مسموحة).",
+  "inputDescription": "عدد صحيح `n` (0 <= n <= 1000000000).",
+  "outputDescription": "true أو false."
+ },
+ "GATE // TITLE CASE": {
+  "description": "اكتب دالة `solve(text)` تجعل الحرف الأول من كل كلمة كبيرًا. تفصل بين الكلمات مسافة واحدة، وتبقى الأحرف الأخرى كما هي.",
+  "inputDescription": "نص `text` من كلمات بأحرف صغيرة ومسافات مفردة.",
+  "outputDescription": "النص مع حرف أول كبير لكل كلمة."
+ },
+ "GATE // TWIN SUM": {
+  "description": "اكتب دالة `solve(nums, target)` تُرجع الفهرسين [i, j] (i < j) للعددين اللذين مجموعهما target. توجد إجابة واحدة بالضبط.",
+  "inputDescription": "مصفوفة `nums` (2 <= الطول <= 10000) وعدد صحيح `target`.",
+  "outputDescription": "مصفوفة من فهرسين."
+ },
+ "GATE // BRACKET VAULT": {
+  "description": "اكتب دالة `solve(s)` تُرجع true إذا أُغلق كل قوس ( [ { بالقوس المطابق ) ] } بالترتيب الصحيح.",
+  "inputDescription": "نص `s` لا يحتوي إلا على الرموز ()[]{}.",
+  "outputDescription": "true أو false."
+ },
+ "GATE // LONGEST STREAK": {
+  "description": "اكتب دالة `solve(s)` تُرجع طول أطول سلسلة متتالية من الحرف نفسه.",
+  "inputDescription": "نص `s` (قد يكون فارغًا).",
+  "outputDescription": "طول أطول سلسلة."
+ },
+ "GATE // LOST PACKET": {
+  "description": "اكتب دالة `solve(nums)` تُرجع العدد الوحيد الناقص من المدى 0..n. تحتوي المصفوفة على n أعداد مختلفة من هذا المدى.",
+  "inputDescription": "مصفوفة من n أعداد صحيحة مختلفة بين 0 وn.",
+  "outputDescription": "العدد الناقص."
+ },
+ "GATE // ROMAN DECODER": {
+  "description": "اكتب دالة `solve(roman)` تحوّل عددًا رومانيًا (I, V, X, L, C, D, M) إلى عدد صحيح.",
+  "inputDescription": "عدد روماني صحيح بين 1 و3999.",
+  "outputDescription": "قيمته."
+ },
+ "GATE // MATRIX TRACE": {
+  "description": "اكتب دالة `solve(grid)` تُرجع مجموع القطر الرئيسي (من أعلى اليسار إلى أسفل اليمين) لمصفوفة مربعة.",
+  "inputDescription": "مصفوفة مربعة `grid` (1 <= الحجم <= 50).",
+  "outputDescription": "مجموع grid[i][i]."
+ },
+ "GATE // RUN-LENGTH PACK": {
+  "description": "اكتب دالة `solve(s)` تضغط النص: كل سلسلة من الحرف نفسه تصبح الحرف متبوعًا بطول السلسلة.",
+  "inputDescription": "نص بأحرف صغيرة `s` (قد يكون فارغًا).",
+  "outputDescription": "النص المضغوط."
+ },
+ "GATE // PEAK SEGMENT": {
+  "description": "اكتب دالة `solve(nums)` تُرجع أكبر مجموع ممكن لجزء متصل وغير فارغ من المصفوفة.",
+  "inputDescription": "مصفوفة أعداد صحيحة `nums` (الطول >= 1).",
+  "outputDescription": "أكبر مجموع لمصفوفة جزئية."
+ },
+ "GATE // PRIME FIELD": {
+  "description": "اكتب دالة `solve(n)` تُرجع عدد الأعداد الأولية الأصغر من n أو المساوية له.",
+  "inputDescription": "عدد صحيح `n` (0 <= n <= 1000000).",
+  "outputDescription": "عدد الأعداد الأولية <= n."
+ },
+ "GATE // UNIQUE WINDOW": {
+  "description": "اكتب دالة `solve(s)` تُرجع طول أطول جزء متصل من النص دون أحرف مكررة.",
+  "inputDescription": "نص `s` (قد يكون فارغًا).",
+  "outputDescription": "طول أطول نص جزئي دون تكرار."
+ },
+ "GATE // ROTATION DRIVE": {
+  "description": "اكتب دالة `solve(nums, k)` تدوّر المصفوفة k خطوات إلى اليمين (ينتقل العنصر الأخير إلى البداية، k مرات).",
+  "inputDescription": "مصفوفة `nums` (قد تكون فارغة) وعدد صحيح `k` (0 <= k <= 1000000).",
+  "outputDescription": "المصفوفة بعد التدوير."
+ }
+}

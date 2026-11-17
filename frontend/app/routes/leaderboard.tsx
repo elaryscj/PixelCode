@@ -4,6 +4,7 @@ import PersonalRating from "../components/PersonalRating";
 import { FaUser } from "react-icons/fa";
 import Rank from "../components/Rank";
 import TopRating from "../components/TopRating";
+import SeasonBanner from "../components/SeasonBanner";
 
 const LeaderBoard = () => {
   const { t } = useTranslation();
@@ -17,6 +18,7 @@ const LeaderBoard = () => {
         <h1 className="font-pixel text-yellow text-[13vw]/none sm:text-7xl/none lg:text-8xl/none text-center text-glow-sm my-4">{t("leaderboard").toUpperCase()}</h1>
 
         <div className="container max-w-200 mx-auto font-pixel">
+          <SeasonBanner />
           <PersonalRating />
 
           <TopRating />

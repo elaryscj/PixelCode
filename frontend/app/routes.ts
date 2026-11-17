@@ -20,6 +20,8 @@ export default [
   route('/store', 'routes/store.tsx'),
   route('/profile', 'routes/profile.tsx'),
   route('/verify-email', 'routes/verify-email.tsx'),
+  route('/join/:code', 'routes/join.tsx'),
+  route('/progress', 'routes/progress.tsx'),
   route('*', 'routes/not-found.tsx')
   ] satisfies RouteConfig;
 

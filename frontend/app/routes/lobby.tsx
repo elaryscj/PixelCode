@@ -4,7 +4,7 @@ import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
-import { FaCheck, FaCopy } from "react-icons/fa";
+import { FaCheck, FaCopy, FaLink } from "react-icons/fa";
 import Avatar from "~/components/Avatar";
 import { getRoom, leaveRoom, readyRoom, voteMap, type Room } from "~/api/room";
 import MapVote from "~/components/game/MapVote";
@@ -24,6 +24,7 @@ const LobbyScreen = () => {
   const [room, setRoom] = useState<Room | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
   const [busy, setBusy] = useState(false);
   const [left, setLeft] = useState<number | null>(null);
   const offset = useRef(0); // server time - local time
@@ -93,6 +94,26 @@ const LobbyScreen = () => {
     }, 500);
     return () => clearInterval(id);
   }, [room?.joinDeadline]);
+
+  // Invite link: opens the room for a friend (signing in first if needed). Phones get the share sheet.
+  const shareInvite = async () => {
+    const url = `${window.location.origin}/join/${code}`;
+    if (navigator.share && window.matchMedia("(pointer: coarse)").matches) {
+      try {
+        await navigator.share({ title: "PixelCode Arena", text: t("inv_share_text"), url });
+        return;
+      } catch (e) {
+        if ((e as Error)?.name === "AbortError") return; // the player closed the share sheet
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    } catch {
+      window.prompt(t("inv_copy_prompt"), url);
+    }
+  };
 
   const copyCode = async () => {
     try {
@@ -252,6 +273,16 @@ const LobbyScreen = () => {
         </div>
 
         <p className="text-neon/80 text-sm sm:text-xl -mt-4 text-center">{t("lb_private_sub")}</p>
+
+        {players.length < 2 && (
+          <button
+            onClick={shareInvite}
+            className="btn-arcade flex items-center gap-3 uppercase text-xl sm:text-2xl px-6 py-2 border-2 border-neon text-yellow hover:text-glow-sm"
+          >
+            {linkCopied ? <FaCheck className="text-neon" /> : <FaLink className="text-neon" />}
+            {linkCopied ? t("inv_link_copied") : t("inv_invite_friend")}
+          </button>
+        )}
 
         {left !== null && (
           <p className="text-center text-2xl text-yellow">

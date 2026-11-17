@@ -72,6 +72,21 @@ public class User {
     @Column(nullable = false, columnDefinition = "integer default 0")
     private int tokenVersion = 0;
 
+    /** Progress counters for achievements (see game/ProgressService). */
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int doorsSolved = 0;
+
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int hardDoorsSolved = 0;
+
+    /** ranked wins in a row (a loss or draw resets it) */
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int winStreak = 0;
+
+    /** ranked matches in the current season: the season top 10 only counts players with a few of them */
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int seasonMatches = 0;
+
     public User() {
     }
 
@@ -114,6 +129,15 @@ public class User {
 
     public boolean isBot() { return bot; }
     public void setBot(boolean bot) { this.bot = bot; }
+
+    public int getDoorsSolved() { return doorsSolved; }
+    public void setDoorsSolved(int doorsSolved) { this.doorsSolved = doorsSolved; }
+    public int getHardDoorsSolved() { return hardDoorsSolved; }
+    public void setHardDoorsSolved(int hardDoorsSolved) { this.hardDoorsSolved = hardDoorsSolved; }
+    public int getWinStreak() { return winStreak; }
+    public void setWinStreak(int winStreak) { this.winStreak = winStreak; }
+    public int getSeasonMatches() { return seasonMatches; }
+    public void setSeasonMatches(int seasonMatches) { this.seasonMatches = seasonMatches; }
 
     public boolean isBanned() {
         return bannedUntil != null && bannedUntil.isAfter(Instant.now());

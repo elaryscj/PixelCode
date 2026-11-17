@@ -1,0 +1,212 @@
+{
+ "GATE // PARITY LOCK": {
+  "description": "Schreib eine Methode `solve(n)`, die true zurückgibt, wenn die Zahl gerade ist, sonst false.",
+  "inputDescription": "Eine ganze Zahl `n` (-1000 <= n <= 1000).",
+  "outputDescription": "Boolean true oder false."
+ },
+ "GATE // FIZZ PROTOCOL": {
+  "description": "Schreib eine Methode `solve(n)`, die \"FizzBuzz\" zurückgibt, wenn n durch 3 und 5 teilbar ist, \"Fizz\", wenn durch 3 teilbar, \"Buzz\", wenn durch 5 teilbar, sonst die Zahl als String.",
+  "inputDescription": "Eine positive ganze Zahl `n`.",
+  "outputDescription": "Ein String."
+ },
+ "GATE // FACTORIAL CORE": {
+  "description": "Schreib eine Methode `solve(n)`, die n! (die Fakultät von n) zurückgibt. 0! ist 1.",
+  "inputDescription": "Eine ganze Zahl `n` (0 <= n <= 10).",
+  "outputDescription": "Die Fakultät von n."
+ },
+ "GATE // SQUARE GRID": {
+  "description": "Schreib eine Methode `solve(nums)`, die ein neues Array zurückgibt, in dem jede Zahl quadriert ist.",
+  "inputDescription": "Ein Array ganzer Zahlen `nums` (kann leer sein).",
+  "outputDescription": "Ein Array der Quadrate in derselben Reihenfolge."
+ },
+ "GATE // NEURAL SUM": {
+  "description": "Schreib eine Methode `solve(a, b)`, die die Summe zweier ganzer Zahlen zurückgibt.",
+  "inputDescription": "Zwei ganze Zahlen `a` und `b` (-1000 <= a, b <= 1000).",
+  "outputDescription": "Die ganze Zahl a + b."
+ },
+ "GATE // CYBER MIRROR": {
+  "description": "Schreib eine Methode `solve(str)`, die true zurückgibt, wenn der String vorwärts und rückwärts gleich gelesen wird, sonst false.",
+  "inputDescription": "Ein alphanumerischer String `str` in Kleinbuchstaben.",
+  "outputDescription": "Boolean true oder false."
+ },
+ "GATE // MAX SIGNAL": {
+  "description": "Schreib eine Methode `solve(nums)`, die die größte Zahl in einem Array zurückgibt.",
+  "inputDescription": "Ein Array von Zahlen `nums` (Länge >= 1).",
+  "outputDescription": "Die größte Zahl im Array."
+ },
+ "GATE // DATA REVERSAL": {
+  "description": "Schreib eine Methode `solve(str)`, die den String rückwärts zurückgibt.",
+  "inputDescription": "Ein String `str`.",
+  "outputDescription": "Der umgedrehte String."
+ },
+ "GATE // VOWEL SCAN": {
+  "description": "Schreib eine Methode `solve(str)`, die die Vokale (a, e, i, o, u) in einem kleingeschriebenen String zählt.",
+  "inputDescription": "Ein kleingeschriebener String `str`.",
+  "outputDescription": "Die Anzahl der Vokale."
+ },
+ "GATE // ARRAY TOTAL": {
+  "description": "Schreib eine Methode `solve(nums)`, die die Summe aller Zahlen in einem Array zurückgibt.",
+  "inputDescription": "Ein Array ganzer Zahlen `nums` (kann leer sein).",
+  "outputDescription": "Die Summe aller Elemente (0 für ein leeres Array)."
+ },
+ "GATE // MIN SIGNAL": {
+  "description": "Schreib eine Methode `solve(nums)`, die die kleinste Zahl in einem Array zurückgibt.",
+  "inputDescription": "Ein Array ganzer Zahlen `nums` (Länge >= 1).",
+  "outputDescription": "Das Minimum."
+ },
+ "GATE // NEGATIVE SCAN": {
+  "description": "Schreib eine Methode `solve(nums)`, die zählt, wie viele Zahlen im Array negativ sind.",
+  "inputDescription": "Ein Array ganzer Zahlen `nums` (kann leer sein).",
+  "outputDescription": "Wie viele Elemente kleiner als null sind."
+ },
+ "GATE // CAPS LOCK": {
+  "description": "Schreib eine Methode `solve(str)`, die den String in Großbuchstaben zurückgibt.",
+  "inputDescription": "Ein String `str` aus Buchstaben, Ziffern und Leerzeichen.",
+  "outputDescription": "Derselbe String in Großbuchstaben."
+ },
+ "GATE // ABSOLUTE ZERO": {
+  "description": "Schreib eine Methode `solve(n)`, die den Betrag von n (seinen Abstand zur Null) zurückgibt.",
+  "inputDescription": "Eine ganze Zahl `n` (-10000 <= n <= 10000).",
+  "outputDescription": "Der Betrag von n."
+ },
+ "GATE // LAST BYTE": {
+  "description": "Schreib eine Methode `solve(str)`, die das letzte Zeichen des Strings als String zurückgibt.",
+  "inputDescription": "Ein nicht leerer String `str`.",
+  "outputDescription": "Ein String der Länge 1."
+ },
+ "GATE // FIBONACCI STREAM": {
+  "description": "Schreib eine Methode `solve(n)`, die die n-te Fibonacci-Zahl zurückgibt. F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2).",
+  "inputDescription": "Eine ganze Zahl `n` (0 <= n <= 40).",
+  "outputDescription": "F(n)."
+ },
+ "GATE // PRIME SENTRY": {
+  "description": "Schreib eine Methode `solve(n)`, die true zurückgibt, wenn n eine Primzahl ist.",
+  "inputDescription": "Eine ganze Zahl `n` (0 <= n <= 100000).",
+  "outputDescription": "true, wenn n prim ist, sonst false."
+ },
+ "GATE // DIGIT CRUSHER": {
+  "description": "Schreib eine Methode `solve(n)`, die die Quersumme von n zurückgibt.",
+  "inputDescription": "Eine ganze Zahl `n` (0 <= n <= 1000000000).",
+  "outputDescription": "Die Quersumme."
+ },
+ "GATE // WORD COUNTER": {
+  "description": "Schreib eine Methode `solve(text)`, die die Wörter im Text zählt. Wörter sind durch ein oder mehrere Leerzeichen getrennt; am Anfang und Ende können Leerzeichen stehen.",
+  "inputDescription": "Ein String `text`.",
+  "outputDescription": "Die Anzahl der Wörter."
+ },
+ "GATE // ANAGRAM LOCK": {
+  "description": "Schreib eine Methode `solve(a, b)`, die true zurückgibt, wenn `b` ein Anagramm von `a` ist (dieselben Buchstaben, jeder gleich oft).",
+  "inputDescription": "Zwei kleingeschriebene Strings `a` und `b`.",
+  "outputDescription": "true oder false."
+ },
+ "GATE // RUNNER-UP": {
+  "description": "Schreib eine Methode `solve(nums)`, die den zweitgrößten VERSCHIEDENEN Wert im Array zurückgibt.",
+  "inputDescription": "Ein Array `nums` mit mindestens zwei verschiedenen Werten.",
+  "outputDescription": "Der zweitgrößte verschiedene Wert."
+ },
+ "GATE // ARRAY FLIP": {
+  "description": "Schreib eine Methode `solve(nums)`, die ein neues Array mit den Elementen in umgekehrter Reihenfolge zurückgibt.",
+  "inputDescription": "Ein Array ganzer Zahlen `nums` (kann leer sein).",
+  "outputDescription": "Das umgedrehte Array."
+ },
+ "GATE // FREQUENCY SCAN": {
+  "description": "Schreib eine Methode `solve(str)`, die den Buchstaben zurückgibt, der am häufigsten vorkommt. Bei Gleichstand gib den zurück, der im Alphabet zuerst kommt.",
+  "inputDescription": "Ein nicht leerer, kleingeschriebener String `str` (nur Buchstaben).",
+  "outputDescription": "Ein String aus einem Buchstaben."
+ },
+ "GATE // BINARY ENCODER": {
+  "description": "Schreib eine Methode `solve(n)`, die n in Binärschreibweise (Basis 2) ohne führende Nullen zurückgibt.",
+  "inputDescription": "Eine ganze Zahl `n` (0 <= n <= 1000000).",
+  "outputDescription": "Die Binärdarstellung als String."
+ },
+ "GATE // GCD CIPHER": {
+  "description": "Schreib eine Methode `solve(a, b)`, die den größten gemeinsamen Teiler von a und b zurückgibt.",
+  "inputDescription": "Zwei positive ganze Zahlen `a` und `b` (<= 1000000).",
+  "outputDescription": "ggT(a, b)."
+ },
+ "GATE // DUPLICATE PURGE": {
+  "description": "Schreib eine Methode `solve(nums)`, die doppelte Werte entfernt und jeweils das erste Vorkommen in der ursprünglichen Reihenfolge behält.",
+  "inputDescription": "Ein Array ganzer Zahlen `nums` (kann leer sein).",
+  "outputDescription": "Das Array ohne Duplikate."
+ },
+ "GATE // ORDER CHECK": {
+  "description": "Schreib eine Methode `solve(nums)`, die true zurückgibt, wenn das Array aufsteigend sortiert ist (gleiche Werte erlaubt).",
+  "inputDescription": "Ein Array ganzer Zahlen `nums` (kann leer sein).",
+  "outputDescription": "true oder false."
+ },
+ "GATE // CAESAR SHIFT": {
+  "description": "Schreib eine Methode `solve(text, k)`, die jeden Kleinbuchstaben um k Stellen im Alphabet nach vorn verschiebt; nach z geht es mit a weiter. Andere Zeichen bleiben gleich.",
+  "inputDescription": "Ein String `text` und eine ganze Zahl `k` (0 <= k <= 25).",
+  "outputDescription": "Der verschobene String."
+ },
+ "GATE // EVEN COUNTER": {
+  "description": "Schreib eine Methode `solve(nums)`, die die geraden Zahlen im Array zählt.",
+  "inputDescription": "Ein Array ganzer Zahlen `nums` (kann leer sein).",
+  "outputDescription": "Wie viele Elemente gerade sind."
+ },
+ "GATE // MIRROR NUMBER": {
+  "description": "Schreib eine Methode `solve(n)`, die true zurückgibt, wenn die Zahl vorwärts und rückwärts gleich gelesen wird (Strings sind nicht nötig, aber erlaubt).",
+  "inputDescription": "Eine ganze Zahl `n` (0 <= n <= 1000000000).",
+  "outputDescription": "true oder false."
+ },
+ "GATE // TITLE CASE": {
+  "description": "Schreib eine Methode `solve(text)`, die den ersten Buchstaben jedes Wortes großschreibt. Wörter sind durch einzelne Leerzeichen getrennt; die übrigen Buchstaben bleiben, wie sie sind.",
+  "inputDescription": "Ein String `text` aus kleingeschriebenen Wörtern und einzelnen Leerzeichen.",
+  "outputDescription": "Der String mit großem Anfangsbuchstaben bei jedem Wort."
+ },
+ "GATE // TWIN SUM": {
+  "description": "Schreib eine Methode `solve(nums, target)`, die die Indizes [i, j] (i < j) der beiden Zahlen zurückgibt, deren Summe target ergibt. Es gibt genau eine Lösung.",
+  "inputDescription": "Ein Array `nums` (2 <= Länge <= 10000) und eine ganze Zahl `target`.",
+  "outputDescription": "Ein Array mit zwei Indizes."
+ },
+ "GATE // BRACKET VAULT": {
+  "description": "Schreib eine Methode `solve(s)`, die true zurückgibt, wenn jede Klammer ( [ { in der richtigen Reihenfolge durch die passende ) ] } geschlossen wird.",
+  "inputDescription": "Ein String `s`, der nur die Zeichen ()[]{} enthält.",
+  "outputDescription": "true oder false."
+ },
+ "GATE // LONGEST STREAK": {
+  "description": "Schreib eine Methode `solve(s)`, die die Länge der längsten Folge gleicher Zeichen hintereinander zurückgibt.",
+  "inputDescription": "Ein String `s` (kann leer sein).",
+  "outputDescription": "Die Länge der längsten Folge."
+ },
+ "GATE // LOST PACKET": {
+  "description": "Schreib eine Methode `solve(nums)`, die die eine Zahl zurückgibt, die im Bereich 0..n fehlt. Das Array enthält n verschiedene Zahlen aus diesem Bereich.",
+  "inputDescription": "Ein Array aus n verschiedenen ganzen Zahlen zwischen 0 und n.",
+  "outputDescription": "Die fehlende Zahl."
+ },
+ "GATE // ROMAN DECODER": {
+  "description": "Schreib eine Methode `solve(roman)`, die eine römische Zahl (I, V, X, L, C, D, M) in eine ganze Zahl umwandelt.",
+  "inputDescription": "Eine gültige römische Zahl zwischen 1 und 3999.",
+  "outputDescription": "Ihr Wert."
+ },
+ "GATE // MATRIX TRACE": {
+  "description": "Schreib eine Methode `solve(grid)`, die die Summe der Hauptdiagonale (von oben links nach unten rechts) einer quadratischen Matrix zurückgibt.",
+  "inputDescription": "Eine quadratische Matrix `grid` (1 <= Größe <= 50).",
+  "outputDescription": "Die Summe von grid[i][i]."
+ },
+ "GATE // RUN-LENGTH PACK": {
+  "description": "Schreib eine Methode `solve(s)`, die den String komprimiert: Jede Folge gleicher Zeichen wird zum Zeichen, gefolgt von der Länge der Folge.",
+  "inputDescription": "Ein kleingeschriebener String `s` (kann leer sein).",
+  "outputDescription": "Der komprimierte String."
+ },
+ "GATE // PEAK SEGMENT": {
+  "description": "Schreib eine Methode `solve(nums)`, die die größtmögliche Summe eines zusammenhängenden, nicht leeren Teils des Arrays zurückgibt.",
+  "inputDescription": "Ein Array ganzer Zahlen `nums` (Länge >= 1).",
+  "outputDescription": "Die maximale Teilarray-Summe."
+ },
+ "GATE // PRIME FIELD": {
+  "description": "Schreib eine Methode `solve(n)`, die zurückgibt, wie viele Primzahlen kleiner oder gleich n sind.",
+  "inputDescription": "Eine ganze Zahl `n` (0 <= n <= 1000000).",
+  "outputDescription": "Die Anzahl der Primzahlen <= n."
+ },
+ "GATE // UNIQUE WINDOW": {
+  "description": "Schreib eine Methode `solve(s)`, die die Länge des längsten zusammenhängenden Teils des Strings ohne wiederholte Zeichen zurückgibt.",
+  "inputDescription": "Ein String `s` (kann leer sein).",
+  "outputDescription": "Die Länge des längsten Teilstrings ohne Wiederholungen."
+ },
+ "GATE // ROTATION DRIVE": {
+  "description": "Schreib eine Methode `solve(nums, k)`, die das Array um k Schritte nach rechts rotiert (das letzte Element wandert nach vorn, k-mal).",
+  "inputDescription": "Ein Array `nums` (kann leer sein) und eine ganze Zahl `k` (0 <= k <= 1000000).",
+  "outputDescription": "Das rotierte Array."
+ }
+}

@@ -25,10 +25,14 @@ public class ProfileController {
     private final AdminAccess admins;
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public ProfileController(UserRepository users, TokenService tokens, AdminAccess admins) {
+    private final com.example.game_backend.progress.ProgressService progress;
+
+    public ProfileController(UserRepository users, TokenService tokens, AdminAccess admins,
+                             com.example.game_backend.progress.ProgressService progress) {
         this.users = users;
         this.tokens = tokens;
         this.admins = admins;
+        this.progress = progress;
     }
 
     private User me(long id, String auth) {
@@ -125,6 +129,7 @@ public class ProfileController {
         if (!"DELETE".equals(str(body.get("confirmation"))) || !Boolean.TRUE.equals(body.get("acknowledged"))) {
             throw new ApiException(400, "Type DELETE and confirm to remove the account");
         }
+        progress.deleteFor(u.getId());
         users.delete(u);
         tokens.invalidate(u.getId());
         return ResponseEntity.ok(Map.of("message", "Account deleted"));

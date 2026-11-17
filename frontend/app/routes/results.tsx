@@ -8,6 +8,9 @@ import type { TFunction } from "i18next";
 import { getCurrentUser, refreshUser } from "~/api/auth";
 import { getMatchHistory, type MatchHistoryEntry } from "~/api/game";
 import { getMap } from "~/game/maps";
+import { getProgress } from "~/api/progress";
+
+type Reward = { key: string; label: string; reward: number };
 
 export function meta() {
   return [{ title: "My Results | PixelCode Arena" }];
@@ -51,6 +54,7 @@ function ResultsScreen() {
   const [matches, setMatches] = useState<MatchHistoryEntry[] | null>(null);
   const [rating, setRating] = useState<number | null>(null); // filled after mount (no SSR mismatch)
   const [error, setError] = useState<string | null>(null);
+  const [rewards, setRewards] = useState<Reward[]>([]);
 
   useEffect(() => {
     if (!user) {
@@ -65,6 +69,25 @@ function ResultsScreen() {
       .then((u) => u && setRating(u.rating))
       .catch(() => {});
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // quests and achievements completed during the match just played (shown once, under the stats)
+  useEffect(() => {
+    const m = highlight ? matches?.find((x) => x.code === highlight) : null;
+    if (!m?.finishedAt) return;
+    const from = m.finishedAt - (m.durationSeconds + 60) * 1000;
+    const to = m.finishedAt + 60_000;
+    const inMatch = (at: number | null) => at !== null && at >= from && at <= to;
+    getProgress()
+      .then((p) => {
+        const list: Reward[] = [];
+        for (const q of p.quests)
+          if (inMatch(q.completedAt)) list.push({ key: `q-${q.code}`, label: t(`quest_${q.code}`, { n: q.target }), reward: q.reward });
+        for (const a of p.achievements)
+          if (inMatch(a.unlockedAt)) list.push({ key: `a-${a.code}`, label: t(`ach_${a.code}_name`), reward: a.reward });
+        setRewards(list);
+      })
+      .catch(() => {});
+  }, [matches, highlight]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const mine = (m: MatchHistoryEntry) => m.players.find((p) => p.userId === user?.id);
   const rival = (m: MatchHistoryEntry) => m.players.find((p) => p.userId !== user?.id);
@@ -95,6 +118,23 @@ function ResultsScreen() {
           {tile(t("mr_win_rate"), decided ? `${Math.round((wins / decided) * 100)}%` : "--")}
           {tile(t("mr_mmr_last", { n: list.length || 20 }), `${net >= 0 ? "+" : ""}${net}`, net >= 0 ? "text-neon" : "text-pink")}
         </div>
+
+        {rewards.length > 0 && (
+          <div className="border-2 border-yellow bg-yellow/5 px-4 py-3 flex flex-col gap-2 shadow-[0_0_14px_rgba(253,224,71,0.35)]">
+            <span className="text-yellow text-xl">★ {t("rs_rewards")}</span>
+            <ul className="flex flex-col gap-1">
+              {rewards.map((r) => (
+                <li key={r.key} className="flex justify-between gap-3 font-sans text-sm text-gray-100">
+                  <span>{r.label}</span>
+                  <span dir="ltr" className="font-pixel text-yellow whitespace-nowrap">+{r.reward} PX</span>
+                </li>
+              ))}
+            </ul>
+            <Link to="/progress" className="self-start text-neon text-sm hover:text-white">
+              {t("rs_see_progress")} &gt;
+            </Link>
+          </div>
+        )}
 
         {error && <p className="text-pink text-center">{error}</p>}
         {!matches && !error && <p className="text-neon text-center animate-pulse">{t("mr_loading")}</p>}

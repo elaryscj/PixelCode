@@ -1,6 +1,8 @@
 package com.example.game_backend.security;
 
 import com.example.game_backend.error.ApiException;
+import com.example.game_backend.i18n.Lang;
+import com.example.game_backend.i18n.ServerText;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,8 +50,8 @@ public class ApiRateLimitFilter extends OncePerRequestFilter {
         boolean chunked = length < 0 && req.getHeader("Transfer-Encoding") != null;
         if (length > MAX_BODY_BYTES || chunked) {
             res.setStatus(413);
-            res.setContentType("application/json");
-            res.getWriter().write("{\"message\":\"Request is too large\"}");
+            res.setContentType("application/json;charset=UTF-8");
+            res.getWriter().write(message("Request is too large", req));
             return;
         }
         String ip = req.getRemoteAddr();
@@ -60,14 +62,20 @@ public class ApiRateLimitFilter extends OncePerRequestFilter {
             }
         } catch (ApiException e) {
             res.setStatus(429);
-            res.setContentType("application/json");
+            res.setContentType("application/json;charset=UTF-8");
             Object wait = e.getExtra().get("retryAfterSeconds");
             if (wait != null) {
                 res.setHeader("Retry-After", String.valueOf(wait));
             }
-            res.getWriter().write("{\"message\":\"Too many requests, slow down a little\"}");
+            res.getWriter().write(message("Too many requests, slow down a little", req));
             return;
         }
         chain.doFilter(req, res);
+    }
+
+    /** {"message": ...} in the player's language (this filter runs before Spring's request context exists). */
+    private static String message(String english, HttpServletRequest req) {
+        String text = ServerText.tr(english, Lang.of(req.getHeader("Accept-Language")));
+        return "{\"message\":\"" + text.replace("\\", "\\\\").replace("\"", "\\\"") + "\"}";
     }
 }

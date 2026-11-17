@@ -1,4 +1,5 @@
-// app/api/http.ts — one fetch helper for the whole app (adds the login token)
+// app/api/http.ts — one fetch helper for the whole app (adds the login token and the player's language)
+import i18n from "i18next";
 const API_ORIGIN = import.meta.env.VITE_API_URL ?? "";
 export const API_BASE = `${API_ORIGIN}/api`;
 
@@ -46,7 +47,7 @@ async function fetchWithRetry(url: string, init: RequestInit): Promise<Response>
         continue;
       }
       // fetch() only throws on network problems: say so instead of "Failed to fetch"
-      throw new ApiError(0, "Can't reach the server. Check your connection and try again.", {});
+      throw new ApiError(0, i18n.t("err_offline"), {});
     }
   }
 }
@@ -55,6 +56,8 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
   const token = getToken();
   const headers: Record<string, string> = {
     Accept: "application/json",
+    // the server answers errors and challenge texts in this language (see backend i18n/Lang.java)
+    "Accept-Language": i18n.language || "en",
     ...(options.body ? { "Content-Type": "application/json" } : {}),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...((options.headers as Record<string, string>) ?? {}),

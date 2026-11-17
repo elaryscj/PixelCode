@@ -1,0 +1,212 @@
+{
+ "GATE // PARITY LOCK": {
+  "description": "Напишите метод `solve(n)`, который возвращает true, если число чётное, иначе false.",
+  "inputDescription": "Целое число `n` (-1000 <= n <= 1000).",
+  "outputDescription": "Boolean: true или false."
+ },
+ "GATE // FIZZ PROTOCOL": {
+  "description": "Напишите метод `solve(n)`, который возвращает \"FizzBuzz\", если n делится на 3 и на 5, \"Fizz\", если делится на 3, \"Buzz\", если делится на 5, иначе само число в виде строки.",
+  "inputDescription": "Положительное целое число `n`.",
+  "outputDescription": "Строка."
+ },
+ "GATE // FACTORIAL CORE": {
+  "description": "Напишите метод `solve(n)`, который возвращает n! (факториал n). 0! равен 1.",
+  "inputDescription": "Целое число `n` (0 <= n <= 10).",
+  "outputDescription": "Факториал n."
+ },
+ "GATE // SQUARE GRID": {
+  "description": "Напишите метод `solve(nums)`, который возвращает новый массив, где каждое число возведено в квадрат.",
+  "inputDescription": "Массив целых чисел `nums` (может быть пустым).",
+  "outputDescription": "Массив квадратов в том же порядке."
+ },
+ "GATE // NEURAL SUM": {
+  "description": "Напишите метод `solve(a, b)`, который возвращает сумму двух целых чисел.",
+  "inputDescription": "Два целых числа `a` и `b` (-1000 <= a, b <= 1000).",
+  "outputDescription": "Целое число a + b."
+ },
+ "GATE // CYBER MIRROR": {
+  "description": "Напишите метод `solve(str)`, который возвращает true, если строка одинаково читается слева направо и справа налево, иначе false.",
+  "inputDescription": "Строка `str` из строчных латинских букв и цифр.",
+  "outputDescription": "Boolean: true или false."
+ },
+ "GATE // MAX SIGNAL": {
+  "description": "Напишите метод `solve(nums)`, который возвращает наибольшее число в массиве.",
+  "inputDescription": "Массив чисел `nums` (длина >= 1).",
+  "outputDescription": "Максимальное число в массиве."
+ },
+ "GATE // DATA REVERSAL": {
+  "description": "Напишите метод `solve(str)`, который возвращает строку задом наперёд.",
+  "inputDescription": "Строка `str`.",
+  "outputDescription": "Перевёрнутая строка."
+ },
+ "GATE // VOWEL SCAN": {
+  "description": "Напишите метод `solve(str)`, который считает гласные (a, e, i, o, u) в строке из строчных букв.",
+  "inputDescription": "Строка `str` из строчных букв.",
+  "outputDescription": "Количество гласных."
+ },
+ "GATE // ARRAY TOTAL": {
+  "description": "Напишите метод `solve(nums)`, который возвращает сумму всех чисел в массиве.",
+  "inputDescription": "Массив целых чисел `nums` (может быть пустым).",
+  "outputDescription": "Сумма всех элементов (0 для пустого массива)."
+ },
+ "GATE // MIN SIGNAL": {
+  "description": "Напишите метод `solve(nums)`, который возвращает наименьшее число в массиве.",
+  "inputDescription": "Массив целых чисел `nums` (длина >= 1).",
+  "outputDescription": "Минимум."
+ },
+ "GATE // NEGATIVE SCAN": {
+  "description": "Напишите метод `solve(nums)`, который считает, сколько чисел в массиве отрицательные.",
+  "inputDescription": "Массив целых чисел `nums` (может быть пустым).",
+  "outputDescription": "Сколько элементов меньше нуля."
+ },
+ "GATE // CAPS LOCK": {
+  "description": "Напишите метод `solve(str)`, который возвращает строку в верхнем регистре.",
+  "inputDescription": "Строка `str` из букв, цифр и пробелов.",
+  "outputDescription": "Та же строка в верхнем регистре."
+ },
+ "GATE // ABSOLUTE ZERO": {
+  "description": "Напишите метод `solve(n)`, который возвращает модуль n (расстояние от нуля).",
+  "inputDescription": "Целое число `n` (-10000 <= n <= 10000).",
+  "outputDescription": "Модуль n."
+ },
+ "GATE // LAST BYTE": {
+  "description": "Напишите метод `solve(str)`, который возвращает последний символ строки в виде строки.",
+  "inputDescription": "Непустая строка `str`.",
+  "outputDescription": "Строка длины 1."
+ },
+ "GATE // FIBONACCI STREAM": {
+  "description": "Напишите метод `solve(n)`, который возвращает n-е число Фибоначчи. F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2).",
+  "inputDescription": "Целое число `n` (0 <= n <= 40).",
+  "outputDescription": "F(n)."
+ },
+ "GATE // PRIME SENTRY": {
+  "description": "Напишите метод `solve(n)`, который возвращает true, если n — простое число.",
+  "inputDescription": "Целое число `n` (0 <= n <= 100000).",
+  "outputDescription": "true, если n простое, иначе false."
+ },
+ "GATE // DIGIT CRUSHER": {
+  "description": "Напишите метод `solve(n)`, который возвращает сумму цифр числа n.",
+  "inputDescription": "Целое число `n` (0 <= n <= 1000000000).",
+  "outputDescription": "Сумма цифр."
+ },
+ "GATE // WORD COUNTER": {
+  "description": "Напишите метод `solve(text)`, который считает слова в тексте. Слова разделены одним или несколькими пробелами; в начале и в конце тоже могут быть пробелы.",
+  "inputDescription": "Строка `text`.",
+  "outputDescription": "Количество слов."
+ },
+ "GATE // ANAGRAM LOCK": {
+  "description": "Напишите метод `solve(a, b)`, который возвращает true, если `b` — анаграмма `a` (те же буквы, каждая столько же раз).",
+  "inputDescription": "Две строки `a` и `b` из строчных букв.",
+  "outputDescription": "true или false."
+ },
+ "GATE // RUNNER-UP": {
+  "description": "Напишите метод `solve(nums)`, который возвращает второе по величине РАЗЛИЧНОЕ значение в массиве.",
+  "inputDescription": "Массив `nums`, в котором есть хотя бы два разных значения.",
+  "outputDescription": "Второе по величине различное значение."
+ },
+ "GATE // ARRAY FLIP": {
+  "description": "Напишите метод `solve(nums)`, который возвращает новый массив с элементами в обратном порядке.",
+  "inputDescription": "Массив целых чисел `nums` (может быть пустым).",
+  "outputDescription": "Перевёрнутый массив."
+ },
+ "GATE // FREQUENCY SCAN": {
+  "description": "Напишите метод `solve(str)`, который возвращает букву, встречающуюся чаще всего. Если таких букв несколько, верните ту, что раньше в алфавите.",
+  "inputDescription": "Непустая строка `str` из строчных букв.",
+  "outputDescription": "Строка из одной буквы."
+ },
+ "GATE // BINARY ENCODER": {
+  "description": "Напишите метод `solve(n)`, который возвращает n в двоичной системе (основание 2), без ведущих нулей.",
+  "inputDescription": "Целое число `n` (0 <= n <= 1000000).",
+  "outputDescription": "Двоичная запись в виде строки."
+ },
+ "GATE // GCD CIPHER": {
+  "description": "Напишите метод `solve(a, b)`, который возвращает наибольший общий делитель a и b.",
+  "inputDescription": "Два положительных целых числа `a` и `b` (<= 1000000).",
+  "outputDescription": "НОД(a, b)."
+ },
+ "GATE // DUPLICATE PURGE": {
+  "description": "Напишите метод `solve(nums)`, который убирает повторы, оставляя первое вхождение каждого значения в исходном порядке.",
+  "inputDescription": "Массив целых чисел `nums` (может быть пустым).",
+  "outputDescription": "Массив без повторов."
+ },
+ "GATE // ORDER CHECK": {
+  "description": "Напишите метод `solve(nums)`, который возвращает true, если массив отсортирован по неубыванию.",
+  "inputDescription": "Массив целых чисел `nums` (может быть пустым).",
+  "outputDescription": "true или false."
+ },
+ "GATE // CAESAR SHIFT": {
+  "description": "Напишите метод `solve(text, k)`, который сдвигает каждую строчную букву на k позиций вперёд по алфавиту, после z снова идёт a. Остальные символы не меняются.",
+  "inputDescription": "Строка `text` и целое число `k` (0 <= k <= 25).",
+  "outputDescription": "Сдвинутая строка."
+ },
+ "GATE // EVEN COUNTER": {
+  "description": "Напишите метод `solve(nums)`, который считает чётные числа в массиве.",
+  "inputDescription": "Массив целых чисел `nums` (может быть пустым).",
+  "outputDescription": "Сколько элементов чётные."
+ },
+ "GATE // MIRROR NUMBER": {
+  "description": "Напишите метод `solve(n)`, который возвращает true, если число одинаково читается слева направо и справа налево (строки не нужны, но разрешены).",
+  "inputDescription": "Целое число `n` (0 <= n <= 1000000000).",
+  "outputDescription": "true или false."
+ },
+ "GATE // TITLE CASE": {
+  "description": "Напишите метод `solve(text)`, который делает заглавной первую букву каждого слова. Слова разделены одиночными пробелами; остальные буквы не меняются.",
+  "inputDescription": "Строка `text` из слов строчными буквами и одиночных пробелов.",
+  "outputDescription": "Строка, где каждое слово с заглавной буквы."
+ },
+ "GATE // TWIN SUM": {
+  "description": "Напишите метод `solve(nums, target)`, который возвращает индексы [i, j] (i < j) двух чисел, дающих в сумме target. Ответ ровно один.",
+  "inputDescription": "Массив `nums` (2 <= длина <= 10000) и целое число `target`.",
+  "outputDescription": "Массив из двух индексов."
+ },
+ "GATE // BRACKET VAULT": {
+  "description": "Напишите метод `solve(s)`, который возвращает true, если каждая скобка ( [ { закрыта соответствующей ) ] } в правильном порядке.",
+  "inputDescription": "Строка `s`, состоящая только из символов ()[]{}.",
+  "outputDescription": "true или false."
+ },
+ "GATE // LONGEST STREAK": {
+  "description": "Напишите метод `solve(s)`, который возвращает длину самой длинной серии одинаковых символов подряд.",
+  "inputDescription": "Строка `s` (может быть пустой).",
+  "outputDescription": "Длина самой длинной серии."
+ },
+ "GATE // LOST PACKET": {
+  "description": "Напишите метод `solve(nums)`, который возвращает единственное число, пропущенное в диапазоне 0..n. В массиве n различных чисел из этого диапазона.",
+  "inputDescription": "Массив из n различных целых чисел от 0 до n.",
+  "outputDescription": "Пропущенное число."
+ },
+ "GATE // ROMAN DECODER": {
+  "description": "Напишите метод `solve(roman)`, который переводит римское число (I, V, X, L, C, D, M) в целое.",
+  "inputDescription": "Корректное римское число от 1 до 3999.",
+  "outputDescription": "Его значение."
+ },
+ "GATE // MATRIX TRACE": {
+  "description": "Напишите метод `solve(grid)`, который возвращает сумму главной диагонали (из левого верхнего угла в правый нижний) квадратной матрицы.",
+  "inputDescription": "Квадратная матрица `grid` (1 <= размер <= 50).",
+  "outputDescription": "Сумма grid[i][i]."
+ },
+ "GATE // RUN-LENGTH PACK": {
+  "description": "Напишите метод `solve(s)`, который сжимает строку: каждая серия одинаковых символов заменяется символом и длиной серии.",
+  "inputDescription": "Строка `s` из строчных букв (может быть пустой).",
+  "outputDescription": "Сжатая строка."
+ },
+ "GATE // PEAK SEGMENT": {
+  "description": "Напишите метод `solve(nums)`, который возвращает наибольшую возможную сумму непрерывной непустой части массива.",
+  "inputDescription": "Массив целых чисел `nums` (длина >= 1).",
+  "outputDescription": "Максимальная сумма подмассива."
+ },
+ "GATE // PRIME FIELD": {
+  "description": "Напишите метод `solve(n)`, который возвращает, сколько простых чисел меньше или равно n.",
+  "inputDescription": "Целое число `n` (0 <= n <= 1000000).",
+  "outputDescription": "Количество простых чисел <= n."
+ },
+ "GATE // UNIQUE WINDOW": {
+  "description": "Напишите метод `solve(s)`, который возвращает длину самой длинной непрерывной части строки без повторяющихся символов.",
+  "inputDescription": "Строка `s` (может быть пустой).",
+  "outputDescription": "Длина самой длинной подстроки без повторов."
+ },
+ "GATE // ROTATION DRIVE": {
+  "description": "Напишите метод `solve(nums, k)`, который сдвигает массив на k шагов вправо (последний элемент переходит в начало, k раз).",
+  "inputDescription": "Массив `nums` (может быть пустым) и целое число `k` (0 <= k <= 1000000).",
+  "outputDescription": "Сдвинутый массив."
+ }
+}

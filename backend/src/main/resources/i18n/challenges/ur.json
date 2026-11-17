@@ -1,0 +1,212 @@
+{
+ "GATE // PARITY LOCK": {
+  "description": "ایک میتھڈ `solve(n)` لکھیں جو عدد جفت ہو تو true لوٹائے، ورنہ false۔",
+  "inputDescription": "ایک عدد صحیح `n` (-1000 <= n <= 1000)۔",
+  "outputDescription": "Boolean true یا false۔"
+ },
+ "GATE // FIZZ PROTOCOL": {
+  "description": "ایک میتھڈ `solve(n)` لکھیں جو n کے 3 اور 5 دونوں پر تقسیم ہونے پر \"FizzBuzz\"، 3 پر تقسیم ہونے پر \"Fizz\"، 5 پر تقسیم ہونے پر \"Buzz\"، ورنہ عدد کو اسٹرنگ کی شکل میں لوٹائے۔",
+  "inputDescription": "ایک مثبت عدد صحیح `n`۔",
+  "outputDescription": "ایک اسٹرنگ۔"
+ },
+ "GATE // FACTORIAL CORE": {
+  "description": "ایک میتھڈ `solve(n)` لکھیں جو n! (n کا فیکٹوریل) لوٹائے۔ 0! برابر 1 ہے۔",
+  "inputDescription": "ایک عدد صحیح `n` (0 <= n <= 10)۔",
+  "outputDescription": "n کا فیکٹوریل۔"
+ },
+ "GATE // SQUARE GRID": {
+  "description": "ایک میتھڈ `solve(nums)` لکھیں جو ہر عدد کا مربع لے کر نئی ارے لوٹائے۔",
+  "inputDescription": "اعداد صحیح کی ارے `nums` (خالی ہو سکتی ہے)۔",
+  "outputDescription": "مربعوں کی ارے، اسی ترتیب میں۔"
+ },
+ "GATE // NEURAL SUM": {
+  "description": "ایک میتھڈ `solve(a, b)` لکھیں جو دو اعداد صحیح کا مجموعہ لوٹائے۔",
+  "inputDescription": "دو اعداد صحیح `a` اور `b` (-1000 <= a, b <= 1000)۔",
+  "outputDescription": "عدد صحیح a + b۔"
+ },
+ "GATE // CYBER MIRROR": {
+  "description": "ایک میتھڈ `solve(str)` لکھیں جو اسٹرنگ آگے اور پیچھے سے ایک جیسی پڑھی جائے تو true لوٹائے، ورنہ false۔",
+  "inputDescription": "چھوٹے انگریزی حروف اور ہندسوں والی اسٹرنگ `str`۔",
+  "outputDescription": "Boolean true یا false۔"
+ },
+ "GATE // MAX SIGNAL": {
+  "description": "ایک میتھڈ `solve(nums)` لکھیں جو ارے کا سب سے بڑا عدد لوٹائے۔",
+  "inputDescription": "اعداد کی ارے `nums` (لمبائی >= 1)۔",
+  "outputDescription": "ارے کا سب سے بڑا عدد۔"
+ },
+ "GATE // DATA REVERSAL": {
+  "description": "ایک میتھڈ `solve(str)` لکھیں جو اسٹرنگ کو الٹا کر کے لوٹائے۔",
+  "inputDescription": "ایک اسٹرنگ `str`۔",
+  "outputDescription": "الٹی اسٹرنگ۔"
+ },
+ "GATE // VOWEL SCAN": {
+  "description": "ایک میتھڈ `solve(str)` لکھیں جو چھوٹے حروف والی اسٹرنگ میں حروفِ علت (a, e, i, o, u) گنے۔",
+  "inputDescription": "چھوٹے حروف والی اسٹرنگ `str`۔",
+  "outputDescription": "حروفِ علت کی تعداد۔"
+ },
+ "GATE // ARRAY TOTAL": {
+  "description": "ایک میتھڈ `solve(nums)` لکھیں جو ارے کے تمام اعداد کا مجموعہ لوٹائے۔",
+  "inputDescription": "اعداد صحیح کی ارے `nums` (خالی ہو سکتی ہے)۔",
+  "outputDescription": "تمام عناصر کا مجموعہ (خالی ارے کے لیے 0)۔"
+ },
+ "GATE // MIN SIGNAL": {
+  "description": "ایک میتھڈ `solve(nums)` لکھیں جو ارے کا سب سے چھوٹا عدد لوٹائے۔",
+  "inputDescription": "اعداد صحیح کی ارے `nums` (لمبائی >= 1)۔",
+  "outputDescription": "کم سے کم قدر۔"
+ },
+ "GATE // NEGATIVE SCAN": {
+  "description": "ایک میتھڈ `solve(nums)` لکھیں جو گنے کہ ارے میں کتنے اعداد منفی ہیں۔",
+  "inputDescription": "اعداد صحیح کی ارے `nums` (خالی ہو سکتی ہے)۔",
+  "outputDescription": "صفر سے چھوٹے عناصر کی تعداد۔"
+ },
+ "GATE // CAPS LOCK": {
+  "description": "ایک میتھڈ `solve(str)` لکھیں جو اسٹرنگ کو بڑے حروف میں لوٹائے۔",
+  "inputDescription": "حروف، ہندسوں اور اسپیس والی اسٹرنگ `str`۔",
+  "outputDescription": "وہی اسٹرنگ بڑے حروف میں۔"
+ },
+ "GATE // ABSOLUTE ZERO": {
+  "description": "ایک میتھڈ `solve(n)` لکھیں جو n کی مطلق قدر (صفر سے اس کا فاصلہ) لوٹائے۔",
+  "inputDescription": "ایک عدد صحیح `n` (-10000 <= n <= 10000)۔",
+  "outputDescription": "n کی مطلق قدر۔"
+ },
+ "GATE // LAST BYTE": {
+  "description": "ایک میتھڈ `solve(str)` لکھیں جو اسٹرنگ کا آخری حرف اسٹرنگ کی شکل میں لوٹائے۔",
+  "inputDescription": "ایک غیر خالی اسٹرنگ `str`۔",
+  "outputDescription": "لمبائی 1 والی اسٹرنگ۔"
+ },
+ "GATE // FIBONACCI STREAM": {
+  "description": "ایک میتھڈ `solve(n)` لکھیں جو n واں فبوناچی عدد لوٹائے۔ F(0) = 0، F(1) = 1، F(n) = F(n-1) + F(n-2)۔",
+  "inputDescription": "ایک عدد صحیح `n` (0 <= n <= 40)۔",
+  "outputDescription": "F(n)۔"
+ },
+ "GATE // PRIME SENTRY": {
+  "description": "ایک میتھڈ `solve(n)` لکھیں جو n مفرد عدد ہو تو true لوٹائے۔",
+  "inputDescription": "ایک عدد صحیح `n` (0 <= n <= 100000)۔",
+  "outputDescription": "n مفرد ہو تو true، ورنہ false۔"
+ },
+ "GATE // DIGIT CRUSHER": {
+  "description": "ایک میتھڈ `solve(n)` لکھیں جو n کے ہندسوں کا مجموعہ لوٹائے۔",
+  "inputDescription": "ایک عدد صحیح `n` (0 <= n <= 1000000000)۔",
+  "outputDescription": "ہندسوں کا مجموعہ۔"
+ },
+ "GATE // WORD COUNTER": {
+  "description": "ایک میتھڈ `solve(text)` لکھیں جو متن میں الفاظ گنے۔ الفاظ ایک یا زیادہ اسپیس سے الگ ہوتے ہیں؛ شروع اور آخر میں بھی اسپیس ہو سکتی ہے۔",
+  "inputDescription": "ایک اسٹرنگ `text`۔",
+  "outputDescription": "الفاظ کی تعداد۔"
+ },
+ "GATE // ANAGRAM LOCK": {
+  "description": "ایک میتھڈ `solve(a, b)` لکھیں جو `b` اگر `a` کا اینا گرام ہو (وہی حروف، ہر ایک اتنی ہی بار) تو true لوٹائے۔",
+  "inputDescription": "چھوٹے حروف والی دو اسٹرنگز `a` اور `b`۔",
+  "outputDescription": "true یا false۔"
+ },
+ "GATE // RUNNER-UP": {
+  "description": "ایک میتھڈ `solve(nums)` لکھیں جو ارے کی دوسری سب سے بڑی مختلف (DISTINCT) قدر لوٹائے۔",
+  "inputDescription": "کم از کم دو مختلف قدروں والی ارے `nums`۔",
+  "outputDescription": "دوسری سب سے بڑی مختلف قدر۔"
+ },
+ "GATE // ARRAY FLIP": {
+  "description": "ایک میتھڈ `solve(nums)` لکھیں جو عناصر کو الٹی ترتیب میں رکھ کر نئی ارے لوٹائے۔",
+  "inputDescription": "اعداد صحیح کی ارے `nums` (خالی ہو سکتی ہے)۔",
+  "outputDescription": "الٹی ارے۔"
+ },
+ "GATE // FREQUENCY SCAN": {
+  "description": "ایک میتھڈ `solve(str)` لکھیں جو سب سے زیادہ آنے والا حرف لوٹائے۔ برابری کی صورت میں حروفِ تہجی میں پہلے آنے والا حرف لوٹائیں۔",
+  "inputDescription": "چھوٹے حروف والی غیر خالی اسٹرنگ `str` (صرف حروف)۔",
+  "outputDescription": "ایک حرف والی اسٹرنگ۔"
+ },
+ "GATE // BINARY ENCODER": {
+  "description": "ایک میتھڈ `solve(n)` لکھیں جو n کو بائنری (بیس 2) میں، شروع کے صفروں کے بغیر لوٹائے۔",
+  "inputDescription": "ایک عدد صحیح `n` (0 <= n <= 1000000)۔",
+  "outputDescription": "بائنری شکل، اسٹرنگ کے طور پر۔"
+ },
+ "GATE // GCD CIPHER": {
+  "description": "ایک میتھڈ `solve(a, b)` لکھیں جو a اور b کا عادِ اعظم لوٹائے۔",
+  "inputDescription": "دو مثبت اعداد صحیح `a` اور `b` (<= 1000000)۔",
+  "outputDescription": "gcd(a, b)۔"
+ },
+ "GATE // DUPLICATE PURGE": {
+  "description": "ایک میتھڈ `solve(nums)` لکھیں جو دہرائی گئی قدریں ہٹائے اور ہر قدر کی پہلی موجودگی اصل ترتیب میں رکھے۔",
+  "inputDescription": "اعداد صحیح کی ارے `nums` (خالی ہو سکتی ہے)۔",
+  "outputDescription": "دہرائی کے بغیر ارے۔"
+ },
+ "GATE // ORDER CHECK": {
+  "description": "ایک میتھڈ `solve(nums)` لکھیں جو ارے غیر نزولی ترتیب میں ہو تو true لوٹائے۔",
+  "inputDescription": "اعداد صحیح کی ارے `nums` (خالی ہو سکتی ہے)۔",
+  "outputDescription": "true یا false۔"
+ },
+ "GATE // CAESAR SHIFT": {
+  "description": "ایک میتھڈ `solve(text, k)` لکھیں جو ہر چھوٹے حرف کو حروفِ تہجی میں k جگہ آگے کرے، z کے بعد پھر a آتا ہے۔ باقی حروف ویسے ہی رہیں۔",
+  "inputDescription": "ایک اسٹرنگ `text` اور ایک عدد صحیح `k` (0 <= k <= 25)۔",
+  "outputDescription": "آگے کی گئی اسٹرنگ۔"
+ },
+ "GATE // EVEN COUNTER": {
+  "description": "ایک میتھڈ `solve(nums)` لکھیں جو ارے میں جفت اعداد گنے۔",
+  "inputDescription": "اعداد صحیح کی ارے `nums` (خالی ہو سکتی ہے)۔",
+  "outputDescription": "جفت عناصر کی تعداد۔"
+ },
+ "GATE // MIRROR NUMBER": {
+  "description": "ایک میتھڈ `solve(n)` لکھیں جو عدد آگے اور پیچھے سے ایک جیسا پڑھا جائے تو true لوٹائے (اسٹرنگ ضروری نہیں، مگر استعمال کر سکتے ہیں)۔",
+  "inputDescription": "ایک عدد صحیح `n` (0 <= n <= 1000000000)۔",
+  "outputDescription": "true یا false۔"
+ },
+ "GATE // TITLE CASE": {
+  "description": "ایک میتھڈ `solve(text)` لکھیں جو ہر لفظ کا پہلا حرف بڑا کر دے۔ الفاظ ایک اسپیس سے الگ ہیں؛ باقی حروف ویسے ہی رہیں۔",
+  "inputDescription": "چھوٹے حروف والے الفاظ اور ایک ایک اسپیس سے بنی اسٹرنگ `text`۔",
+  "outputDescription": "ہر لفظ بڑے پہلے حرف کے ساتھ۔"
+ },
+ "GATE // TWIN SUM": {
+  "description": "ایک میتھڈ `solve(nums, target)` لکھیں جو ان دو اعداد کے انڈیکس [i, j] (i < j) لوٹائے جن کا مجموعہ target ہے۔ جواب بالکل ایک ہے۔",
+  "inputDescription": "ارے `nums` (2 <= لمبائی <= 10000) اور ایک عدد صحیح `target`۔",
+  "outputDescription": "دو انڈیکس کی ارے۔"
+ },
+ "GATE // BRACKET VAULT": {
+  "description": "ایک میتھڈ `solve(s)` لکھیں جو ہر بریکٹ ( [ { درست ترتیب میں اپنے مطابق ) ] } سے بند ہو تو true لوٹائے۔",
+  "inputDescription": "صرف ()[]{} حروف والی اسٹرنگ `s`۔",
+  "outputDescription": "true یا false۔"
+ },
+ "GATE // LONGEST STREAK": {
+  "description": "ایک میتھڈ `solve(s)` لکھیں جو مسلسل ایک ہی حرف کی سب سے لمبی لڑی کی لمبائی لوٹائے۔",
+  "inputDescription": "ایک اسٹرنگ `s` (خالی ہو سکتی ہے)۔",
+  "outputDescription": "سب سے لمبی لڑی کی لمبائی۔"
+ },
+ "GATE // LOST PACKET": {
+  "description": "ایک میتھڈ `solve(nums)` لکھیں جو 0..n کی حد سے غائب ایک عدد لوٹائے۔ ارے میں اس حد کے n مختلف اعداد ہیں۔",
+  "inputDescription": "0 اور n کے درمیان n مختلف اعداد صحیح کی ارے۔",
+  "outputDescription": "غائب عدد۔"
+ },
+ "GATE // ROMAN DECODER": {
+  "description": "ایک میتھڈ `solve(roman)` لکھیں جو رومن عدد (I, V, X, L, C, D, M) کو عدد صحیح میں بدلے۔",
+  "inputDescription": "1 سے 3999 کے درمیان ایک درست رومن عدد۔",
+  "outputDescription": "اس کی قدر۔"
+ },
+ "GATE // MATRIX TRACE": {
+  "description": "ایک میتھڈ `solve(grid)` لکھیں جو مربع میٹرکس کے مرکزی وتر (اوپر بائیں سے نیچے دائیں) کا مجموعہ لوٹائے۔",
+  "inputDescription": "مربع میٹرکس `grid` (1 <= سائز <= 50)۔",
+  "outputDescription": "grid[i][i] کا مجموعہ۔"
+ },
+ "GATE // RUN-LENGTH PACK": {
+  "description": "ایک میتھڈ `solve(s)` لکھیں جو اسٹرنگ کو مختصر کرے: ایک ہی حرف کی ہر لڑی وہ حرف اور اس کے بعد لڑی کی لمبائی بن جاتی ہے۔",
+  "inputDescription": "چھوٹے حروف والی اسٹرنگ `s` (خالی ہو سکتی ہے)۔",
+  "outputDescription": "مختصر کی گئی اسٹرنگ۔"
+ },
+ "GATE // PEAK SEGMENT": {
+  "description": "ایک میتھڈ `solve(nums)` لکھیں جو ارے کے کسی مسلسل، غیر خالی حصے کا سب سے بڑا ممکنہ مجموعہ لوٹائے۔",
+  "inputDescription": "اعداد صحیح کی ارے `nums` (لمبائی >= 1)۔",
+  "outputDescription": "زیادہ سے زیادہ سب ارے مجموعہ۔"
+ },
+ "GATE // PRIME FIELD": {
+  "description": "ایک میتھڈ `solve(n)` لکھیں جو بتائے کہ n سے چھوٹے یا برابر کتنے مفرد اعداد ہیں۔",
+  "inputDescription": "ایک عدد صحیح `n` (0 <= n <= 1000000)۔",
+  "outputDescription": "<= n مفرد اعداد کی گنتی۔"
+ },
+ "GATE // UNIQUE WINDOW": {
+  "description": "ایک میتھڈ `solve(s)` لکھیں جو اسٹرنگ کے بغیر دہرائے حروف والے سب سے لمبے مسلسل حصے کی لمبائی لوٹائے۔",
+  "inputDescription": "ایک اسٹرنگ `s` (خالی ہو سکتی ہے)۔",
+  "outputDescription": "بغیر دہرائی والی سب سے لمبی سب اسٹرنگ کی لمبائی۔"
+ },
+ "GATE // ROTATION DRIVE": {
+  "description": "ایک میتھڈ `solve(nums, k)` لکھیں جو ارے کو k قدم دائیں گھمائے (آخری عنصر سب سے آگے آتا ہے، k بار)۔",
+  "inputDescription": "ارے `nums` (خالی ہو سکتی ہے) اور ایک عدد صحیح `k` (0 <= k <= 1000000)۔",
+  "outputDescription": "گھمائی گئی ارے۔"
+ }
+}

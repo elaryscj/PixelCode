@@ -5,8 +5,11 @@ import com.example.game_backend.entity.Room;
 import com.example.game_backend.entity.RoomStatus;
 import com.example.game_backend.entity.User;
 import com.example.game_backend.error.ApiException;
+import com.example.game_backend.progress.ProgressService;
 import com.example.game_backend.repository.RoomRepository;
 import com.example.game_backend.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -21,16 +24,19 @@ import java.util.Map;
 /** Finalizes a match exactly once: result, Elo, counters, bans (US-15, US-25, US-34, US-35, NFR-07, NFR-09). */
 @Service
 public class MatchResultService {
+    private static final Logger log = LoggerFactory.getLogger(MatchResultService.class);
     private final RoomRepository rooms;
     private final UserRepository users;
     private final TransactionTemplate tx;
     private final long banMinutes;
+    private final ProgressService progress;
     private final Object lock = new Object();
 
     public MatchResultService(RoomRepository rooms, UserRepository users, PlatformTransactionManager tm,
-                              @Value("${game.ban-minutes:30}") long banMinutes) {
+                              ProgressService progress, @Value("${game.ban-minutes:30}") long banMinutes) {
         this.rooms = rooms;
         this.users = users;
+        this.progress = progress;
         this.tx = new TransactionTemplate(tm);
         this.banMinutes = banMinutes;
     }
@@ -99,6 +105,11 @@ public class MatchResultService {
                             users.save(u);
                         });
                     }
+                }
+                try {
+                    progress.onMatchFinished(room); // quests, achievements, season match count
+                } catch (RuntimeException e) {
+                    log.error("Could not record progress for match {}", code, e);
                 }
                 rooms.save(room);
                 return ResultViews.of(room);

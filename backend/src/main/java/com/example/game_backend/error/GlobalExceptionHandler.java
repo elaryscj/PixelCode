@@ -1,5 +1,6 @@
 package com.example.game_backend.error;
 
+import com.example.game_backend.i18n.ServerText;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<Map<String, Object>> handleApi(ApiException e) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("message", e.getMessage());
+        body.put("message", ServerText.tr(e.getMessage()));
         body.putAll(e.getExtra());
         return ResponseEntity.status(e.getStatus()).body(body);
     }
@@ -27,7 +28,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleDatabase(Exception e) {
         log.error("Database error", e);
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("message", "The server is busy right now, please try again in a moment");
+        body.put("message", ServerText.tr("The server is busy right now, please try again in a moment"));
         return ResponseEntity.status(503).header("Retry-After", "2").body(body);
     }
 
@@ -35,7 +36,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleOther(Exception e) {
         log.error("Unhandled error", e);
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("message", "Internal server error");
+        body.put("message", ServerText.tr("Internal server error"));
         return ResponseEntity.status(500).body(body);
     }
 }

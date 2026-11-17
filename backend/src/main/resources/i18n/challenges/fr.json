@@ -1,0 +1,212 @@
+{
+ "GATE // PARITY LOCK": {
+  "description": "Écris une méthode `solve(n)` qui renvoie true si l'entier est pair, sinon false.",
+  "inputDescription": "Un entier `n` (-1000 <= n <= 1000).",
+  "outputDescription": "Boolean true ou false."
+ },
+ "GATE // FIZZ PROTOCOL": {
+  "description": "Écris une méthode `solve(n)` qui renvoie \"FizzBuzz\" si n est divisible par 3 et par 5, \"Fizz\" s'il est divisible par 3, \"Buzz\" s'il est divisible par 5, sinon le nombre sous forme de chaîne.",
+  "inputDescription": "Un entier positif `n`.",
+  "outputDescription": "Une chaîne."
+ },
+ "GATE // FACTORIAL CORE": {
+  "description": "Écris une méthode `solve(n)` qui renvoie n! (la factorielle de n). 0! vaut 1.",
+  "inputDescription": "Un entier `n` (0 <= n <= 10).",
+  "outputDescription": "La factorielle de n."
+ },
+ "GATE // SQUARE GRID": {
+  "description": "Écris une méthode `solve(nums)` qui renvoie un nouveau tableau où chaque nombre est mis au carré.",
+  "inputDescription": "Un tableau d'entiers `nums` (peut être vide).",
+  "outputDescription": "Un tableau des carrés, dans le même ordre."
+ },
+ "GATE // NEURAL SUM": {
+  "description": "Écris une méthode `solve(a, b)` qui renvoie la somme de deux entiers.",
+  "inputDescription": "Deux entiers `a` et `b` (-1000 <= a, b <= 1000).",
+  "outputDescription": "L'entier a + b."
+ },
+ "GATE // CYBER MIRROR": {
+  "description": "Écris une méthode `solve(str)` qui renvoie true si la chaîne se lit de la même façon dans les deux sens, sinon false.",
+  "inputDescription": "Une chaîne alphanumérique en minuscules `str`.",
+  "outputDescription": "Boolean true ou false."
+ },
+ "GATE // MAX SIGNAL": {
+  "description": "Écris une méthode `solve(nums)` qui renvoie le plus grand nombre d'un tableau.",
+  "inputDescription": "Un tableau de nombres `nums` (longueur >= 1).",
+  "outputDescription": "Le plus grand nombre du tableau."
+ },
+ "GATE // DATA REVERSAL": {
+  "description": "Écris une méthode `solve(str)` qui renvoie la chaîne à l'envers.",
+  "inputDescription": "Une chaîne `str`.",
+  "outputDescription": "La chaîne inversée."
+ },
+ "GATE // VOWEL SCAN": {
+  "description": "Écris une méthode `solve(str)` qui compte les voyelles (a, e, i, o, u) d'une chaîne en minuscules.",
+  "inputDescription": "Une chaîne en minuscules `str`.",
+  "outputDescription": "Le nombre de voyelles."
+ },
+ "GATE // ARRAY TOTAL": {
+  "description": "Écris une méthode `solve(nums)` qui renvoie la somme de tous les nombres d'un tableau.",
+  "inputDescription": "Un tableau d'entiers `nums` (peut être vide).",
+  "outputDescription": "La somme de tous les éléments (0 pour un tableau vide)."
+ },
+ "GATE // MIN SIGNAL": {
+  "description": "Écris une méthode `solve(nums)` qui renvoie le plus petit nombre d'un tableau.",
+  "inputDescription": "Un tableau d'entiers `nums` (longueur >= 1).",
+  "outputDescription": "Le minimum."
+ },
+ "GATE // NEGATIVE SCAN": {
+  "description": "Écris une méthode `solve(nums)` qui compte combien de nombres du tableau sont négatifs.",
+  "inputDescription": "Un tableau d'entiers `nums` (peut être vide).",
+  "outputDescription": "Le nombre d'éléments inférieurs à zéro."
+ },
+ "GATE // CAPS LOCK": {
+  "description": "Écris une méthode `solve(str)` qui renvoie la chaîne en majuscules.",
+  "inputDescription": "Une chaîne `str` de lettres, chiffres et espaces.",
+  "outputDescription": "La même chaîne en majuscules."
+ },
+ "GATE // ABSOLUTE ZERO": {
+  "description": "Écris une méthode `solve(n)` qui renvoie la valeur absolue de n (sa distance à zéro).",
+  "inputDescription": "Un entier `n` (-10000 <= n <= 10000).",
+  "outputDescription": "La valeur absolue de n."
+ },
+ "GATE // LAST BYTE": {
+  "description": "Écris une méthode `solve(str)` qui renvoie le dernier caractère de la chaîne, sous forme de chaîne.",
+  "inputDescription": "Une chaîne non vide `str`.",
+  "outputDescription": "Une chaîne de longueur 1."
+ },
+ "GATE // FIBONACCI STREAM": {
+  "description": "Écris une méthode `solve(n)` qui renvoie le n-ième nombre de Fibonacci. F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2).",
+  "inputDescription": "Un entier `n` (0 <= n <= 40).",
+  "outputDescription": "F(n)."
+ },
+ "GATE // PRIME SENTRY": {
+  "description": "Écris une méthode `solve(n)` qui renvoie true si n est un nombre premier.",
+  "inputDescription": "Un entier `n` (0 <= n <= 100000).",
+  "outputDescription": "true si n est premier, sinon false."
+ },
+ "GATE // DIGIT CRUSHER": {
+  "description": "Écris une méthode `solve(n)` qui renvoie la somme des chiffres de n.",
+  "inputDescription": "Un entier `n` (0 <= n <= 1000000000).",
+  "outputDescription": "La somme des chiffres."
+ },
+ "GATE // WORD COUNTER": {
+  "description": "Écris une méthode `solve(text)` qui compte les mots du texte. Les mots sont séparés par une ou plusieurs espaces ; il peut y avoir des espaces au début et à la fin.",
+  "inputDescription": "Une chaîne `text`.",
+  "outputDescription": "Le nombre de mots."
+ },
+ "GATE // ANAGRAM LOCK": {
+  "description": "Écris une méthode `solve(a, b)` qui renvoie true si `b` est un anagramme de `a` (les mêmes lettres, chacune le même nombre de fois).",
+  "inputDescription": "Deux chaînes en minuscules `a` et `b`.",
+  "outputDescription": "true ou false."
+ },
+ "GATE // RUNNER-UP": {
+  "description": "Écris une méthode `solve(nums)` qui renvoie la deuxième plus grande valeur DISTINCTE du tableau.",
+  "inputDescription": "Un tableau `nums` contenant au moins deux valeurs différentes.",
+  "outputDescription": "La deuxième plus grande valeur distincte."
+ },
+ "GATE // ARRAY FLIP": {
+  "description": "Écris une méthode `solve(nums)` qui renvoie un nouveau tableau avec les éléments dans l'ordre inverse.",
+  "inputDescription": "Un tableau d'entiers `nums` (peut être vide).",
+  "outputDescription": "Le tableau inversé."
+ },
+ "GATE // FREQUENCY SCAN": {
+  "description": "Écris une méthode `solve(str)` qui renvoie la lettre la plus fréquente. En cas d'égalité, renvoie celle qui vient en premier dans l'alphabet.",
+  "inputDescription": "Une chaîne non vide en minuscules `str` (lettres uniquement).",
+  "outputDescription": "Une chaîne d'une seule lettre."
+ },
+ "GATE // BINARY ENCODER": {
+  "description": "Écris une méthode `solve(n)` qui renvoie n écrit en binaire (base 2), sans zéros en tête.",
+  "inputDescription": "Un entier `n` (0 <= n <= 1000000).",
+  "outputDescription": "La représentation binaire sous forme de chaîne."
+ },
+ "GATE // GCD CIPHER": {
+  "description": "Écris une méthode `solve(a, b)` qui renvoie le plus grand commun diviseur de a et b.",
+  "inputDescription": "Deux entiers positifs `a` et `b` (<= 1000000).",
+  "outputDescription": "pgcd(a, b)."
+ },
+ "GATE // DUPLICATE PURGE": {
+  "description": "Écris une méthode `solve(nums)` qui supprime les valeurs répétées en gardant la première occurrence de chacune, dans l'ordre d'origine.",
+  "inputDescription": "Un tableau d'entiers `nums` (peut être vide).",
+  "outputDescription": "Le tableau sans doublons."
+ },
+ "GATE // ORDER CHECK": {
+  "description": "Écris une méthode `solve(nums)` qui renvoie true si le tableau est trié par ordre croissant (au sens large).",
+  "inputDescription": "Un tableau d'entiers `nums` (peut être vide).",
+  "outputDescription": "true ou false."
+ },
+ "GATE // CAESAR SHIFT": {
+  "description": "Écris une méthode `solve(text, k)` qui décale chaque lettre minuscule de k rangs dans l'alphabet, en revenant de z à a. Les autres caractères ne changent pas.",
+  "inputDescription": "Une chaîne `text` et un entier `k` (0 <= k <= 25).",
+  "outputDescription": "La chaîne décalée."
+ },
+ "GATE // EVEN COUNTER": {
+  "description": "Écris une méthode `solve(nums)` qui compte les nombres pairs du tableau.",
+  "inputDescription": "Un tableau d'entiers `nums` (peut être vide).",
+  "outputDescription": "Le nombre d'éléments pairs."
+ },
+ "GATE // MIRROR NUMBER": {
+  "description": "Écris une méthode `solve(n)` qui renvoie true si le nombre se lit de la même façon dans les deux sens (pas besoin de chaînes, mais c'est autorisé).",
+  "inputDescription": "Un entier `n` (0 <= n <= 1000000000).",
+  "outputDescription": "true ou false."
+ },
+ "GATE // TITLE CASE": {
+  "description": "Écris une méthode `solve(text)` qui met en majuscule la première lettre de chaque mot. Les mots sont séparés par une seule espace ; les autres lettres restent telles quelles.",
+  "inputDescription": "Une chaîne `text` de mots en minuscules et d'espaces simples.",
+  "outputDescription": "La chaîne avec une majuscule à chaque mot."
+ },
+ "GATE // TWIN SUM": {
+  "description": "Écris une méthode `solve(nums, target)` qui renvoie les indices [i, j] (i < j) des deux nombres dont la somme vaut target. Il y a exactement une réponse.",
+  "inputDescription": "Un tableau `nums` (2 <= longueur <= 10000) et un entier `target`.",
+  "outputDescription": "Un tableau de deux indices."
+ },
+ "GATE // BRACKET VAULT": {
+  "description": "Écris une méthode `solve(s)` qui renvoie true si chaque parenthèse ( [ { est fermée par la ) ] } correspondante dans le bon ordre.",
+  "inputDescription": "Une chaîne `s` ne contenant que les caractères ()[]{}.",
+  "outputDescription": "true ou false."
+ },
+ "GATE // LONGEST STREAK": {
+  "description": "Écris une méthode `solve(s)` qui renvoie la longueur de la plus longue suite du même caractère d'affilée.",
+  "inputDescription": "Une chaîne `s` (peut être vide).",
+  "outputDescription": "La longueur de la plus longue suite."
+ },
+ "GATE // LOST PACKET": {
+  "description": "Écris une méthode `solve(nums)` qui renvoie le seul nombre manquant de l'intervalle 0..n. Le tableau contient n nombres distincts de cet intervalle.",
+  "inputDescription": "Un tableau de n entiers distincts entre 0 et n.",
+  "outputDescription": "Le nombre manquant."
+ },
+ "GATE // ROMAN DECODER": {
+  "description": "Écris une méthode `solve(roman)` qui convertit un nombre romain (I, V, X, L, C, D, M) en entier.",
+  "inputDescription": "Un nombre romain valide entre 1 et 3999.",
+  "outputDescription": "Sa valeur."
+ },
+ "GATE // MATRIX TRACE": {
+  "description": "Écris une méthode `solve(grid)` qui renvoie la somme de la diagonale principale (d'en haut à gauche à en bas à droite) d'une matrice carrée.",
+  "inputDescription": "Une matrice carrée `grid` (1 <= taille <= 50).",
+  "outputDescription": "La somme des grid[i][i]."
+ },
+ "GATE // RUN-LENGTH PACK": {
+  "description": "Écris une méthode `solve(s)` qui compresse la chaîne : chaque suite du même caractère devient ce caractère suivi de la longueur de la suite.",
+  "inputDescription": "Une chaîne en minuscules `s` (peut être vide).",
+  "outputDescription": "La chaîne compressée."
+ },
+ "GATE // PEAK SEGMENT": {
+  "description": "Écris une méthode `solve(nums)` qui renvoie la plus grande somme possible d'une partie contiguë et non vide du tableau.",
+  "inputDescription": "Un tableau d'entiers `nums` (longueur >= 1).",
+  "outputDescription": "La somme maximale d'un sous-tableau."
+ },
+ "GATE // PRIME FIELD": {
+  "description": "Écris une méthode `solve(n)` qui renvoie combien de nombres premiers sont inférieurs ou égaux à n.",
+  "inputDescription": "Un entier `n` (0 <= n <= 1000000).",
+  "outputDescription": "Le nombre de premiers <= n."
+ },
+ "GATE // UNIQUE WINDOW": {
+  "description": "Écris une méthode `solve(s)` qui renvoie la longueur de la plus longue partie contiguë de la chaîne sans caractère répété.",
+  "inputDescription": "Une chaîne `s` (peut être vide).",
+  "outputDescription": "La longueur de la plus longue sous-chaîne sans répétition."
+ },
+ "GATE // ROTATION DRIVE": {
+  "description": "Écris une méthode `solve(nums, k)` qui fait tourner le tableau de k pas vers la droite (le dernier élément passe en tête, k fois).",
+  "inputDescription": "Un tableau `nums` (peut être vide) et un entier `k` (0 <= k <= 1000000).",
+  "outputDescription": "Le tableau tourné."
+ }
+}

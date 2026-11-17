@@ -26,11 +26,14 @@ public class StoreController {
     private final TokenService tokens;
 
     private final CosmeticRepository cosmetics;
+    private final com.example.game_backend.progress.ProgressService progress;
 
-    public StoreController(UserRepository users, TokenService tokens, CosmeticRepository cosmetics) {
+    public StoreController(UserRepository users, TokenService tokens, CosmeticRepository cosmetics,
+                           com.example.game_backend.progress.ProgressService progress) {
         this.users = users;
         this.tokens = tokens;
         this.cosmetics = cosmetics;
+        this.progress = progress;
     }
 
     /** Price of a built-in skin or a published admin item, or null when it cannot be bought. */
@@ -74,6 +77,7 @@ public class StoreController {
         owned.add(skinId);
         u.setOwnedSkins(String.join(",", owned));
         u.setActiveSkin(skinId);
+        progress.onSkinBought(u);
         users.save(u);
         return ResponseEntity.ok(view(u));
     }

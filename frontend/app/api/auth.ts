@@ -3,6 +3,7 @@
 import { saveNickname } from "~/lib/nickname";
 import { saveAvatar } from "~/lib/avatar";
 import { notifyUserChanged } from "~/lib/currentUser";
+import i18n from "i18next";
 
 export type AuthResponse = {
   id: number;
@@ -42,6 +43,7 @@ async function authRequest(path: string, body: { username: string; password: str
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
+      "Accept-Language": i18n.language || "en",
     },
     body: JSON.stringify(body),
   });
@@ -123,7 +125,7 @@ export async function refreshUser(): Promise<AuthResponse | null> {
 async function plainPost(path: string, body: object): Promise<void> {
   const res = await fetch(`${BASE_URL}${path}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    headers: { "Content-Type": "application/json", Accept: "application/json", "Accept-Language": i18n.language || "en" },
     body: JSON.stringify(body),
   });
   if (!res.ok) {
