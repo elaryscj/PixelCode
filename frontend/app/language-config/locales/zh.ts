@@ -416,6 +416,15 @@ const zh: Translation = {
   ach_FRIENDLY_desc: "和好友在私人房间完成一场对局。",
   ach_COLLECTOR_name: "收藏家",
   ach_COLLECTOR_desc: "在商店购买一个皮肤。",
+
+  // emotes, season prize skins, menu badge
+  g_emote_wave: "挥手",
+  g_emote_dance: "跳舞",
+  st_exclusive: "赛季奖励",
+  st_exclusive_lore: "第 {{n}} 赛季前三名专属皮肤，商店不出售。",
+  pg_season_skin: "第 1-{{n}} 名还将获得专属皮肤 {{name}}，商店不出售。",
+  menu_new: "{{n}} 个新奖励",
+  g_opp_disconnected: "对手已断线——对方有 5 分钟时间返回",
 };
 
 export default zh;

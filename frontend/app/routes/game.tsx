@@ -11,6 +11,7 @@ import TouchControls from "~/components/game/TouchControls";
 import { burst, confetti, flash, shake } from "~/components/game/fx";
 import { sfx } from "~/lib/sfx";
 import { AnimatedSkin, type AnimId, type SkinHandle } from "~/components/skins";
+import type { EmoteId } from "~/game/skinRig";
 import { getCurrentUser, refreshUser } from "~/api/auth";
 import { getRoom, rematchRoom } from "~/api/room";
 import { pingColor, pingLabel, usePing } from "~/lib/liveStats";
@@ -18,6 +19,7 @@ import { getToken } from "~/api/http";
 import { onGameEvent, sendMove } from "~/api/socket";
 import {
   finishMatch,
+  sendEmote,
   getGameState,
   openDoor,
   type DoorChallenge,
@@ -39,6 +41,10 @@ import {
   stepPlayer,
   type CrumbleState,
 } from "~/game/physics";
+
+/** how long an emote plays, and the shortest gap between two (the server enforces the same gap) */
+const EMOTE_MS = 1900;
+const EMOTE_GAP_MS = 1500;
 
 function toDeadlines(doors?: Record<string, number>): Record<number, number> {
   const out: Record<number, number> = {};
@@ -183,6 +189,9 @@ function GameScreen() {
   const mySkinRef = useRef<SkinHandle | null>(null);
   const oppSkinRef = useRef<SkinHandle | null>(null);
   const oppUnlockedRef = useRef<number[]>([]);
+  // an emote plays for a moment unless the figure moves (then the movement animation wins)
+  const myEmote = useRef<{ anim: EmoteId | null; until: number; sentAt: number }>({ anim: null, until: 0, sentAt: 0 });
+  const oppEmote = useRef<{ anim: EmoteId | null; until: number }>({ anim: null, until: 0 });
   const opponentState = useRef({
     x: 100 - getMap(0).start.x - CHAR_W,
     y: getMap(0).start.y,
@@ -409,6 +418,8 @@ function GameScreen() {
           setOpponentUnlockedCps((prev) => Array.from(new Set([...prev, data.cpNum])));
           setOppDoors(drop);
         }
+      } else if (data.type === "EMOTE" && data.userId !== myId && (data.emote === "wave" || data.emote === "dance")) {
+        oppEmote.current = { anim: data.emote, until: performance.now() + EMOTE_MS };
       } else if (data.type === "REMATCH" && data.userId !== myId && data.code) {
         setRematchOffer(String(data.code));
       } else if (data.type === "GAME_OVER" && data.result) {
@@ -496,11 +507,23 @@ function GameScreen() {
     }
   };
 
+  // ---------------------------------------------------------------- emotes
+  const emote = (e: EmoteId) => {
+    const now = performance.now();
+    if (gameOverRef.current || modalRef.current || now - myEmote.current.sentAt < EMOTE_GAP_MS) return;
+    myEmote.current = { anim: e, until: now + EMOTE_MS, sentAt: now };
+    void sendEmote(code, e).catch(() => {});
+  };
+  const emoteRef = useRef(emote);
+  emoteRef.current = emote;
+
   // ---------------------------------------------------------------- keyboard
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (modalRef.current) return;
       keysPressed.current[e.code] = true;
+      if (e.code === "Digit1" && !e.repeat) emoteRef.current("wave");
+      if (e.code === "Digit2" && !e.repeat) emoteRef.current("dance");
       if ((e.code === "KeyE" || e.code === "Enter") && nearRef.current) {
         void openChallenge(nearRef.current);
       }
@@ -569,7 +592,7 @@ function GameScreen() {
           const squash = p.bounced < 8 ? ` scaleY(${1.25 - p.bounced * 0.03})` : "";
           playerSpriteRef.current.style.transform = `scaleX(${p.facingLeft ? -1 : 1})${squash}`;
         }
-        const myAnim: AnimId = typing
+        let myAnim: AnimId = typing
           ? "think"
           : !p.isGrounded
             ? p.vy > 0
@@ -578,6 +601,8 @@ function GameScreen() {
             : Math.abs(p.vx) > 0.08
               ? "walk"
               : "idle";
+        if (myAnim === "idle" && myEmote.current.anim && now < myEmote.current.until) myAnim = myEmote.current.anim;
+        else if (myAnim !== "idle") myEmote.current.until = 0; // moving ends the emote
         mySkinRef.current?.setAnim(myAnim);
         const fl = floorOf(map, p.y);
         if (fl !== floorRef.current.me) {
@@ -607,8 +632,20 @@ function GameScreen() {
             opp.y >= d.y - 0.5 &&
             opp.y < d.y + 6,
         );
+        const oppMoving = Math.abs(oppDy) > 0.4 || Math.abs(oppDx) > 0.05;
+        if (oppMoving) oppEmote.current.until = 0;
         oppSkinRef.current?.setAnim(
-          oppDy > 0.4 ? "jump" : oppDy < -0.4 ? "fall" : Math.abs(oppDx) > 0.05 ? "walk" : oppAtDoor ? "think" : "idle",
+          oppDy > 0.4
+            ? "jump"
+            : oppDy < -0.4
+              ? "fall"
+              : Math.abs(oppDx) > 0.05
+                ? "walk"
+                : oppEmote.current.anim && now < oppEmote.current.until
+                  ? oppEmote.current.anim
+                  : oppAtDoor
+                    ? "think"
+                    : "idle",
         );
         const oFl = floorOf(map, opp.targetY);
         if (oFl !== floorRef.current.opp) {
@@ -841,6 +878,12 @@ function GameScreen() {
           <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">SPACE</kbd> {t("k_jump")}</span>
           <span><kbd className="border border-neon text-neon px-2 py-0.5">E</kbd> {t("k_interact")}</span>
           <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">R</kbd> {t("k_respawn")}</span>
+          <button type="button" onClick={() => emote("wave")} className="hover:text-white">
+            <kbd className="border border-neon/60 text-neon px-2 py-0.5">1</kbd> 👋 {t("g_emote_wave")}
+          </button>
+          <button type="button" onClick={() => emote("dance")} className="hover:text-white">
+            <kbd className="border border-neon/60 text-neon px-2 py-0.5">2</kbd> 🕺 {t("g_emote_dance")}
+          </button>
         </div>
         <div className="flex gap-4 items-center">
           <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-neon"></div> {t("k_gate")}</span>
@@ -867,6 +910,8 @@ function GameScreen() {
         canInteract={nearCheckpoint !== null && !isModalOpen}
         onInteract={() => nearRef.current && void openChallenge(nearRef.current)}
         onRespawn={triggerRespawn}
+        onEmote={emote}
+        emoteLabels={{ wave: t("g_emote_wave"), dance: t("g_emote_dance") }}
       />
       <div className="hidden pointer-coarse:portrait:flex fixed inset-0 z-[55] flex-col items-center justify-center gap-6 bg-[#050814]/95 text-center px-8">
         <div className="text-7xl text-neon animate-bounce">⟳</div>
@@ -893,7 +938,7 @@ function GameScreen() {
       )}
       {!oppConnected && !gameOver && (
         <div className="fixed top-3 left-1/2 -translate-x-1/2 z-40 bg-yellow text-black px-4 py-1 text-[10px] border-2 border-pink">
-          OPPONENT DISCONNECTED - THEY HAVE 5 MINUTES TO RETURN
+          {t("g_opp_disconnected")}
         </div>
       )}
       {offline && !gameOver && (

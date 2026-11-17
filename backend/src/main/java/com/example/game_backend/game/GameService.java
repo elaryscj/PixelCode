@@ -427,6 +427,33 @@ public class GameService {
 
     // ---------------------------------------------------------------- finish
 
+    public static final java.util.Set<String> EMOTES = java.util.Set.of("wave", "dance");
+    private static final long EMOTE_GAP_MS = 1500;
+
+    /** A player waves or dances: relayed to the opponent's screen. Silently ignored when sent too often. */
+    public Map<String, Object> emote(String code, long userId, String emote) {
+        if (emote == null || !EMOTES.contains(emote)) {
+            throw new ApiException(400, "Unknown emote");
+        }
+        GameSession s = activeSession(code);
+        GameSession.Slot me = requireSlot(s, userId);
+        boolean sent = false;
+        synchronized (s) {
+            long now = System.currentTimeMillis();
+            if (!s.over && now - me.lastEmoteAt >= EMOTE_GAP_MS) {
+                me.lastEmoteAt = now;
+                me.lastSeen = now;
+                Map<String, Object> msg = new LinkedHashMap<>();
+                msg.put("type", "EMOTE");
+                msg.put("userId", me.userId);
+                msg.put("emote", emote);
+                emit(s.code, msg);
+                sent = true;
+            }
+        }
+        return Map.of("sent", sent);
+    }
+
     /** US-15: first player at the exit with all doors open wins. */
     public Map<String, Object> finish(String code, long userId, Double x, Double y) {
         GameSession s = activeSession(code);

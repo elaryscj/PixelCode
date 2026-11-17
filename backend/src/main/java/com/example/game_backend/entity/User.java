@@ -87,6 +87,10 @@ public class User {
     @Column(nullable = false, columnDefinition = "integer default 0")
     private int seasonMatches = 0;
 
+    /** when the player last opened the PROGRESS screen: newer quests / achievements / season places are "new" */
+    @Column
+    private Instant progressSeenAt;
+
     public User() {
     }
 
@@ -138,6 +142,9 @@ public class User {
     public void setWinStreak(int winStreak) { this.winStreak = winStreak; }
     public int getSeasonMatches() { return seasonMatches; }
     public void setSeasonMatches(int seasonMatches) { this.seasonMatches = seasonMatches; }
+
+    public Instant getProgressSeenAt() { return progressSeenAt; }
+    public void setProgressSeenAt(Instant progressSeenAt) { this.progressSeenAt = progressSeenAt; }
 
     public boolean isBanned() {
         return bannedUntil != null && bannedUntil.isAfter(Instant.now());

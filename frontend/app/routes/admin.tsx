@@ -71,6 +71,7 @@ function AdminScreen() {
   const [skinPixels, setSkinPixels] = useState<Uint8ClampedArray>(() => builtinTexture("neon_ronin"));
   /** the store item being edited (null = a new one) */
   const [editingSkin, setEditingSkin] = useState<string | null>(null);
+  const [skinPrize, setSkinPrize] = useState(false);
   const [skinMsg, setSkinMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const reloadSkins = () => listCosmetics().then(setSkins).catch(() => {});
@@ -81,12 +82,15 @@ function AdminScreen() {
     try {
       const texture = textureToDataUrl(skinPixels);
       if (editingSkin) {
-        const c = await updateCosmetic(editingSkin, skinName, Number(skinPrice), texture);
+        const c = await updateCosmetic(editingSkin, skinName, Number(skinPrice), texture, skinPrize);
         forgetSkin(c.id);
         setSkinMsg({ ok: true, text: `Saved "${c.name}"` });
       } else {
-        const c = await createCosmetic(skinName, Number(skinPrice), texture);
-        setSkinMsg({ ok: true, text: `Published "${c.name}" in the store` });
+        const c = await createCosmetic(skinName, Number(skinPrice), texture, skinPrize);
+        setSkinMsg({
+          ok: true,
+          text: c.seasonReward ? `"${c.name}" will go to this season's top 3` : `Published "${c.name}" in the store`,
+        });
         setSkinName("");
       }
       void reloadSkins();
@@ -103,6 +107,7 @@ function AdminScreen() {
       setSkinPixels(await loadTextureFromUrl(c.texture));
       setSkinName(c.name);
       setSkinPrice(String(c.price));
+      setSkinPrize(!!c.seasonReward);
       setEditingSkin(id);
       document.getElementById("skin-editor")?.scrollIntoView({ behavior: "smooth" });
     } catch (err) {
@@ -242,6 +247,16 @@ function AdminScreen() {
           <input className={field} value={skinName} onChange={(e) => setSkinName(e.target.value)} maxLength={40} />
           <label className={label}>PRICE (PIXELS)</label>
           <input className={field} type="number" min={0} value={skinPrice} onChange={(e) => setSkinPrice(e.target.value)} />
+          <label className="flex items-start gap-3 mt-4 font-sans text-white cursor-pointer">
+            <input type="checkbox" checked={skinPrize} onChange={(e) => setSkinPrize(e.target.checked)} className="mt-1 w-5 h-5 accent-yellow" />
+            <span>
+              <span className="font-pixel text-yellow text-xl">SEASON PRIZE</span>
+              <span className="block text-sm text-gray-400">
+                Not sold in the store. When the running season ends, places 1-3 get it (with their PIXELS). The price is
+                ignored. If several prizes are waiting, the newest one is used.
+              </span>
+            </span>
+          </label>
           {skinMsg && (
             <p className={`${skinMsg.ok ? "text-neon border-neon/40 bg-neon/10" : "text-pink border-pink/40 bg-pink/10"} text-xl mt-4 border px-3 py-2 font-sans`}>
               {skinMsg.text}
@@ -255,6 +270,7 @@ function AdminScreen() {
               type="button"
               onClick={() => {
                 setEditingSkin(null);
+                setSkinPrize(false);
                 setSkinName("");
                 setSkinMsg(null);
               }}
@@ -270,7 +286,14 @@ function AdminScreen() {
             <li key={c.id} className="flex items-center justify-between border border-neon/50 bg-[#070c1e]/90 px-4 py-3">
               <span className="flex items-center gap-3 text-yellow text-2xl">
                 <SkinArt id={c.id} size="small" className="h-10 w-auto" />
-                {c.name} <span className="text-neon text-lg">{c.price} PIXELS</span>
+                {c.name}{" "}
+                {c.seasonReward ? (
+                  <span className="text-pink text-lg">
+                    {c.awardedSeason ? `SEASON ${c.awardedSeason} PRIZE (AWARDED)` : "SEASON PRIZE (WAITING)"}
+                  </span>
+                ) : (
+                  <span className="text-neon text-lg">{c.price} PIXELS</span>
+                )}
               </span>
               <span className="flex items-center gap-4">
                 <span className={c.published ? "text-neon text-xl" : "text-pink text-xl"}>{c.published ? "PUBLISHED" : "WITHDRAWN"}</span>

@@ -27,6 +27,9 @@ public class SeasonResult {
     private int rating;
     @Column(nullable = false)
     private int reward;
+    /** exclusive skin received with this place (top 3), if the season had one */
+    @Column
+    private String skinId;
 
     public SeasonResult() {
     }
@@ -47,4 +50,6 @@ public class SeasonResult {
     public int getPlace() { return place; }
     public int getRating() { return rating; }
     public int getReward() { return reward; }
+    public String getSkinId() { return skinId; }
+    public void setSkinId(String skinId) { this.skinId = skinId; }
 }

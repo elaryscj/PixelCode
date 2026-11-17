@@ -44,6 +44,9 @@ US-08 Close account: excluded by SRS (a delete-account action exists in the prof
 
 ## Skins (beyond the SRS)
 - Every skin is a 32 x 16 pixel texture cut into body parts (head, body, arms, legs, hair/hat; layout in frontend game/skinRig.ts). Animations are built from it in the browser: idle, walk, jump, fall, think (at a door), win, lose. The opponent's animation is read from their movement.
+- Emotes in a match: wave (key 1) and dance (key 2), also on-screen buttons on phones; the server relays them to the opponent (at most one every 1.5 s).
+- Season prize skins: in the editor an admin can tick SEASON PRIZE. Such a skin is never sold; when the season ends, places 1-3 get it (the newest waiting prize is used). It is shown on /progress and above the leaderboard; winners see it in their store.
+- The PROGRESS menu button shows how many quests / achievements / season places are new since the player last opened /progress.
 - The 4 built-in skins are redrawn as textures in game/builtinSkins.ts (no image files).
 - /admin has a pixel editor for store skins: pencil, eraser, fill, picker, mirror for left/right, undo, live preview of every animation, GIF download, texture PNG download/upload, editing a published skin. Older admin items that are a single picture still show (not animated).
 

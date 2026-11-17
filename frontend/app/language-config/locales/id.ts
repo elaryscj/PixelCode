@@ -416,6 +416,15 @@ const id: Translation = {
   ach_FRIENDLY_desc: "Selesaikan pertandingan di room pribadi bersama teman.",
   ach_COLLECTOR_name: "Kolektor",
   ach_COLLECTOR_desc: "Beli skin di toko.",
+
+  // emotes, season prize skins, menu badge
+  g_emote_wave: "Melambai",
+  g_emote_dance: "Menari",
+  st_exclusive: "HADIAH MUSIM",
+  st_exclusive_lore: "Skin eksklusif untuk 3 besar musim {{n}}. Tidak pernah dijual di toko.",
+  pg_season_skin: "Peringkat 1-{{n}} juga mendapat skin eksklusif {{name}}. Skin ini tidak dijual di toko.",
+  menu_new: "{{n}} hadiah baru",
+  g_opp_disconnected: "LAWAN TERPUTUS — DIA PUNYA 5 MENIT UNTUK KEMBALI",
 };
 
 export default id;

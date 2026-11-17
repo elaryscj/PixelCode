@@ -63,6 +63,8 @@ public class GameSession {
         public final long[] doorStartedAt = new long[DOORS + 1];
         public final long[] lastSubmitAt = new long[DOORS + 1];
         public long lastSeen;
+        /** emotes are limited to one every EMOTE_GAP_MS so they cannot be spammed at the opponent */
+        public long lastEmoteAt;
         public double x;
         public double y;
         /** when the last position was accepted (0 = none yet) */

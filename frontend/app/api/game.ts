@@ -84,6 +84,9 @@ export const openDoor = (code: string, cp: number, x: number, y: number) =>
 export const submitDoor = (code: string, cp: number, source: string) =>
   api<SubmitResult>(`/games/${enc(code)}/doors/${cp}/submit`, { method: "POST", body: JSON.stringify({ code: source }) });
 /** `x`/`y`: where the player stands; the server checks they are really at the exit. */
+/** wave / dance: shown to the opponent too (the server limits it to one every 1.5 s) */
+export const sendEmote = (code: string, emote: string) =>
+  api<{ sent: boolean }>(`/games/${enc(code)}/emote`, { method: "POST", body: JSON.stringify({ emote }) });
 export const finishMatch = (code: string, x: number, y: number) =>
   api<{ status: string; result: MatchResult }>(`/games/${enc(code)}/finish`, { method: "POST", body: JSON.stringify({ x, y }) });
 

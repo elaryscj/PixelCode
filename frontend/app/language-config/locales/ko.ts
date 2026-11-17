@@ -416,6 +416,15 @@ const ko: Translation = {
   ach_FRIENDLY_desc: "친구와 비공개 방에서 매치를 끝내세요.",
   ach_COLLECTOR_name: "수집가",
   ach_COLLECTOR_desc: "상점에서 스킨을 구매하세요.",
+
+  // emotes, season prize skins, menu badge
+  g_emote_wave: "손 흔들기",
+  g_emote_dance: "춤추기",
+  st_exclusive: "시즌 보상",
+  st_exclusive_lore: "시즌 {{n}} 상위 3명 전용 스킨입니다. 상점에서 판매하지 않습니다.",
+  pg_season_skin: "1~{{n}}위는 전용 스킨 {{name}}도 받습니다. 상점에서 판매하지 않습니다.",
+  menu_new: "새 보상 {{n}}개",
+  g_opp_disconnected: "상대 연결 끊김 — 5분 안에 돌아와야 합니다",
 };
 
 export default ko;

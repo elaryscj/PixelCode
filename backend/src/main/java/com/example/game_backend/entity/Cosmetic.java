@@ -23,6 +23,12 @@ public class Cosmetic {
      */
     @Column(columnDefinition = "TEXT")
     private String texture;
+    /** an exclusive skin for the season top 3: never sold in the store */
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean seasonReward = false;
+    /** the season whose top 3 received it (null = waiting for the end of the current season) */
+    @Column
+    private Long awardedSeason;
 
     public Long getId() { return id; }
     public String getSkinId() { return "c_" + id; }
@@ -36,4 +42,8 @@ public class Cosmetic {
     public void setPublished(boolean v) { this.published = v; }
     public String getTexture() { return texture; }
     public void setTexture(String v) { this.texture = v; }
+    public boolean isSeasonReward() { return seasonReward; }
+    public void setSeasonReward(boolean v) { this.seasonReward = v; }
+    public Long getAwardedSeason() { return awardedSeason; }
+    public void setAwardedSeason(Long v) { this.awardedSeason = v; }
 }

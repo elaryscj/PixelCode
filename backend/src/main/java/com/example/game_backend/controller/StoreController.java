@@ -42,7 +42,7 @@ public class StoreController {
         if (skinId.startsWith("c_")) {
             try {
                 return cosmetics.findById(Long.parseLong(skinId.substring(2)))
-                        .filter(Cosmetic::isPublished).map(Cosmetic::getPrice).orElse(null);
+                        .filter(c -> c.isPublished() && !c.isSeasonReward()).map(Cosmetic::getPrice).orElse(null);
             } catch (NumberFormatException ignored) {
             }
         }
@@ -117,9 +117,19 @@ public class StoreController {
         m.put("active", u.getActiveSkin());
         Map<String, Integer> prices = new LinkedHashMap<>(SkinCatalog.PRICES);
         List<Map<String, Object>> catalog = new ArrayList<>();
-        for (Cosmetic c : cosmetics.findByPublishedTrueOrderByIdAsc()) {
-            prices.put(c.getSkinId(), c.getPrice());
+        Set<String> owned = owned(u);
+        for (Cosmetic c : cosmetics.findAllByOrderByIdDesc().reversed()) {
             Map<String, Object> item = new LinkedHashMap<>();
+            if (c.isSeasonReward()) {
+                // a season prize: only its winners see it, and it is never for sale
+                if (!owned.contains(c.getSkinId())) continue;
+                item.put("exclusive", true);
+                item.put("season", c.getAwardedSeason());
+            } else if (c.isPublished()) {
+                prices.put(c.getSkinId(), c.getPrice());
+            } else {
+                continue;
+            }
             item.put("id", c.getSkinId());
             item.put("name", c.getName());
             catalog.add(item);

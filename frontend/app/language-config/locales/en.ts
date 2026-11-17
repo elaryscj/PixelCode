@@ -420,6 +420,15 @@ const en = {
   ach_FRIENDLY_desc: "Finish a match in a private room with a friend.",
   ach_COLLECTOR_name: "Collector",
   ach_COLLECTOR_desc: "Buy a skin in the store.",
+
+  // emotes, season prize skins, menu badge
+  g_emote_wave: "Wave",
+  g_emote_dance: "Dance",
+  st_exclusive: "SEASON PRIZE",
+  st_exclusive_lore: "An exclusive skin for the top 3 of season {{n}}. It is never sold in the store.",
+  pg_season_skin: "Places 1-{{n}} also win the exclusive skin {{name}}. It is never sold in the store.",
+  menu_new: "{{n}} new rewards",
+  g_opp_disconnected: "OPPONENT DISCONNECTED - THEY HAVE 5 MINUTES TO RETURN",
 };
 
 export type Translation = Record<keyof typeof en, string>;

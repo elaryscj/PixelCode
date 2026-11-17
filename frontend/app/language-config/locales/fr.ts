@@ -416,6 +416,15 @@ const fr: Translation = {
   ach_FRIENDLY_desc: "Termine un match dans un salon privé avec un ami.",
   ach_COLLECTOR_name: "Collectionneur",
   ach_COLLECTOR_desc: "Achète un skin dans la boutique.",
+
+  // emotes, season prize skins, menu badge
+  g_emote_wave: "Saluer",
+  g_emote_dance: "Danser",
+  st_exclusive: "PRIX DE SAISON",
+  st_exclusive_lore: "Un skin exclusif pour le top 3 de la saison {{n}}. Jamais vendu en boutique.",
+  pg_season_skin: "Les places 1 à {{n}} gagnent aussi le skin exclusif {{name}}. Il n'est jamais vendu en boutique.",
+  menu_new: "{{n}} nouvelles récompenses",
+  g_opp_disconnected: "ADVERSAIRE DÉCONNECTÉ : IL A 5 MINUTES POUR REVENIR",
 };
 
 export default fr;

@@ -76,6 +76,14 @@ public class GameController {
         return ResponseEntity.ok(result);
     }
 
+    /** body: {"emote": "wave" | "dance"} */
+    @PostMapping("/{code}/emote")
+    public ResponseEntity<Map<String, Object>> emote(@PathVariable String code, @RequestBody(required = false) Map<String, Object> body,
+                                                     @RequestHeader(value = "Authorization", required = false) String auth) {
+        Object e = body == null ? null : body.get("emote");
+        return ResponseEntity.ok(games.emote(code.toUpperCase(), tokens.requireUserId(auth), e == null ? null : e.toString()));
+    }
+
     @PostMapping("/{code}/finish")
     public ResponseEntity<Map<String, Object>> finish(@PathVariable String code,
                                                       @RequestBody(required = false) Map<String, Object> body,

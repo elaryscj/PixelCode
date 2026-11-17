@@ -88,5 +88,6 @@
  "{0}() is not allowed (no threads)": "{0}() ist nicht erlaubt (keine Threads)",
  "{0}() is not allowed": "{0}() ist nicht erlaubt",
  "{0} is not available": "{0} ist nicht verfügbar",
- "Line {0}: {1}": "Zeile {0}: {1}"
+ "Line {0}: {1}": "Zeile {0}: {1}",
+ "Unknown emote": "Unbekanntes Emote"
 }
