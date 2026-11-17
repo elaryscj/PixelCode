@@ -89,5 +89,15 @@
  "{0}() is not allowed": "{0}() no está permitido",
  "{0} is not available": "{0} no está disponible",
  "Line {0}: {1}": "Línea {0}: {1}",
- "Unknown emote": "Emoción desconocida"
+ "Unknown emote": "Emoción desconocida",
+ "Enter a player's name": "Escribe el nombre de un jugador",
+ "You cannot add yourself": "No puedes añadirte a ti mismo",
+ "You are already friends": "Ya sois amigos",
+ "Friend request already sent": "Solicitud de amistad ya enviada",
+ "Your friend list is full": "Tu lista de amigos está llena",
+ "Too many requests are waiting for an answer": "Hay demasiadas solicitudes esperando respuesta",
+ "Friend request not found": "Solicitud de amistad no encontrada",
+ "This player is not your friend": "Este jugador no es tu amigo",
+ "Your friend is in a match right now": "Tu amigo está en una partida ahora",
+ "Your friend is offline": "Tu amigo no está conectado"
 }

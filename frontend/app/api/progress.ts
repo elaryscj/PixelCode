@@ -23,6 +23,8 @@ export type Progress = {
   achievements: Achievement[];
   season: SeasonInfo & { myMatches: number; myPlace: number | null };
   badges: SeasonBadge[];
+  /** daily login streak */
+  login: { streak: number; claimedToday: boolean; nextReward: number; rewards: number[] };
 };
 
 export type CurrentSeason = SeasonInfo & { lastSeason: number | null; lastTop: SeasonBadge[] };

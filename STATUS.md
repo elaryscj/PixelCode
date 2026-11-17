@@ -50,6 +50,12 @@ US-08 Close account: excluded by SRS (a delete-account action exists in the prof
 - The 4 built-in skins are redrawn as textures in game/builtinSkins.ts (no image files).
 - /admin has a pixel editor for store skins: pencil, eraser, fill, picker, mirror for left/right, undo, live preview of every animation, GIF download, texture PNG download/upload, editing a published skin. Older admin items that are a single picture still show (not animated).
 
+## Friends and daily login (beyond the SRS)
+- /friends: add by player name (asking someone who already asked you = accept), answer requests, cancel your own, remove friends. Friends show Online / In a match / Offline (online = used the game in the last 2 minutes).
+- DUEL challenges an online friend: the challenger's private room opens (or their waiting one is reused) and the friend gets a pop-up invitation on any screen except inside a match (polled every 8 s, kept in server memory for 5 minutes).
+- Emotes show a heart (wave) or notes (dance) over the head and play a short sound.
+- Daily login streak: the first visit of each UTC day pays 20, 30, 40, 50, 60, 80, then 100 PIXELS per day in a row; a missed day restarts at day 1. Shown on /progress and as a pop-up.
+
 ## Progress (beyond the SRS)
 - Invite link: a private room shows INVITE A FRIEND -> /join/CODE (sign-in first if needed, then straight into the room).
 - Daily quests: 3 per player per UTC day, PIXELS paid on completion; count Quick Play (bot) and ranked matches, not private rooms.

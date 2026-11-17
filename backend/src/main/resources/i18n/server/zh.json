@@ -89,5 +89,15 @@
  "{0}() is not allowed": "不允许使用 {0}()",
  "{0} is not available": "{0} 不可用",
  "Line {0}: {1}": "第 {0} 行：{1}",
- "Unknown emote": "未知的表情动作"
+ "Unknown emote": "未知的表情动作",
+ "Enter a player's name": "请输入玩家名称",
+ "You cannot add yourself": "不能添加自己",
+ "You are already friends": "你们已经是好友了",
+ "Friend request already sent": "好友请求已发送",
+ "Your friend list is full": "你的好友列表已满",
+ "Too many requests are waiting for an answer": "等待回复的请求太多",
+ "Friend request not found": "未找到该好友请求",
+ "This player is not your friend": "该玩家不是你的好友",
+ "Your friend is in a match right now": "你的好友正在对局中",
+ "Your friend is offline": "你的好友不在线"
 }

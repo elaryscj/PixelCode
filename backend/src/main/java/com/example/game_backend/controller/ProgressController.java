@@ -87,7 +87,20 @@ public class ProgressController {
             badges.add(resultView(r));
         }
         out.put("badges", badges);
+        int streak = ProgressService.currentStreak(u, ProgressService.today());
+        Map<String, Object> login = new LinkedHashMap<>();
+        login.put("streak", streak);
+        login.put("claimedToday", ProgressService.today().equals(u.getLastLoginDay()));
+        login.put("nextReward", ProgressService.streakReward(streak + 1));
+        login.put("rewards", java.util.Arrays.stream(new int[]{1, 2, 3, 4, 5, 6, 7}).map(ProgressService::streakReward).boxed().toList());
+        out.put("login", login);
         return ResponseEntity.ok(out);
+    }
+
+    /** Called once a day by the client: the daily login streak reward. */
+    @org.springframework.web.bind.annotation.PostMapping("/api/progress/daily-login")
+    public ResponseEntity<Map<String, Object>> dailyLogin(@RequestHeader(value = "Authorization", required = false) String auth) {
+        return ResponseEntity.ok(progress.dailyLogin(tokens.requireUserId(auth)));
     }
 
     /** Number of rewards not seen on the PROGRESS screen yet (the dot on the menu button). */

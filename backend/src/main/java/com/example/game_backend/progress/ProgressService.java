@@ -159,6 +159,48 @@ public class ProgressService {
         return n;
     }
 
+    /** PIXELS for the n-th day in a row: 20, 30, 40, 50, 60, 80, then 100 every day */
+    static final int[] STREAK_REWARDS = {20, 30, 40, 50, 60, 80, 100};
+
+    public static int streakReward(int day) {
+        return STREAK_REWARDS[Math.min(Math.max(day, 1), STREAK_REWARDS.length) - 1];
+    }
+
+    /** The streak as it stands today: 0 if the player missed a day (it restarts at their next visit). */
+    public static int currentStreak(User u, LocalDate today) {
+        LocalDate last = u.getLastLoginDay();
+        return last != null && !last.isBefore(today.minusDays(1)) ? u.getLoginStreak() : 0;
+    }
+
+    /**
+     * First visit of the UTC day: extends the streak (or starts a new one) and pays its reward. Later calls the
+     * same day change nothing. Returns claimed, streak, reward and tomorrow's reward.
+     */
+    public java.util.Map<String, Object> dailyLogin(long userId) {
+        return tx.execute(st -> {
+            User u = users.findByIdForUpdate(userId).orElseThrow();
+            LocalDate today = today();
+            java.util.Map<String, Object> m = new java.util.LinkedHashMap<>();
+            if (u.isBot() || today.equals(u.getLastLoginDay())) {
+                m.put("claimed", false);
+                m.put("reward", 0);
+            } else {
+                int streak = today.minusDays(1).equals(u.getLastLoginDay()) ? u.getLoginStreak() + 1 : 1;
+                int reward = streakReward(streak);
+                u.setLoginStreak(streak);
+                u.setLastLoginDay(today);
+                u.setPixels(u.getPixels() + reward);
+                users.save(u);
+                m.put("claimed", true);
+                m.put("reward", reward);
+            }
+            m.put("streak", currentStreak(u, today));
+            m.put("nextReward", streakReward(currentStreak(u, today) + 1));
+            m.put("balance", u.getPixels());
+            return m;
+        });
+    }
+
     public void markSeen(long userId) {
         tx.executeWithoutResult(st -> users.findByIdForUpdate(userId).ifPresent(u -> {
             u.setProgressSeenAt(Instant.now());

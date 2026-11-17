@@ -89,5 +89,15 @@
  "{0}() is not allowed": "{0}() は使えません",
  "{0} is not available": "{0} は使えません",
  "Line {0}: {1}": "{0} 行目：{1}",
- "Unknown emote": "不明なエモート"
+ "Unknown emote": "不明なエモート",
+ "Enter a player's name": "プレイヤー名を入力してください",
+ "You cannot add yourself": "自分自身は追加できません",
+ "You are already friends": "すでにフレンドです",
+ "Friend request already sent": "フレンド申請はすでに送信済みです",
+ "Your friend list is full": "フレンドリストがいっぱいです",
+ "Too many requests are waiting for an answer": "返事待ちの申請が多すぎます",
+ "Friend request not found": "フレンド申請が見つかりません",
+ "This player is not your friend": "このプレイヤーはフレンドではありません",
+ "Your friend is in a match right now": "フレンドは今マッチ中です",
+ "Your friend is offline": "フレンドはオフラインです"
 }

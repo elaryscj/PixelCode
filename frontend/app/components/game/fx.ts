@@ -44,6 +44,47 @@ export function burst(
   }
 }
 
+/**
+ * Little symbols rising over a figure's head (emotes): a heart for a wave, notes for a dance.
+ * x / y are arena percentages of the spot above the head.
+ */
+export function floatIcon(arena: HTMLElement | null, x: number, y: number, kind: "heart" | "notes") {
+  if (!arena) return;
+  const glyphs = kind === "heart" ? ["♥"] : ["♪", "♫", "♪"];
+  const color = kind === "heart" ? "#fe2c96" : "#01e4ff";
+  glyphs.forEach((g, i) => {
+    const el = document.createElement("div");
+    el.textContent = g;
+    Object.assign(el.style, {
+      position: "absolute",
+      left: `${x}%`,
+      bottom: `${y}%`,
+      transform: "translateX(-50%)",
+      color,
+      fontSize: kind === "heart" ? "22px" : "16px",
+      lineHeight: "1",
+      textShadow: `0 0 8px ${color}`,
+      zIndex: "26",
+      pointerEvents: "none",
+      fontFamily: "monospace",
+    });
+    arena.appendChild(el);
+    if (reduced()) {
+      setTimeout(() => el.remove(), 900);
+      return;
+    }
+    const side = kind === "notes" ? (i - 1) * 14 : 0;
+    el.animate(
+      [
+        { transform: "translate(-50%, 0) scale(0.6)", opacity: 0 },
+        { transform: `translate(calc(-50% + ${side * 0.4}px), -14px) scale(1.15)`, opacity: 1, offset: 0.25 },
+        { transform: `translate(calc(-50% + ${side}px), -46px) scale(1)`, opacity: 0 },
+      ],
+      { duration: 1100, delay: i * 160, easing: "ease-out", fill: "backwards" },
+    ).onfinish = () => el.remove();
+  });
+}
+
 /** Short camera shake on any element. */
 export function shake(el: HTMLElement | null, strength = 8) {
   if (!el || reduced()) return;

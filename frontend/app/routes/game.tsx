@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import ChallengeModal from "~/components/game/ChallengeModal";
 import GameResultModal from "~/components/game/GameResultModal";
 import TouchControls from "~/components/game/TouchControls";
-import { burst, confetti, flash, shake } from "~/components/game/fx";
+import { burst, confetti, flash, floatIcon, shake } from "~/components/game/fx";
 import { sfx } from "~/lib/sfx";
 import { AnimatedSkin, type AnimId, type SkinHandle } from "~/components/skins";
 import type { EmoteId } from "~/game/skinRig";
@@ -420,6 +420,10 @@ function GameScreen() {
         }
       } else if (data.type === "EMOTE" && data.userId !== myId && (data.emote === "wave" || data.emote === "dance")) {
         oppEmote.current = { anim: data.emote, until: performance.now() + EMOTE_MS };
+        const o = opponentState.current;
+        floatIcon(oppArenaRef.current, o.x + CHAR_W / 2, o.y + CHAR_H + 1, data.emote === "wave" ? "heart" : "notes");
+        if (data.emote === "wave") sfx.wave(true);
+        else sfx.dance(true);
       } else if (data.type === "REMATCH" && data.userId !== myId && data.code) {
         setRematchOffer(String(data.code));
       } else if (data.type === "GAME_OVER" && data.result) {
@@ -512,6 +516,10 @@ function GameScreen() {
     const now = performance.now();
     if (gameOverRef.current || modalRef.current || now - myEmote.current.sentAt < EMOTE_GAP_MS) return;
     myEmote.current = { anim: e, until: now + EMOTE_MS, sentAt: now };
+    const p = playerState.current;
+    floatIcon(myArenaRef.current, p.x + CHAR_W / 2, p.y + CHAR_H + 1, e === "wave" ? "heart" : "notes");
+    if (e === "wave") sfx.wave();
+    else sfx.dance();
     void sendEmote(code, e).catch(() => {});
   };
   const emoteRef = useRef(emote);

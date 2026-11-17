@@ -89,5 +89,15 @@
  "{0}() is not allowed": "{0}() کی اجازت نہیں",
  "{0} is not available": "{0} دستیاب نہیں",
  "Line {0}: {1}": "لائن {0}: {1}",
- "Unknown emote": "نامعلوم ایموٹ"
+ "Unknown emote": "نامعلوم ایموٹ",
+ "Enter a player's name": "کھلاڑی کا نام درج کریں",
+ "You cannot add yourself": "آپ خود کو شامل نہیں کر سکتے",
+ "You are already friends": "آپ پہلے سے دوست ہیں",
+ "Friend request already sent": "دوستی کی درخواست پہلے ہی بھیجی جا چکی ہے",
+ "Your friend list is full": "آپ کی دوستوں کی فہرست بھری ہوئی ہے",
+ "Too many requests are waiting for an answer": "جواب کے منتظر درخواستیں بہت زیادہ ہیں",
+ "Friend request not found": "دوستی کی درخواست نہیں ملی",
+ "This player is not your friend": "یہ کھلاڑی آپ کا دوست نہیں ہے",
+ "Your friend is in a match right now": "آپ کا دوست ابھی میچ میں ہے",
+ "Your friend is offline": "آپ کا دوست آف لائن ہے"
 }

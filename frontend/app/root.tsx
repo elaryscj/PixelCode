@@ -78,12 +78,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 import { AudioProvider } from "./context/AudioContex";
+import SocialPulse from "./components/SocialPulse";
 
 export default function App() {
   return (
     <AudioProvider>
       <BackgroundMusic />
       <Outlet />
+      <SocialPulse />
       <div className="crt-overlay" aria-hidden />
     </AudioProvider>
   );

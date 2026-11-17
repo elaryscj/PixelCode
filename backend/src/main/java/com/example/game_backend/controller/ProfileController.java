@@ -26,13 +26,16 @@ public class ProfileController {
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     private final com.example.game_backend.progress.ProgressService progress;
+    private final com.example.game_backend.social.FriendService friends;
 
     public ProfileController(UserRepository users, TokenService tokens, AdminAccess admins,
-                             com.example.game_backend.progress.ProgressService progress) {
+                             com.example.game_backend.progress.ProgressService progress,
+                             com.example.game_backend.social.FriendService friends) {
         this.users = users;
         this.tokens = tokens;
         this.admins = admins;
         this.progress = progress;
+        this.friends = friends;
     }
 
     private User me(long id, String auth) {
@@ -130,6 +133,7 @@ public class ProfileController {
             throw new ApiException(400, "Type DELETE and confirm to remove the account");
         }
         progress.deleteFor(u.getId());
+        friends.deleteFor(u.getId());
         users.delete(u);
         tokens.invalidate(u.getId());
         return ResponseEntity.ok(Map.of("message", "Account deleted"));
