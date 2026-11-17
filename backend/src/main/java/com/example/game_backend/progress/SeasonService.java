@@ -1,8 +1,10 @@
 package com.example.game_backend.progress;
 
+import com.example.game_backend.entity.Cosmetic;
 import com.example.game_backend.entity.Season;
 import com.example.game_backend.entity.SeasonResult;
 import com.example.game_backend.entity.User;
+import com.example.game_backend.repository.CosmeticRepository;
 import com.example.game_backend.repository.SeasonRepository;
 import com.example.game_backend.repository.SeasonResultRepository;
 import com.example.game_backend.repository.UserRepository;
@@ -26,19 +28,23 @@ public class SeasonService {
     private static final Logger log = LoggerFactory.getLogger(SeasonService.class);
     public static final int MIN_MATCHES = 3;
     public static final int TOP = 10;
+    /** places that also receive the season's exclusive skin */
+    public static final int SKIN_PLACES = 3;
     /** PIXELS for places 1, 2, 3; places 4-10 get the last value */
     private static final int[] REWARDS = {1000, 700, 500, 200};
 
     private final SeasonRepository seasons;
     private final SeasonResultRepository results;
     private final UserRepository users;
+    private final CosmeticRepository cosmetics;
     private final TransactionTemplate tx;
 
     public SeasonService(SeasonRepository seasons, SeasonResultRepository results, UserRepository users,
-                         PlatformTransactionManager tm) {
+                         CosmeticRepository cosmetics, PlatformTransactionManager tm) {
         this.seasons = seasons;
         this.results = results;
         this.users = users;
+        this.cosmetics = cosmetics;
         this.tx = new TransactionTemplate(tm);
     }
 
@@ -56,6 +62,15 @@ public class SeasonService {
             YearMonth m = YearMonth.now(ZoneOffset.UTC);
             return seasons.save(new Season(monthStart(m), monthStart(m.plusMonths(1))));
         });
+    }
+
+    /** The exclusive skin the running season's top 3 will get, if an admin made one. */
+    public Cosmetic rewardSkin() {
+        return cosmetics.findFirstBySeasonRewardTrueAndAwardedSeasonIsNullOrderByIdDesc().orElse(null);
+    }
+
+    public Instant closedAt(long seasonId) {
+        return seasons.findById(seasonId).map(Season::getClosedAt).orElse(null);
     }
 
     public Season lastClosed() {
@@ -86,6 +101,7 @@ public class SeasonService {
             return;
         }
         List<User> top = users.findTop10ByBotFalseAndSeasonMatchesGreaterThanEqualOrderByRatingDescIdAsc(MIN_MATCHES);
+        Cosmetic skin = top.isEmpty() ? null : rewardSkin();
         int place = 1;
         for (User ranked : top) {
             User u = users.findByIdForUpdate(ranked.getId()).orElse(null);
@@ -94,9 +110,21 @@ public class SeasonService {
             }
             int reward = rewardFor(place);
             u.setPixels(u.getPixels() + reward);
+            SeasonResult result = new SeasonResult(s.getId(), u.getId(), u.getUsername(), place, u.getRating(), reward);
+            if (skin != null && place <= SKIN_PLACES) {
+                java.util.Set<String> owned = new java.util.LinkedHashSet<>(java.util.Arrays.asList(u.getOwnedSkins().split(",")));
+                owned.removeIf(String::isBlank);
+                owned.add(skin.getSkinId());
+                u.setOwnedSkins(String.join(",", owned));
+                result.setSkinId(skin.getSkinId());
+            }
             users.save(u);
-            results.save(new SeasonResult(s.getId(), u.getId(), u.getUsername(), place, u.getRating(), reward));
+            results.save(result);
             place++;
+        }
+        if (skin != null) {
+            skin.setAwardedSeason(s.getId());
+            cosmetics.save(skin);
         }
         int reset = users.softResetRatings();
         s.setClosedAt(now);

@@ -10,4 +10,6 @@ public interface DailyQuestRepository extends JpaRepository<DailyQuest, Long> {
     List<DailyQuest> findByUserIdAndDayOrderByIdAsc(Long userId, LocalDate day);
 
     void deleteByUserId(Long userId);
+
+    long countByUserIdAndCompletedAtAfter(Long userId, java.time.Instant after);
 }

@@ -47,6 +47,7 @@ const SWATCHES = [
 ];
 const ANIM_LABEL: Record<AnimId, string> = {
   idle: "Idle", walk: "Walk", jump: "Jump", fall: "Fall", think: "Think (at a door)", win: "Win", lose: "Lose",
+  wave: "Wave (emote)", dance: "Dance (emote)",
 };
 
 const hex = (r: number, g: number, b: number) => "#" + [r, g, b].map((v) => v.toString(16).padStart(2, "0")).join("");

@@ -88,5 +88,6 @@
  "{0}() is not allowed (no threads)": "{0}() tidak diizinkan (tanpa thread)",
  "{0}() is not allowed": "{0}() tidak diizinkan",
  "{0} is not available": "{0} tidak tersedia",
- "Line {0}: {1}": "Baris {0}: {1}"
+ "Line {0}: {1}": "Baris {0}: {1}",
+ "Unknown emote": "Emote tidak dikenal"
 }

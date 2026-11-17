@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { FaTrophy } from "react-icons/fa";
 import { getCurrentSeason, timeLeft, type CurrentSeason } from "~/api/progress";
+import SeasonPrize from "./SeasonPrize";
 
 const MEDAL = ["text-yellow", "text-gray-300", "text-[#cd7f32]"];
 
@@ -34,6 +35,7 @@ export default function SeasonBanner() {
           {t("pg_title")} &gt;
         </Link>
       </p>
+      <SeasonPrize season={season} />
       {season.lastTop.length > 0 && (
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
           <span className="text-gray-400">{t("lb_last_season", { n: season.lastSeason })}</span>

@@ -416,6 +416,15 @@ const ur: Translation = {
   ach_FRIENDLY_desc: "دوست کے ساتھ پرائیویٹ روم میں میچ مکمل کریں۔",
   ach_COLLECTOR_name: "کلیکٹر",
   ach_COLLECTOR_desc: "اسٹور سے ایک اسکِن خریدیں۔",
+
+  // emotes, season prize skins, menu badge
+  g_emote_wave: "ہاتھ ہلائیں",
+  g_emote_dance: "ناچیں",
+  st_exclusive: "سیزن انعام",
+  st_exclusive_lore: "سیزن {{n}} کے ٹاپ 3 کے لیے خاص اسکِن۔ یہ اسٹور میں کبھی نہیں بکتی۔",
+  pg_season_skin: "پوزیشن 1-{{n}} کو خاص اسکِن {{name}} بھی ملے گی۔ یہ اسٹور میں نہیں بکتی۔",
+  menu_new: "{{n}} نئے انعامات",
+  g_opp_disconnected: "مخالف کا رابطہ ٹوٹ گیا — واپس آنے کے لیے اس کے پاس 5 منٹ ہیں",
 };
 
 export default ur;

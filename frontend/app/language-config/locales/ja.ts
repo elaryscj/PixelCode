@@ -416,6 +416,15 @@ const ja: Translation = {
   ach_FRIENDLY_desc: "友だちとプライベートルームで試合を終える。",
   ach_COLLECTOR_name: "コレクター",
   ach_COLLECTOR_desc: "ストアでスキンを買う。",
+
+  // emotes, season prize skins, menu badge
+  g_emote_wave: "手を振る",
+  g_emote_dance: "ダンス",
+  st_exclusive: "シーズン賞品",
+  st_exclusive_lore: "シーズン {{n}} のトップ 3 限定スキン。ストアでは販売されません。",
+  pg_season_skin: "1〜{{n}} 位には限定スキン {{name}} も贈られます。ストアでは販売されません。",
+  menu_new: "新しい報酬 {{n}} 件",
+  g_opp_disconnected: "相手が切断しました — 戻るまで 5 分の猶予があります",
 };
 
 export default ja;

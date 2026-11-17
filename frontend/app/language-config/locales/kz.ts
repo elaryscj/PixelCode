@@ -416,6 +416,15 @@ const kz: Translation = {
   ach_FRIENDLY_desc: "Dosynyzben jeke bolmede matchty ayaqtanyz.",
   ach_COLLECTOR_name: "Kollektsioner",
   ach_COLLECTOR_desc: "Dukennen skin satyp alynyz.",
+
+  // emotes, season prize skins, menu badge
+  g_emote_wave: "Qol bulgau",
+  g_emote_dance: "Bi",
+  st_exclusive: "MAUSYM SYIAQYSY",
+  st_exclusive_lore: "{{n}}-mausymnyn top-3 oiynshysyna arnalgan erekshe skin. Dukende satylmaidy.",
+  pg_season_skin: "1-{{n}} oryndar {{name}} erekshe skinin de alady. Ol dukende satylmaidy.",
+  menu_new: "Jana syiaqylar: {{n}}",
+  g_opp_disconnected: "QARSYLAS SHYGYP KETTI — ORALUGA 5 MINUTY BAR",
 };
 
 export default kz;

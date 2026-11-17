@@ -88,5 +88,6 @@
  "{0}() is not allowed (no threads)": "{0}() は使えません（スレッド禁止）",
  "{0}() is not allowed": "{0}() は使えません",
  "{0} is not available": "{0} は使えません",
- "Line {0}: {1}": "{0} 行目：{1}"
+ "Line {0}: {1}": "{0} 行目：{1}",
+ "Unknown emote": "不明なエモート"
 }

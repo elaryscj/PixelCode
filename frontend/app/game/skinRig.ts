@@ -54,8 +54,11 @@ export function partAt(x: number, y: number): PartId | null {
   return null;
 }
 
-export type AnimId = "idle" | "walk" | "jump" | "fall" | "think" | "win" | "lose";
-export const ANIMS: AnimId[] = ["idle", "walk", "jump", "fall", "think", "win", "lose"];
+export type AnimId = "idle" | "walk" | "jump" | "fall" | "think" | "win" | "lose" | "wave" | "dance";
+export const ANIMS: AnimId[] = ["idle", "walk", "jump", "fall", "think", "win", "lose", "wave", "dance"];
+/** animations a player can trigger in a match (sent to the opponent) */
+export const EMOTES = ["wave", "dance"] as const;
+export type EmoteId = (typeof EMOTES)[number];
 
 /** One part in one frame: offset from its home spot, optional crop and vertical flip. */
 type Place = {
@@ -147,6 +150,24 @@ export const ANIM_FRAMES: Record<AnimId, { ms: number; frames: Frame[] }> = {
     frames: [
       pose({ replace: { ARM_L: [armUp("ARM_L", 0)], ARM_R: [armUp("ARM_R", 0)] } }),
       pose({ body: -2, legL: [0, -2], legR: [0, -2], replace: { ARM_L: [armUp("ARM_L", -1, -2)], ARM_R: [armUp("ARM_R", 1, -2)] } }),
+    ],
+  },
+  wave: {
+    ms: 170,
+    frames: [
+      pose({ replace: { ARM_R: [armUp("ARM_R", 0)] } }),
+      pose({ replace: { ARM_R: [armUp("ARM_R", 1)] } }),
+      pose({ replace: { ARM_R: [armUp("ARM_R", 0)] } }),
+      pose({ replace: { ARM_R: [armUp("ARM_R", -1)] } }),
+    ],
+  },
+  dance: {
+    ms: 190,
+    frames: [
+      pose({ legL: [-1, -1], armR: [1, 1], replace: { ARM_L: [armUp("ARM_L", -1)] } }),
+      pose({ body: 1, legL: [0, 0], legR: [0, 0] }),
+      pose({ legR: [1, -1], armL: [-1, 1], replace: { ARM_R: [armUp("ARM_R", 1)] } }),
+      pose({ body: 1, head: [0, 0] }),
     ],
   },
   lose: {

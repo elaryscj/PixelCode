@@ -6,7 +6,8 @@ import { FaCheck, FaLock, FaTrophy } from "react-icons/fa";
 import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
 import { getCurrentUser } from "~/api/auth";
-import { getProgress, timeLeft, type Achievement, type Progress, type Quest } from "~/api/progress";
+import { getProgress, markProgressSeen, timeLeft, type Achievement, type Progress, type Quest } from "~/api/progress";
+import SeasonPrize from "~/components/SeasonPrize";
 
 export function meta() {
   return [{ title: "Progress | PixelCode Arena" }];
@@ -97,6 +98,10 @@ function ProgressScreen() {
       .then((p) => {
         setOffset(p.season.serverTime - Date.now());
         setData(p);
+        // everything is on screen now: the menu badge goes away
+        markProgressSeen()
+          .then(() => window.dispatchEvent(new Event("pixelcode:progress-seen")))
+          .catch(() => {});
       })
       .catch((e) => setError(e instanceof Error ? e.message : t("unexpected_error")));
     const id = setInterval(() => tick((n) => n + 1), 30_000);
@@ -135,6 +140,7 @@ function ProgressScreen() {
               <p className="font-sans text-sm text-gray-300">
                 {t("pg_season_rules", { n: season.minMatches, first: season.rewards[0], last: season.rewards[season.rewards.length - 1] })}
               </p>
+              <SeasonPrize season={season} />
               <div className="flex flex-wrap gap-3">
                 <div className="flex-1 min-w-36 border border-neon/50 bg-[#060b1e] px-4 py-2 flex flex-col">
                   <span className="text-[11px] text-gray-400">{t("pg_season_matches")}</span>

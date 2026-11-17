@@ -11,4 +11,6 @@ public interface AchievementRepository extends JpaRepository<AchievementUnlock, 
     boolean existsByUserIdAndCode(Long userId, String code);
 
     void deleteByUserId(Long userId);
+
+    long countByUserIdAndUnlockedAtAfter(Long userId, java.time.Instant after);
 }

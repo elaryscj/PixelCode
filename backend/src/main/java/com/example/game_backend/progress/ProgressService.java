@@ -141,6 +141,31 @@ public class ProgressService {
         return ensureQuests(userId);
     }
 
+    /**
+     * Rewards the player has not seen on the PROGRESS screen yet: completed quests, new achievements and
+     * season places (closed after the last visit). Before the first visit everything counts.
+     */
+    public long unseen(User u, List<com.example.game_backend.entity.SeasonResult> badges,
+                       java.util.function.LongFunction<Instant> seasonClosedAt) {
+        Instant since = u.getProgressSeenAt() == null ? Instant.EPOCH : u.getProgressSeenAt();
+        long n = quests.countByUserIdAndCompletedAtAfter(u.getId(), since)
+                + achievements.countByUserIdAndUnlockedAtAfter(u.getId(), since);
+        for (com.example.game_backend.entity.SeasonResult r : badges) {
+            Instant closed = seasonClosedAt.apply(r.getSeasonId());
+            if (closed != null && closed.isAfter(since)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    public void markSeen(long userId) {
+        tx.executeWithoutResult(st -> users.findByIdForUpdate(userId).ifPresent(u -> {
+            u.setProgressSeenAt(Instant.now());
+            users.save(u);
+        }));
+    }
+
     public List<AchievementUnlock> unlocked(long userId) {
         return achievements.findByUserId(userId);
     }

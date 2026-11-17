@@ -1,5 +1,6 @@
 package com.example.game_backend.progress;
 
+import com.example.game_backend.entity.Cosmetic;
 import com.example.game_backend.entity.Player;
 import com.example.game_backend.entity.Room;
 import com.example.game_backend.entity.RoomStatus;
@@ -8,6 +9,7 @@ import com.example.game_backend.entity.SeasonResult;
 import com.example.game_backend.entity.User;
 import com.example.game_backend.game.MatchResultService;
 import com.example.game_backend.repository.AchievementRepository;
+import com.example.game_backend.repository.CosmeticRepository;
 import com.example.game_backend.repository.RoomRepository;
 import com.example.game_backend.repository.SeasonRepository;
 import com.example.game_backend.repository.UserRepository;
@@ -43,6 +45,7 @@ class ProgressFlowTest {
     @Autowired ProgressService progress;
     @Autowired SeasonService seasons;
     @Autowired MatchResultService results;
+    @Autowired CosmeticRepository cosmetics;
 
     private User newUser() {
         User u = new User("t" + UUID.randomUUID().toString().substring(0, 8), "x");
@@ -99,6 +102,22 @@ class ProgressFlowTest {
         assertEquals(0, b2.getWinStreak());
         assertEquals(1000 + 25 + questReward(b.getId(), Quests.Kind.RANKED), b2.getPixels());
 
+        // --- unseen rewards: door achievements + first win (+ quests) until the PROGRESS screen is opened
+        User forBadge = users.findById(a.getId()).orElseThrow();
+        assertTrue(progress.unseen(forBadge, seasons.badgesOf(a.getId()), seasons::closedAt) >= 3);
+        progress.markSeen(a.getId());
+        User seen = users.findById(a.getId()).orElseThrow();
+        assertEquals(0, progress.unseen(seen, seasons.badgesOf(a.getId()), seasons::closedAt));
+
+        // --- an exclusive skin for this season's top 3
+        Cosmetic prize = new Cosmetic();
+        prize.setName("Season Prize");
+        prize.setPrice(0);
+        prize.setImage("data:image/png;base64,AA==");
+        prize.setTexture("data:image/png;base64,AA==");
+        prize.setSeasonReward(true);
+        prize = cosmetics.save(prize);
+
         // --- season end: make a an eligible leader, then pretend the month is over
         seasons.current();
         User lead = users.findById(a.getId()).orElseThrow();
@@ -123,6 +142,12 @@ class ProgressFlowTest {
         assertEquals(0, a3.getSeasonMatches());
         assertEquals(before + 1000, a3.getPixels());
         assertEquals(1500 + (bRating - 1500) / 2, users.findById(b.getId()).orElseThrow().getRating());
+        assertTrue(a3.getOwnedSkins().contains(prize.getSkinId()), "the winner owns the season skin");
+        assertEquals(prize.getSkinId(), top.get(0).getSkinId());
+        assertEquals(ending.getId(), cosmetics.findById(prize.getId()).orElseThrow().getAwardedSeason());
+        assertTrue(!users.findById(b.getId()).orElseThrow().getOwnedSkins().contains(prize.getSkinId()));
+        // the new season place shows up as a new reward
+        assertEquals(1, progress.unseen(a3, seasons.badgesOf(a.getId()), seasons::closedAt));
         Season next = seasons.current();
         assertTrue(next.getId() > ending.getId() && next.getEndsAt().isAfter(Instant.now()));
 

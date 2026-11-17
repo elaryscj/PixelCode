@@ -7,7 +7,7 @@ export type StoreState = {
   active: string;
   prices: Record<string, number>;
   /** skins published by administrators */
-  catalog?: { id: string; name: string }[];
+  catalog?: { id: string; name: string; exclusive?: boolean; season?: number | null }[];
 };
 
 export const getStore = () => api<StoreState>("/store");

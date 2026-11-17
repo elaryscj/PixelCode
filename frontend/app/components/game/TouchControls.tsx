@@ -9,6 +9,9 @@ type Props = {
   canInteract: boolean;
   onInteract: () => void;
   onRespawn: () => void;
+  /** wave / dance buttons (match only) */
+  onEmote?: (emote: "wave" | "dance") => void;
+  emoteLabels?: { wave: string; dance: string };
 };
 
 function Pad({
@@ -54,7 +57,7 @@ function Pad({
   );
 }
 
-export default function TouchControls({ keys, canInteract, onInteract, onRespawn }: Props) {
+export default function TouchControls({ keys, canInteract, onInteract, onRespawn, onEmote, emoteLabels }: Props) {
   return (
     <div
       className="hidden pointer-coarse:flex fixed inset-x-0 bottom-0 z-40 justify-between items-end px-3 pointer-events-none font-pixel"
@@ -72,6 +75,26 @@ export default function TouchControls({ keys, canInteract, onInteract, onRespawn
 
       {/* right thumb: actions */}
       <div className="flex items-end gap-3">
+        {onEmote && (
+          <div className="flex flex-col gap-2">
+            <button
+              type="button"
+              onClick={() => onEmote("wave")}
+              aria-label={emoteLabels?.wave ?? "Wave"}
+              className="pointer-events-auto w-11 h-11 border-2 border-neon/70 bg-black/45 text-lg active:scale-95"
+            >
+              👋
+            </button>
+            <button
+              type="button"
+              onClick={() => onEmote("dance")}
+              aria-label={emoteLabels?.dance ?? "Dance"}
+              className="pointer-events-auto w-11 h-11 border-2 border-neon/70 bg-black/45 text-lg active:scale-95"
+            >
+              🕺
+            </button>
+          </div>
+        )}
         <button
           type="button"
           onClick={onRespawn}

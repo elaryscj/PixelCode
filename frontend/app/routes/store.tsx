@@ -20,6 +20,8 @@ type Skin = {
   shortDesc: string;
   lore: string;
   glow: string;
+  /** a season top-3 prize: never sold, only its winners see it */
+  exclusive?: boolean;
 };
 
 const BASE_SKINS: Skin[] = [
@@ -85,17 +87,30 @@ function StoreRouteScreen() {
   const ownedSkins = store?.owned ?? ["neon_ronin"];
   const SKINS: Skin[] = [
     ...BASE_SKINS,
-    ...(store?.catalog ?? []).map((c) => ({
-      id: c.id,
-      name: c.name.toUpperCase(),
-      category: "NEW DROP // ARENA STORE",
-      shortDesc: "Fresh arrival in the store.",
-      lore: "A brand-new cosmetic published by the arena team. Equip it and stand out in the next duel.",
-      glow: "rgba(1,228,255,0.4)",
-    })),
+    ...(store?.catalog ?? []).map((c) =>
+      c.exclusive
+        ? {
+            id: c.id,
+            name: c.name.toUpperCase(),
+            category: "SEASON PRIZE // TOP 3",
+            shortDesc: t("st_exclusive"),
+            lore: t("st_exclusive_lore", { n: c.season ?? "?" }),
+            glow: "rgba(253,224,71,0.45)",
+            exclusive: true,
+          }
+        : {
+            id: c.id,
+            name: c.name.toUpperCase(),
+            category: "NEW DROP // ARENA STORE",
+            shortDesc: "Fresh arrival in the store.",
+            lore: "A brand-new cosmetic published by the arena team. Equip it and stand out in the next duel.",
+            glow: "rgba(1,228,255,0.4)",
+          },
+    ),
   ];
   const activeSkin = store?.active ?? "neon_ronin";
   const priceOf = (id: string) => store?.prices?.[id] ?? 0;
+  const labelOf = (s: Skin) => (s.exclusive ? t("st_exclusive") : priceLabel(priceOf(s.id)));
 
   const currentSkin = SKINS[currentIndex];
   const price = priceOf(currentSkin.id);
@@ -301,7 +316,7 @@ function StoreRouteScreen() {
               <div className="flex flex-col gap-1.5">
                 <span className="text-[10px] text-yellow tracking-wider uppercase">{t("st_price")}</span>
                 <div className="w-full bg-[#02050f] border border-[#01E4FF] px-4 py-2.5 text-xs text-yellow tracking-wider">
-                  {priceLabel(price)}
+                  {labelOf(currentSkin)}
                 </div>
               </div>
 
@@ -373,7 +388,7 @@ function StoreRouteScreen() {
                   <div className="flex flex-col justify-between overflow-hidden">
                     <div className="text-yellow text-xs tracking-wider truncate">{skin.name}</div>
                     <div dir="auto" className="text-gray-400 text-[9px] truncate">{skin.shortDesc}</div>
-                    <div className="text-[#01E4FF] text-[10px] mt-1">{priceLabel(priceOf(skin.id))}</div>
+                    <div className="text-[#01E4FF] text-[10px] mt-1">{labelOf(skin)}</div>
                   </div>
                 </div>
               );
@@ -403,7 +418,7 @@ function StoreRouteScreen() {
                   <p className="text-gray-300 text-xs font-sans leading-relaxed">
                     Unlock this skin permanently. Cosmetics do not affect gameplay.
                   </p>
-                  <div className="text-[#01E4FF] text-2xl tracking-wider">{priceLabel(price)}</div>
+                  <div className="text-[#01E4FF] text-2xl tracking-wider">{labelOf(currentSkin)}</div>
                 </div>
               </div>
 

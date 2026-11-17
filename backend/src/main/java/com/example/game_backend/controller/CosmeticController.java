@@ -57,6 +57,7 @@ public class CosmeticController {
             SkinTexture.validate(texture.toString());
             c.setTexture(texture.toString());
             c.setImage(texture.toString()); // the picture column is required; the texture doubles as it
+            c.setSeasonReward(Boolean.TRUE.equals(body.get("seasonReward")));
             return ResponseEntity.ok(view(cosmetics.save(c)));
         }
         String image = body.get("image") == null ? "" : body.get("image").toString();
@@ -79,6 +80,10 @@ public class CosmeticController {
             SkinTexture.validate(texture.toString());
             c.setTexture(texture.toString());
             c.setImage(texture.toString());
+        }
+        // an already awarded prize stays a prize (its winners keep it, nobody can buy it)
+        if (body.containsKey("seasonReward") && c.getAwardedSeason() == null) {
+            c.setSeasonReward(Boolean.TRUE.equals(body.get("seasonReward")));
         }
         return ResponseEntity.ok(view(cosmetics.save(c)));
     }
@@ -176,6 +181,8 @@ public class CosmeticController {
         m.put("price", c.getPrice());
         m.put("published", c.isPublished());
         m.put("animated", c.getTexture() != null);
+        m.put("seasonReward", c.isSeasonReward());
+        m.put("awardedSeason", c.getAwardedSeason());
         return m;
     }
 }

@@ -416,6 +416,15 @@ const ru: Translation = {
   ach_FRIENDLY_desc: "Доиграйте матч в частной комнате с другом.",
   ach_COLLECTOR_name: "Коллекционер",
   ach_COLLECTOR_desc: "Купите скин в магазине.",
+
+  // emotes, season prize skins, menu badge
+  g_emote_wave: "Помахать",
+  g_emote_dance: "Танец",
+  st_exclusive: "НАГРАДА СЕЗОНА",
+  st_exclusive_lore: "Эксклюзивный скин для топ-3 сезона {{n}}. В магазине не продаётся.",
+  pg_season_skin: "Места 1–{{n}} также получат эксклюзивный скин {{name}}. В магазине он не продаётся.",
+  menu_new: "Новых наград: {{n}}",
+  g_opp_disconnected: "СОПЕРНИК ОТКЛЮЧИЛСЯ — У НЕГО 5 МИНУТ, ЧТОБЫ ВЕРНУТЬСЯ",
 };
 
 export default ru;

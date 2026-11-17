@@ -416,6 +416,15 @@ const hi: Translation = {
   ach_FRIENDLY_desc: "दोस्त के साथ प्राइवेट रूम में मैच पूरा करें।",
   ach_COLLECTOR_name: "संग्रहकर्ता",
   ach_COLLECTOR_desc: "स्टोर से एक स्किन खरीदें।",
+
+  // emotes, season prize skins, menu badge
+  g_emote_wave: "हाथ हिलाएँ",
+  g_emote_dance: "नाचें",
+  st_exclusive: "सीज़न इनाम",
+  st_exclusive_lore: "सीज़न {{n}} के टॉप 3 के लिए खास स्किन। यह स्टोर में कभी नहीं बिकती।",
+  pg_season_skin: "स्थान 1-{{n}} को खास स्किन {{name}} भी मिलेगी। यह स्टोर में नहीं बिकती।",
+  menu_new: "{{n}} नए इनाम",
+  g_opp_disconnected: "विरोधी डिस्कनेक्ट हो गया — लौटने के लिए उसके पास 5 मिनट हैं",
 };
 
 export default hi;

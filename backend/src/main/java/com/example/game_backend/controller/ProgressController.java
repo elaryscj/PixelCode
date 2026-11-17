@@ -90,6 +90,20 @@ public class ProgressController {
         return ResponseEntity.ok(out);
     }
 
+    /** Number of rewards not seen on the PROGRESS screen yet (the dot on the menu button). */
+    @GetMapping("/api/progress/unseen")
+    public ResponseEntity<Map<String, Object>> unseen(@RequestHeader(value = "Authorization", required = false) String auth) {
+        long uid = tokens.requireUserId(auth);
+        User u = users.findById(uid).orElseThrow(() -> new ApiException(401, "Please log in again"));
+        return ResponseEntity.ok(Map.of("count", progress.unseen(u, seasons.badgesOf(uid), seasons::closedAt)));
+    }
+
+    @org.springframework.web.bind.annotation.PostMapping("/api/progress/seen")
+    public ResponseEntity<Void> seen(@RequestHeader(value = "Authorization", required = false) String auth) {
+        progress.markSeen(tokens.requireUserId(auth));
+        return ResponseEntity.noContent().build();
+    }
+
     /** Public: the running season and the top 10 of the last finished one. */
     @GetMapping("/api/seasons/current")
     public ResponseEntity<Map<String, Object>> current() {
@@ -106,8 +120,11 @@ public class ProgressController {
         return ResponseEntity.ok(out);
     }
 
-    private static Map<String, Object> seasonView(Season s) {
+    private Map<String, Object> seasonView(Season s) {
         Map<String, Object> m = new LinkedHashMap<>();
+        com.example.game_backend.entity.Cosmetic skin = seasons.rewardSkin();
+        m.put("rewardSkin", skin == null ? null : Map.of("id", skin.getSkinId(), "name", skin.getName()));
+        m.put("skinPlaces", SeasonService.SKIN_PLACES);
         m.put("number", s.getId());
         m.put("startsAt", s.getStartsAt().toEpochMilli());
         m.put("endsAt", s.getEndsAt().toEpochMilli());
@@ -128,6 +145,7 @@ public class ProgressController {
         m.put("username", r.getUsername());
         m.put("rating", r.getRating());
         m.put("reward", r.getReward());
+        m.put("skinId", r.getSkinId());
         return m;
     }
 }

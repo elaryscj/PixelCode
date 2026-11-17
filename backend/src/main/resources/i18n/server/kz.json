@@ -88,5 +88,6 @@
  "{0}() is not allowed (no threads)": "{0}() ruqsat etilmegen (aghyndarsyz)",
  "{0}() is not allowed": "{0}() ruqsat etilmegen",
  "{0} is not available": "{0} qoljetimsiz",
- "Line {0}: {1}": "{0}-jol: {1}"
+ "Line {0}: {1}": "{0}-jol: {1}",
+ "Unknown emote": "Belgisiz emotsiia"
 }

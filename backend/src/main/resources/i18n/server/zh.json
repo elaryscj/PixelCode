@@ -88,5 +88,6 @@
  "{0}() is not allowed (no threads)": "不允许使用 {0}()（禁止线程）",
  "{0}() is not allowed": "不允许使用 {0}()",
  "{0} is not available": "{0} 不可用",
- "Line {0}: {1}": "第 {0} 行：{1}"
+ "Line {0}: {1}": "第 {0} 行：{1}",
+ "Unknown emote": "未知的表情动作"
 }

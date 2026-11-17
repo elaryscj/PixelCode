@@ -416,6 +416,15 @@ const ar: Translation = {
   ach_FRIENDLY_desc: "أكمل مباراة في غرفة خاصة مع صديق.",
   ach_COLLECTOR_name: "جامع",
   ach_COLLECTOR_desc: "اشترِ مظهرًا من المتجر.",
+
+  // emotes, season prize skins, menu badge
+  g_emote_wave: "تلويح",
+  g_emote_dance: "رقص",
+  st_exclusive: "جائزة الموسم",
+  st_exclusive_lore: "مظهر حصري لأفضل 3 في الموسم {{n}}. لا يُباع في المتجر أبدًا.",
+  pg_season_skin: "المراكز 1-{{n}} تربح أيضًا المظهر الحصري {{name}}. لا يُباع في المتجر.",
+  menu_new: "{{n}} مكافآت جديدة",
+  g_opp_disconnected: "انقطع اتصال الخصم — لديه 5 دقائق للعودة",
 };
 
 export default ar;

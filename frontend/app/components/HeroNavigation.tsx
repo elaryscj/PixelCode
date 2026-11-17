@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router";
 import { logoutUser } from "~/api/auth";
 import { useCurrentUser } from "~/lib/currentUser";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import { getUnseen } from "~/api/progress";
 
 const base =
   "btn-arcade uppercase w-full font-pixel text-3xl sm:text-4xl py-3 sm:py-2 px-6 text-center";
@@ -11,6 +13,23 @@ const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useCurrentUser();
+  // new quests / achievements / season places not looked at yet
+  const [unseen, setUnseen] = useState(0);
+  useEffect(() => {
+    if (!user) {
+      setUnseen(0);
+      return;
+    }
+    let alive = true;
+    const load = () => getUnseen().then((r) => alive && setUnseen(r.count)).catch(() => {});
+    void load();
+    const cleared = () => setUnseen(0);
+    window.addEventListener("pixelcode:progress-seen", cleared);
+    return () => {
+      alive = false;
+      window.removeEventListener("pixelcode:progress-seen", cleared);
+    };
+  }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <nav className="enter-up mx-auto w-full max-w-100 flex flex-col gap-4" style={{ animationDelay: "120ms" }}>
@@ -42,8 +61,17 @@ const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
         <Link to={"/profile"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
           {t("menu_profile")}
         </Link>
-        <Link to={"/progress"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
+        <Link to={"/progress"} className={`${secondary} !text-xl sm:!text-2xl !px-2 relative`}>
           {t("menu_progress")}
+          {unseen > 0 && (
+            <span
+              className="absolute -top-2.5 -end-2.5 min-w-7 h-7 px-1.5 flex items-center justify-center bg-pink text-black text-sm border-2 border-yellow shadow-[0_0_12px_rgba(254,44,150,0.8)] animate-pulse"
+              aria-label={t("menu_new", { n: unseen })}
+              title={t("menu_new", { n: unseen })}
+            >
+              {unseen > 9 ? "9+" : unseen}
+            </span>
+          )}
         </Link>
         <Link to={"/settings"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
           {t("settings")}
