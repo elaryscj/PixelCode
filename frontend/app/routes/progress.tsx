@@ -105,7 +105,16 @@ function ProgressScreen() {
       })
       .catch((e) => setError(e instanceof Error ? e.message : t("unexpected_error")));
     const id = setInterval(() => tick((n) => n + 1), 30_000);
-    return () => clearInterval(id);
+    // today's login reward may land just after this page loaded: show the new streak
+    const refresh = () =>
+      getProgress()
+        .then(setData)
+        .catch(() => {});
+    window.addEventListener("pixelcode:daily-login", refresh);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener("pixelcode:daily-login", refresh);
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const now = Date.now() + offset;
@@ -163,6 +172,36 @@ function ProgressScreen() {
                   ))}
                 </div>
               )}
+            </section>
+
+            {/* daily login streak */}
+            <section className="border-2 border-yellow/70 bg-[#0a0f25] px-4 py-3 flex flex-col gap-3">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h2 className="text-yellow text-2xl">🔥 {t("dl_title", { n: data.login.streak })}</h2>
+                <span className="text-sm text-gray-300">
+                  {data.login.claimedToday ? t("dl_tomorrow", { n: data.login.nextReward }) : t("dl_come_back")}
+                </span>
+              </div>
+              <div className="grid grid-cols-7 gap-1.5" dir="ltr">
+                {data.login.rewards.map((r, i) => {
+                  const day = i + 1;
+                  // where today sits in the 7-day row (after day 7 every day is the last box)
+                  const current = Math.min(data.login.streak, 7);
+                  const done = day <= current;
+                  return (
+                    <div
+                      key={day}
+                      className={`flex flex-col items-center py-1.5 border ${
+                        done ? "border-yellow bg-yellow/15 text-yellow" : "border-neon/25 text-gray-400"
+                      }`}
+                    >
+                      <span className="text-[10px]">{t("dl_day", { n: day === 7 ? "7+" : day })}</span>
+                      <span className="text-xs sm:text-sm">{r}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="font-sans text-xs text-gray-400">{t("dl_hint")}</p>
             </section>
 
             {/* daily quests */}

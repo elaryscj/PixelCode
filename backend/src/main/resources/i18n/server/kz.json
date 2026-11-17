@@ -89,5 +89,15 @@
  "{0}() is not allowed": "{0}() ruqsat etilmegen",
  "{0} is not available": "{0} qoljetimsiz",
  "Line {0}: {1}": "{0}-jol: {1}",
- "Unknown emote": "Belgisiz emotsiia"
+ "Unknown emote": "Belgisiz emotsiia",
+ "Enter a player's name": "Oiynshynyn nikin engiziniz",
+ "You cannot add yourself": "Ozinizdi qosa almaisyz",
+ "You are already friends": "Siz dossyz",
+ "Friend request already sent": "Otinish jiberilgen",
+ "Your friend list is full": "Dostar tizimi tolyq",
+ "Too many requests are waiting for an answer": "Jauap kutip turgan otinish tym kop",
+ "Friend request not found": "Dostyq otinishi tabylmady",
+ "This player is not your friend": "Bul oiynshy sizdin dosynyz emes",
+ "Your friend is in a match right now": "Dosynyz qazir matchta",
+ "Your friend is offline": "Dosynyz jelide emes"
 }

@@ -143,6 +143,11 @@ public class TokenService {
                         sign(payload + ":" + passwordHash).getBytes(StandardCharsets.UTF_8));
     }
 
+    /** When this player last made an authenticated request (0 = not in the last hour). */
+    public long lastActive(long userId) {
+        return lastActive.getOrDefault(userId, 0L);
+    }
+
     /** Players who made an authenticated request in the last `withinMs` milliseconds. */
     public int activeUsers(long withinMs) {
         long from = System.currentTimeMillis() - withinMs;

@@ -89,5 +89,15 @@
  "{0}() is not allowed": "{0}() запрещён",
  "{0} is not available": "{0} недоступен",
  "Line {0}: {1}": "Строка {0}: {1}",
- "Unknown emote": "Неизвестная эмоция"
+ "Unknown emote": "Неизвестная эмоция",
+ "Enter a player's name": "Введите ник игрока",
+ "You cannot add yourself": "Нельзя добавить самого себя",
+ "You are already friends": "Вы уже друзья",
+ "Friend request already sent": "Заявка уже отправлена",
+ "Your friend list is full": "Список друзей заполнен",
+ "Too many requests are waiting for an answer": "Слишком много заявок ждут ответа",
+ "Friend request not found": "Заявка в друзья не найдена",
+ "This player is not your friend": "Этот игрок не ваш друг",
+ "Your friend is in a match right now": "Ваш друг сейчас в матче",
+ "Your friend is offline": "Ваш друг не в сети"
 }

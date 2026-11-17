@@ -89,5 +89,15 @@
  "{0}() is not allowed": "{0}() tidak diizinkan",
  "{0} is not available": "{0} tidak tersedia",
  "Line {0}: {1}": "Baris {0}: {1}",
- "Unknown emote": "Emote tidak dikenal"
+ "Unknown emote": "Emote tidak dikenal",
+ "Enter a player's name": "Masukkan nama pemain",
+ "You cannot add yourself": "Kamu tidak bisa menambahkan dirimu sendiri",
+ "You are already friends": "Kalian sudah berteman",
+ "Friend request already sent": "Permintaan pertemanan sudah dikirim",
+ "Your friend list is full": "Daftar temanmu sudah penuh",
+ "Too many requests are waiting for an answer": "Terlalu banyak permintaan menunggu jawaban",
+ "Friend request not found": "Permintaan pertemanan tidak ditemukan",
+ "This player is not your friend": "Pemain ini bukan temanmu",
+ "Your friend is in a match right now": "Temanmu sedang bertanding",
+ "Your friend is offline": "Temanmu sedang offline"
 }

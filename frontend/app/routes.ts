@@ -22,6 +22,7 @@ export default [
   route('/verify-email', 'routes/verify-email.tsx'),
   route('/join/:code', 'routes/join.tsx'),
   route('/progress', 'routes/progress.tsx'),
+  route('/friends', 'routes/friends.tsx'),
   route('*', 'routes/not-found.tsx')
   ] satisfies RouteConfig;
 

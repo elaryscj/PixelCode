@@ -83,6 +83,17 @@ function noise(dur: number, { at = 0, vol = 0.5, lowpass = 1800 } = {}) {
 }
 
 export const sfx = {
+  /** emote "wave": a friendly two-note chirp (soft = the opponent's, a bit quieter) */
+  wave(soft = false) {
+    const v = soft ? 0.25 : 0.45;
+    tone(880, 0.09, { type: "triangle", vol: v });
+    tone(1175, 0.14, { type: "triangle", at: 0.1, vol: v });
+  },
+  /** emote "dance": a quick rising arpeggio */
+  dance(soft = false) {
+    const v = soft ? 0.18 : 0.32;
+    [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.08, { type: "square", at: i * 0.075, vol: v }));
+  },
   /** Call from any user gesture so later sounds are allowed to play. */
   unlock() {
     audio();

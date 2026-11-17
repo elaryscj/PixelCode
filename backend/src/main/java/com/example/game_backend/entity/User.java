@@ -91,6 +91,13 @@ public class User {
     @Column
     private Instant progressSeenAt;
 
+    /** days in a row the player opened the game (daily login reward) and the last such UTC day */
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int loginStreak = 0;
+
+    @Column
+    private java.time.LocalDate lastLoginDay;
+
     public User() {
     }
 
@@ -145,6 +152,11 @@ public class User {
 
     public Instant getProgressSeenAt() { return progressSeenAt; }
     public void setProgressSeenAt(Instant progressSeenAt) { this.progressSeenAt = progressSeenAt; }
+
+    public int getLoginStreak() { return loginStreak; }
+    public void setLoginStreak(int loginStreak) { this.loginStreak = loginStreak; }
+    public java.time.LocalDate getLastLoginDay() { return lastLoginDay; }
+    public void setLastLoginDay(java.time.LocalDate lastLoginDay) { this.lastLoginDay = lastLoginDay; }
 
     public boolean isBanned() {
         return bannedUntil != null && bannedUntil.isAfter(Instant.now());

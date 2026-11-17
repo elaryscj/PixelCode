@@ -89,5 +89,15 @@
  "{0}() is not allowed": "{0}() غير مسموح",
  "{0} is not available": "{0} غير متاح",
  "Line {0}: {1}": "السطر {0}: {1}",
- "Unknown emote": "تعبير غير معروف"
+ "Unknown emote": "تعبير غير معروف",
+ "Enter a player's name": "أدخل اسم لاعب",
+ "You cannot add yourself": "لا يمكنك إضافة نفسك",
+ "You are already friends": "أنتما صديقان بالفعل",
+ "Friend request already sent": "تم إرسال طلب الصداقة بالفعل",
+ "Your friend list is full": "قائمة أصدقائك ممتلئة",
+ "Too many requests are waiting for an answer": "طلبات كثيرة جدًا بانتظار الرد",
+ "Friend request not found": "طلب الصداقة غير موجود",
+ "This player is not your friend": "هذا اللاعب ليس صديقك",
+ "Your friend is in a match right now": "صديقك في مباراة الآن",
+ "Your friend is offline": "صديقك غير متصل"
 }
