@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import { SkinArt } from "~/components/skins";
+import PhraseBar, { type PhraseId } from "./PhraseBar";
 
 interface GameResultModalProps {
   isOpen: boolean;
@@ -30,6 +31,10 @@ interface GameResultModalProps {
   rematchOffered?: boolean;
   rematchBusy?: boolean;
   onRematch?: () => void;
+  /** quick phrases still work after the end ("GG") */
+  onPhrase?: (p: PhraseId) => void;
+  /** the rival's latest phrase, shown on this screen */
+  incomingPhrase?: string | null;
 }
 
 export default function GameResultModal({
@@ -54,6 +59,8 @@ export default function GameResultModal({
   rematchOffered = false,
   rematchBusy = false,
   onRematch,
+  onPhrase,
+  incomingPhrase = null,
 }: GameResultModalProps) {
   const { t } = useTranslation();
   if (!isOpen) return null;
@@ -157,6 +164,22 @@ export default function GameResultModal({
           {row(t("rs_checkpoints"), `${myCheckpoints} / 4`, `${oppCheckpoints} / 4`)}
           {row(t("rs_exit_time"), exitA, exitB)}
         </div>
+
+        {(onPhrase || incomingPhrase) && (
+          <div className="w-full flex flex-wrap items-center justify-between gap-3">
+            {onPhrase && <PhraseBar onPhrase={onPhrase} className="text-sm" />}
+            {incomingPhrase && (
+              <span className="enter-up bg-white text-black text-base px-3 py-1 border-2 border-pink">
+                {opponentNickname}: {incomingPhrase}
+              </span>
+            )}
+          </div>
+        )}
+        {myRoomCode && (
+          <Link to={`/replay/${encodeURIComponent(myRoomCode)}`} className="w-full text-center py-3 text-2xl border-2 border-yellow text-yellow hover:bg-yellow/10">
+            ▶ {t("rp_watch")}
+          </Link>
+        )}
 
         <p className="font-sans text-gray-400 text-lg">{t("rs_momentum")}</p>
         <div className="flex gap-6 w-full">

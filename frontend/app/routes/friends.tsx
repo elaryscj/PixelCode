@@ -48,7 +48,11 @@ function FriendsScreen() {
     }
     void load();
     const id = setInterval(load, REFRESH_MS);
-    return () => clearInterval(id);
+    window.addEventListener("pixelcode:friends-changed", load);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener("pixelcode:friends-changed", load);
+    };
   }, [load, navigate]);
 
   const fail = (e: unknown) => setMsg({ ok: false, text: e instanceof Error ? e.message : t("unexpected_error") });
@@ -170,7 +174,9 @@ function FriendsScreen() {
                 <div key={f.requestId} className={`${row} border-neon/40`}>
                   <SkinArt id={f.activeSkin} className="h-12 w-auto shrink-0" />
                   <div className="flex-1 min-w-0 flex flex-col">
-                    <span className="truncate text-yellow text-lg">{f.username}</span>
+                    <Link to={`/player/${f.userId}`} className="truncate text-yellow text-lg hover:underline">
+                      {f.username}
+                    </Link>
                     <span className="flex items-center gap-2 text-xs text-gray-300">
                       <span className={`w-2.5 h-2.5 ${st.dot}`} /> {t(st.key)} · <span dir="ltr">{f.rating} MMR</span>
                     </span>

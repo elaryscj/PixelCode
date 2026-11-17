@@ -161,6 +161,14 @@ public class TokenService {
         return n;
     }
 
+    /**
+     * Private WebSocket channel of a player (/topic/inbox/{channel}): unguessable, so only the player, who gets
+     * it from an authenticated request, can listen to their own duel invitations and friend requests.
+     */
+    public String inboxChannel(long userId) {
+        return sign("inbox:" + userId).substring(0, 24);
+    }
+
     private String sign(String data) {
         try {
             Mac mac = Mac.getInstance("HmacSHA256");

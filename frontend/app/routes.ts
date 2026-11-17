@@ -23,6 +23,8 @@ export default [
   route('/join/:code', 'routes/join.tsx'),
   route('/progress', 'routes/progress.tsx'),
   route('/friends', 'routes/friends.tsx'),
+  route('/player/:id', 'routes/player.tsx'),
+  route('/replay/:code', 'routes/replay.tsx'),
   route('*', 'routes/not-found.tsx')
   ] satisfies RouteConfig;
 

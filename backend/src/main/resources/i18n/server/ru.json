@@ -99,5 +99,8 @@
  "Friend request not found": "Заявка в друзья не найдена",
  "This player is not your friend": "Этот игрок не ваш друг",
  "Your friend is in a match right now": "Ваш друг сейчас в матче",
- "Your friend is offline": "Ваш друг не в сети"
+ "Your friend is offline": "Ваш друг не в сети",
+ "Unknown phrase": "Неизвестная фраза",
+ "Replay not found": "Повтор не найден",
+ "Only friends can see this profile": "Этот профиль видят только друзья"
 }

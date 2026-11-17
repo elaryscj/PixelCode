@@ -54,6 +54,10 @@ US-08 Close account: excluded by SRS (a delete-account action exists in the prof
 - /friends: add by player name (asking someone who already asked you = accept), answer requests, cancel your own, remove friends. Friends show Online / In a match / Offline (online = used the game in the last 2 minutes).
 - DUEL challenges an online friend: the challenger's private room opens (or their waiting one is reused) and the friend gets a pop-up invitation on any screen except inside a match (polled every 8 s, kept in server memory for 5 minutes).
 - Emotes show a heart (wave) or notes (dance) over the head and play a short sound.
+- Quick phrases in a match (Good luck! / GG / Rematch? / Nice! / Oops! / Wow!): keys 3-8, buttons under the arena, a 💬 menu on phones, also on the result screen; fixed choices, shown translated, one every 2 s, still allowed 3 minutes after the end.
+- Friend profile /player/:id (friends and yourself only): rating, record, achievements, season badges, last 10 matches. Friend names in /friends link to it.
+- Duel invitations and friend requests arrive instantly over the WebSocket on a private, unguessable channel (/topic/inbox/{HMAC of the user id}); polling every 30 s stays as a safety net.
+- Match replays /replay/:code (only the two players): both runs side by side like in the match, play / pause / 1x-8x / scrubbing, door markers (filled = solved, hollow = timer), who led when and overtakes, per door time, attempts and "stuck here" (over 90 s), and the code of every submission. Recorded on the server during the match (positions every 150 ms, door events, up to 20 submissions per player and door); kept 14 days. Links on the result screen and in My results.
 - Daily login streak: the first visit of each UTC day pays 20, 30, 40, 50, 60, 80, then 100 PIXELS per day in a row; a missed day restarts at day 1. Shown on /progress and as a pop-up.
 
 ## Progress (beyond the SRS)

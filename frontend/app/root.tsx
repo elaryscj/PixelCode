@@ -62,7 +62,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta property="og:title" content="PixelCode Arena" />
         <meta property="og:description" content="Real-time 1v1 coding duels. Race, crack the code doors, climb the ranks." />
         <link rel="manifest" href="/manifest.webmanifest" />
-        <link rel="apple-touch-icon" href="/icon-192.png" />
+        {/* the PC ARENA icon everywhere (the template's React Router favicon used to show in tabs) */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
         <Meta />
         <Links />
       </head>

@@ -8,8 +8,10 @@ import { refreshUser } from "~/api/auth";
 import { joinRoom } from "~/api/room";
 import { claimDailyLogin, dismissInvite, getInvites, type DuelInvite } from "~/api/friends";
 import { sfx } from "~/lib/sfx";
+import { subscribe } from "~/api/socket";
 
-const POLL_MS = 8000;
+/** invitations arrive at once over the WebSocket; polling is only the safety net */
+const POLL_MS = 30_000;
 const todayUtc = () => new Date().toISOString().slice(0, 10);
 
 export default function SocialPulse() {
@@ -22,6 +24,8 @@ export default function SocialPulse() {
   const [streak, setStreak] = useState<{ day: number; reward: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const seen = useRef(new Set<string>());
+  const [channel, setChannel] = useState<string | null>(null);
+  const pollRef = useRef<() => void>(() => {});
 
   // daily login streak: once per UTC day per account (the server pays only once anyway)
   useEffect(() => {
@@ -64,9 +68,11 @@ export default function SocialPulse() {
           if (fresh.length) sfx.unlock();
           fresh.forEach((i) => seen.current.add(i.code));
           setInvites(r.invites);
+          if (r.channel) setChannel(r.channel);
           window.dispatchEvent(new CustomEvent("pixelcode:friend-requests", { detail: r.requests }));
         })
         .catch(() => {});
+    pollRef.current = () => void poll();
     void poll();
     const id = setInterval(poll, POLL_MS);
     return () => {
@@ -74,6 +80,16 @@ export default function SocialPulse() {
       clearInterval(id);
     };
   }, [user?.id, inMatch]);
+
+  // private channel: a duel invitation or a friend request shows up immediately
+  useEffect(() => {
+    if (!user || !channel) return;
+    const off = subscribe<{ type: string }>(`/topic/inbox/${channel}`, (msg) => {
+      pollRef.current();
+      if (msg?.type === "FRIEND_ACCEPTED" || msg?.type === "FRIEND_REQUEST") window.dispatchEvent(new Event("pixelcode:friends-changed"));
+    });
+    return off;
+  }, [user?.id, channel]);
 
   const accept = async (inv: DuelInvite) => {
     setError(null);

@@ -23,11 +23,14 @@ public class GameController {
     private final GameService games;
     private final TokenService tokens;
     private final RoomRepository rooms;
+    private final com.example.game_backend.game.ReplayStore replays;
 
-    public GameController(GameService games, TokenService tokens, RoomRepository rooms) {
+    public GameController(GameService games, TokenService tokens, RoomRepository rooms,
+                          com.example.game_backend.game.ReplayStore replays) {
         this.games = games;
         this.tokens = tokens;
         this.rooms = rooms;
+        this.replays = replays;
     }
 
     /** "See my results": the caller's last finished matches, newest first. */
@@ -41,6 +44,7 @@ public class GameController {
             m.put("ranked", r.isRanked());
             m.put("mapId", r.getMapId());
             m.put("finishedAt", r.getFinishedAt() == null ? null : r.getFinishedAt().toEpochMilli());
+            m.put("replay", replays.exists(r.getCode()));
             out.add(m);
         }
         return ResponseEntity.ok(out);
@@ -74,6 +78,14 @@ public class GameController {
             result.put("errorMessage", ServerText.tr(msg));
         }
         return ResponseEntity.ok(result);
+    }
+
+    /** body: {"phrase": "gl" | "gg" | "rematch" | "nice" | "oops" | "wow"} */
+    @PostMapping("/{code}/phrase")
+    public ResponseEntity<Map<String, Object>> phrase(@PathVariable String code, @RequestBody(required = false) Map<String, Object> body,
+                                                      @RequestHeader(value = "Authorization", required = false) String auth) {
+        Object p = body == null ? null : body.get("phrase");
+        return ResponseEntity.ok(games.phrase(code.toUpperCase(), tokens.requireUserId(auth), p == null ? null : p.toString()));
     }
 
     /** body: {"emote": "wave" | "dance"} */
