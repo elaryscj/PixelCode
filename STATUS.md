@@ -42,6 +42,11 @@ US-30 Publish cosmetic (admin): done (/admin: name, price, picture; appears in /
 US-05 Languages: 14 (en, kz, ru, es, fr, de, pt, id, zh, ja, ko, hi, ar, ur; Arabic / Urdu right-to-left). Texts of the 42 built-in challenges and the server's error / checker messages are translated too (the frontend sends Accept-Language; backend i18n/, resources/i18n/). Challenge titles, the admin page and challenges added by an admin stay English. US-06 Music volume: done. US-07 Fullscreen: done.
 US-08 Close account: excluded by SRS (a delete-account action exists in the profile anyway).
 
+## Skins (beyond the SRS)
+- Every skin is a 32 x 16 pixel texture cut into body parts (head, body, arms, legs, hair/hat; layout in frontend game/skinRig.ts). Animations are built from it in the browser: idle, walk, jump, fall, think (at a door), win, lose. The opponent's animation is read from their movement.
+- The 4 built-in skins are redrawn as textures in game/builtinSkins.ts (no image files).
+- /admin has a pixel editor for store skins: pencil, eraser, fill, picker, mirror for left/right, undo, live preview of every animation, GIF download, texture PNG download/upload, editing a published skin. Older admin items that are a single picture still show (not animated).
+
 ## Progress (beyond the SRS)
 - Invite link: a private room shows INVITE A FRIEND -> /join/CODE (sign-in first if needed, then straight into the room).
 - Daily quests: 3 per player per UTC day, PIXELS paid on completion; count Quick Play (bot) and ranked matches, not private rooms.

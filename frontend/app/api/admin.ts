@@ -30,10 +30,16 @@ export const withdrawChallenge = (id: number) =>
 export const publishChallenge = (id: number) =>
   api<AdminChallenge>(`/admin/challenges/${id}/publish`, { method: "POST" });
 
-export type AdminCosmetic = { id: string; name: string; price: number; published: boolean };
+/** animated = made in the skin editor (a texture); otherwise an older single picture */
+export type AdminCosmetic = { id: string; name: string; price: number; published: boolean; animated?: boolean };
 export const listCosmetics = () => api<AdminCosmetic[]>("/admin/cosmetics");
-export const createCosmetic = (name: string, price: number, image: string) =>
-  api<AdminCosmetic>("/admin/cosmetics", { method: "POST", body: JSON.stringify({ name, price, image }) });
+/** texture: PNG data URL of the skin texture (see game/skinRig.ts) */
+export const createCosmetic = (name: string, price: number, texture: string) =>
+  api<AdminCosmetic>("/admin/cosmetics", { method: "POST", body: JSON.stringify({ name, price, texture }) });
+export const updateCosmetic = (id: string, name: string, price: number, texture: string) =>
+  api<AdminCosmetic>(`/admin/cosmetics/${id.replace("c_", "")}`, { method: "PUT", body: JSON.stringify({ name, price, texture }) });
+export const getCosmeticTexture = (id: string) =>
+  api<AdminCosmetic & { texture: string | null }>(`/admin/cosmetics/${id.replace("c_", "")}/texture`);
 export const toggleCosmetic = (id: string, publish: boolean) =>
   api<AdminCosmetic>(`/admin/cosmetics/${id.replace("c_", "")}/${publish ? "publish" : "withdraw"}`, { method: "POST" });
 

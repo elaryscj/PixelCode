@@ -84,7 +84,11 @@ export default function GameResultModal({
         <div className={`relative border-2 ${color} w-60 h-60 bg-[#0a0f24] flex items-center justify-center`}>
           <span className={`absolute -top-1 -right-1 w-3 h-3 ${sq}`} />
           <span className={`absolute -bottom-1 -left-1 w-3 h-3 ${sq}`} />
-          <SkinArt id={mine ? mySkin : oppSkin} size="large" className="w-52 h-52 object-contain" />
+          <SkinArt
+            id={mine ? mySkin : oppSkin}
+            anim={isDraw || isTechnical ? "idle" : mine === isWinner ? "win" : "lose"}
+            className="w-52 h-52 object-contain"
+          />
         </div>
         <span className="text-yellow text-5xl truncate max-w-full">{mine ? playerNickname : opponentNickname}</span>
         <span className="text-yellow text-base">{tag(mine)}</span>

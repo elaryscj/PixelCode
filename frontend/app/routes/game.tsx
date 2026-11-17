@@ -10,7 +10,7 @@ import GameResultModal from "~/components/game/GameResultModal";
 import TouchControls from "~/components/game/TouchControls";
 import { burst, confetti, flash, shake } from "~/components/game/fx";
 import { sfx } from "~/lib/sfx";
-import { SkinArt } from "~/components/skins";
+import { AnimatedSkin, type AnimId, type SkinHandle } from "~/components/skins";
 import { getCurrentUser, refreshUser } from "~/api/auth";
 import { getRoom, rematchRoom } from "~/api/room";
 import { pingColor, pingLabel, usePing } from "~/lib/liveStats";
@@ -179,6 +179,10 @@ function GameScreen() {
   const opponentDomRef = useRef<HTMLDivElement | null>(null);
   const playerSpriteRef = useRef<HTMLDivElement | null>(null);
   const opponentSpriteRef = useRef<HTMLDivElement | null>(null);
+  // which animation each figure plays (walk / jump / think ...), set from the game loop without re-rendering
+  const mySkinRef = useRef<SkinHandle | null>(null);
+  const oppSkinRef = useRef<SkinHandle | null>(null);
+  const oppUnlockedRef = useRef<number[]>([]);
   const opponentState = useRef({
     x: 100 - getMap(0).start.x - CHAR_W,
     y: getMap(0).start.y,
@@ -356,9 +360,15 @@ function GameScreen() {
     if (!gameOver && matchSeconds > 0 && matchSeconds <= 10) sfx.tick();
   }, [matchSeconds, gameOver]);
 
+  oppUnlockedRef.current = opponentUnlockedCps;
+
   // Result sting: fanfare + confetti for a win, a falling tune for a loss
   useEffect(() => {
     if (!result) return;
+    const draw = result.winnerUserId === null;
+    const iWon = result.winnerUserId === myId;
+    mySkinRef.current?.setAnim(draw ? "idle" : iWon ? "win" : "lose");
+    oppSkinRef.current?.setAnim(draw ? "idle" : iWon ? "lose" : "win");
     if (result.winnerUserId === null) return;
     if (result.winnerUserId === myId) {
       sfx.victory();
@@ -556,10 +566,19 @@ function GameScreen() {
           playerDomRef.current.style.bottom = `${p.y}%`;
         }
         if (playerSpriteRef.current) {
-          const bob = p.isGrounded && Math.abs(p.vx) > 0.08 ? Math.abs(Math.sin(now / 90)) * 3 : 0;
           const squash = p.bounced < 8 ? ` scaleY(${1.25 - p.bounced * 0.03})` : "";
-          playerSpriteRef.current.style.transform = `translateY(${-bob}px) scaleX(${p.facingLeft ? -1 : 1})${squash}`;
+          playerSpriteRef.current.style.transform = `scaleX(${p.facingLeft ? -1 : 1})${squash}`;
         }
+        const myAnim: AnimId = typing
+          ? "think"
+          : !p.isGrounded
+            ? p.vy > 0
+              ? "jump"
+              : "fall"
+            : Math.abs(p.vx) > 0.08
+              ? "walk"
+              : "idle";
+        mySkinRef.current?.setAnim(myAnim);
         const fl = floorOf(map, p.y);
         if (fl !== floorRef.current.me) {
           floorRef.current.me = fl;
@@ -576,11 +595,21 @@ function GameScreen() {
         }
         if (opponentSpriteRef.current && Math.abs(oppDx) > 0.05) {
           // the right panel is mirrored: moving "left" on the map is moving right here
-          const bob = Math.abs(Math.sin(now / 90)) * 3;
-          opponentSpriteRef.current.style.transform = `translateY(${-bob}px) scaleX(${oppDx > 0 ? 1 : -1})`;
-        } else if (opponentSpriteRef.current) {
-          opponentSpriteRef.current.style.transform = opponentSpriteRef.current.style.transform.replace(/translateY\([^)]*\)/, "translateY(0px)");
+          opponentSpriteRef.current.style.transform = `scaleX(${oppDx > 0 ? 1 : -1})`;
         }
+        // the opponent's animation is read from their movement; standing at a locked door = solving it
+        const oppDy = opp.targetY - opp.y;
+        const oppMapX = 100 - opp.x - CHAR_W; // back from the mirrored panel to map coordinates
+        const oppAtDoor = map.doors.some(
+          (d) =>
+            !oppUnlockedRef.current.includes(d.num) &&
+            Math.abs(oppMapX + CHAR_W / 2 - (d.x + DOOR_W / 2)) < 10 &&
+            opp.y >= d.y - 0.5 &&
+            opp.y < d.y + 6,
+        );
+        oppSkinRef.current?.setAnim(
+          oppDy > 0.4 ? "jump" : oppDy < -0.4 ? "fall" : Math.abs(oppDx) > 0.05 ? "walk" : oppAtDoor ? "think" : "idle",
+        );
         const oFl = floorOf(map, opp.targetY);
         if (oFl !== floorRef.current.opp) {
           floorRef.current.opp = oFl;
@@ -760,7 +789,7 @@ function GameScreen() {
                 {localPlayerName}
               </div>
               <div ref={playerSpriteRef} className="w-full h-full">
-                <SkinArt id={mySkin} size="small" className="w-full h-full" />
+                <AnimatedSkin ref={mySkinRef} id={mySkin} className="w-full h-full" />
               </div>
             </div>
           </div>
@@ -797,7 +826,7 @@ function GameScreen() {
                 {opponentName}
               </div>
               <div ref={opponentSpriteRef} className="w-full h-full">
-                <SkinArt id={oppSkin} size="small" className="w-full h-full" />
+                <AnimatedSkin ref={oppSkinRef} id={oppSkin} className="w-full h-full" />
               </div>
             </div>
           </div>
