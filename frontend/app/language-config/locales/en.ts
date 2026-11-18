@@ -611,6 +611,15 @@ const en = {
   lg_privacy: "Privacy",
   lg_contacts: "Contacts",
   tp_accept: "By starting the trial or sending a request you accept the",
+  tp_pay: "PAY",
+  tp_redirecting: "OPENING PAYMENT...",
+  tp_pay_hint: "Card payment on the secure Freedom Pay page. Teacher mode switches on right after the payment.",
+  tp_invoice: "Does the school pay by invoice? Leave a request:",
+  tp_invoice_btn: "INVOICE FOR A SCHOOL",
+  tp_pay_checking: "Checking the payment...",
+  tp_pay_paid: "Payment received! Teacher mode is on.",
+  tp_pay_failed: "The payment did not go through. No money was taken; you can try again.",
+  tp_pay_late: "The payment is still being confirmed. It can take a few minutes; refresh this page later. If money was taken and access did not appear within an hour, write to us (see Contacts).",
 };
 
 export type Translation = Record<keyof typeof en, string>;

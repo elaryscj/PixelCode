@@ -141,5 +141,8 @@
  "Enter a phone number or e-mail to reach you": "संपर्क के लिए फ़ोन नंबर या ई-मेल लिखें",
  "Your request is already waiting for an answer": "आपका अनुरोध पहले से जवाब का इंतज़ार कर रहा है",
  "Days must be between 1 and 3660": "दिन 1 से 3660 के बीच होने चाहिए",
- "Request not found": "अनुरोध नहीं मिला"
+ "Request not found": "अनुरोध नहीं मिला",
+ "Online payment is not connected yet": "ऑनलाइन भुगतान अभी उपलब्ध नहीं है",
+ "The payment service did not answer, please try again": "भुगतान सेवा ने जवाब नहीं दिया, फिर से कोशिश करें",
+ "Payment not found": "भुगतान नहीं मिला"
 }

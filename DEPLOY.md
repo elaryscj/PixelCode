@@ -28,3 +28,4 @@ Logs: `docker compose logs -f backend`
 4. E-mail (password reset): Render's free plan blocks SMTP, so use Brevo (free, 300 e-mails a day): sign up at brevo.com, verify a sender address, create an API key, then set BREVO_API_KEY and MAIL_FROM (that sender address) in the backend service's Environment tab. On a paid plan MAIL_HOST / MAIL_USER / MAIL_PASSWORD (SMTP) also work.
 5. Set SERVER_REGION (e.g. oregon) on the backend so players see where the server is.
 Free instances sleep after ~15 min idle (first open takes ~1 min).
+6. Online payment (Freedom Pay): in the Freedom Pay cabinet copy the Merchant ID and the payment secret key, set FREEDOM_MERCHANT_ID and FREEDOM_SECRET_KEY on the backend. Start with FREEDOM_TESTING=true (test cards from docs.freedompay.kz), then remove it. The result URL is sent with every payment (https://<backend>/api/payments/freedom/result), nothing to configure.

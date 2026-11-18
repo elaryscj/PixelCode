@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
-import { requestTeacherPlan, startTeacherTrial, type TeacherStatus } from "~/api/teacher";
+import { requestTeacherPlan, startCheckout, startTeacherTrial, type TeacherStatus } from "~/api/teacher";
 
 const money = (n: number, currency: string, lang: string) => {
   try {
@@ -43,6 +43,39 @@ export default function TeacherPlans({ status, onChange }: { status: TeacherStat
   };
 
   const field = "w-full bg-[#02050f] border-2 border-neon text-white px-3 py-2 font-sans text-base outline-none focus:border-yellow";
+
+  // online card payment: Freedom Pay's page, then the subscription switches on by itself
+  const pay = async (p: "MONTH" | "YEAR") => {
+    if (busy) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const { redirectUrl } = await startCheckout(p);
+      window.location.href = redirectUrl;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t("unexpected_error"));
+      setBusy(false);
+    }
+  };
+  const payButtons = status.onlinePayment ? (
+    <div className="flex flex-col gap-2">
+      <div className="grid sm:grid-cols-2 gap-3">
+        {(["MONTH", "YEAR"] as const).map((p) => (
+          <button
+            key={p}
+            onClick={() => pay(p)}
+            disabled={busy}
+            className={`border-2 px-4 py-3 text-start disabled:opacity-60 ${p === "YEAR" ? "border-yellow bg-yellow/10" : "border-neon/60"} hover:brightness-125`}
+          >
+            <div className="text-gray-300 text-lg">{p === "MONTH" ? t("tp_month") : t("tp_year")}</div>
+            <div className="text-white text-2xl">{fmt(p === "MONTH" ? status.priceMonth : status.priceYear)}</div>
+            <div className="text-pink text-lg mt-1">{busy ? t("tp_redirecting") : `▶ ${t("tp_pay")}`}</div>
+          </button>
+        ))}
+      </div>
+      <p className="text-gray-400 text-sm font-sans">{t("tp_pay_hint")}</p>
+    </div>
+  ) : null;
 
   const form = (
     <div className="flex flex-col gap-3 border-2 border-yellow/70 p-4">
@@ -98,7 +131,14 @@ export default function TeacherPlans({ status, onChange }: { status: TeacherStat
             </button>
           )}
         </div>
-        {formOpen && form}
+        {formOpen && (
+          <div className="flex flex-col gap-3">
+            {payButtons}
+            {status.onlinePayment && <p className="text-gray-300 text-base font-sans">{t("tp_invoice")}</p>}
+            {form}
+          </div>
+        )}
+        {error && !formOpen && <p className="text-pink text-base font-sans">{error}</p>}
       </section>
     );
   }
@@ -117,6 +157,8 @@ export default function TeacherPlans({ status, onChange }: { status: TeacherStat
           </li>
         ))}
       </ul>
+      {payButtons ?? (
+        <>
       <div className="grid sm:grid-cols-2 gap-3">
         <div className="border-2 border-neon/60 p-4">
           <div className="text-gray-300 text-lg">{t("tp_month")}</div>
@@ -130,6 +172,8 @@ export default function TeacherPlans({ status, onChange }: { status: TeacherStat
           <div className="text-white text-3xl">{fmt(status.priceYear)}</div>
         </div>
       </div>
+        </>
+      )}
       <div className="flex flex-wrap gap-3">
         {status.trialAvailable && (
           <button
@@ -141,7 +185,7 @@ export default function TeacherPlans({ status, onChange }: { status: TeacherStat
           </button>
         )}
         <button onClick={() => setFormOpen((o) => !o)} className="border-2 border-yellow text-yellow text-2xl px-6 py-3 hover:bg-yellow/10">
-          {t("tp_buy")}
+          {status.onlinePayment ? t("tp_invoice_btn") : t("tp_buy")}
         </button>
       </div>
       {status.trialAvailable && <p className="text-gray-400 text-sm font-sans">{t("tp_trial_hint")}</p>}

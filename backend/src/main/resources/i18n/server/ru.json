@@ -141,5 +141,8 @@
  "Enter a phone number or e-mail to reach you": "Укажите телефон или e-mail для связи",
  "Your request is already waiting for an answer": "Ваша заявка уже ждёт ответа",
  "Days must be between 1 and 3660": "Дней должно быть от 1 до 3660",
- "Request not found": "Заявка не найдена"
+ "Request not found": "Заявка не найдена",
+ "Online payment is not connected yet": "Онлайн-оплата пока не подключена",
+ "The payment service did not answer, please try again": "Платёжный сервис не ответил, попробуйте ещё раз",
+ "Payment not found": "Платёж не найден"
 }

@@ -141,5 +141,8 @@
  "Enter a phone number or e-mail to reach you": "أدخل رقم هاتف أو بريدًا إلكترونيًا للتواصل",
  "Your request is already waiting for an answer": "طلبك بانتظار الرد بالفعل",
  "Days must be between 1 and 3660": "يجب أن تكون الأيام بين 1 و3660",
- "Request not found": "الطلب غير موجود"
+ "Request not found": "الطلب غير موجود",
+ "Online payment is not connected yet": "الدفع الإلكتروني غير متاح بعد",
+ "The payment service did not answer, please try again": "لم تستجب خدمة الدفع، حاول مرة أخرى",
+ "Payment not found": "الدفعة غير موجودة"
 }

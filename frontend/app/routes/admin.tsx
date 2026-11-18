@@ -24,6 +24,8 @@ import {
   teacherRequests,
   closeTeacherRequest,
   type TeacherRequestRow,
+  recentPayments,
+  type PaymentRow,
   type AdminUser,
 } from "~/api/admin";
 import { SkinArt, forgetSkin } from "~/components/skins";
@@ -57,8 +59,10 @@ function AdminScreen() {
   const [players, setPlayers] = useState<AdminUser[]>([]);
   const [requests, setRequests] = useState<TeacherRequestRow[]>([]);
   const loadRequests = () => teacherRequests().then(setRequests).catch(() => {});
+  const [paymentsList, setPaymentsList] = useState<PaymentRow[]>([]);
   useEffect(() => {
     void loadRequests();
+    recentPayments().then(setPaymentsList).catch(() => {});
   }, []);
   const [query, setQuery] = useState("");
   const [amounts, setAmounts] = useState<Record<number, string>>({});
@@ -321,6 +325,23 @@ function AdminScreen() {
             </li>
           ))}
         </ul>
+
+        <h2 className="text-neon text-3xl mt-12 mb-3">&gt; ONLINE PAYMENTS</h2>
+        <div className="border-2 border-neon bg-[#070c1e]/90 p-6 flex flex-col gap-1 font-sans">
+          <p className="text-gray-300 text-base">Paid orders switch teacher mode on by themselves. TEST = made with FREEDOM_TESTING.</p>
+          {paymentsList.length === 0 && <p className="text-gray-400">No online payments yet.</p>}
+          {paymentsList.map((p) => (
+            <div key={p.orderId} className="flex flex-wrap justify-between gap-2 border-b border-neon/20 py-1">
+              <span className="text-white">
+                {p.username} · {p.plan} · {p.amount} {p.currency}
+                {p.testing && <span className="text-pink ms-2">TEST</span>}
+              </span>
+              <span className={p.status === "PAID" ? "text-neon" : p.status === "FAILED" ? "text-pink" : "text-yellow"}>
+                {p.status} · {new Date(p.createdAt).toLocaleString()}
+              </span>
+            </div>
+          ))}
+        </div>
 
         <h2 className="text-neon text-3xl mt-12 mb-3">&gt; TEACHER REQUESTS</h2>
         <div className="border-2 border-yellow bg-[#070c1e]/90 p-6 flex flex-col gap-2">

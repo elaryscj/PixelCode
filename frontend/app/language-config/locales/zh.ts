@@ -607,6 +607,15 @@ const zh: Translation = {
   lg_privacy: "隐私政策",
   lg_contacts: "联系方式",
   tp_accept: "开始试用或提交申请即表示你接受",
+  tp_pay: "支付",
+  tp_redirecting: "正在打开支付...",
+  tp_pay_hint: "在 Freedom Pay 安全页面用银行卡支付，付款后立即开通教师模式。",
+  tp_invoice: "学校需要开票付款？请提交申请：",
+  tp_invoice_btn: "学校开票",
+  tp_pay_checking: "正在确认付款...",
+  tp_pay_paid: "付款成功！教师模式已开通。",
+  tp_pay_failed: "付款未成功，未扣款，可以重试。",
+  tp_pay_late: "付款仍在确认中，可能需要几分钟，请稍后刷新页面。如已扣款但一小时内未开通，请联系我们（见联系方式）。",
 };
 
 export default zh;

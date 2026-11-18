@@ -607,6 +607,15 @@ const id: Translation = {
   lg_privacy: "Privasi",
   lg_contacts: "Kontak",
   tp_accept: "Dengan memulai uji coba atau mengirim permintaan, Anda menyetujui",
+  tp_pay: "BAYAR",
+  tp_redirecting: "MEMBUKA PEMBAYARAN...",
+  tp_pay_hint: "Pembayaran kartu di halaman aman Freedom Pay. Mode guru aktif segera setelah pembayaran.",
+  tp_invoice: "Sekolah membayar dengan tagihan? Kirim permintaan:",
+  tp_invoice_btn: "TAGIHAN UNTUK SEKOLAH",
+  tp_pay_checking: "Memeriksa pembayaran...",
+  tp_pay_paid: "Pembayaran diterima! Mode guru aktif.",
+  tp_pay_failed: "Pembayaran tidak berhasil. Tidak ada dana yang ditarik; Anda bisa mencoba lagi.",
+  tp_pay_late: "Pembayaran masih dikonfirmasi. Bisa memakan beberapa menit; muat ulang halaman nanti. Jika dana terpotong dan akses tidak muncul dalam satu jam, hubungi kami (lihat Kontak).",
 };
 
 export default id;

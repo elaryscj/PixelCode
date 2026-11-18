@@ -84,3 +84,15 @@ export const closeTeacherRequest = (id: number) => api<void>(`/admin/users/teach
 export const searchUsers = (q: string) => api<AdminUser[]>(`/admin/users?q=${encodeURIComponent(q)}`);
 export const changeBalance = (id: number, mode: "set" | "add", amount: number) =>
   api<AdminUser>(`/admin/users/${id}/balance`, { method: "POST", body: JSON.stringify({ mode, amount }) });
+
+export type PaymentRow = {
+  orderId: string;
+  username: string;
+  plan: string;
+  amount: number;
+  currency: string;
+  status: "PENDING" | "PAID" | "FAILED";
+  testing: boolean;
+  createdAt: number;
+};
+export const recentPayments = () => api<PaymentRow[]>("/payments/admin/recent");

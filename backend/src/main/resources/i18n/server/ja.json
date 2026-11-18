@@ -141,5 +141,8 @@
  "Enter a phone number or e-mail to reach you": "連絡先の電話番号かメールアドレスを入力してください",
  "Your request is already waiting for an answer": "申し込みはすでに返答待ちです",
  "Days must be between 1 and 3660": "日数は1〜3660で指定してください",
- "Request not found": "申し込みが見つかりません"
+ "Request not found": "申し込みが見つかりません",
+ "Online payment is not connected yet": "オンライン決済はまだ利用できません",
+ "The payment service did not answer, please try again": "決済サービスが応答しませんでした。もう一度お試しください",
+ "Payment not found": "支払いが見つかりません"
 }

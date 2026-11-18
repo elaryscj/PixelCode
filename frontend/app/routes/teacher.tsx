@@ -1,12 +1,12 @@
 // app/routes/teacher.tsx — /teacher : a teacher's lessons and the form for a new one (map, four tasks, length).
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { ClientOnly, useCurrentUser } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
 import TeacherTasks from "~/components/TeacherTasks";
 import TeacherPlans from "~/components/TeacherPlans";
-import { teacherStatus, type TeacherStatus } from "~/api/teacher";
+import { paymentStatus, teacherStatus, type TeacherStatus } from "~/api/teacher";
 import { MAPS } from "~/game/maps";
 import { createLesson, lessonCatalog, myLessons, type CatalogTask, type LessonSummary } from "~/api/lessons";
 
@@ -24,6 +24,11 @@ function TeacherScreen() {
   const [lessons, setLessons] = useState<LessonSummary[] | null>(null);
   const [catalog, setCatalog] = useState<CatalogTask[]>([]);
   const [status, setStatus] = useState<TeacherStatus | null>(null);
+  // back from Freedom Pay: ?paid=<order> (wait for the payment notification) or ?payment=failed
+  const [params, setParams] = useSearchParams();
+  const [payNote, setPayNote] = useState<"checking" | "paid" | "failed" | "late" | null>(
+    params.get("paid") ? "checking" : params.get("payment") === "failed" ? "failed" : null,
+  );
   const [error, setError] = useState<string | null>(null);
 
   const [title, setTitle] = useState("");
@@ -58,6 +63,39 @@ function TeacherScreen() {
       setLessons([]);
     }
   };
+  useEffect(() => {
+    const order = params.get("paid");
+    if (!order || !user) return;
+    let alive = true;
+    let tries = 0;
+    const tick = async () => {
+      tries++;
+      try {
+        const r = await paymentStatus(order);
+        if (!alive) return;
+        if (r.status === "PAID") {
+          setPayNote("paid");
+          setParams({}, { replace: true });
+          void loadAll();
+          return;
+        }
+        if (r.status === "FAILED") {
+          setPayNote("failed");
+          return;
+        }
+      } catch {
+        /* keep trying a little */
+      }
+      // the notification usually comes within seconds; after a minute say it may take longer
+      if (tries >= 30) setPayNote("late");
+      else if (alive) setTimeout(tick, 2000);
+    };
+    void tick();
+    return () => {
+      alive = false;
+    };
+  }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const onStatus = (st: TeacherStatus) => {
     const turnedOn = st.active && !status?.active;
     setStatus(st);
@@ -101,6 +139,13 @@ function TeacherScreen() {
           <h1 className="text-yellow text-4xl sm:text-5xl text-glow-sm">{t("tc_title")}</h1>
         </header>
 
+        {payNote && (
+          <p
+            className={`border-2 p-4 text-lg font-sans ${payNote === "paid" ? "border-neon text-neon" : payNote === "failed" ? "border-pink text-pink" : "border-yellow text-yellow animate-pulse"}`}
+          >
+            {t(`tp_pay_${payNote}`)}
+          </p>
+        )}
         {status && <TeacherPlans status={status} onChange={onStatus} />}
         {error && !status && <p className="text-pink text-lg font-sans">{error}</p>}
         {status?.teacher && (

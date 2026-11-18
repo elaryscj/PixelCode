@@ -79,8 +79,8 @@ const OFFER: Record<DocLang, Doc> = {
         h: "4. Тарифы и порядок оплаты",
         p: [
           "Подписка на 1 месяц (30 дней) — {month} {currency}; подписка на учебный год (365 дней) — {year} {currency}. Актуальные цены всегда указаны на странице «Для учителей». Цены указаны без НДС (Исполнитель не является плательщиком НДС).",
-          "Пользователь оставляет заявку на странице «Для учителей». Исполнитель связывается с ним и выставляет счёт или ссылку на оплату через Kaspi (Kaspi Pay, QR, счёт на оплату) либо другим доступным способом.",
-          "Доступ включается в течение 1 рабочего дня после поступления оплаты. При продлении новый срок прибавляется к оставшемуся.",
+          "Оплата производится банковской картой на защищённой странице платёжного сервиса Freedom Pay (кнопка «Оплатить» на странице «Для учителей»), либо по заявке: Исполнитель выставляет счёт или ссылку на оплату через Kaspi (Kaspi Pay, QR, счёт на оплату).",
+          "При оплате картой доступ включается автоматически сразу после подтверждения платежа; при оплате по счёту — в течение 1 рабочего дня после поступления денег. При продлении новый срок прибавляется к оставшемуся.",
           "После окончания подписки создавать новые уроки и задачи нельзя, но ранее проведённые уроки и их результаты остаются доступны Пользователю.",
         ],
       },
@@ -145,8 +145,8 @@ const OFFER: Record<DocLang, Doc> = {
         h: "4. Тарифтер және төлем тәртібі",
         p: [
           "1 айлық жазылым (30 күн) — {month} {currency}; оқу жылына жазылым (365 күн) — {year} {currency}. Өзекті бағалар әрқашан «Мұғалімдерге» бетінде көрсетіледі. Бағалар ҚҚС-сыз (Орындаушы ҚҚС төлеуші емес).",
-          "Пайдаланушы «Мұғалімдерге» бетінде өтініш қалдырады. Орындаушы онымен байланысып, Kaspi арқылы (Kaspi Pay, QR, төлем шоты) немесе басқа қолжетімді тәсілмен шот не төлем сілтемесін жібереді.",
-          "Төлем түскеннен кейін 1 жұмыс күні ішінде қолжетімділік қосылады. Ұзартқанда жаңа мерзім қалған мерзімге қосылады.",
+          "Төлем Freedom Pay төлем қызметінің қорғалған бетінде банк картасымен («Мұғалімдерге» бетіндегі «Төлеу» батырмасы) немесе өтініш бойынша жасалады: Орындаушы Kaspi арқылы (Kaspi Pay, QR, төлем шоты) шот не төлем сілтемесін жібереді.",
+          "Картамен төлегенде қолжетімділік төлем расталған бойда автоматты түрде қосылады; шот бойынша төлегенде — ақша түскеннен кейін 1 жұмыс күні ішінде. Ұзартқанда жаңа мерзім қалған мерзімге қосылады.",
           "Жазылым аяқталғаннан кейін жаңа сабақтар мен тапсырмалар құруға болмайды, бірақ бұрын өткізілген сабақтар мен олардың нәтижелері Пайдаланушыға қолжетімді болып қалады.",
         ],
       },
@@ -211,8 +211,8 @@ const OFFER: Record<DocLang, Doc> = {
         h: "4. Prices and payment",
         p: [
           "1-month subscription (30 days): {month} {currency}; school-year subscription (365 days): {year} {currency}. Current prices are always shown on the For teachers page. Prices do not include VAT (the Provider is not a VAT payer).",
-          "The User sends a request on the For teachers page. The Provider contacts them and sends an invoice or a payment link via Kaspi (Kaspi Pay, QR, invoice) or another available method.",
-          "Access is switched on within 1 business day after the payment arrives. A renewal adds the new period to what is left.",
+          "Payment is made by bank card on the secure page of the Freedom Pay payment service (the Pay button on the For teachers page) or on request: the Provider sends an invoice or a payment link via Kaspi (Kaspi Pay, QR, invoice).",
+          "With a card payment access switches on automatically as soon as the payment is confirmed; with an invoice, within 1 business day after the money arrives. A renewal adds the new period to what is left.",
           "After a subscription ends, new lessons and tasks cannot be created, but past lessons and their results stay available to the User.",
         ],
       },
@@ -282,7 +282,7 @@ const PRIVACY: Record<DocLang, Doc> = {
       {
         h: "4. Где хранятся данные",
         p: [
-          "Сервер и база данных размещены у хостинг-провайдера Render (США); письма отправляются через сервис Brevo (ЕС). Пользуясь Сервисом, Пользователь соглашается на трансграничную передачу данных этим провайдерам. Оплата проходит на стороне Kaspi; данные карт Сервис не получает и не хранит.",
+          "Сервер и база данных размещены у хостинг-провайдера Render (США); письма отправляются через сервис Brevo (ЕС). Пользуясь Сервисом, Пользователь соглашается на трансграничную передачу данных этим провайдерам. Оплата проходит на стороне Freedom Pay или Kaspi; данные карт Сервис не получает и не хранит.",
         ],
       },
       {
@@ -342,7 +342,7 @@ const PRIVACY: Record<DocLang, Doc> = {
       {
         h: "4. Деректер қайда сақталады",
         p: [
-          "Сервер мен дерекқор Render хостинг-провайдерінде (АҚШ) орналасқан; хаттар Brevo (ЕО) сервисі арқылы жіберіледі. Сервисті пайдалану арқылы Пайдаланушы деректердің осы провайдерлерге трансшекаралық берілуіне келіседі. Төлем Kaspi жағында өтеді; Сервис карта деректерін алмайды және сақтамайды.",
+          "Сервер мен дерекқор Render хостинг-провайдерінде (АҚШ) орналасқан; хаттар Brevo (ЕО) сервисі арқылы жіберіледі. Сервисті пайдалану арқылы Пайдаланушы деректердің осы провайдерлерге трансшекаралық берілуіне келіседі. Төлем Freedom Pay немесе Kaspi жағында өтеді; Сервис карта деректерін алмайды және сақтамайды.",
         ],
       },
       {
@@ -402,7 +402,7 @@ const PRIVACY: Record<DocLang, Doc> = {
       {
         h: "4. Where the data is kept",
         p: [
-          "The server and database are hosted by Render (USA); e-mails are sent through Brevo (EU). By using the Service the User agrees to this cross-border transfer. Payments happen on Kaspi's side; the Service never receives or stores card details.",
+          "The server and database are hosted by Render (USA); e-mails are sent through Brevo (EU). By using the Service the User agrees to this cross-border transfer. Payments happen on Freedom Pay's or Kaspi's side; the Service never receives or stores card details.",
         ],
       },
       {

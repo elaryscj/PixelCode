@@ -607,6 +607,15 @@ const fr: Translation = {
   lg_privacy: "Confidentialité",
   lg_contacts: "Contacts",
   tp_accept: "En lançant l'essai ou en envoyant une demande, vous acceptez",
+  tp_pay: "PAYER",
+  tp_redirecting: "OUVERTURE DU PAIEMENT...",
+  tp_pay_hint: "Paiement par carte sur la page sécurisée de Freedom Pay. Le mode enseignant s'active juste après le paiement.",
+  tp_invoice: "L'école paie sur facture ? Laissez une demande :",
+  tp_invoice_btn: "FACTURE POUR L'ÉCOLE",
+  tp_pay_checking: "Vérification du paiement...",
+  tp_pay_paid: "Paiement reçu ! Le mode enseignant est activé.",
+  tp_pay_failed: "Le paiement n'a pas abouti. Rien n'a été débité ; vous pouvez réessayer.",
+  tp_pay_late: "Le paiement est en cours de confirmation. Cela peut prendre quelques minutes ; actualisez la page plus tard. Si l'argent a été débité et l'accès n'apparaît pas dans l'heure, écrivez-nous (voir Contacts).",
 };
 
 export default fr;
