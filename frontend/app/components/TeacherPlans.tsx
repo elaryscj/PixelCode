@@ -2,6 +2,7 @@
 // Without access it is the whole page; with access it shrinks to a bar with the end date and a renew button.
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 import { requestTeacherPlan, startTeacherTrial, type TeacherStatus } from "~/api/teacher";
 
 const money = (n: number, currency: string, lang: string) => {
@@ -64,7 +65,10 @@ export default function TeacherPlans({ status, onChange }: { status: TeacherStat
           <input className={field} value={school} maxLength={120} placeholder={t("tp_school")} onChange={(e) => setSchool(e.target.value)} />
           <input className={field} value={contact} maxLength={120} placeholder={t("tp_contact")} onChange={(e) => setContact(e.target.value)} />
           <textarea className={field} rows={2} value={note} maxLength={500} placeholder={t("tp_note")} onChange={(e) => setNote(e.target.value)} />
-          <p className="text-gray-400 text-sm font-sans">{t("tp_how_pay")}</p>
+          <p className="text-gray-400 text-sm font-sans">
+            {t("tp_how_pay")}{" "}
+            <Link to="/offer" className="text-neon underline">{t("lg_offer")}</Link>
+          </p>
           <button
             onClick={() => act(() => requestTeacherPlan({ plan, school, contact, note }), () => setSent(true))}
             disabled={busy}
@@ -141,6 +145,11 @@ export default function TeacherPlans({ status, onChange }: { status: TeacherStat
         </button>
       </div>
       {status.trialAvailable && <p className="text-gray-400 text-sm font-sans">{t("tp_trial_hint")}</p>}
+      <p className="text-gray-400 text-sm font-sans">
+        {t("tp_accept")}{" "}
+        <Link to="/offer" className="text-neon underline">{t("lg_offer")}</Link>{" · "}
+        <Link to="/privacy" className="text-neon underline">{t("lg_privacy")}</Link>
+      </p>
       {(formOpen || status.requestPending) && form}
       {error && !formOpen && <p className="text-pink text-base font-sans">{error}</p>}
     </section>

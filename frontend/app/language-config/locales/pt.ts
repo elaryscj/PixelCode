@@ -603,6 +603,10 @@ const pt: Translation = {
   tp_unlimited: "Modo professor ativo, sem data de término",
   tp_renew: "RENOVAR",
   tp_ended: "Sua assinatura de professor terminou. Aulas e resultados continuam aqui; renove para dar novas aulas.",
+  lg_offer: "Oferta e termos",
+  lg_privacy: "Privacidade",
+  lg_contacts: "Contatos",
+  tp_accept: "Ao iniciar o teste ou enviar um pedido, você aceita a",
 };
 
 export default pt;

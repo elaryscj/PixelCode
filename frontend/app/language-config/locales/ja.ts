@@ -603,6 +603,10 @@ const ja: Translation = {
   tp_unlimited: "教師モードは期限なしで有効です",
   tp_renew: "更新する",
   tp_ended: "教師サブスクリプションの期限が切れました。授業と結果は残っています。新しい授業には更新が必要です。",
+  lg_offer: "利用規約",
+  lg_privacy: "プライバシー",
+  lg_contacts: "お問い合わせ",
+  tp_accept: "トライアル開始または申し込み送信により、次に同意したものとみなされます：",
 };
 
 export default ja;

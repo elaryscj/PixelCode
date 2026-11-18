@@ -603,6 +603,10 @@ const id: Translation = {
   tp_unlimited: "Mode guru aktif tanpa batas waktu",
   tp_renew: "PERPANJANG",
   tp_ended: "Langganan guru Anda telah berakhir. Pelajaran dan hasilnya tetap ada; perpanjang untuk mengadakan kelas baru.",
+  lg_offer: "Penawaran & ketentuan",
+  lg_privacy: "Privasi",
+  lg_contacts: "Kontak",
+  tp_accept: "Dengan memulai uji coba atau mengirim permintaan, Anda menyetujui",
 };
 
 export default id;

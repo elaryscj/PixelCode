@@ -603,6 +603,10 @@ const zh: Translation = {
   tp_unlimited: "教师模式已开启，无到期日",
   tp_renew: "续订",
   tp_ended: "教师订阅已到期。课程和成绩仍保留；续订后可开新课。",
+  lg_offer: "服务条款",
+  lg_privacy: "隐私政策",
+  lg_contacts: "联系方式",
+  tp_accept: "开始试用或提交申请即表示你接受",
 };
 
 export default zh;

@@ -607,6 +607,10 @@ const en = {
   tp_unlimited: "Teacher mode is on, with no end date",
   tp_renew: "RENEW",
   tp_ended: "Your teacher subscription has ended. Your lessons and results are still here; renew to run new lessons.",
+  lg_offer: "Offer & terms",
+  lg_privacy: "Privacy",
+  lg_contacts: "Contacts",
+  tp_accept: "By starting the trial or sending a request you accept the",
 };
 
 export type Translation = Record<keyof typeof en, string>;

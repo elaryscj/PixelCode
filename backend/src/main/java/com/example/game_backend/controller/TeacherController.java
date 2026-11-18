@@ -18,6 +18,12 @@ public class TeacherController {
         this.tokens = tokens;
     }
 
+    /** No login needed: the public offer quotes these prices. */
+    @GetMapping("/plans")
+    public Map<String, Object> plans() {
+        return access.plans();
+    }
+
     @GetMapping("/status")
     public Map<String, Object> status(@RequestHeader(value = "Authorization", required = false) String auth) {
         return access.status(tokens.requireUserId(auth));

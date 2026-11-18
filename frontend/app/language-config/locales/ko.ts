@@ -603,6 +603,10 @@ const ko: Translation = {
   tp_unlimited: "교사 모드가 기한 없이 켜져 있습니다",
   tp_renew: "연장",
   tp_ended: "교사 구독이 만료되었습니다. 수업과 결과는 그대로 있으며, 새 수업을 하려면 연장하세요.",
+  lg_offer: "이용약관",
+  lg_privacy: "개인정보",
+  lg_contacts: "연락처",
+  tp_accept: "체험을 시작하거나 신청을 보내면 다음에 동의하게 됩니다:",
 };
 
 export default ko;
