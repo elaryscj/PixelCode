@@ -54,7 +54,9 @@ public class AdminController {
         requireAdmin(auth);
         List<Map<String, Object>> out = new ArrayList<>();
         for (Challenge c : challenges.findAllByOrderByIdDesc()) {
-            out.add(view(c));
+            if (c.getOwnerId() == null) { // teachers' own tasks stay private to them
+                out.add(view(c));
+            }
         }
         return ResponseEntity.ok(out);
     }
@@ -109,7 +111,8 @@ public class AdminController {
     @PostMapping("/{id}/publish")
     public ResponseEntity<Map<String, Object>> publish(@PathVariable long id, @RequestHeader(value = "Authorization", required = false) String auth) {
         requireAdmin(auth);
-        Challenge c = challenges.findById(id).orElseThrow(() -> new ApiException(404, "Challenge not found"));
+        Challenge c = challenges.findById(id).filter(x -> x.getOwnerId() == null)
+                .orElseThrow(() -> new ApiException(404, "Challenge not found"));
         c.setPublished(true);
         return ResponseEntity.ok(view(challenges.save(c)));
     }

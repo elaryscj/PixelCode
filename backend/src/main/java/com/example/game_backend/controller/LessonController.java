@@ -4,6 +4,7 @@ import com.example.game_backend.i18n.ChallengeText;
 import com.example.game_backend.i18n.Lang;
 import com.example.game_backend.i18n.ServerText;
 import com.example.game_backend.lesson.LessonService;
+import com.example.game_backend.lesson.TeacherTaskService;
 import com.example.game_backend.security.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,32 @@ import java.util.Map;
 @RequestMapping("/api/lessons")
 public class LessonController {
     private final LessonService lessons;
+    private final TeacherTaskService tasks;
     private final TokenService tokens;
 
-    public LessonController(LessonService lessons, TokenService tokens) {
+    public LessonController(LessonService lessons, TeacherTaskService tasks, TokenService tokens) {
         this.lessons = lessons;
+        this.tasks = tasks;
         this.tokens = tokens;
+    }
+
+    // ------------------------------------------------------------------ a teacher's own tasks
+
+    @GetMapping("/tasks")
+    public List<Map<String, Object>> myTasks(@RequestHeader(value = "Authorization", required = false) String auth) {
+        return tasks.mine(tokens.requireUserId(auth));
+    }
+
+    @PostMapping("/tasks")
+    public Map<String, Object> createTask(@RequestBody TeacherTaskService.Form body,
+                                          @RequestHeader(value = "Authorization", required = false) String auth) {
+        return tasks.create(tokens.requireUserId(auth), body);
+    }
+
+    @PutMapping("/tasks/{id}")
+    public Map<String, Object> updateTask(@PathVariable long id, @RequestBody TeacherTaskService.Form body,
+                                          @RequestHeader(value = "Authorization", required = false) String auth) {
+        return tasks.update(tokens.requireUserId(auth), id, body);
     }
 
     // ------------------------------------------------------------------ teacher

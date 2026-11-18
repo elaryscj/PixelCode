@@ -30,6 +30,7 @@ class LessonFlowTest {
     @Autowired UserRepository users;
     @Autowired ChallengeRepository challenges;
     @Autowired LessonRepository lessons;
+    @Autowired TeacherTaskService tasks;
 
     private User newUser(boolean teacher) {
         User u = new User("t" + UUID.randomUUID().toString().substring(0, 8), "x");
@@ -144,5 +145,49 @@ class LessonFlowTest {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    @Test
+    void teachersOwnTasksArePrivateAndChecked() {
+        User teacher = newUser(true);
+        User other = newUser(true);
+        String tests = "[{\"input\":[2,3],\"expected\":5},{\"input\":[10,-4],\"expected\":6}]";
+        String good = "class Solution { public static int solve(int a, int b) { return a + b; } }";
+        String title = "Sum for 7B " + UUID.randomUUID().toString().substring(0, 6);
+        TeacherTaskService.Form wrong = new TeacherTaskService.Form(title, "EASY", "Add two numbers", null, null,
+                "solve", "solve(2, 3) -> 5", tests, "class Solution { public static int solve(int a, int b) { return a - b; } }");
+        assertThrows(ApiException.class, () -> tasks.create(teacher.getId(), wrong)); // reference fails a test
+        assertThrows(ApiException.class, () -> tasks.create(newUser(false).getId(), wrong)); // not a teacher
+        TeacherTaskService.Form ok = new TeacherTaskService.Form(title, "EASY", "Add two numbers", null, null,
+                "solve", "solve(2, 3) -> 5", tests, good);
+        long id = ((Number) tasks.create(teacher.getId(), ok).get("id")).longValue();
+        assertThrows(ApiException.class, () -> tasks.create(teacher.getId(), ok)); // same title again
+
+        // private: never in public matches or in another teacher's list
+        assertTrue(challenges.findByPublishedTrue().stream().noneMatch(c -> c.getId() == id));
+        assertTrue(service.catalog(other.getId()).stream().noneMatch(m -> ((Number) m.get("id")).longValue() == id));
+        Map<String, Object> mineFirst = service.catalog(teacher.getId()).get(0);
+        assertEquals(id, ((Number) mineFirst.get("id")).longValue());
+        assertEquals(true, mineFirst.get("mine"));
+        assertThrows(ApiException.class, () -> tasks.update(other.getId(), id, ok));
+
+        // usable in the owner's lesson, not in someone else's
+        List<Long> ids = new ArrayList<>(fourTasks().stream().map(t -> (Long) t[0]).toList());
+        ids.set(0, id);
+        assertThrows(ApiException.class, () -> service.create(other.getId(), "Theirs", 0, ids, 30));
+        String code = (String) service.create(teacher.getId(), "Mine", 0, ids, 30).get("code");
+        String token = (String) service.join(code, "Kim", "5.6.7.8").get("token");
+        service.start(teacher.getId(), code);
+        Lesson l = lessons.findByCode(code).orElseThrow();
+        l.setStartedAt(Instant.now().minusSeconds(1));
+        lessons.save(l);
+        assertEquals(title, service.openDoor(code, token, 1).get("title"));
+        assertEquals(true, service.submit(code, token, 1, good).get("unlocked"));
+
+        // editing keeps it checked
+        TeacherTaskService.Form edited = new TeacherTaskService.Form(title, "MEDIUM", "Add two whole numbers", null, null,
+                "solve", "", tests, good);
+        assertEquals("MEDIUM", tasks.update(teacher.getId(), id, edited).get("difficulty"));
+        assertEquals(1, tasks.mine(teacher.getId()).size());
     }
 }

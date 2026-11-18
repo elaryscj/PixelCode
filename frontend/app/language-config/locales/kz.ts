@@ -551,6 +551,28 @@ const kz: Translation = {
   tb_passed: "qabyldandy",
   tb_failed: "{{total}} testten {{passed}}",
   tb_at: "{{time}} kezinde",
+  tb_show_qr: "QR TOLYQ EKRANGA",
+  tb_scan: "Kiru ushin telefon kamerasyn bagyttanyz",
+  // teacher's own tasks
+  tt_my_tasks: "MENIN TAPSYRMALARYM",
+  tt_new: "JANA TAPSYRMA",
+  tt_private: "Tapsyrmalarynyzdy tek siz koresiz. Olar adettegi matchtarda shyqpaidy.",
+  tt_none: "Oz tapsyrmalarynyz ali joq. Synybynyzga tapsyrma qurynyz!",
+  tt_edit: "OZGERTU",
+  tt_title: "Atauy",
+  tt_title_ph: "mysaly, Eki sannyn qosyndysy",
+  tt_difficulty: "Qiyndygy",
+  tt_method: "Adis aty",
+  tt_description: "Tapsyrma sharty (oqushylar oqidy)",
+  tt_input: "Kiris derekteri (mindetti emes)",
+  tt_output: "Natije (mindetti emes)",
+  tt_examples: "Oqushylarga mysaldar (ar jolda bireuden, mindetti emes)",
+  tt_tests: "Testter (JSON): input — adis argumentteri, expected — duris jauap",
+  tt_tests_hint: "Qatelesse oqushylar algashqy 2 testti jauabymen koredi; qalgandary jasyryn.",
+  tt_reference: "Ulgi sheshim (Java): barlyq testten otui kerek, oqushylar ony kormeidi",
+  tt_save: "TAPSYRMANY SAQTAU",
+  tt_saving: "SHESHIMDI TEKSERIP JATYRMYZ...",
+  tt_mine: "MENIKI",
 };
 
 export default kz;

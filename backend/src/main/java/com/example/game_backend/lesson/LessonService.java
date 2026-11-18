@@ -78,14 +78,17 @@ public class LessonService {
     public List<Map<String, Object>> catalog(long userId) {
         requireTeacher(userId);
         List<Map<String, Object>> out = new ArrayList<>();
+        // the teacher's own tasks first, then the public catalog by difficulty
         List<Challenge> all = new ArrayList<>(challenges.findByPublishedTrue());
         all.sort(Comparator.comparing((Challenge c) -> difficultyRank(c.getDifficulty())).thenComparing(Challenge::getId));
+        all.addAll(0, challenges.findByOwnerIdOrderByIdDesc(userId));
         for (Challenge c : all) {
             Map<String, Object> m = new LinkedHashMap<>();
             m.put("id", c.getId());
             m.put("title", c.getTitle());
             m.put("difficulty", c.getDifficulty());
             m.put("description", c.getDescription());
+            m.put("mine", c.getOwnerId() != null);
             out.add(m);
         }
         return out;
@@ -110,7 +113,8 @@ public class LessonService {
         }
         for (Long id : challengeIds) {
             Challenge c = id == null ? null : challenges.findById(id).orElse(null);
-            if (c == null || !c.isPublished()) {
+            boolean usable = c != null && (Objects.equals(c.getOwnerId(), userId) || (c.isPublished() && c.getOwnerId() == null));
+            if (!usable) {
                 throw new ApiException(400, "Choose four tasks, one for each door");
             }
         }

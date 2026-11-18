@@ -11,4 +11,9 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
     List<Challenge> findAllByOrderByIdDesc();
     boolean existsByTitle(String title);
     List<Challenge> findByPublishedTrue();
+
+    /** a teacher's own tasks (teacher mode) */
+    List<Challenge> findByOwnerIdOrderByIdDesc(Long ownerId);
+
+    long countByOwnerId(Long ownerId);
 }

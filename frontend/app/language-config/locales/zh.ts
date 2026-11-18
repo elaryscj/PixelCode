@@ -551,6 +551,28 @@ const zh: Translation = {
   tb_passed: "通过",
   tb_failed: "{{passed}}/{{total}} 个测试",
   tb_at: "第 {{time}}",
+  tb_show_qr: "全屏显示二维码",
+  tb_scan: "用手机相机扫码加入",
+  // teacher's own tasks
+  tt_my_tasks: "我的题目",
+  tt_new: "新题目",
+  tt_private: "只有你能看到自己的题目，它们不会出现在公开对战中。",
+  tt_none: "还没有自己的题目，为你的班级创建一道吧！",
+  tt_edit: "编辑",
+  tt_title: "标题",
+  tt_title_ph: "例如：两数之和",
+  tt_difficulty: "难度",
+  tt_method: "方法名",
+  tt_description: "题目描述（学生会看到）",
+  tt_input: "输入（可选）",
+  tt_output: "输出（可选）",
+  tt_examples: "给学生的示例（每行一个，可选）",
+  tt_tests: "测试（JSON）：input 为方法参数，expected 为正确答案",
+  tt_tests_hint: "答错时学生能看到前 2 个测试及答案，其余测试隐藏。",
+  tt_reference: "参考解答（Java）：必须通过所有测试，学生看不到",
+  tt_save: "保存题目",
+  tt_saving: "正在检查解答...",
+  tt_mine: "我的",
 };
 
 export default zh;

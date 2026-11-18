@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { ClientOnly, useCurrentUser } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
+import TeacherTasks from "~/components/TeacherTasks";
 import { MAPS } from "~/game/maps";
 import { createLesson, lessonCatalog, myLessons, type CatalogTask, type LessonSummary } from "~/api/lessons";
 import { ApiError } from "~/api/http";
@@ -49,8 +50,9 @@ function TeacherScreen() {
       });
   }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const reloadCatalog = () => lessonCatalog().then(setCatalog).catch(() => {});
   const byId = useMemo(() => new Map(catalog.map((c) => [c.id, c])), [catalog]);
-  const shown = catalog.filter((c) => filter === "ALL" || c.difficulty === filter);
+  const shown = catalog.filter((c) => filter === "ALL" || (filter === "MINE" ? c.mine : c.difficulty === filter));
 
   const create = async () => {
     if (busy) return;
@@ -144,13 +146,13 @@ function TeacherScreen() {
                 <div className="border-2 border-yellow/70 p-3 flex flex-col gap-3">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-yellow text-lg me-2">{t("tc_door_n", { n: picking + 1 })}: {t("tc_pick_task")}</span>
-                    {["ALL", ...LEVELS].map((l) => (
+                    {["ALL", ...(catalog.some((c) => c.mine) ? ["MINE"] : []), ...LEVELS].map((l) => (
                       <button
                         key={l}
                         onClick={() => setFilter(l)}
                         className={`text-sm px-2 py-0.5 border ${filter === l ? "border-yellow text-yellow" : "border-neon/40 text-neon/70"}`}
                       >
-                        {l === "ALL" ? t("tc_filter_all") : l}
+                        {l === "ALL" ? t("tc_filter_all") : l === "MINE" ? t("tt_mine") : l}
                       </button>
                     ))}
                   </div>
@@ -166,6 +168,7 @@ function TeacherScreen() {
                             }}
                             className={`w-full text-start px-3 py-2 border ${used ? "border-yellow/60 bg-yellow/5" : "border-neon/30 hover:border-neon"}`}
                           >
+                            {c.mine && <span className="text-black bg-yellow text-xs px-1.5 py-0.5 me-2">{t("tt_mine")}</span>}
                             <span className="text-white text-lg">{c.title}</span>{" "}
                             <span className={`text-sm ${levelColor[c.difficulty]}`}>{c.difficulty}</span>
                             <span className="block text-gray-400 text-sm font-sans line-clamp-2">{c.description}</span>
@@ -186,6 +189,8 @@ function TeacherScreen() {
                 {t("tc_create")}
               </button>
             </section>
+
+            <TeacherTasks onChanged={reloadCatalog} />
 
             <section className="flex flex-col gap-3">
               <h2 className="text-neon text-3xl">&gt; {t("tc_my_lessons")}</h2>

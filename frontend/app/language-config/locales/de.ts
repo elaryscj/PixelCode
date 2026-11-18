@@ -551,6 +551,28 @@ const de: Translation = {
   tb_passed: "angenommen",
   tb_failed: "{{passed}} von {{total}} Tests",
   tb_at: "bei {{time}}",
+  tb_show_qr: "QR IM VOLLBILD",
+  tb_scan: "Mit der Handykamera scannen und beitreten",
+  // teacher's own tasks
+  tt_my_tasks: "MEINE AUFGABEN",
+  tt_new: "NEUE AUFGABE",
+  tt_private: "Nur du siehst deine Aufgaben. Sie erscheinen nie in öffentlichen Matches.",
+  tt_none: "Noch keine eigenen Aufgaben. Erstelle eine für deine Klasse!",
+  tt_edit: "BEARBEITEN",
+  tt_title: "Titel",
+  tt_title_ph: "z. B. Summe zweier Zahlen",
+  tt_difficulty: "Schwierigkeit",
+  tt_method: "Methodenname",
+  tt_description: "Aufgabentext (das lesen die Schüler)",
+  tt_input: "Eingabe (optional)",
+  tt_output: "Ausgabe (optional)",
+  tt_examples: "Beispiele für Schüler (eins pro Zeile, optional)",
+  tt_tests: "Tests (JSON): input = Argumente der Methode, expected = richtige Antwort",
+  tt_tests_hint: "Bei Fehlern sehen Schüler die ersten 2 Tests mit Antworten; der Rest bleibt verborgen.",
+  tt_reference: "Musterlösung (Java): muss alle Tests bestehen, Schüler sehen sie nie",
+  tt_save: "AUFGABE SPEICHERN",
+  tt_saving: "LÖSUNG WIRD GEPRÜFT...",
+  tt_mine: "MEINE",
 };
 
 export default de;

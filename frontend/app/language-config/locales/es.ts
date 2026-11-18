@@ -551,6 +551,28 @@ const es: Translation = {
   tb_passed: "aceptada",
   tb_failed: "{{passed}} de {{total}} pruebas",
   tb_at: "a los {{time}}",
+  tb_show_qr: "QR A PANTALLA COMPLETA",
+  tb_scan: "Escanea con la cámara del móvil para unirte",
+  // teacher's own tasks
+  tt_my_tasks: "MIS TAREAS",
+  tt_new: "NUEVA TAREA",
+  tt_private: "Solo tú ves tus tareas. Nunca aparecen en las partidas públicas.",
+  tt_none: "Aún no tienes tareas propias. ¡Crea una para tu clase!",
+  tt_edit: "EDITAR",
+  tt_title: "Título",
+  tt_title_ph: "p. ej., Suma de dos números",
+  tt_difficulty: "Dificultad",
+  tt_method: "Nombre del método",
+  tt_description: "Enunciado (lo que leen los alumnos)",
+  tt_input: "Entrada (opcional)",
+  tt_output: "Salida (opcional)",
+  tt_examples: "Ejemplos para los alumnos (uno por línea, opcional)",
+  tt_tests: "Pruebas (JSON): input = argumentos del método, expected = respuesta correcta",
+  tt_tests_hint: "Si fallan, los alumnos ven las 2 primeras pruebas con respuestas; el resto queda oculto.",
+  tt_reference: "Solución de referencia (Java): debe pasar todas las pruebas; los alumnos no la ven",
+  tt_save: "GUARDAR TAREA",
+  tt_saving: "COMPROBANDO LA SOLUCIÓN...",
+  tt_mine: "MÍA",
 };
 
 export default es;

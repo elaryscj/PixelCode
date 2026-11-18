@@ -18,7 +18,28 @@ export type LessonSummary = {
   students?: number;
 };
 
-export type CatalogTask = { id: number; title: string; difficulty: "EASY" | "MEDIUM" | "HARD"; description: string };
+export type CatalogTask = {
+  id: number;
+  title: string;
+  difficulty: "EASY" | "MEDIUM" | "HARD";
+  description: string;
+  /** the teacher's own task (private) */
+  mine?: boolean;
+};
+
+/** A teacher's own task, as edited in the form. The server runs the reference solution on every save. */
+export type TeacherTask = {
+  id?: number;
+  title: string;
+  difficulty: "EASY" | "MEDIUM" | "HARD";
+  description: string;
+  inputDescription: string;
+  outputDescription: string;
+  functionName: string;
+  examples: string;
+  testsJson: string;
+  referenceSolution: string;
+};
 
 export type DoorCell = {
   door: number;
@@ -75,6 +96,11 @@ export const myLessons = () => api<LessonSummary[]>("/lessons");
 export const lessonCatalog = () => api<CatalogTask[]>("/lessons/catalog");
 export const createLesson = (body: { title: string; mapId: number; challengeIds: number[]; durationMinutes: number }) =>
   api<LessonSummary>("/lessons", { method: "POST", body: JSON.stringify(body) });
+export const myTasks = () => api<TeacherTask[]>("/lessons/tasks");
+export const saveTask = (task: TeacherTask) =>
+  task.id
+    ? api<TeacherTask>(`/lessons/tasks/${task.id}`, { method: "PUT", body: JSON.stringify(task) })
+    : api<TeacherTask>("/lessons/tasks", { method: "POST", body: JSON.stringify(task) });
 export const lessonBoard = (code: string) => api<Board>(`/lessons/${enc(code)}/board`);
 export const studentWork = (code: string, id: number) => api<StudentWork>(`/lessons/${enc(code)}/students/${id}`);
 export const startLesson = (code: string) => api<LessonSummary>(`/lessons/${enc(code)}/start`, { method: "POST" });

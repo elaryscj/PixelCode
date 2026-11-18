@@ -121,5 +121,16 @@
  "Join the lesson first": "पहले पाठ में शामिल हों",
  "A task of this lesson was deleted": "इस पाठ का एक कार्य हटा दिया गया",
  "Student not found": "छात्र नहीं मिला",
- "Open all four doors first": "पहले चारों दरवाज़े खोलें"
+ "Open all four doors first": "पहले चारों दरवाज़े खोलें",
+ "You have too many tasks": "आपके पास बहुत ज़्यादा कार्य हैं",
+ "Task not found": "कार्य नहीं मिला",
+ "Give the task a title (up to 80 characters)": "कार्य को शीर्षक दें (80 अक्षरों तक)",
+ "A task with this title already exists": "इस शीर्षक का कार्य पहले से है",
+ "Describe the task": "कार्य का विवरण लिखें",
+ "Difficulty must be EASY, MEDIUM or HARD": "कठिनाई EASY, MEDIUM या HARD होनी चाहिए",
+ "The method name must be a Java name, for example solve": "मेथड का नाम Java नाम होना चाहिए, जैसे solve",
+ "Add tests": "टेस्ट जोड़ें",
+ "Write a reference solution": "संदर्भ हल लिखें",
+ "Reference solution failed: {0}": "संदर्भ हल विफल: {0}",
+ "Reference solution passes only {0} of {1} tests": "संदर्भ हल {1} में से केवल {0} टेस्ट पास करता है"
 }
