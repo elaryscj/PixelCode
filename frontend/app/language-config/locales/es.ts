@@ -603,6 +603,10 @@ const es: Translation = {
   tp_unlimited: "El modo profesor está activo, sin fecha de fin",
   tp_renew: "RENOVAR",
   tp_ended: "Tu suscripción de profesor ha terminado. Tus clases y resultados siguen aquí; renueva para dar nuevas clases.",
+  lg_offer: "Oferta y términos",
+  lg_privacy: "Privacidad",
+  lg_contacts: "Contacto",
+  tp_accept: "Al iniciar la prueba o enviar una solicitud aceptas la",
 };
 
 export default es;

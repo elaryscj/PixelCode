@@ -603,6 +603,10 @@ const ar: Translation = {
   tp_unlimited: "وضع المعلم مفعّل بلا تاريخ انتهاء",
   tp_renew: "تجديد",
   tp_ended: "انتهى اشتراك المعلم. دروسك ونتائجك محفوظة؛ جدّد لتقديم دروس جديدة.",
+  lg_offer: "العرض والشروط",
+  lg_privacy: "الخصوصية",
+  lg_contacts: "اتصل بنا",
+  tp_accept: "ببدء التجربة أو إرسال طلب فإنك توافق على",
 };
 
 export default ar;

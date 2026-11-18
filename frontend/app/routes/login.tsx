@@ -258,7 +258,9 @@ export default function LoginRoute() {
 
             {isRegister && (
               <p className="text-center text-[16px] text-gray-500">
-                {t("au_accept_rules")} <span className="text-[#01E4FF]">{t("au_rules")}</span>
+                {t("au_accept_rules")}{" "}
+                <Link to="/offer" className="text-[#01E4FF] underline">{t("au_rules")}</Link>{" "}
+                · <Link to="/privacy" className="text-[#01E4FF] underline">{t("lg_privacy")}</Link>
               </p>
             )}
             {/* Sub-links */}

@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 
 const Footer = () => {
 
@@ -13,7 +14,12 @@ const Footer = () => {
             <p className="uppercase text-md font-pixel text-yellow">v1.0-beta</p>
           </div>
         </div>
-        {/* Instagram / Twitch / e-mail icons hidden until the project has its own accounts */}
+        {/* the documents payment providers and parents look for */}
+        <nav className="flex flex-wrap justify-end gap-x-4 gap-y-1 font-pixel text-sm sm:text-base py-2">
+          <Link to="/offer" className="text-gray-400 hover:text-neon">{t("lg_offer")}</Link>
+          <Link to="/privacy" className="text-gray-400 hover:text-neon">{t("lg_privacy")}</Link>
+          <Link to="/contacts" className="text-gray-400 hover:text-neon">{t("lg_contacts")}</Link>
+        </nav>
       </div>
     </footer>
   );

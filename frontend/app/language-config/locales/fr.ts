@@ -603,6 +603,10 @@ const fr: Translation = {
   tp_unlimited: "Mode enseignant actif, sans date de fin",
   tp_renew: "RENOUVELER",
   tp_ended: "Votre abonnement enseignant a expiré. Vos cours et résultats sont conservés ; renouvelez pour lancer de nouveaux cours.",
+  lg_offer: "Offre et conditions",
+  lg_privacy: "Confidentialité",
+  lg_contacts: "Contacts",
+  tp_accept: "En lançant l'essai ou en envoyant une demande, vous acceptez",
 };
 
 export default fr;

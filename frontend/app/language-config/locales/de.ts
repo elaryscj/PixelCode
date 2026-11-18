@@ -603,6 +603,10 @@ const de: Translation = {
   tp_unlimited: "Lehrermodus aktiv, ohne Enddatum",
   tp_renew: "VERLÄNGERN",
   tp_ended: "Dein Lehrer-Abo ist abgelaufen. Stunden und Ergebnisse bleiben erhalten; verlängere, um neue Stunden zu starten.",
+  lg_offer: "Angebot & AGB",
+  lg_privacy: "Datenschutz",
+  lg_contacts: "Kontakt",
+  tp_accept: "Mit dem Start der Testphase oder einer Anfrage akzeptierst du",
 };
 
 export default de;

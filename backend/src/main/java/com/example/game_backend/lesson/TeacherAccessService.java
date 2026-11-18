@@ -53,6 +53,16 @@ public class TeacherAccessService {
         return users.findById(userId).orElseThrow(() -> new ApiException(401, "Please log in again"));
     }
 
+    /** Public prices and trial length (the offer page and the teacher page show the same numbers). */
+    public Map<String, Object> plans() {
+        Map<String, Object> m = new LinkedHashMap<>();
+        m.put("trialDays", trialDays);
+        m.put("priceMonth", priceMonth);
+        m.put("priceYear", priceYear);
+        m.put("currency", currency);
+        return m;
+    }
+
     /** What the teacher page shows: access, end date, trial, prices, a pending request. */
     public Map<String, Object> status(long userId) {
         User u = user(userId);

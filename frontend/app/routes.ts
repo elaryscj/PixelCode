@@ -30,6 +30,9 @@ export default [
   route('/lesson/:code/play', 'routes/lesson-play.tsx'),
   route('/teacher', 'routes/teacher.tsx'),
   route('/teacher/:code', 'routes/teacher-lesson.tsx'),
+  route('/offer', 'routes/legal.tsx', { id: 'legal-offer' }),
+  route('/privacy', 'routes/legal.tsx', { id: 'legal-privacy' }),
+  route('/contacts', 'routes/legal.tsx', { id: 'legal-contacts' }),
   route('*', 'routes/not-found.tsx')
   ] satisfies RouteConfig;
 
