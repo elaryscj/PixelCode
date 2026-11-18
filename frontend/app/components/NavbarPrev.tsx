@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { useServerLabel } from "~/lib/serverRegion";
 import { Link, useLocation } from "react-router";
 import { FaChevronLeft } from "react-icons/fa";
 import { onlineLabel, useLiveStats } from "~/lib/liveStats";
@@ -6,6 +7,7 @@ import PingBadge from "./PingBadge";
 
 const NavbarPrev = () => {
   const { t } = useTranslation();
+  const serverLabel = useServerLabel();
   const { pathname } = useLocation();
   const stats = useLiveStats();
   // inside a lobby the way back leads to the mode selection, everywhere else to the menu
@@ -21,7 +23,7 @@ const NavbarPrev = () => {
           <FaChevronLeft className="text-sm rtl:-scale-x-100" /> {inLobby ? t("back").toUpperCase() : t("menu")}
         </Link>
         <div className="flex items-center gap-2 sm:gap-4 font-pixel text-base sm:text-xl min-w-0">
-          <span className="hidden lg:inline text-neon">{t("server")}</span>
+          <span className="hidden lg:inline text-neon">{serverLabel}</span>
           <span className="hidden lg:inline-block w-2 h-2 rounded-full bg-yellow" />
           <PingBadge />
           <span className="w-2 h-2 rounded-full bg-yellow" />

@@ -27,9 +27,15 @@ services:
         generateValue: true
       - key: CORS_ORIGINS
         value: "*"
+      - key: SERVER_REGION
+        value: oregon
       - key: FRONTEND_URL
         value: https://pixelcode-arena.onrender.com
       - key: ADMIN_USERNAMES
+        sync: false
+      - key: BREVO_API_KEY
+        sync: false
+      - key: MAIL_FROM
         sync: false
       - key: MAIL_HOST
         sync: false

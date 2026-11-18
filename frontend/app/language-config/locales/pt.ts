@@ -18,7 +18,8 @@ const pt: Translation = {
   live_duels: "DUELOS AO VIVO",
   live_queue: "NA FILA",
   footer_text: "Versão de produção",
-  server: "SERVIDOR: CAZAQUISTÃO",
+  server: "SERVIDOR: {{place}}",
+  server_plain: "SERVIDOR",
   loading: "Carregando...",
   cancel: "CANCELAR",
 
@@ -573,6 +574,13 @@ const pt: Translation = {
   tt_save: "SALVAR TAREFA",
   tt_saving: "VERIFICANDO A SOLUÇÃO...",
   tt_mine: "MINHA",
+  // where the game server runs
+  rg_oregon: "EUA (OREGON)",
+  rg_virginia: "EUA (VIRGÍNIA)",
+  rg_ohio: "EUA (OHIO)",
+  rg_frankfurt: "ALEMANHA (FRANKFURT)",
+  rg_singapore: "SINGAPURA",
+  rg_local: "ESTE COMPUTADOR",
 };
 
 export default pt;

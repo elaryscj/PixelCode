@@ -12,8 +12,14 @@ import java.util.Map;
 @RestController
 public class HealthController {
     private final JdbcTemplate jdbc;
+    /** where this server runs (SERVER_REGION, e.g. "oregon", "frankfurt"); "" = not told. Shown in the game. */
+    private final String region;
 
-    public HealthController(javax.sql.DataSource dataSource) {
+    public HealthController(javax.sql.DataSource dataSource,
+                            @org.springframework.beans.factory.annotation.Value("${game.server-region:}") String region) {
+        // a server started on a laptop is "local" unless told otherwise; on the hosting the operator sets it
+        this.region = !region.isBlank() ? region.trim().toLowerCase(java.util.Locale.ROOT)
+                : System.getenv("RENDER") == null ? "local" : "";
         // own template with a short timeout, so the app-wide JdbcTemplate settings stay untouched
         this.jdbc = new JdbcTemplate(dataSource);
         this.jdbc.setQueryTimeout(3);
@@ -22,7 +28,7 @@ public class HealthController {
     /** Light: the in-game ping meter calls this every few seconds, so it must not touch the database. */
     @GetMapping("/api/health")
     public ResponseEntity<Map<String, Object>> health() {
-        return ResponseEntity.ok(Map.of("status", "ok"));
+        return ResponseEntity.ok(Map.of("status", "ok", "region", region));
     }
 
     /** For the hosting health check / monitoring: also proves the database answers. 503 when it does not. */

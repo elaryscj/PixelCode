@@ -1,212 +1,212 @@
 {
  "GATE // PARITY LOCK": {
-  "description": "`solve(n)` adisin jazynyz: san jup bolsa true, aitpese false qaitarsyn.",
-  "inputDescription": "Butin san `n` (-1000 <= n <= 1000).",
-  "outputDescription": "Boolean: true nemese false."
+  "description": "`solve(n)` әдісін жазыңыз: бүтін сан жұп болса true, әйтпесе false қайтарсын.",
+  "inputDescription": "Бүтін сан `n` (-1000 <= n <= 1000).",
+  "outputDescription": "Boolean: true немесе false."
  },
  "GATE // FIZZ PROTOCOL": {
-  "description": "`solve(n)` adisin jazynyz: n 3-ke de, 5-ke de bolinse \"FizzBuzz\", 3-ke bolinse \"Fizz\", 5-ke bolinse \"Buzz\", aitpese sannyn ozin jol retinde qaitarsyn.",
-  "inputDescription": "On butin san `n`.",
-  "outputDescription": "Jol."
+  "description": "`solve(n)` әдісін жазыңыз: n саны 3-ке де, 5-ке де бөлінсе \"FizzBuzz\", тек 3-ке бөлінсе \"Fizz\", тек 5-ке бөлінсе \"Buzz\", әйтпесе санның өзін жол түрінде қайтарсын.",
+  "inputDescription": "Оң бүтін сан `n`.",
+  "outputDescription": "Жол."
  },
  "GATE // FACTORIAL CORE": {
-  "description": "`solve(n)` adisin jazynyz: n! (n-nin faktorialyn) qaitarsyn. 0! = 1.",
-  "inputDescription": "Butin san `n` (0 <= n <= 10).",
-  "outputDescription": "n-nin faktorialy."
+  "description": "`solve(n)` әдісін жазыңыз: n! (n санының факториалын) қайтарсын. 0! = 1.",
+  "inputDescription": "Бүтін сан `n` (0 <= n <= 10).",
+  "outputDescription": "n санының факториалы."
  },
  "GATE // SQUARE GRID": {
-  "description": "`solve(nums)` adisin jazynyz: ar sany kvadratqa shygarylgan jana massiv qaitarsyn.",
-  "inputDescription": "Butin sandar massivi `nums` (bos boluy mumkin).",
-  "outputDescription": "Kvadrattar massivi, sol retpen."
+  "description": "`solve(nums)` әдісін жазыңыз: әр сан квадратқа шығарылған жаңа массив қайтарсын.",
+  "inputDescription": "Бүтін сандар массиві `nums` (бос болуы мүмкін).",
+  "outputDescription": "Квадраттар массиві, сол ретпен."
  },
  "GATE // NEURAL SUM": {
-  "description": "`solve(a, b)` adisin jazynyz: eki butin sannyn qosyndysyn qaitarsyn.",
-  "inputDescription": "Eki butin san `a` jane `b` (-1000 <= a, b <= 1000).",
-  "outputDescription": "a + b butin sany."
+  "description": "`solve(a, b)` әдісін жазыңыз: екі бүтін санның қосындысын қайтарсын.",
+  "inputDescription": "Екі бүтін сан `a` және `b` (-1000 <= a, b <= 1000).",
+  "outputDescription": "a + b бүтін саны."
  },
  "GATE // CYBER MIRROR": {
-  "description": "`solve(str)` adisin jazynyz: jol solldan ongga da, onnan solga da birdei oqylsa true, aitpese false qaitarsyn.",
-  "inputDescription": "Kishi latyn ariptari men sandardan turatyn jol `str`.",
-  "outputDescription": "Boolean: true nemese false."
+  "description": "`solve(str)` әдісін жазыңыз: жол алдынан да, артынан да бірдей оқылса true, әйтпесе false қайтарсын.",
+  "inputDescription": "Кіші әріптер мен сандардан тұратын жол `str`.",
+  "outputDescription": "Boolean: true немесе false."
  },
  "GATE // MAX SIGNAL": {
-  "description": "`solve(nums)` adisin jazynyz: massivtegi en ulken sandy qaitarsyn.",
-  "inputDescription": "Sandar massivi `nums` (uzyndygy >= 1).",
-  "outputDescription": "Massivtegi en ulken san."
+  "description": "`solve(nums)` әдісін жазыңыз: массивтегі ең үлкен санды қайтарсын.",
+  "inputDescription": "Сандар массиві `nums` (ұзындығы >= 1).",
+  "outputDescription": "Массивтегі ең үлкен сан."
  },
  "GATE // DATA REVERSAL": {
-  "description": "`solve(str)` adisin jazynyz: joldy keri retpen qaitarsyn.",
-  "inputDescription": "Jol `str`.",
-  "outputDescription": "Kerisinshe jazylgan jol."
+  "description": "`solve(str)` әдісін жазыңыз: жолды кері ретпен қайтарсын.",
+  "inputDescription": "Жол `str`.",
+  "outputDescription": "Кері айналдырылған жол."
  },
  "GATE // VOWEL SCAN": {
-  "description": "`solve(str)` adisin jazynyz: kishi ariptermen jazylgan joldagy dauysty ariptardy (a, e, i, o, u) sanasyn.",
-  "inputDescription": "Kishi ariptermen jazylgan jol `str`.",
-  "outputDescription": "Dauysty ariptar sany."
+  "description": "`solve(str)` әдісін жазыңыз: кіші әріптермен жазылған жолдағы дауысты әріптерді (a, e, i, o, u) санасын.",
+  "inputDescription": "Кіші әріптермен жазылған жол `str`.",
+  "outputDescription": "Дауысты әріптер саны."
  },
  "GATE // ARRAY TOTAL": {
-  "description": "`solve(nums)` adisin jazynyz: massivtegi barlyq sandardyn qosyndysyn qaitarsyn.",
-  "inputDescription": "Butin sandar massivi `nums` (bos boluy mumkin).",
-  "outputDescription": "Barlyq elementterdin qosyndysy (bos massiv ushin 0)."
+  "description": "`solve(nums)` әдісін жазыңыз: массивтегі барлық сандардың қосындысын қайтарсын.",
+  "inputDescription": "Бүтін сандар массиві `nums` (бос болуы мүмкін).",
+  "outputDescription": "Барлық элементтердің қосындысы (бос массив үшін 0)."
  },
  "GATE // MIN SIGNAL": {
-  "description": "`solve(nums)` adisin jazynyz: massivtegi en kishi sandy qaitarsyn.",
-  "inputDescription": "Butin sandar massivi `nums` (uzyndygy >= 1).",
-  "outputDescription": "En kishi mani."
+  "description": "`solve(nums)` әдісін жазыңыз: массивтегі ең кіші санды қайтарсын.",
+  "inputDescription": "Бүтін сандар массиві `nums` (ұзындығы >= 1).",
+  "outputDescription": "Ең кіші сан."
  },
  "GATE // NEGATIVE SCAN": {
-  "description": "`solve(nums)` adisin jazynyz: massivte neshe teris san bar ekenin sanasyn.",
-  "inputDescription": "Butin sandar massivi `nums` (bos boluy mumkin).",
-  "outputDescription": "Nolden kishi elementter sany."
+  "description": "`solve(nums)` әдісін жазыңыз: массивте қанша теріс сан бар екенін санасын.",
+  "inputDescription": "Бүтін сандар массиві `nums` (бос болуы мүмкін).",
+  "outputDescription": "Нөлден кіші элементтер саны."
  },
  "GATE // CAPS LOCK": {
-  "description": "`solve(str)` adisin jazynyz: joldy bas ariptermen qaitarsyn.",
-  "inputDescription": "Ariptar, sandar jane bos oryndardan turatyn jol `str`.",
-  "outputDescription": "Sol jol bas ariptermen."
+  "description": "`solve(str)` әдісін жазыңыз: жолды бас әріптермен қайтарсын.",
+  "inputDescription": "Әріптерден, сандардан және бос орындардан тұратын жол `str`.",
+  "outputDescription": "Бас әріптермен жазылған сол жол."
  },
  "GATE // ABSOLUTE ZERO": {
-  "description": "`solve(n)` adisin jazynyz: n-nin modulin (nolden qashyqtygyn) qaitarsyn.",
-  "inputDescription": "Butin san `n` (-10000 <= n <= 10000).",
-  "outputDescription": "n-nin moduli."
+  "description": "`solve(n)` әдісін жазыңыз: n санының модулін (нөлге дейінгі қашықтығын) қайтарсын.",
+  "inputDescription": "Бүтін сан `n` (-10000 <= n <= 10000).",
+  "outputDescription": "n санының модулі."
  },
  "GATE // LAST BYTE": {
-  "description": "`solve(str)` adisin jazynyz: joldyn songgy tanbasyn jol retinde qaitarsyn.",
-  "inputDescription": "Bos emes jol `str`.",
-  "outputDescription": "Uzyndygy 1 jol."
+  "description": "`solve(str)` әдісін жазыңыз: жолдың соңғы таңбасын жол түрінде қайтарсын.",
+  "inputDescription": "Бос емес жол `str`.",
+  "outputDescription": "Ұзындығы 1 жол."
  },
  "GATE // FIBONACCI STREAM": {
-  "description": "`solve(n)` adisin jazynyz: n-shi Fibonachchi sanyn qaitarsyn. F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2).",
-  "inputDescription": "Butin san `n` (0 <= n <= 40).",
+  "description": "`solve(n)` әдісін жазыңыз: n-ші Фибоначчи санын қайтарсын. F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2).",
+  "inputDescription": "Бүтін сан `n` (0 <= n <= 40).",
   "outputDescription": "F(n)."
  },
  "GATE // PRIME SENTRY": {
-  "description": "`solve(n)` adisin jazynyz: n jai san bolsa true qaitarsyn.",
-  "inputDescription": "Butin san `n` (0 <= n <= 100000).",
-  "outputDescription": "n jai san bolsa true, aitpese false."
+  "description": "`solve(n)` әдісін жазыңыз: n жай сан болса true қайтарсын.",
+  "inputDescription": "Бүтін сан `n` (0 <= n <= 100000).",
+  "outputDescription": "n жай сан болса true, әйтпесе false."
  },
  "GATE // DIGIT CRUSHER": {
-  "description": "`solve(n)` adisin jazynyz: n sanynyn tsifrlarynyn qosyndysyn qaitarsyn.",
-  "inputDescription": "Butin san `n` (0 <= n <= 1000000000).",
-  "outputDescription": "Tsifrlar qosyndysy."
+  "description": "`solve(n)` әдісін жазыңыз: n санының цифрларының қосындысын қайтарсын.",
+  "inputDescription": "Бүтін сан `n` (0 <= n <= 1000000000).",
+  "outputDescription": "Цифрлар қосындысы."
  },
  "GATE // WORD COUNTER": {
-  "description": "`solve(text)` adisin jazynyz: matindegi sozderdi sanasyn. Sozder bir nemese birneshe bos orynmen bolingen; basynda jane sonynda da bos oryn boluy mumkin.",
-  "inputDescription": "Jol `text`.",
-  "outputDescription": "Sozder sany."
+  "description": "`solve(text)` әдісін жазыңыз: мәтіндегі сөздерді санасын. Сөздер бір немесе бірнеше бос орынмен бөлінеді; басында және соңында бос орын болуы мүмкін.",
+  "inputDescription": "Жол `text`.",
+  "outputDescription": "Сөздер саны."
  },
  "GATE // ANAGRAM LOCK": {
-  "description": "`solve(a, b)` adisin jazynyz: `b` sozi `a` sozinin anagrammasy bolsa (sol ariptar, arqaisysy sonsha ret) true qaitarsyn.",
-  "inputDescription": "Kishi ariptermen jazylgan eki jol `a` jane `b`.",
-  "outputDescription": "true nemese false."
+  "description": "`solve(a, b)` әдісін жазыңыз: `b` жолы `a` жолының анаграммасы болса (сол әріптер, әрқайсысы сонша рет), true қайтарсын.",
+  "inputDescription": "Кіші әріптермен жазылған екі жол `a` және `b`.",
+  "outputDescription": "true немесе false."
  },
  "GATE // RUNNER-UP": {
-  "description": "`solve(nums)` adisin jazynyz: massivtegi ulkendigi boiynsha ekinshi ARTURLI mandi qaitarsyn.",
-  "inputDescription": "Keminde eki turli mani bar massiv `nums`.",
-  "outputDescription": "Ulkendigi boiynsha ekinshi arturli man."
+  "description": "`solve(nums)` әдісін жазыңыз: массивтегі ӘРТҮРЛІ мәндердің ішінен екінші ең үлкенін қайтарсын.",
+  "inputDescription": "Кемінде екі әртүрлі мәні бар массив `nums`.",
+  "outputDescription": "Әртүрлі мәндердің екінші ең үлкені."
  },
  "GATE // ARRAY FLIP": {
-  "description": "`solve(nums)` adisin jazynyz: elementteri keri retpen turgan jana massiv qaitarsyn.",
-  "inputDescription": "Butin sandar massivi `nums` (bos boluy mumkin).",
-  "outputDescription": "Kerisinshe ainalgan massiv."
+  "description": "`solve(nums)` әдісін жазыңыз: элементтері кері ретпен тұрған жаңа массив қайтарсын.",
+  "inputDescription": "Бүтін сандар массиві `nums` (бос болуы мүмкін).",
+  "outputDescription": "Кері айналдырылған массив."
  },
  "GATE // FREQUENCY SCAN": {
-  "description": "`solve(str)` adisin jazynyz: en jii kezdesetin aripti qaitarsyn. Birneshe arip ten bolsa, alipbide aldyn turganyn qaitarynyz.",
-  "inputDescription": "Tek kishi ariptermen jazylgan bos emes jol `str`.",
-  "outputDescription": "Bir ariptik jol."
+  "description": "`solve(str)` әдісін жазыңыз: ең жиі кездесетін әріпті қайтарсын. Бірнеше әріп тең болса, әліпбиде бірінші тұрғанын қайтарыңыз.",
+  "inputDescription": "Тек кіші әріптерден тұратын бос емес жол `str`.",
+  "outputDescription": "Бір әріптен тұратын жол."
  },
  "GATE // BINARY ENCODER": {
-  "description": "`solve(n)` adisin jazynyz: n sanyn ekilik juiede (2 negizinde), aldyngy noldersiz qaitarsyn.",
-  "inputDescription": "Butin san `n` (0 <= n <= 1000000).",
-  "outputDescription": "Ekilik jazbasy jol retinde."
+  "description": "`solve(n)` әдісін жазыңыз: n санын екілік жүйеде (2-негіз), алдыңғы нөлдерсіз қайтарсын.",
+  "inputDescription": "Бүтін сан `n` (0 <= n <= 1000000).",
+  "outputDescription": "Екілік жазылуы, жол түрінде."
  },
  "GATE // GCD CIPHER": {
-  "description": "`solve(a, b)` adisin jazynyz: a men b-nin en ulken ortaq bolgishin qaitarsyn.",
-  "inputDescription": "Eki on butin san `a` jane `b` (<= 1000000).",
-  "outputDescription": "EUOB(a, b)."
+  "description": "`solve(a, b)` әдісін жазыңыз: a мен b сандарының ең үлкен ортақ бөлгішін қайтарсын.",
+  "inputDescription": "Екі оң бүтін сан `a` және `b` (<= 1000000).",
+  "outputDescription": "ЕҮОБ(a, b)."
  },
  "GATE // DUPLICATE PURGE": {
-  "description": "`solve(nums)` adisin jazynyz: qaitalanatyn manderdi alyp tastap, arqaisysynyn birinshi kezdesuin bastapqy retpen qaldyrsyn.",
-  "inputDescription": "Butin sandar massivi `nums` (bos boluy mumkin).",
-  "outputDescription": "Qaitalanbaityn massiv."
+  "description": "`solve(nums)` әдісін жазыңыз: қайталанатын мәндерді алып тастап, әрқайсысының алғашқы кездесуін бастапқы ретпен қалдырсын.",
+  "inputDescription": "Бүтін сандар массиві `nums` (бос болуы мүмкін).",
+  "outputDescription": "Қайталаусыз массив."
  },
  "GATE // ORDER CHECK": {
-  "description": "`solve(nums)` adisin jazynyz: massiv kemimeitin retpen surttalgan bolsa true qaitarsyn.",
-  "inputDescription": "Butin sandar massivi `nums` (bos boluy mumkin).",
-  "outputDescription": "true nemese false."
+  "description": "`solve(nums)` әдісін жазыңыз: массив кемімейтін ретпен сұрыпталған болса true қайтарсын.",
+  "inputDescription": "Бүтін сандар массиві `nums` (бос болуы мүмкін).",
+  "outputDescription": "true немесе false."
  },
  "GATE // CAESAR SHIFT": {
-  "description": "`solve(text, k)` adisin jazynyz: ar kishi aripti alipbide k orynga algha jyljytsyn, z-ten keiin qaitadan a bastalady. Basqa tanbalar ozgermeidi.",
-  "inputDescription": "Jol `text` jane butin san `k` (0 <= k <= 25).",
-  "outputDescription": "Jyljytylgan jol."
+  "description": "`solve(text, k)` әдісін жазыңыз: әр кіші әріпті әліпбиде k орынға алға жылжытсын, z-ден кейін қайтадан a-дан бастасын. Басқа таңбалар өзгермейді.",
+  "inputDescription": "Жол `text` және бүтін сан `k` (0 <= k <= 25).",
+  "outputDescription": "Жылжытылған жол."
  },
  "GATE // EVEN COUNTER": {
-  "description": "`solve(nums)` adisin jazynyz: massivtegi jup sandardy sanasyn.",
-  "inputDescription": "Butin sandar massivi `nums` (bos boluy mumkin).",
-  "outputDescription": "Jup elementter sany."
+  "description": "`solve(nums)` әдісін жазыңыз: массивтегі жұп сандарды санасын.",
+  "inputDescription": "Бүтін сандар массиві `nums` (бос болуы мүмкін).",
+  "outputDescription": "Жұп элементтер саны."
  },
  "GATE // MIRROR NUMBER": {
-  "description": "`solve(n)` adisin jazynyz: san solldan ongga da, onnan solga da birdei oqylsa true qaitarsyn (jol qoldanu shart emes, biraq ruqsat).",
-  "inputDescription": "Butin san `n` (0 <= n <= 1000000000).",
-  "outputDescription": "true nemese false."
+  "description": "`solve(n)` әдісін жазыңыз: сан алдынан да, артынан да бірдей оқылса true қайтарсын (жолсыз шығаруға болады, бірақ жолмен де болады).",
+  "inputDescription": "Бүтін сан `n` (0 <= n <= 1000000000).",
+  "outputDescription": "true немесе false."
  },
  "GATE // TITLE CASE": {
-  "description": "`solve(text)` adisin jazynyz: ar sozdin birinshi aripin bas aripke ainaldyrsyn. Sozder bir bos orynmen bolingen; qalgan ariptar ozgermeidi.",
-  "inputDescription": "Kishi ariptermen jazylgan sozder men jalgyz bos oryndardan turatyn jol `text`.",
-  "outputDescription": "Ar sozi bas aripten bastalatyn jol."
+  "description": "`solve(text)` әдісін жазыңыз: әр сөздің бірінші әрпін бас әріпке айналдырсын. Сөздер бір бос орынмен бөлінген; қалған әріптер өзгермейді.",
+  "inputDescription": "Кіші әріптермен жазылған сөздер мен жалғыз бос орындардан тұратын жол `text`.",
+  "outputDescription": "Әр сөзі бас әріптен басталатын жол."
  },
  "GATE // TWIN SUM": {
-  "description": "`solve(nums, target)` adisin jazynyz: qosyndysy target-ke ten eki sannyn [i, j] (i < j) indeksterin qaitarsyn. Jauap dal bireu.",
-  "inputDescription": "Massiv `nums` (2 <= uzyndygy <= 10000) jane butin san `target`.",
-  "outputDescription": "Eki indeksten turatyn massiv."
+  "description": "`solve(nums, target)` әдісін жазыңыз: қосындысы target-ке тең екі санның индекстерін [i, j] (i < j) қайтарсын. Жауап дәл біреу.",
+  "inputDescription": "Массив `nums` (2 <= ұзындығы <= 10000) және бүтін сан `target`.",
+  "outputDescription": "Екі индекстен тұратын массив."
  },
  "GATE // BRACKET VAULT": {
-  "description": "`solve(s)` adisin jazynyz: ar jaqsha ( [ { durys retpen saikes ) ] } jaqshamen jabylsa true qaitarsyn.",
-  "inputDescription": "Tek ()[]{} tanbalarynan turatyn jol `s`.",
-  "outputDescription": "true nemese false."
+  "description": "`solve(s)` әдісін жазыңыз: әр ( [ { жақшасы дұрыс ретпен сәйкес ) ] } жақшасымен жабылса, true қайтарсын.",
+  "inputDescription": "Тек ()[]{} таңбаларынан тұратын жол `s`.",
+  "outputDescription": "true немесе false."
  },
  "GATE // LONGEST STREAK": {
-  "description": "`solve(s)` adisin jazynyz: qatar turgan birdei tanbalardyn en uzyn tizbeginin uzyndygyn qaitarsyn.",
-  "inputDescription": "Jol `s` (bos boluy mumkin).",
-  "outputDescription": "En uzyn tizbektin uzyndygy."
+  "description": "`solve(s)` әдісін жазыңыз: қатар тұрған бірдей таңбалардың ең ұзын тізбегінің ұзындығын қайтарсын.",
+  "inputDescription": "Жол `s` (бос болуы мүмкін).",
+  "outputDescription": "Ең ұзын тізбектің ұзындығы."
  },
  "GATE // LOST PACKET": {
-  "description": "`solve(nums)` adisin jazynyz: 0..n auqymynan tusip qalgan jalgyz sandy qaitarsyn. Massivte osy auqymnan n arturli san bar.",
-  "inputDescription": "0 men n arasyndagy n arturli butin sannan turatyn massiv.",
-  "outputDescription": "Tusip qalgan san."
+  "description": "`solve(nums)` әдісін жазыңыз: 0..n аралығындағы жетіспейтін бір санды қайтарсын. Массивте осы аралықтан n әртүрлі сан бар.",
+  "inputDescription": "0 мен n аралығындағы n әртүрлі бүтін саннан тұратын массив.",
+  "outputDescription": "Жетіспейтін сан."
  },
  "GATE // ROMAN DECODER": {
-  "description": "`solve(roman)` adisin jazynyz: rim sanyn (I, V, X, L, C, D, M) butin sanga ainaldyrsyn.",
-  "inputDescription": "1 men 3999 arasyndagy durys rim sany.",
-  "outputDescription": "Onyn mani."
+  "description": "`solve(roman)` әдісін жазыңыз: рим цифрымен (I, V, X, L, C, D, M) жазылған санды бүтін санға айналдырсын.",
+  "inputDescription": "1 мен 3999 аралығындағы дұрыс рим саны.",
+  "outputDescription": "Оның мәні."
  },
  "GATE // MATRIX TRACE": {
-  "description": "`solve(grid)` adisin jazynyz: kvadrat matritsanyn bas diagonalynyn (sol jogargy buryshtan ong tomengi burysqa deiin) qosyndysyn qaitarsyn.",
-  "inputDescription": "Kvadrat matritsa `grid` (1 <= olshemi <= 50).",
-  "outputDescription": "grid[i][i] qosyndysy."
+  "description": "`solve(grid)` әдісін жазыңыз: шаршы матрицаның бас диагоналінің (сол жақ жоғарыдан оң жақ төменге) қосындысын қайтарсын.",
+  "inputDescription": "Шаршы матрица `grid` (1 <= өлшемі <= 50).",
+  "outputDescription": "grid[i][i] элементтерінің қосындысы."
  },
  "GATE // RUN-LENGTH PACK": {
-  "description": "`solve(s)` adisin jazynyz: joldy qysyp jazsyn: birdei tanbalardyn ar tizbegi sol tanba men tizbek uzyndygyna ainalady.",
-  "inputDescription": "Kishi ariptermen jazylgan jol `s` (bos boluy mumkin).",
-  "outputDescription": "Qysylgan jol."
+  "description": "`solve(s)` әдісін жазыңыз: жолды қыссын: бірдей таңбалардың әр тізбегі таңбаның өзі және одан кейін тізбектің ұзындығы болып жазылады.",
+  "inputDescription": "Кіші әріптермен жазылған жол `s` (бос болуы мүмкін).",
+  "outputDescription": "Қысылған жол."
  },
  "GATE // PEAK SEGMENT": {
-  "description": "`solve(nums)` adisin jazynyz: massivtin uzdiksiz, bos emes boliginin en ulken mumkin qosyndysyn qaitarsyn.",
-  "inputDescription": "Butin sandar massivi `nums` (uzyndygy >= 1).",
-  "outputDescription": "Ishki massivtin en ulken qosyndysy."
+  "description": "`solve(nums)` әдісін жазыңыз: массивтің қатар тұрған, бос емес бөлігінің ең үлкен қосындысын қайтарсын.",
+  "inputDescription": "Бүтін сандар массиві `nums` (ұзындығы >= 1).",
+  "outputDescription": "Ішкі массивтің ең үлкен қосындысы."
  },
  "GATE // PRIME FIELD": {
-  "description": "`solve(n)` adisin jazynyz: n-nen kishi nemese ten jai sandardyn sanyn qaitarsyn.",
-  "inputDescription": "Butin san `n` (0 <= n <= 1000000).",
-  "outputDescription": "<= n jai sandar sany."
+  "description": "`solve(n)` әдісін жазыңыз: n-нен аспайтын жай сандар санын қайтарсын.",
+  "inputDescription": "Бүтін сан `n` (0 <= n <= 1000000).",
+  "outputDescription": "<= n жай сандар саны."
  },
  "GATE // UNIQUE WINDOW": {
-  "description": "`solve(s)` adisin jazynyz: joldyn qaitalanatyn tanbasy joq en uzyn uzdiksiz boliginin uzyndygyn qaitarsyn.",
-  "inputDescription": "Jol `s` (bos boluy mumkin).",
-  "outputDescription": "Qaitalanbaityn en uzyn ishki joldyn uzyndygy."
+  "description": "`solve(s)` әдісін жазыңыз: жолдың қайталанатын таңбасы жоқ ең ұзын (қатар тұрған) бөлігінің ұзындығын қайтарсын.",
+  "inputDescription": "Жол `s` (бос болуы мүмкін).",
+  "outputDescription": "Қайталаусыз ең ұзын ішкі жолдың ұзындығы."
  },
  "GATE // ROTATION DRIVE": {
-  "description": "`solve(nums, k)` adisin jazynyz: massivti k qadam ongga ainaldyrsyn (songgy element basqa otedi, k ret).",
-  "inputDescription": "Massiv `nums` (bos boluy mumkin) jane butin san `k` (0 <= k <= 1000000).",
-  "outputDescription": "Ainaldyrylgan massiv."
+  "description": "`solve(nums, k)` әдісін жазыңыз: массивті оңға k қадам бұрсын (соңғы элемент басына k рет ауысады).",
+  "inputDescription": "Массив `nums` (бос болуы мүмкін) және бүтін сан `k` (0 <= k <= 1000000).",
+  "outputDescription": "Бұрылған массив."
  }
 }

@@ -25,5 +25,6 @@ Logs: `docker compose logs -f backend`
 2. render.com > New > Blueprint > choose the repo > Apply. Wait for both services to build.
 3. If your service URLs differ from `pixelcode-backend.onrender.com` / `pixelcode-arena.onrender.com`,
    edit them in render.yaml (VITE_API_URL, VITE_WS_URL, FRONTEND_URL), push, and redeploy.
-4. Optional e-mail: set MAIL_HOST / MAIL_USER / MAIL_PASSWORD in the backend service's Environment tab.
+4. E-mail (password reset): Render's free plan blocks SMTP, so use Brevo (free, 300 e-mails a day): sign up at brevo.com, verify a sender address, create an API key, then set BREVO_API_KEY and MAIL_FROM (that sender address) in the backend service's Environment tab. On a paid plan MAIL_HOST / MAIL_USER / MAIL_PASSWORD (SMTP) also work.
+5. Set SERVER_REGION (e.g. oregon) on the backend so players see where the server is.
 Free instances sleep after ~15 min idle (first open takes ~1 min).

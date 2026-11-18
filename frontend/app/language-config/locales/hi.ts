@@ -18,7 +18,8 @@ const hi: Translation = {
   live_duels: "मुकाबले जारी",
   live_queue: "कतार में",
   footer_text: "प्रोडक्शन संस्करण",
-  server: "सर्वर: कज़ाखस्तान",
+  server: "सर्वर: {{place}}",
+  server_plain: "सर्वर",
   loading: "लोड हो रहा है...",
   cancel: "रद्द करें",
 
@@ -573,6 +574,13 @@ const hi: Translation = {
   tt_save: "कार्य सहेजें",
   tt_saving: "हल जाँचा जा रहा है...",
   tt_mine: "मेरा",
+  // where the game server runs
+  rg_oregon: "अमेरिका (ओरेगन)",
+  rg_virginia: "अमेरिका (वर्जीनिया)",
+  rg_ohio: "अमेरिका (ओहायो)",
+  rg_frankfurt: "जर्मनी (फ्रैंकफ़र्ट)",
+  rg_singapore: "सिंगापुर",
+  rg_local: "यह कंप्यूटर",
 };
 
 export default hi;

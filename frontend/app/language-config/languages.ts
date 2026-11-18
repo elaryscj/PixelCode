@@ -28,7 +28,7 @@ export type Language = {
 
 export const LANGUAGES: Language[] = [
   { code: "en", label: "English", htmlLang: "en" },
-  { code: "kz", label: "Qazaqsha", htmlLang: "kk-Latn" },
+  { code: "kz", label: "Қазақша", htmlLang: "kk" },
   { code: "ru", label: "Русский", htmlLang: "ru" },
   { code: "es", label: "Español", htmlLang: "es" },
   { code: "fr", label: "Français", htmlLang: "fr" },

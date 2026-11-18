@@ -18,7 +18,8 @@ const de: Translation = {
   live_duels: "DUELLE LAUFEN",
   live_queue: "IN DER WARTESCHLANGE",
   footer_text: "Produktionsversion",
-  server: "SERVER: KASACHSTAN",
+  server: "SERVER: {{place}}",
+  server_plain: "SERVER",
   loading: "Wird geladen...",
   cancel: "ABBRECHEN",
 
@@ -573,6 +574,13 @@ const de: Translation = {
   tt_save: "AUFGABE SPEICHERN",
   tt_saving: "LÖSUNG WIRD GEPRÜFT...",
   tt_mine: "MEINE",
+  // where the game server runs
+  rg_oregon: "USA (OREGON)",
+  rg_virginia: "USA (VIRGINIA)",
+  rg_ohio: "USA (OHIO)",
+  rg_frankfurt: "DEUTSCHLAND (FRANKFURT)",
+  rg_singapore: "SINGAPUR",
+  rg_local: "DIESER COMPUTER",
 };
 
 export default de;

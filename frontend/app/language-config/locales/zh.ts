@@ -18,7 +18,8 @@ const zh: Translation = {
   live_duels: "场对决进行中",
   live_queue: "人排队中",
   footer_text: "正式版",
-  server: "服务器：哈萨克斯坦",
+  server: "服务器：{{place}}",
+  server_plain: "服务器",
   loading: "加载中...",
   cancel: "取消",
 
@@ -573,6 +574,13 @@ const zh: Translation = {
   tt_save: "保存题目",
   tt_saving: "正在检查解答...",
   tt_mine: "我的",
+  // where the game server runs
+  rg_oregon: "美国（俄勒冈）",
+  rg_virginia: "美国（弗吉尼亚）",
+  rg_ohio: "美国（俄亥俄）",
+  rg_frankfurt: "德国（法兰克福）",
+  rg_singapore: "新加坡",
+  rg_local: "本机",
 };
 
 export default zh;

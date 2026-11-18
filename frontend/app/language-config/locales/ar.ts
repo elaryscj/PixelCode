@@ -18,7 +18,8 @@ const ar: Translation = {
   live_duels: "مبارزات جارية",
   live_queue: "في الانتظار",
   footer_text: "نسخة الإنتاج",
-  server: "الخادم: كازاخستان",
+  server: "الخادم: {{place}}",
+  server_plain: "الخادم",
   loading: "جارٍ التحميل...",
   cancel: "إلغاء",
 
@@ -573,6 +574,13 @@ const ar: Translation = {
   tt_save: "حفظ المهمة",
   tt_saving: "جارٍ التحقق من الحل...",
   tt_mine: "خاصتي",
+  // where the game server runs
+  rg_oregon: "الولايات المتحدة (أوريغون)",
+  rg_virginia: "الولايات المتحدة (فيرجينيا)",
+  rg_ohio: "الولايات المتحدة (أوهايو)",
+  rg_frankfurt: "ألمانيا (فرانكفورت)",
+  rg_singapore: "سنغافورة",
+  rg_local: "هذا الحاسوب",
 };
 
 export default ar;

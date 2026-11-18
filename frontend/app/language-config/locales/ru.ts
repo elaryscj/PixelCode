@@ -18,7 +18,8 @@ const ru: Translation = {
   live_duels: "ДУЭЛЕЙ ИДЁТ",
   live_queue: "В ОЧЕРЕДИ",
   footer_text: "Рабочая версия",
-  server: "СЕРВЕР: КАЗАХСТАН",
+  server: "СЕРВЕР: {{place}}",
+  server_plain: "СЕРВЕР",
   loading: "Загрузка...",
   cancel: "ОТМЕНА",
 
@@ -573,6 +574,13 @@ const ru: Translation = {
   tt_save: "СОХРАНИТЬ ЗАДАЧУ",
   tt_saving: "ПРОВЕРЯЕМ РЕШЕНИЕ...",
   tt_mine: "МОЯ",
+  // where the game server runs
+  rg_oregon: "США (ОРЕГОН)",
+  rg_virginia: "США (ВИРДЖИНИЯ)",
+  rg_ohio: "США (ОГАЙО)",
+  rg_frankfurt: "ГЕРМАНИЯ (ФРАНКФУРТ)",
+  rg_singapore: "СИНГАПУР",
+  rg_local: "ЭТОТ КОМПЬЮТЕР",
 };
 
 export default ru;

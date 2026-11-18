@@ -18,7 +18,8 @@ const id: Translation = {
   live_duels: "DUEL BERLANGSUNG",
   live_queue: "DALAM ANTREAN",
   footer_text: "Versi produksi",
-  server: "SERVER: KAZAKHSTAN",
+  server: "SERVER: {{place}}",
+  server_plain: "SERVER",
   loading: "Memuat...",
   cancel: "BATAL",
 
@@ -573,6 +574,13 @@ const id: Translation = {
   tt_save: "SIMPAN SOAL",
   tt_saving: "MEMERIKSA SOLUSI...",
   tt_mine: "MILIKKU",
+  // where the game server runs
+  rg_oregon: "AS (OREGON)",
+  rg_virginia: "AS (VIRGINIA)",
+  rg_ohio: "AS (OHIO)",
+  rg_frankfurt: "JERMAN (FRANKFURT)",
+  rg_singapore: "SINGAPURA",
+  rg_local: "KOMPUTER INI",
 };
 
 export default id;

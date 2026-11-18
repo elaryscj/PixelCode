@@ -18,7 +18,8 @@ const ur: Translation = {
   live_duels: "مقابلے جاری",
   live_queue: "قطار میں",
   footer_text: "پروڈکشن ورژن",
-  server: "سرور: قازقستان",
+  server: "سرور: {{place}}",
+  server_plain: "سرور",
   loading: "لوڈ ہو رہا ہے...",
   cancel: "منسوخ کریں",
 
@@ -573,6 +574,13 @@ const ur: Translation = {
   tt_save: "سوال محفوظ کریں",
   tt_saving: "حل جانچا جا رہا ہے...",
   tt_mine: "میرا",
+  // where the game server runs
+  rg_oregon: "امریکا (اوریگن)",
+  rg_virginia: "امریکا (ورجینیا)",
+  rg_ohio: "امریکا (اوہائیو)",
+  rg_frankfurt: "جرمنی (فرینکفرٹ)",
+  rg_singapore: "سنگاپور",
+  rg_local: "یہ کمپیوٹر",
 };
 
 export default ur;
