@@ -132,5 +132,14 @@
  "Add tests": "テストを追加してください",
  "Write a reference solution": "模範解答を書いてください",
  "Reference solution failed: {0}": "模範解答が失敗しました：{0}",
- "Reference solution passes only {0} of {1} tests": "模範解答は {1} 件中 {0} 件のテストしか通りません"
+ "Reference solution passes only {0} of {1} tests": "模範解答は {1} 件中 {0} 件のテストしか通りません",
+ "Your teacher subscription has ended": "教師サブスクリプションの期限が切れました",
+ "The free trial has already been used": "無料トライアルはすでに使用済みです",
+ "Teacher mode is already active": "教師モードはすでに有効です",
+ "Choose a month or a year": "1か月か1年を選んでください",
+ "Enter your school or course": "学校名または教室名を入力してください",
+ "Enter a phone number or e-mail to reach you": "連絡先の電話番号かメールアドレスを入力してください",
+ "Your request is already waiting for an answer": "申し込みはすでに返答待ちです",
+ "Days must be between 1 and 3660": "日数は1〜3660で指定してください",
+ "Request not found": "申し込みが見つかりません"
 }

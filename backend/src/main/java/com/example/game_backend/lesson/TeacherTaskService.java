@@ -43,7 +43,7 @@ public class TeacherTaskService {
     }
 
     public List<Map<String, Object>> mine(long userId) {
-        lessons.requireTeacher(userId);
+        lessons.requireAnyTeacher(userId);
         List<Map<String, Object>> out = new ArrayList<>();
         for (Challenge c : challenges.findByOwnerIdOrderByIdDesc(userId)) {
             out.add(view(c));

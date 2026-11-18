@@ -102,7 +102,8 @@ const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
           {t("menu_lesson")}
         </Link>
       </div>
-      {user?.teacher && (
+      {/* everyone sees it: teachers find the offer (free trial, subscription) there */}
+      {user && (
         <Link to={"/teacher"} className={`${base} border-2 border-neon text-neon hover:text-glow-sm`}>
           {t("menu_teacher")}
         </Link>

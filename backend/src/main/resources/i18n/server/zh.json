@@ -132,5 +132,14 @@
  "Add tests": "请添加测试",
  "Write a reference solution": "请编写参考解答",
  "Reference solution failed: {0}": "参考解答未通过：{0}",
- "Reference solution passes only {0} of {1} tests": "参考解答只通过了 {1} 个测试中的 {0} 个"
+ "Reference solution passes only {0} of {1} tests": "参考解答只通过了 {1} 个测试中的 {0} 个",
+ "Your teacher subscription has ended": "你的教师订阅已到期",
+ "The free trial has already been used": "免费试用已使用过",
+ "Teacher mode is already active": "教师模式已开启",
+ "Choose a month or a year": "请选择按月或按年",
+ "Enter your school or course": "请填写学校或培训机构",
+ "Enter a phone number or e-mail to reach you": "请填写联系电话或邮箱",
+ "Your request is already waiting for an answer": "你的申请正在等待回复",
+ "Days must be between 1 and 3660": "天数必须在 1 到 3660 之间",
+ "Request not found": "未找到申请"
 }

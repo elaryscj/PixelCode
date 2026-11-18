@@ -59,9 +59,14 @@ public class User {
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean admin = false;
 
-    /** May run lessons (teacher mode); granted by an administrator in /admin. */
+    /** May run lessons (teacher mode): a free trial or a subscription (until teacherUntil), set in /admin. */
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean teacher = false;
+    /** end of the teacher subscription / trial; null with teacher = true means no end (granted for good) */
+    private Instant teacherUntil;
+    /** the free teacher trial can be started once per account */
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean teacherTrialUsed = false;
 
     /** The ADMIN_USERNAMES entry that granted `admin`; removing it from the config revokes the rights. */
     @Column
@@ -139,6 +144,15 @@ public class User {
     public void setAdmin(boolean admin) { this.admin = admin; }
     public boolean isTeacher() { return teacher; }
     public void setTeacher(boolean teacher) { this.teacher = teacher; }
+    public Instant getTeacherUntil() { return teacherUntil; }
+    public void setTeacherUntil(Instant teacherUntil) { this.teacherUntil = teacherUntil; }
+    public boolean isTeacherTrialUsed() { return teacherTrialUsed; }
+    public void setTeacherTrialUsed(boolean teacherTrialUsed) { this.teacherTrialUsed = teacherTrialUsed; }
+
+    /** Teacher mode right now: granted, and the subscription / trial has not run out. */
+    public boolean hasTeacherAccess() {
+        return teacher && (teacherUntil == null || teacherUntil.isAfter(Instant.now()));
+    }
     public String getAdminGrant() { return adminGrant; }
     public void setAdminGrant(String adminGrant) { this.adminGrant = adminGrant; }
     public int getTokenVersion() { return tokenVersion; }

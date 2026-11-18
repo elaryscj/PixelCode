@@ -132,5 +132,14 @@
  "Add tests": "Тесттер қосыңыз",
  "Write a reference solution": "Үлгі шешімді жазыңыз",
  "Reference solution failed: {0}": "Үлгі шешім өтпеді: {0}",
- "Reference solution passes only {0} of {1} tests": "Үлгі шешім {1} тесттен тек {0} өтеді"
+ "Reference solution passes only {0} of {1} tests": "Үлгі шешім {1} тесттен тек {0} өтеді",
+ "Your teacher subscription has ended": "Мұғалім жазылымы аяқталды",
+ "The free trial has already been used": "Тегін сынақ мерзімі қолданылып қойған",
+ "Teacher mode is already active": "Мұғалім режимі қосулы тұр",
+ "Choose a month or a year": "Айды немесе жылды таңдаңыз",
+ "Enter your school or course": "Мектепті немесе курсты көрсетіңіз",
+ "Enter a phone number or e-mail to reach you": "Байланыс үшін телефон не e-mail көрсетіңіз",
+ "Your request is already waiting for an answer": "Өтінішіңіз жауап күтіп тұр",
+ "Days must be between 1 and 3660": "Күн саны 1-ден 3660-қа дейін болуы керек",
+ "Request not found": "Өтініш табылмады"
 }

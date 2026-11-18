@@ -132,5 +132,14 @@
  "Add tests": "Añade pruebas",
  "Write a reference solution": "Escribe una solución de referencia",
  "Reference solution failed: {0}": "La solución de referencia falló: {0}",
- "Reference solution passes only {0} of {1} tests": "La solución de referencia solo pasa {0} de {1} pruebas"
+ "Reference solution passes only {0} of {1} tests": "La solución de referencia solo pasa {0} de {1} pruebas",
+ "Your teacher subscription has ended": "Tu suscripción de profesor ha terminado",
+ "The free trial has already been used": "La prueba gratuita ya se ha usado",
+ "Teacher mode is already active": "El modo profesor ya está activo",
+ "Choose a month or a year": "Elige un mes o un año",
+ "Enter your school or course": "Indica tu escuela o curso",
+ "Enter a phone number or e-mail to reach you": "Indica un teléfono o e-mail de contacto",
+ "Your request is already waiting for an answer": "Tu solicitud ya está esperando respuesta",
+ "Days must be between 1 and 3660": "Los días deben estar entre 1 y 3660",
+ "Request not found": "Solicitud no encontrada"
 }

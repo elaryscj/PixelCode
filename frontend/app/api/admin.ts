@@ -55,10 +55,32 @@ export const getCosmeticTexture = (id: string) =>
 export const toggleCosmetic = (id: string, publish: boolean) =>
   api<AdminCosmetic>(`/admin/cosmetics/${id.replace("c_", "")}/${publish ? "publish" : "withdraw"}`, { method: "POST" });
 
-export type AdminUser = { id: number; username: string; rating: number; pixels: number; teacher?: boolean };
-/** Teacher mode: the player may create lessons (/teacher). */
-export const setTeacher = (id: number, teacher: boolean) =>
-  api<AdminUser>(`/admin/users/${id}/teacher`, { method: "POST", body: JSON.stringify({ teacher }) });
+export type AdminUser = {
+  id: number;
+  username: string;
+  rating: number;
+  pixels: number;
+  teacher?: boolean;
+  teacherActive?: boolean;
+  teacherUntil?: number | null;
+};
+/** Teacher mode: `days` more days (a renewal adds to what is left), null = no end date, 0 = take it away. */
+export const grantTeacher = (id: number, days: number | null) =>
+  api<AdminUser>(`/admin/users/${id}/teacher`, { method: "POST", body: JSON.stringify({ days }) });
+
+export type TeacherRequestRow = {
+  id: number;
+  userId: number;
+  username: string;
+  plan: "MONTH" | "YEAR";
+  school: string;
+  contact: string;
+  note: string;
+  status: "NEW" | "DONE";
+  createdAt: number;
+};
+export const teacherRequests = () => api<TeacherRequestRow[]>("/admin/users/teacher-requests");
+export const closeTeacherRequest = (id: number) => api<void>(`/admin/users/teacher-requests/${id}/close`, { method: "POST" });
 export const searchUsers = (q: string) => api<AdminUser[]>(`/admin/users?q=${encodeURIComponent(q)}`);
 export const changeBalance = (id: number, mode: "set" | "add", amount: number) =>
   api<AdminUser>(`/admin/users/${id}/balance`, { method: "POST", body: JSON.stringify({ mode, amount }) });

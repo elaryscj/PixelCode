@@ -5,9 +5,10 @@ import { useTranslation } from "react-i18next";
 import { ClientOnly, useCurrentUser } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
 import TeacherTasks from "~/components/TeacherTasks";
+import TeacherPlans from "~/components/TeacherPlans";
+import { teacherStatus, type TeacherStatus } from "~/api/teacher";
 import { MAPS } from "~/game/maps";
 import { createLesson, lessonCatalog, myLessons, type CatalogTask, type LessonSummary } from "~/api/lessons";
-import { ApiError } from "~/api/http";
 
 export function meta() {
   return [{ title: "Teacher | PixelCode Arena" }];
@@ -22,7 +23,7 @@ function TeacherScreen() {
   const user = useCurrentUser();
   const [lessons, setLessons] = useState<LessonSummary[] | null>(null);
   const [catalog, setCatalog] = useState<CatalogTask[]>([]);
-  const [denied, setDenied] = useState(false);
+  const [status, setStatus] = useState<TeacherStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const [title, setTitle] = useState("");
@@ -38,17 +39,30 @@ function TeacherScreen() {
       navigate(`/login?next=${encodeURIComponent("/teacher")}`, { replace: true });
       return;
     }
-    Promise.all([myLessons(), lessonCatalog()])
-      .then(([l, c]) => {
-        setLessons(l);
-        setCatalog(c);
-      })
-      .catch((e) => {
-        if (e instanceof ApiError && e.status === 403) setDenied(true);
-        else setError(e instanceof Error ? e.message : t("unexpected_error"));
-        setLessons([]);
-      });
+    void loadAll();
   }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // access first: without it the page is the offer; past lessons stay readable after a subscription ends
+  const loadAll = async () => {
+    try {
+      const st = await teacherStatus();
+      setStatus(st);
+      const [l, c] = await Promise.all([
+        st.teacher ? myLessons() : Promise.resolve([] as LessonSummary[]),
+        st.active ? lessonCatalog() : Promise.resolve([] as CatalogTask[]),
+      ]);
+      setLessons(l);
+      setCatalog(c);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t("unexpected_error"));
+      setLessons([]);
+    }
+  };
+  const onStatus = (st: TeacherStatus) => {
+    const turnedOn = st.active && !status?.active;
+    setStatus(st);
+    if (turnedOn) void loadAll();
+  };
 
   const reloadCatalog = () => lessonCatalog().then(setCatalog).catch(() => {});
   const byId = useMemo(() => new Map(catalog.map((c) => [c.id, c])), [catalog]);
@@ -87,10 +101,11 @@ function TeacherScreen() {
           <h1 className="text-yellow text-4xl sm:text-5xl text-glow-sm">{t("tc_title")}</h1>
         </header>
 
-        {denied ? (
-          <p className="text-pink text-xl font-sans border-2 border-pink p-4">{t("tc_not_teacher")}</p>
-        ) : (
+        {status && <TeacherPlans status={status} onChange={onStatus} />}
+        {error && !status && <p className="text-pink text-lg font-sans">{error}</p>}
+        {status?.teacher && (
           <>
+            {status.active && (
             <section className="border-2 border-neon bg-[#070c1e]/90 p-4 sm:p-6 flex flex-col gap-4">
               <h2 className="text-neon text-3xl">&gt; {t("tc_new")}</h2>
               <div className="grid sm:grid-cols-[1fr_auto_auto] gap-4">
@@ -190,7 +205,8 @@ function TeacherScreen() {
               </button>
             </section>
 
-            <TeacherTasks onChanged={reloadCatalog} />
+            )}
+            {status.active && <TeacherTasks onChanged={reloadCatalog} />}
 
             <section className="flex flex-col gap-3">
               <h2 className="text-neon text-3xl">&gt; {t("tc_my_lessons")}</h2>

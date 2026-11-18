@@ -132,5 +132,14 @@
  "Add tests": "Tambahkan tes",
  "Write a reference solution": "Tulis solusi acuan",
  "Reference solution failed: {0}": "Solusi acuan gagal: {0}",
- "Reference solution passes only {0} of {1} tests": "Solusi acuan hanya lolos {0} dari {1} tes"
+ "Reference solution passes only {0} of {1} tests": "Solusi acuan hanya lolos {0} dari {1} tes",
+ "Your teacher subscription has ended": "Langganan guru Anda telah berakhir",
+ "The free trial has already been used": "Uji coba gratis sudah digunakan",
+ "Teacher mode is already active": "Mode guru sudah aktif",
+ "Choose a month or a year": "Pilih satu bulan atau satu tahun",
+ "Enter your school or course": "Masukkan sekolah atau kursus Anda",
+ "Enter a phone number or e-mail to reach you": "Masukkan nomor telepon atau e-mail untuk dihubungi",
+ "Your request is already waiting for an answer": "Permintaan Anda sudah menunggu jawaban",
+ "Days must be between 1 and 3660": "Jumlah hari harus antara 1 dan 3660",
+ "Request not found": "Permintaan tidak ditemukan"
 }
