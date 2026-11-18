@@ -28,7 +28,7 @@ services:
       - key: CORS_ORIGINS
         value: "*"
       - key: FRONTEND_URL
-        value: https://pixelcode-frontend.onrender.com
+        value: https://pixelcode-arena.onrender.com
       - key: ADMIN_USERNAMES
         sync: false
       - key: MAIL_HOST
@@ -39,7 +39,7 @@ services:
         sync: false
 
   - type: web
-    name: pixelcode-frontend
+    name: pixelcode-arena
     runtime: docker
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend

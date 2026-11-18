@@ -1,6 +1,6 @@
 # PixelCode Arena: status against the SRS (v0.2)
 
-Live: https://pixelcode-frontend.onrender.com (frontend) / backend on Render, PostgreSQL.
+Live: https://pixelcode-arena.onrender.com (frontend, Frankfurt) / backend on Render, PostgreSQL.
 
 ## Must (22)
 | Story | Status | Where |

@@ -23,7 +23,7 @@ Logs: `docker compose logs -f backend`
 ## Render (free, no server needed)
 1. Push this folder to a GitHub repo.
 2. render.com > New > Blueprint > choose the repo > Apply. Wait for both services to build.
-3. If your service URLs differ from `pixelcode-backend.onrender.com` / `pixelcode-frontend.onrender.com`,
+3. If your service URLs differ from `pixelcode-backend.onrender.com` / `pixelcode-arena.onrender.com`,
    edit them in render.yaml (VITE_API_URL, VITE_WS_URL, FRONTEND_URL), push, and redeploy.
 4. Optional e-mail: set MAIL_HOST / MAIL_USER / MAIL_PASSWORD in the backend service's Environment tab.
 Free instances sleep after ~15 min idle (first open takes ~1 min).
