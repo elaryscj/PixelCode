@@ -141,5 +141,8 @@
  "Enter a phone number or e-mail to reach you": "Masukkan nomor telepon atau e-mail untuk dihubungi",
  "Your request is already waiting for an answer": "Permintaan Anda sudah menunggu jawaban",
  "Days must be between 1 and 3660": "Jumlah hari harus antara 1 dan 3660",
- "Request not found": "Permintaan tidak ditemukan"
+ "Request not found": "Permintaan tidak ditemukan",
+ "Online payment is not connected yet": "Pembayaran online belum tersedia",
+ "The payment service did not answer, please try again": "Layanan pembayaran tidak merespons, coba lagi",
+ "Payment not found": "Pembayaran tidak ditemukan"
 }

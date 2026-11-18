@@ -607,6 +607,15 @@ const ko: Translation = {
   lg_privacy: "개인정보",
   lg_contacts: "연락처",
   tp_accept: "체험을 시작하거나 신청을 보내면 다음에 동의하게 됩니다:",
+  tp_pay: "결제",
+  tp_redirecting: "결제 창 여는 중...",
+  tp_pay_hint: "Freedom Pay 보안 페이지에서 카드로 결제합니다. 결제 직후 교사 모드가 켜집니다.",
+  tp_invoice: "학교가 청구서로 결제하나요? 신청을 남기세요:",
+  tp_invoice_btn: "학교용 청구서",
+  tp_pay_checking: "결제 확인 중...",
+  tp_pay_paid: "결제가 완료되었습니다! 교사 모드가 켜졌습니다.",
+  tp_pay_failed: "결제가 완료되지 않았습니다. 청구된 금액은 없으니 다시 시도하세요.",
+  tp_pay_late: "결제를 아직 확인 중입니다. 몇 분 걸릴 수 있으니 나중에 새로고침하세요. 결제되었는데 한 시간 안에 활성화되지 않으면 연락해 주세요(연락처 참고).",
 };
 
 export default ko;

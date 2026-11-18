@@ -607,6 +607,15 @@ const de: Translation = {
   lg_privacy: "Datenschutz",
   lg_contacts: "Kontakt",
   tp_accept: "Mit dem Start der Testphase oder einer Anfrage akzeptierst du",
+  tp_pay: "BEZAHLEN",
+  tp_redirecting: "ZAHLUNG WIRD GEÖFFNET...",
+  tp_pay_hint: "Kartenzahlung auf der sicheren Seite von Freedom Pay. Der Lehrermodus ist direkt nach der Zahlung aktiv.",
+  tp_invoice: "Zahlt die Schule per Rechnung? Hinterlasse eine Anfrage:",
+  tp_invoice_btn: "RECHNUNG FÜR DIE SCHULE",
+  tp_pay_checking: "Zahlung wird geprüft...",
+  tp_pay_paid: "Zahlung erhalten! Der Lehrermodus ist aktiv.",
+  tp_pay_failed: "Die Zahlung ist nicht durchgegangen. Es wurde nichts abgebucht; versuche es erneut.",
+  tp_pay_late: "Die Zahlung wird noch bestätigt. Das kann einige Minuten dauern; lade die Seite später neu. Wenn abgebucht wurde und der Zugang nach einer Stunde fehlt, schreib uns (siehe Kontakt).",
 };
 
 export default de;

@@ -141,5 +141,8 @@
  "Enter a phone number or e-mail to reach you": "请填写联系电话或邮箱",
  "Your request is already waiting for an answer": "你的申请正在等待回复",
  "Days must be between 1 and 3660": "天数必须在 1 到 3660 之间",
- "Request not found": "未找到申请"
+ "Request not found": "未找到申请",
+ "Online payment is not connected yet": "在线支付尚未开通",
+ "The payment service did not answer, please try again": "支付服务未响应，请重试",
+ "Payment not found": "未找到付款"
 }

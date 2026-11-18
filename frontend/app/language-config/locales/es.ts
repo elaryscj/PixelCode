@@ -607,6 +607,15 @@ const es: Translation = {
   lg_privacy: "Privacidad",
   lg_contacts: "Contacto",
   tp_accept: "Al iniciar la prueba o enviar una solicitud aceptas la",
+  tp_pay: "PAGAR",
+  tp_redirecting: "ABRIENDO EL PAGO...",
+  tp_pay_hint: "Pago con tarjeta en la página segura de Freedom Pay. El modo profesor se activa justo después del pago.",
+  tp_invoice: "¿La escuela paga con factura? Deja una solicitud:",
+  tp_invoice_btn: "FACTURA PARA LA ESCUELA",
+  tp_pay_checking: "Comprobando el pago...",
+  tp_pay_paid: "¡Pago recibido! El modo profesor está activo.",
+  tp_pay_failed: "El pago no se completó. No se cobró nada; puedes intentarlo de nuevo.",
+  tp_pay_late: "El pago aún se está confirmando. Puede tardar unos minutos; actualiza la página más tarde. Si se cobró y el acceso no aparece en una hora, escríbenos (ver Contacto).",
 };
 
 export default es;

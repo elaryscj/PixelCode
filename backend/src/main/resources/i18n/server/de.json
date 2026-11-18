@@ -141,5 +141,8 @@
  "Enter a phone number or e-mail to reach you": "Gib eine Telefonnummer oder E-Mail für Rückfragen an",
  "Your request is already waiting for an answer": "Deine Anfrage wartet bereits auf Antwort",
  "Days must be between 1 and 3660": "Die Tage müssen zwischen 1 und 3660 liegen",
- "Request not found": "Anfrage nicht gefunden"
+ "Request not found": "Anfrage nicht gefunden",
+ "Online payment is not connected yet": "Die Online-Zahlung ist noch nicht verfügbar",
+ "The payment service did not answer, please try again": "Der Zahlungsdienst hat nicht geantwortet, bitte versuche es erneut",
+ "Payment not found": "Zahlung nicht gefunden"
 }

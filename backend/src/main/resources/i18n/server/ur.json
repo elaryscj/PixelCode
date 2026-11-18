@@ -141,5 +141,8 @@
  "Enter a phone number or e-mail to reach you": "رابطے کے لیے فون نمبر یا ای میل لکھیں",
  "Your request is already waiting for an answer": "آپ کی درخواست پہلے سے جواب کی منتظر ہے",
  "Days must be between 1 and 3660": "دن 1 سے 3660 کے درمیان ہونے چاہئیں",
- "Request not found": "درخواست نہیں ملی"
+ "Request not found": "درخواست نہیں ملی",
+ "Online payment is not connected yet": "آن لائن ادائیگی ابھی دستیاب نہیں",
+ "The payment service did not answer, please try again": "ادائیگی سروس نے جواب نہیں دیا، دوبارہ کوشش کریں",
+ "Payment not found": "ادائیگی نہیں ملی"
 }

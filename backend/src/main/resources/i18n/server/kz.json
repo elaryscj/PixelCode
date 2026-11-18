@@ -141,5 +141,8 @@
  "Enter a phone number or e-mail to reach you": "Байланыс үшін телефон не e-mail көрсетіңіз",
  "Your request is already waiting for an answer": "Өтінішіңіз жауап күтіп тұр",
  "Days must be between 1 and 3660": "Күн саны 1-ден 3660-қа дейін болуы керек",
- "Request not found": "Өтініш табылмады"
+ "Request not found": "Өтініш табылмады",
+ "Online payment is not connected yet": "Онлайн төлем әлі қосылмаған",
+ "The payment service did not answer, please try again": "Төлем қызметі жауап бермеді, қайталап көріңіз",
+ "Payment not found": "Төлем табылмады"
 }

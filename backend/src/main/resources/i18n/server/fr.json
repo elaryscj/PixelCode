@@ -141,5 +141,8 @@
  "Enter a phone number or e-mail to reach you": "Indiquez un téléphone ou un e-mail pour vous joindre",
  "Your request is already waiting for an answer": "Votre demande attend déjà une réponse",
  "Days must be between 1 and 3660": "Le nombre de jours doit être entre 1 et 3660",
- "Request not found": "Demande introuvable"
+ "Request not found": "Demande introuvable",
+ "Online payment is not connected yet": "Le paiement en ligne n'est pas encore disponible",
+ "The payment service did not answer, please try again": "Le service de paiement n'a pas répondu, réessayez",
+ "Payment not found": "Paiement introuvable"
 }
