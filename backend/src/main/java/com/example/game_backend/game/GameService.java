@@ -219,8 +219,9 @@ public class GameService {
             for (GameSession.Snap sn : snaps) {
                 levels.add(sn.difficulty);
             }
-            session.bot = new BotPlan(botSlot, arena, levels, human == null ? 1500 : human.rating,
+            session.bot = new BotPlan(botSlot, mapId, levels, human == null ? 1500 : human.rating,
                     now + BotPlan.START_DELAY_MS, doorMs, new java.util.Random());
+            BotPlan.planInBackground(session.bot);
         }
         return session;
     }
@@ -531,6 +532,9 @@ public class GameService {
                 s.ranked ? banned : List.of(), rated && s.ranked);
         s.result = result;
         s.over = true;
+        if (s.bot != null) {
+            s.bot.cancel();
+        }
         s.overAt = System.currentTimeMillis();
         if (!"VOID".equals(reason)) {
             try {
@@ -699,7 +703,7 @@ public class GameService {
 
     // ---------------------------------------------------------------- PIXEL_BOT
 
-    /** Four times a second: move PIXEL_BOT along its plan, open its doors, let it finish. */
+    /** Eight times a second: move PIXEL_BOT along its plan, open its doors, let it finish. */
     public void botTick() {
         long now = System.currentTimeMillis();
         for (GameSession s : sessions.values()) {
@@ -736,19 +740,27 @@ public class GameService {
             msg.put("y", bot.y);
             emit(s.code, msg);
         }
-        for (int cp = 1; cp <= GameSession.DOORS; cp++) {
-            if (bot.unlocked[cp]) {
-                continue;
+        long arrived;
+        long solved;
+        long atExit;
+        int cp = 1;
+        while (cp <= GameSession.DOORS && bot.unlocked[cp]) {
+            cp++; // doors open strictly in order
+        }
+        synchronized (plan) { // the planner thread fills these in
+            arrived = cp <= GameSession.DOORS ? plan.arriveAt[cp] : 0;
+            solved = cp <= GameSession.DOORS ? plan.solvedAt[cp] : 0;
+            atExit = plan.arriveAt[5];
+        }
+        if (cp <= GameSession.DOORS) {
+            if (bot.doorStartedAt[cp] == 0 && now >= arrived) {
+                bot.doorStartedAt[cp] = arrived; // its door timer runs like a human's
             }
-            if (bot.doorStartedAt[cp] == 0 && now >= plan.arriveAt[cp]) {
-                bot.doorStartedAt[cp] = plan.arriveAt[cp]; // its door timer runs like a human's
-            }
-            if (now >= plan.solvedAt[cp]) {
+            if (now >= solved) {
                 unlock(s, bot, cp, "SOLVED");
             }
-            break; // doors open strictly in order
         }
-        if (bot.unlockedCount() == GameSession.DOORS && now >= plan.arriveAt[5]) {
+        if (bot.unlockedCount() == GameSession.DOORS && now >= atExit) {
             conclude(s, bot.userId, "FINISH", List.of(), true);
         }
     }

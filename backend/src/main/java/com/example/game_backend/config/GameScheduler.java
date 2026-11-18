@@ -37,8 +37,8 @@ public class GameScheduler {
         try { matchmaking.pair(); } catch (RuntimeException e) { log.error("matchmaking.pair failed", e); }
     }
 
-    /** PIXEL_BOT moves four times a second, so its sprite glides instead of jumping once per second. */
-    @Scheduled(fixedDelay = 250)
+    /** PIXEL_BOT moves eight times a second, about as often as a human client reports its position. */
+    @Scheduled(fixedDelay = 125)
     public void botTick() {
         try { games.botTick(); } catch (RuntimeException e) { log.error("games.botTick failed", e); }
     }

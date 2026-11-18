@@ -176,10 +176,10 @@ export function MapLayer({
       ))}
 
       {map.platforms.map((p, i) => (
-        <Track key={`t${i}`} p={p} mirror={mirror} />
+        <Track key={`t${map.id}-${i}`} p={p} mirror={mirror} />
       ))}
       {map.platforms.map((p, i) => (
-        <PlatformView key={i} p={p} i={i} mirror={mirror} tone={tone} />
+        <PlatformView key={`${map.id}-${i}`} p={p} i={i} mirror={mirror} tone={tone} />
       ))}
 
       {/* Security doors: sealed -> timer running -> open. A locked door is a wall; it opens only with E next to it. */}
@@ -244,7 +244,7 @@ export function MapLayer({
       })}
 
       {map.hazards.map((h, i) => (
-        <HazardView key={i} h={h} i={i} mirror={mirror} />
+        <HazardView key={`${map.id}-${i}`} h={h} i={i} mirror={mirror} />
       ))}
 
       {/* FINISH */}

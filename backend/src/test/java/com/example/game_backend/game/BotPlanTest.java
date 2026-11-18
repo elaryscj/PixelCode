@@ -10,10 +10,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BotPlanTest {
     private static final long DOOR_MS = 240_000;
+    private static final long START = 1_763_000_000_000L;
 
     private static BotPlan plan(int mapId, int rating, List<String> levels, long seed) {
         GameSession.Slot slot = new GameSession.Slot(-1, "PIXEL_BOT", rating, 0);
-        return new BotPlan(slot, MapGeometry.of(mapId), levels, rating, 1_000, DOOR_MS, new Random(seed));
+        BotPlan plan = new BotPlan(slot, mapId, levels, rating, START, DOOR_MS, new Random(seed));
+        plan.planAll(() -> 0); // a clock that never runs late: plan synchronously
+        return plan;
     }
 
     @Test
@@ -38,11 +41,11 @@ class BotPlanTest {
     @Test
     void newcomersFaceASlowerBotThanStrongPlayers() {
         List<String> levels = List.of("EASY", "EASY", "EASY", "MEDIUM");
-        long slow = plan(0, 1400, levels, 7).arriveAt[5];
-        long fast = plan(0, 1900, levels, 7).arriveAt[5];
+        long slow = plan(0, 1400, levels, 7).arriveAt[5] - START;
+        long fast = plan(0, 1900, levels, 7).arriveAt[5] - START;
         assertTrue(slow > fast * 2, "1400 MMR: " + slow + " ms, 1900 MMR: " + fast + " ms");
         // a 1500-MMR newcomer: several minutes for the whole map, so a first win is realistic
-        long newcomer = plan(0, 1500, levels, 3).arriveAt[5];
+        long newcomer = plan(0, 1500, levels, 3).arriveAt[5] - START;
         assertTrue(newcomer > 3 * 60_000 && newcomer < 8 * 60_000, "newcomer race lasts " + newcomer / 1000 + " s");
     }
 

@@ -55,6 +55,11 @@ public class ApiRateLimitFilter extends OncePerRequestFilter {
             return;
         }
         String ip = req.getRemoteAddr();
+        // a whole class plays a lesson from one school address: count each student separately
+        String student = req.getHeader("X-Lesson-Token");
+        if (student != null && !student.isBlank() && req.getRequestURI().startsWith("/api/lessons/")) {
+            ip = "lesson-student:" + Integer.toHexString(student.hashCode());
+        }
         try {
             limiter.hit("api:" + ip, perMinute, 60);
             if (!"GET".equals(req.getMethod())) {

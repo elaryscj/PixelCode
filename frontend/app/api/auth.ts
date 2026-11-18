@@ -14,6 +14,8 @@ export type AuthResponse = {
   wins: number;
   losses: number;
   admin: boolean;
+  /** may run lessons (teacher mode, /teacher) */
+  teacher?: boolean;
   pixels?: number;
   activeSkin?: string;
   avatarUrl?: string | null;
