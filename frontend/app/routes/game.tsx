@@ -1,5 +1,6 @@
 // app/routes/game.tsx
 // Real-time duel: physics run in the browser, but doors, timers, finish and rating are decided by the server.
+import { useServerLabel } from "~/lib/serverRegion";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
@@ -112,6 +113,7 @@ function PanelHeader({
 
 function GameScreen() {
   const { t } = useTranslation();
+  const serverLabel = useServerLabel();
   const { code = "" } = useParams();
   const navigate = useNavigate();
   const me = getCurrentUser();
@@ -719,7 +721,7 @@ function GameScreen() {
           </Link>
           <div className="hidden sm:flex text-neon text-[10px] md:text-xs border-l-2 border-neon/30 pl-4 uppercase items-center gap-2">
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span>
-            KZ-SERVER / <span className={pingColor(ping)}>{pingLabel(ping)}</span>
+            {serverLabel} / <span className={pingColor(ping)}>{pingLabel(ping)}</span>
           </div>
         </div>
 

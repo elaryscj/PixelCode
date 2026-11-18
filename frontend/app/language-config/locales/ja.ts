@@ -18,7 +18,8 @@ const ja: Translation = {
   live_duels: "対戦中",
   live_queue: "待機中",
   footer_text: "製品版",
-  server: "サーバー：カザフスタン",
+  server: "サーバー：{{place}}",
+  server_plain: "サーバー",
   loading: "読み込み中...",
   cancel: "キャンセル",
 
@@ -573,6 +574,13 @@ const ja: Translation = {
   tt_save: "課題を保存",
   tt_saving: "解答を確認中...",
   tt_mine: "自作",
+  // where the game server runs
+  rg_oregon: "米国（オレゴン）",
+  rg_virginia: "米国（バージニア）",
+  rg_ohio: "米国（オハイオ）",
+  rg_frankfurt: "ドイツ（フランクフルト）",
+  rg_singapore: "シンガポール",
+  rg_local: "このコンピューター",
 };
 
 export default ja;

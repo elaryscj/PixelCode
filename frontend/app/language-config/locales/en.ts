@@ -17,7 +17,8 @@ const en = {
   live_duels: "DUELS LIVE",
   live_queue: "IN QUEUE",
   footer_text: "Production version",
-  server: "SERVER: KAZAKHSTAN",
+  server: "SERVER: {{place}}",
+  server_plain: "SERVER",
   loading: "Loading...",
   cancel: "CANCEL",
 
@@ -577,6 +578,13 @@ const en = {
   tt_save: "SAVE TASK",
   tt_saving: "CHECKING THE SOLUTION...",
   tt_mine: "MINE",
+  // where the game server runs
+  rg_oregon: "USA (OREGON)",
+  rg_virginia: "USA (VIRGINIA)",
+  rg_ohio: "USA (OHIO)",
+  rg_frankfurt: "GERMANY (FRANKFURT)",
+  rg_singapore: "SINGAPORE",
+  rg_local: "THIS COMPUTER",
 };
 
 export type Translation = Record<keyof typeof en, string>;

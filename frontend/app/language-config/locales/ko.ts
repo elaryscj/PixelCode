@@ -18,7 +18,8 @@ const ko: Translation = {
   live_duels: "개 대결 진행 중",
   live_queue: "명 대기 중",
   footer_text: "정식 버전",
-  server: "서버: 카자흐스탄",
+  server: "서버: {{place}}",
+  server_plain: "서버",
   loading: "불러오는 중...",
   cancel: "취소",
 
@@ -573,6 +574,13 @@ const ko: Translation = {
   tt_save: "문제 저장",
   tt_saving: "답안 확인 중...",
   tt_mine: "내 문제",
+  // where the game server runs
+  rg_oregon: "미국 (오리건)",
+  rg_virginia: "미국 (버지니아)",
+  rg_ohio: "미국 (오하이오)",
+  rg_frankfurt: "독일 (프랑크푸르트)",
+  rg_singapore: "싱가포르",
+  rg_local: "이 컴퓨터",
 };
 
 export default ko;

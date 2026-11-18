@@ -1,10 +1,12 @@
 import { useTranslation } from "react-i18next";
+import { useServerLabel } from "~/lib/serverRegion";
 import { FaGamepad } from "react-icons/fa";
 import PingBadge from "./PingBadge";
 import UserInfo from "./UserInfo";
 
 const Navbar = () => {
   const { t } = useTranslation();
+  const serverLabel = useServerLabel();
 
   return (
     <header className="px-2 sm:px-4 py-4 sm:py-6 border-b border-neon shadow-neon bg-[#060814]" style={{ paddingTop: "max(1rem, env(safe-area-inset-top))" }}>
@@ -12,7 +14,7 @@ const Navbar = () => {
         <div className="flex items-center justify-start gap-2">
           <FaGamepad  className="text-neon text-2xl"/>
           <h1 className="text-yellow text-2xl sm:text-4xl font-pixel">PIXELCODE</h1>
-          <p className="hidden md:block font-pixel text-xl text-neon">{t("server")}</p>
+          <p className="hidden md:block font-pixel text-xl text-neon">{serverLabel}</p>
         </div>
         <div className="flex items-center gap-2">
           <PingBadge className="hidden sm:inline-flex font-pixel text-xl" />

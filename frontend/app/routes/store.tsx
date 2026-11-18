@@ -1,5 +1,6 @@
 // app/routes/store.tsx
 // PixelCode Arena Store: skins are bought with PIXELS (balance, ownership and prices are kept on the server)
+import { useServerLabel } from "~/lib/serverRegion";
 import { useState, useEffect, useCallback } from "react";
 import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
@@ -65,6 +66,7 @@ const priceLabel = (n: number) => (n === 0 ? i18n.t("st_free") : pixels(n));
 
 function StoreRouteScreen() {
   const { t } = useTranslation();
+  const serverLabel = useServerLabel();
   const navigate = useNavigate();
   const liveStats = useLiveStats();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -200,7 +202,7 @@ function StoreRouteScreen() {
         </Link>
 
         <div className="flex items-center gap-3 text-xs">
-          <span className="text-[#01E4FF]">{t("server")}</span>
+          <span className="text-[#01E4FF]">{serverLabel}</span>
           <span className="w-2 h-2 rounded-full bg-yellow animate-pulse" />
           <PingBadge />
           <span className="w-2 h-2 rounded-full bg-yellow animate-pulse" />
