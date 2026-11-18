@@ -551,6 +551,28 @@ const ja: Translation = {
   tb_passed: "正解",
   tb_failed: "テスト {{total}} 件中 {{passed}} 件",
   tb_at: "{{time}} 時点",
+  tb_show_qr: "QRを全画面表示",
+  tb_scan: "スマホのカメラで読み取って参加",
+  // teacher's own tasks
+  tt_my_tasks: "私の課題",
+  tt_new: "新しい課題",
+  tt_private: "自分の課題はあなただけに表示され、通常の対戦には出てきません。",
+  tt_none: "まだ自分の課題がありません。クラス用に作ってみましょう！",
+  tt_edit: "編集",
+  tt_title: "タイトル",
+  tt_title_ph: "例：2つの数の和",
+  tt_difficulty: "難易度",
+  tt_method: "メソッド名",
+  tt_description: "課題文（生徒が読む文章）",
+  tt_input: "入力（任意）",
+  tt_output: "出力（任意）",
+  tt_examples: "生徒向けの例（1行に1つ、任意）",
+  tt_tests: "テスト（JSON）：input はメソッドの引数、expected は正解",
+  tt_tests_hint: "間違えると生徒は最初の2つのテストと答えを見られます。残りは非公開です。",
+  tt_reference: "模範解答（Java）：すべてのテストに通る必要があります。生徒には見えません",
+  tt_save: "課題を保存",
+  tt_saving: "解答を確認中...",
+  tt_mine: "自作",
 };
 
 export default ja;

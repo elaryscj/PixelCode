@@ -37,6 +37,12 @@ public class Challenge {
     private boolean published = true;
     @Column
     private Instant createdAt = Instant.now();
+    /** kept for teachers' tasks so they can edit them later (catalog tasks keep theirs in catalog.json) */
+    @Column(columnDefinition = "TEXT")
+    private String referenceSolution;
+    /** set for a teacher's own task: only that teacher sees it (for lessons), never in public matches */
+    @Column
+    private Long ownerId;
 
     public Challenge() {
     }
@@ -63,5 +69,9 @@ public class Challenge {
     public boolean isPublished() { return published; }
     public void setPublished(boolean v) { this.published = v; }
     public Instant getCreatedAt() { return createdAt; }
+    public String getReferenceSolution() { return referenceSolution; }
+    public void setReferenceSolution(String referenceSolution) { this.referenceSolution = referenceSolution; }
+    public Long getOwnerId() { return ownerId; }
+    public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
     public void setCreatedAt(Instant v) { this.createdAt = v; }
 }

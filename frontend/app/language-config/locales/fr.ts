@@ -551,6 +551,28 @@ const fr: Translation = {
   tb_passed: "acceptée",
   tb_failed: "{{passed}} tests sur {{total}}",
   tb_at: "à {{time}}",
+  tb_show_qr: "QR EN PLEIN ÉCRAN",
+  tb_scan: "Scannez avec l'appareil photo du téléphone pour rejoindre",
+  // teacher's own tasks
+  tt_my_tasks: "MES EXERCICES",
+  tt_new: "NOUVEL EXERCICE",
+  tt_private: "Vous seul voyez vos exercices. Ils n'apparaissent jamais dans les matchs publics.",
+  tt_none: "Pas encore d'exercice à vous. Créez-en un pour votre classe !",
+  tt_edit: "MODIFIER",
+  tt_title: "Titre",
+  tt_title_ph: "ex. Somme de deux nombres",
+  tt_difficulty: "Difficulté",
+  tt_method: "Nom de la méthode",
+  tt_description: "Énoncé (ce que lisent les élèves)",
+  tt_input: "Entrée (facultatif)",
+  tt_output: "Sortie (facultatif)",
+  tt_examples: "Exemples pour les élèves (un par ligne, facultatif)",
+  tt_tests: "Tests (JSON) : input = arguments de la méthode, expected = bonne réponse",
+  tt_tests_hint: "En cas d'erreur, les élèves voient les 2 premiers tests avec les réponses ; les autres restent cachés.",
+  tt_reference: "Solution de référence (Java) : doit réussir tous les tests, les élèves ne la voient pas",
+  tt_save: "ENREGISTRER",
+  tt_saving: "VÉRIFICATION DE LA SOLUTION...",
+  tt_mine: "LE MIEN",
 };
 
 export default fr;

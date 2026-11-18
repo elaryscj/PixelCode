@@ -121,5 +121,16 @@
  "Join the lesson first": "Primero únete a la clase",
  "A task of this lesson was deleted": "Se eliminó una tarea de esta clase",
  "Student not found": "Alumno no encontrado",
- "Open all four doors first": "Primero abre las cuatro puertas"
+ "Open all four doors first": "Primero abre las cuatro puertas",
+ "You have too many tasks": "Tienes demasiadas tareas",
+ "Task not found": "Tarea no encontrada",
+ "Give the task a title (up to 80 characters)": "Ponle un título a la tarea (hasta 80 caracteres)",
+ "A task with this title already exists": "Ya existe una tarea con ese título",
+ "Describe the task": "Describe la tarea",
+ "Difficulty must be EASY, MEDIUM or HARD": "La dificultad debe ser EASY, MEDIUM o HARD",
+ "The method name must be a Java name, for example solve": "El nombre del método debe ser un nombre Java, por ejemplo solve",
+ "Add tests": "Añade pruebas",
+ "Write a reference solution": "Escribe una solución de referencia",
+ "Reference solution failed: {0}": "La solución de referencia falló: {0}",
+ "Reference solution passes only {0} of {1} tests": "La solución de referencia solo pasa {0} de {1} pruebas"
 }

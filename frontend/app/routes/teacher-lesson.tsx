@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { ClientOnly, useCurrentUser } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
+import JoinQr from "~/components/JoinQr";
 import { getMap } from "~/game/maps";
 import { endLesson, lessonBoard, startLesson, studentWork, type Board, type DoorCell, type StudentWork } from "~/api/lessons";
 
@@ -40,6 +41,8 @@ function TeacherLessonScreen() {
   const [copied, setCopied] = useState(false);
   const [work, setWork] = useState<StudentWork | null>(null);
   const [busy, setBusy] = useState(false);
+  // the QR code over the whole screen, for the projector (like a quiz game's join screen)
+  const [bigQr, setBigQr] = useState(false);
 
   const load = () =>
     lessonBoard(code)
@@ -122,7 +125,15 @@ function TeacherLessonScreen() {
 
         {/* join code, big enough for a projector */}
         <section className="border-2 border-neon bg-[#070c1e]/90 p-4 sm:p-6 flex flex-wrap items-center justify-between gap-6">
-          <div className="flex flex-col gap-2">
+          <button
+            onClick={() => setBigQr(true)}
+            className="shrink-0 border-2 border-neon hover:border-yellow"
+            title={t("tb_show_qr")}
+            aria-label={t("tb_show_qr")}
+          >
+            <JoinQr url={joinUrl} className="w-36 h-36 sm:w-44 sm:h-44 block" />
+          </button>
+          <div className="flex flex-col gap-2 me-auto">
             <div className="text-gray-300 text-lg font-sans">{t("tb_join_at", { url: shortUrl })}</div>
             <div className="text-pink text-6xl sm:text-8xl tracking-[0.3em] text-glow-sm">{board.code}</div>
             <button
@@ -135,6 +146,9 @@ function TeacherLessonScreen() {
               className="self-start border border-neon text-neon px-3 py-1 text-sm hover:bg-neon/10"
             >
               {copied ? t("tb_copied") : t("tb_copy_link")}
+            </button>
+            <button onClick={() => setBigQr(true)} className="self-start border border-yellow text-yellow px-3 py-1 text-sm hover:bg-yellow/10">
+              {t("tb_show_qr")}
             </button>
           </div>
           <div className="flex flex-col items-end gap-3">
@@ -218,6 +232,22 @@ function TeacherLessonScreen() {
           </div>
         )}
       </div>
+
+      {bigQr && (
+        <div
+          // above the CRT scanlines (z-60): stripes over the code make it harder to scan
+          className="fixed inset-0 z-[70] bg-[#050814] flex flex-col items-center justify-center gap-3 p-4 font-pixel cursor-pointer overflow-hidden"
+          onClick={() => setBigQr(false)}
+        >
+          <div className="text-yellow text-2xl sm:text-4xl text-center">{t("tb_scan")}</div>
+          <JoinQr url={joinUrl} className="w-[min(56vh,84vw)] h-[min(56vh,84vw)] border-4 border-neon" />
+          <div className="text-gray-300 text-lg sm:text-2xl font-sans text-center">{t("tb_join_at", { url: shortUrl })}</div>
+          <div className="flex flex-wrap items-baseline justify-center gap-x-8 gap-y-1">
+            <span className="text-pink text-5xl sm:text-7xl tracking-[0.3em] text-glow-sm">{board.code}</span>
+            <span className="text-neon text-2xl">{t("tb_joined", { n: board.students.length })}</span>
+          </div>
+        </div>
+      )}
 
       {work && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-2 sm:p-6" onClick={() => setWork(null)}>

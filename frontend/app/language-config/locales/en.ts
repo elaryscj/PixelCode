@@ -555,6 +555,28 @@ const en = {
   tb_passed: "accepted",
   tb_failed: "{{passed}} of {{total}} tests",
   tb_at: "at {{time}}",
+  tb_show_qr: "QR ON FULL SCREEN",
+  tb_scan: "Scan with your phone camera to join",
+  // teacher's own tasks
+  tt_my_tasks: "MY TASKS",
+  tt_new: "NEW TASK",
+  tt_private: "Only you see your tasks. They never appear in public matches.",
+  tt_none: "No tasks of your own yet. Create one for your class!",
+  tt_edit: "EDIT",
+  tt_title: "Title",
+  tt_title_ph: "e.g. Sum of two numbers",
+  tt_difficulty: "Difficulty",
+  tt_method: "Method name",
+  tt_description: "Task text (what students read)",
+  tt_input: "Input (optional)",
+  tt_output: "Output (optional)",
+  tt_examples: "Examples for students (one per line, optional)",
+  tt_tests: "Tests (JSON): input = method arguments, expected = the right answer",
+  tt_tests_hint: "Students see the first 2 tests with answers when they fail; the rest stay hidden.",
+  tt_reference: "Reference solution (Java): must pass every test, students never see it",
+  tt_save: "SAVE TASK",
+  tt_saving: "CHECKING THE SOLUTION...",
+  tt_mine: "MINE",
 };
 
 export type Translation = Record<keyof typeof en, string>;

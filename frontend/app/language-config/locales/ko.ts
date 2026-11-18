@@ -551,6 +551,28 @@ const ko: Translation = {
   tb_passed: "통과",
   tb_failed: "테스트 {{total}}개 중 {{passed}}개",
   tb_at: "{{time}} 시점",
+  tb_show_qr: "QR 전체 화면",
+  tb_scan: "휴대폰 카메라로 스캔해 참여하세요",
+  // teacher's own tasks
+  tt_my_tasks: "내 문제",
+  tt_new: "새 문제",
+  tt_private: "내 문제는 나만 볼 수 있으며 일반 대전에는 나오지 않습니다.",
+  tt_none: "아직 직접 만든 문제가 없습니다. 반을 위한 문제를 만들어 보세요!",
+  tt_edit: "수정",
+  tt_title: "제목",
+  tt_title_ph: "예: 두 수의 합",
+  tt_difficulty: "난이도",
+  tt_method: "메서드 이름",
+  tt_description: "문제 설명 (학생이 읽는 내용)",
+  tt_input: "입력 (선택)",
+  tt_output: "출력 (선택)",
+  tt_examples: "학생용 예시 (한 줄에 하나, 선택)",
+  tt_tests: "테스트 (JSON): input = 메서드 인자, expected = 정답",
+  tt_tests_hint: "틀리면 학생은 처음 2개 테스트와 정답을 볼 수 있고 나머지는 숨겨집니다.",
+  tt_reference: "모범 답안 (Java): 모든 테스트를 통과해야 하며 학생에게는 보이지 않습니다",
+  tt_save: "문제 저장",
+  tt_saving: "답안 확인 중...",
+  tt_mine: "내 문제",
 };
 
 export default ko;

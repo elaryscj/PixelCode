@@ -551,6 +551,28 @@ const id: Translation = {
   tb_passed: "diterima",
   tb_failed: "{{passed}} dari {{total}} tes",
   tb_at: "pada {{time}}",
+  tb_show_qr: "QR LAYAR PENUH",
+  tb_scan: "Pindai dengan kamera ponsel untuk bergabung",
+  // teacher's own tasks
+  tt_my_tasks: "SOAL SAYA",
+  tt_new: "SOAL BARU",
+  tt_private: "Hanya Anda yang melihat soal Anda. Soal ini tidak pernah muncul di pertandingan umum.",
+  tt_none: "Belum ada soal buatan sendiri. Buat satu untuk kelas Anda!",
+  tt_edit: "UBAH",
+  tt_title: "Judul",
+  tt_title_ph: "mis. Jumlah dua bilangan",
+  tt_difficulty: "Kesulitan",
+  tt_method: "Nama metode",
+  tt_description: "Teks soal (yang dibaca siswa)",
+  tt_input: "Masukan (opsional)",
+  tt_output: "Keluaran (opsional)",
+  tt_examples: "Contoh untuk siswa (satu per baris, opsional)",
+  tt_tests: "Tes (JSON): input = argumen metode, expected = jawaban benar",
+  tt_tests_hint: "Jika salah, siswa melihat 2 tes pertama beserta jawabannya; sisanya tersembunyi.",
+  tt_reference: "Solusi acuan (Java): harus lolos semua tes, siswa tidak melihatnya",
+  tt_save: "SIMPAN SOAL",
+  tt_saving: "MEMERIKSA SOLUSI...",
+  tt_mine: "MILIKKU",
 };
 
 export default id;

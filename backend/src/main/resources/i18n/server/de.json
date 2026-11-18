@@ -121,5 +121,16 @@
  "Join the lesson first": "Tritt zuerst der Stunde bei",
  "A task of this lesson was deleted": "Eine Aufgabe dieser Stunde wurde gelöscht",
  "Student not found": "Schüler nicht gefunden",
- "Open all four doors first": "Öffne zuerst alle vier Türen"
+ "Open all four doors first": "Öffne zuerst alle vier Türen",
+ "You have too many tasks": "Du hast zu viele Aufgaben",
+ "Task not found": "Aufgabe nicht gefunden",
+ "Give the task a title (up to 80 characters)": "Gib der Aufgabe einen Titel (bis zu 80 Zeichen)",
+ "A task with this title already exists": "Eine Aufgabe mit diesem Titel gibt es schon",
+ "Describe the task": "Beschreibe die Aufgabe",
+ "Difficulty must be EASY, MEDIUM or HARD": "Die Schwierigkeit muss EASY, MEDIUM oder HARD sein",
+ "The method name must be a Java name, for example solve": "Der Methodenname muss ein Java-Name sein, z. B. solve",
+ "Add tests": "Füge Tests hinzu",
+ "Write a reference solution": "Schreibe eine Musterlösung",
+ "Reference solution failed: {0}": "Die Musterlösung ist fehlgeschlagen: {0}",
+ "Reference solution passes only {0} of {1} tests": "Die Musterlösung besteht nur {0} von {1} Tests"
 }

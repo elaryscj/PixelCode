@@ -121,5 +121,16 @@
  "Join the lesson first": "먼저 수업에 참여하세요",
  "A task of this lesson was deleted": "이 수업의 문제가 삭제되었습니다",
  "Student not found": "학생을 찾을 수 없습니다",
- "Open all four doors first": "먼저 문 네 개를 모두 여세요"
+ "Open all four doors first": "먼저 문 네 개를 모두 여세요",
+ "You have too many tasks": "문제가 너무 많습니다",
+ "Task not found": "문제를 찾을 수 없습니다",
+ "Give the task a title (up to 80 characters)": "문제 제목을 입력하세요 (최대 80자)",
+ "A task with this title already exists": "같은 제목의 문제가 이미 있습니다",
+ "Describe the task": "문제 설명을 입력하세요",
+ "Difficulty must be EASY, MEDIUM or HARD": "난이도는 EASY, MEDIUM, HARD 중 하나여야 합니다",
+ "The method name must be a Java name, for example solve": "메서드 이름은 Java 이름이어야 합니다 (예: solve)",
+ "Add tests": "테스트를 추가하세요",
+ "Write a reference solution": "모범 답안을 작성하세요",
+ "Reference solution failed: {0}": "모범 답안 실패: {0}",
+ "Reference solution passes only {0} of {1} tests": "모범 답안이 테스트 {1}개 중 {0}개만 통과합니다"
 }
