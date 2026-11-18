@@ -44,12 +44,17 @@ services:
       - key: MAIL_PASSWORD
         sync: false
 
+  # The site is plain files (SPA mode): a free Static Site never sleeps and uses no instance hours.
   - type: web
-    name: pixelcode-arena
-    runtime: docker
-    dockerfilePath: ./frontend/Dockerfile
-    dockerContext: ./frontend
-    plan: free
+    name: pixelcode-site
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: build/client
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
       - key: VITE_API_URL
         value: https://pixelcode-backend-unf5.onrender.com
