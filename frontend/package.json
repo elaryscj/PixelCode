@@ -5,7 +5,7 @@
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
-    "start": "react-router-serve ./build/server/index.js",
+    "start": "node scripts/serve-static.mjs build/client",
     "typecheck": "react-router typegen && tsc",
     "export-maps": "node scripts/export-maps.mjs"
   },
