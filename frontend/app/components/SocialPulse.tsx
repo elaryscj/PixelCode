@@ -19,7 +19,8 @@ export default function SocialPulse() {
   const user = useCurrentUser();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const inMatch = /^\/play\/[^/]+\/game/.test(pathname);
+  // no duel pop-ups in a match or during a lesson
+  const inMatch = /^\/play\/[^/]+\/game/.test(pathname) || /^\/lesson\/[^/]+\/play/.test(pathname);
   const [invites, setInvites] = useState<DuelInvite[]>([]);
   const [streak, setStreak] = useState<{ day: number; reward: number } | null>(null);
   const [error, setError] = useState<string | null>(null);

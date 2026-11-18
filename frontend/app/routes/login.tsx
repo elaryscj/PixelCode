@@ -268,6 +268,10 @@ export default function LoginRoute() {
                   {t("au_forgot")}
                 </Link>
               )}
+              {/* students in a lesson need no account */}
+              <Link to="/lesson" className="text-yellow hover:brightness-125 transition-all text-center">
+                {t("login_join_lesson")}
+              </Link>
 
               <div className="flex items-center gap-1">
                 <span>{isRegister ? t("au_have_account") : t("au_are_new")}</span>

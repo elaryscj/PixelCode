@@ -14,6 +14,10 @@ interface ChallengeModalProps {
   serverUnlocked: boolean;
   onClose: () => void;
   onSuccess: (cpNum: number) => void;
+  /** lessons send solutions elsewhere (default: this match's door) */
+  submit?: (cpNum: number, code: string) => Promise<SubmitResult>;
+  /** label of the countdown (default: the 4-minute door timer) */
+  timerLabel?: string;
 }
 
 export default function ChallengeModal({
@@ -23,6 +27,8 @@ export default function ChallengeModal({
   serverUnlocked,
   onClose,
   onSuccess,
+  submit,
+  timerLabel,
 }: ChallengeModalProps) {
   const { t } = useTranslation();
   const [code, setCode] = useState<string>(challenge.initialCode);
@@ -62,7 +68,11 @@ export default function ChallengeModal({
   const autoUnlocked = serverUnlocked && !result?.passed;
   const minutes = Math.floor(secondsRemaining / 60);
   const seconds = secondsRemaining % 60;
-  const timeFormatted = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  // a lesson can last up to 3 hours: h:mm:ss then
+  const timeFormatted =
+    minutes >= 60
+      ? `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
+      : `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
   // US-17: the code is sent to the server and evaluated there
   const handleSubmit = async () => {
@@ -71,7 +81,7 @@ export default function ChallengeModal({
     setResult(null);
     setSubmitError(null);
     try {
-      const res = await submitDoor(roomCode, challenge.cpNum, code);
+      const res = await (submit ? submit(challenge.cpNum, code) : submitDoor(roomCode, challenge.cpNum, code));
       setResult(res);
       setSecondsRemaining(res.secondsRemaining);
       if (!res.unlocked) sfx.wrong();
@@ -126,7 +136,7 @@ export default function ChallengeModal({
               secondsRemaining < 60 ? "border-pink text-pink animate-pulse" : "border-yellow text-yellow"
             }`}>
               <FaClock />
-              <span>{t("cm_door_timer")}: {timeFormatted}</span>
+              <span>{timerLabel ?? t("cm_door_timer")}: {timeFormatted}</span>
             </div>
 
             <button

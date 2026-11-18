@@ -95,10 +95,18 @@ const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
             </span>
           )}
         </Link>
-        <Link to={"/settings"} className={`${secondary} !text-xl sm:!text-2xl !px-2 col-span-2`}>
+        <Link to={"/settings"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
           {t("settings")}
         </Link>
+        <Link to={"/lesson"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
+          {t("menu_lesson")}
+        </Link>
       </div>
+      {user?.teacher && (
+        <Link to={"/teacher"} className={`${base} border-2 border-neon text-neon hover:text-glow-sm`}>
+          {t("menu_teacher")}
+        </Link>
+      )}
       {user?.admin && (
         <Link to={"/admin"} className={`${base} border-2 border-yellow text-yellow hover:text-glow-sm`}>
           ADMIN

@@ -32,7 +32,7 @@ Live: https://pixelcode-arena.onrender.com (frontend, Frankfurt) / backend on Re
 US-03 Reset password: done (/forgot-password, /reset-password; e-mail needs SMTP, otherwise link in backend log).
 US-04 Sign out: done (menu QUIT, Settings).
 US-10 Cancel matchmaking: done.
-Quick Play bot: nobody in the queue for 20 s -> a duel against PIXEL_BOT (no MMR change, +40 / +10 PIXELS; game.bot-after-seconds, 0 = off).
+Quick Play bot: nobody in the queue for 20 s -> a duel against PIXEL_BOT (no MMR change, +40 / +10 PIXELS; game.bot-after-seconds, 0 = off). The bot really plays the level: the server runs a Java copy of the player physics (BotPhysics) and searches key presses (BotPathfinder) for a route, so it jumps, rides lifts, waits for blinking blocks and avoids hazards. Maps for the server: backend resources/game/maps.json, regenerate with `npm run export-maps` after editing frontend game/maps.ts (MapGeometryTest checks it).
 US-23 Withdraw challenge: done (/admin).
 US-26 Leaderboard: done. US-27 My position: done.
 US-28 Browse skins, US-29 Equip, US-31 Buy: done (/store, server-side balance).
@@ -70,3 +70,8 @@ US-08 Close account: excluded by SRS (a delete-account action exists in the prof
 - Full end-to-end test in several browsers (NFR-08) and the 50-match load test (NFR-02/03) are not done.
 - E-mail verification. (Old login tokens now stop working after a password change or reset.)
 - Byte Knight skin art is a placeholder.
+
+## Teacher mode (beyond the SRS)
+- An admin ticks TEACHER for an account in /admin; that player sees TEACHER in the menu (/teacher).
+- A teacher creates a lesson: title, map, four tasks from the catalog (one per door, filter by EASY / MEDIUM / HARD), length 5-180 min. The lesson page (/teacher/CODE) shows a big join code, START / END and a live table (every 3 s): per student and door solved (time) / working / stuck over 3 min / not reached, attempts, finish time, online dot. Clicking a student shows every solution they sent, with the code and the error.
+- Students need no account: /lesson (also linked on the login page and in the menu as LESSON), code + name. They all run the same map with the same four tasks at the same time; a door opens only with an accepted solution (no 4-minute auto-open), the clock is the lesson's time. Their token is kept in the browser (rejoin after closing the tab). Up to 60 students per lesson; rate limits count each student separately (a class shares one school address).

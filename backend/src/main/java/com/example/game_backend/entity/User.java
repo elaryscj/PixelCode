@@ -59,6 +59,10 @@ public class User {
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean admin = false;
 
+    /** May run lessons (teacher mode); granted by an administrator in /admin. */
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean teacher = false;
+
     /** The ADMIN_USERNAMES entry that granted `admin`; removing it from the config revokes the rights. */
     @Column
     private String adminGrant;
@@ -133,6 +137,8 @@ public class User {
 
     public boolean isAdmin() { return admin; }
     public void setAdmin(boolean admin) { this.admin = admin; }
+    public boolean isTeacher() { return teacher; }
+    public void setTeacher(boolean teacher) { this.teacher = teacher; }
     public String getAdminGrant() { return adminGrant; }
     public void setAdminGrant(String adminGrant) { this.adminGrant = adminGrant; }
     public int getTokenVersion() { return tokenVersion; }

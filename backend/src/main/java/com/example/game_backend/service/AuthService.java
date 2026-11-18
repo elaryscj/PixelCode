@@ -92,6 +92,6 @@ public class AuthService {
     public AuthResponse toResponse(User user, String message) {
         return new AuthResponse(user.getId(), user.getUsername(), user.getRating(), message,
                 tokens.issue(user.getId(), user.getTokenVersion()), user.getWins(), user.getLosses(), user.isAdmin(),
-                user.getPixels(), user.getActiveSkin(), user.getAvatarUrl());
+                user.getPixels(), user.getActiveSkin(), user.getAvatarUrl(), user.isTeacher());
     }
 }

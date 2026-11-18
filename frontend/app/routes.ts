@@ -25,6 +25,11 @@ export default [
   route('/friends', 'routes/friends.tsx'),
   route('/player/:id', 'routes/player.tsx'),
   route('/replay/:code', 'routes/replay.tsx'),
+  route('/lesson', 'routes/lesson-join.tsx', { id: 'lesson-join' }),
+  route('/lesson/:code', 'routes/lesson-join.tsx', { id: 'lesson-join-code' }),
+  route('/lesson/:code/play', 'routes/lesson-play.tsx'),
+  route('/teacher', 'routes/teacher.tsx'),
+  route('/teacher/:code', 'routes/teacher-lesson.tsx'),
   route('*', 'routes/not-found.tsx')
   ] satisfies RouteConfig;
 

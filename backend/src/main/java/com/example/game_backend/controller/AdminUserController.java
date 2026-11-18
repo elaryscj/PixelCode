@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-/** Administrators look players up and change their PIXELS balance. */
+/** Administrators look players up, change their PIXELS balance and make them teachers. */
 @RestController
 @RequestMapping("/api/admin/users")
 public class AdminUserController {
@@ -67,12 +67,23 @@ public class AdminUserController {
         return ResponseEntity.ok(view(users.save(u)));
     }
 
+    /** body: {"teacher": true|false}: lets the player run lessons (teacher mode) */
+    @PostMapping("/{id}/teacher")
+    public ResponseEntity<Map<String, Object>> teacher(@PathVariable long id, @RequestBody Map<String, Object> body,
+                                                       @RequestHeader(value = "Authorization", required = false) String auth) {
+        requireAdmin(auth);
+        User u = users.findById(id).orElseThrow(() -> new ApiException(404, "Player not found"));
+        u.setTeacher(Boolean.TRUE.equals(body.get("teacher")));
+        return ResponseEntity.ok(view(users.save(u)));
+    }
+
     private static Map<String, Object> view(User u) {
         Map<String, Object> m = new LinkedHashMap<>();
         m.put("id", u.getId());
         m.put("username", u.getUsername());
         m.put("rating", u.getRating());
         m.put("pixels", u.getPixels());
+        m.put("teacher", u.isTeacher());
         return m;
     }
 }

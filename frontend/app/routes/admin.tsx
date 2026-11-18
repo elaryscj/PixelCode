@@ -20,6 +20,7 @@ import {
   type AdminCosmetic,
   searchUsers,
   changeBalance,
+  setTeacher,
   type AdminUser,
 } from "~/api/admin";
 import { SkinArt, forgetSkin } from "~/components/skins";
@@ -313,7 +314,7 @@ function AdminScreen() {
           ))}
         </ul>
 
-        <h2 className="text-neon text-3xl mt-12 mb-3">&gt; PLAYER BALANCE</h2>
+        <h2 className="text-neon text-3xl mt-12 mb-3">&gt; PLAYERS: BALANCE AND TEACHER MODE</h2>
         <div className="border-2 border-neon bg-[#070c1e]/90 p-6">
           <div className="flex gap-3">
             <input
@@ -342,6 +343,17 @@ function AdminScreen() {
                   <button onClick={() => applyBalance(p.id, "add")} className="border border-neon px-3 py-1 text-yellow text-xl">+ Add</button>
                   <button onClick={() => applyBalance(p.id, "add", -1)} className="border border-neon px-3 py-1 text-pink text-xl">- Take</button>
                   <button onClick={() => applyBalance(p.id, "set")} className="border border-neon px-3 py-1 text-yellow text-xl">Set</button>
+                  <button
+                    onClick={() =>
+                      setTeacher(p.id, !p.teacher)
+                        .then((u) => setPlayers((ps) => ps.map((x) => (x.id === u.id ? u : x))))
+                        .catch((e) => setBalMsg(e instanceof Error ? e.message : "Could not change teacher mode"))
+                    }
+                    className={`border px-3 py-1 text-xl ${p.teacher ? "border-yellow bg-yellow text-black" : "border-neon text-neon"}`}
+                    title="Teacher mode: may create lessons for a class"
+                  >
+                    {p.teacher ? "✓ TEACHER" : "TEACHER"}
+                  </button>
                 </span>
               </li>
             ))}
