@@ -132,5 +132,14 @@
  "Add tests": "Добавьте тесты",
  "Write a reference solution": "Напишите эталонное решение",
  "Reference solution failed: {0}": "Эталонное решение не прошло: {0}",
- "Reference solution passes only {0} of {1} tests": "Эталонное решение проходит только {0} из {1} тестов"
+ "Reference solution passes only {0} of {1} tests": "Эталонное решение проходит только {0} из {1} тестов",
+ "Your teacher subscription has ended": "Подписка учителя закончилась",
+ "The free trial has already been used": "Бесплатный пробный период уже использован",
+ "Teacher mode is already active": "Режим учителя уже включён",
+ "Choose a month or a year": "Выберите месяц или год",
+ "Enter your school or course": "Укажите школу или курсы",
+ "Enter a phone number or e-mail to reach you": "Укажите телефон или e-mail для связи",
+ "Your request is already waiting for an answer": "Ваша заявка уже ждёт ответа",
+ "Days must be between 1 and 3660": "Дней должно быть от 1 до 3660",
+ "Request not found": "Заявка не найдена"
 }

@@ -72,6 +72,11 @@ public class MailService {
                 "Hi " + user.getUsername() + ",\n\nYour account is ready. See you in the arena!");
     }
 
+    /** A note to the operator (MAIL_FROM), e.g. a new teacher subscription request. */
+    public void notifyOwner(String subject, String text) {
+        send(from, subject, text);
+    }
+
     private void send(String to, String subject, String text) {
         outbox.submit(() -> deliver(to, subject, text));
     }

@@ -31,6 +31,7 @@ class LessonFlowTest {
     @Autowired ChallengeRepository challenges;
     @Autowired LessonRepository lessons;
     @Autowired TeacherTaskService tasks;
+    @Autowired TeacherAccessService access;
 
     private User newUser(boolean teacher) {
         User u = new User("t" + UUID.randomUUID().toString().substring(0, 8), "x");
@@ -189,5 +190,46 @@ class LessonFlowTest {
                 "solve", "", tests, good);
         assertEquals("MEDIUM", tasks.update(teacher.getId(), id, edited).get("difficulty"));
         assertEquals(1, tasks.mine(teacher.getId()).size());
+    }
+
+    @Test
+    void trialRequestSubscriptionAndExpiry() {
+        User u = newUser(false);
+        List<Long> ids = fourTasks().stream().map(t -> (Long) t[0]).toList();
+        assertThrows(ApiException.class, () -> service.create(u.getId(), "No access", 0, ids, 30));
+        assertEquals(true, access.status(u.getId()).get("trialAvailable"));
+
+        // the free trial: once, and it works right away
+        Map<String, Object> st = access.startTrial(u.getId());
+        assertEquals(true, st.get("active"));
+        assertEquals(false, st.get("trialAvailable"));
+        assertThrows(ApiException.class, () -> access.startTrial(u.getId()));
+        String code = (String) service.create(u.getId(), "Trial lesson", 0, ids, 30).get("code");
+
+        // a subscription request (one open at a time)
+        assertThrows(ApiException.class, () -> access.request(u.getId(), "WEEK", "School 7", "+7 700 000 00 00", null));
+        assertThrows(ApiException.class, () -> access.request(u.getId(), "YEAR", " ", "+7 700 000 00 00", null));
+        assertEquals(true, access.request(u.getId(), "YEAR", "School 7", "+7 700 000 00 00", "2 classes").get("requestPending"));
+        assertThrows(ApiException.class, () -> access.request(u.getId(), "MONTH", "School 7", "x", null));
+        assertTrue(access.list().stream().anyMatch(r -> r.get("userId").equals(u.getId()) && "NEW".equals(r.get("status"))));
+
+        // the admin grants a year on top of the trial; the request is closed
+        java.time.Instant trialEnd = users.findById(u.getId()).orElseThrow().getTeacherUntil();
+        User granted = access.grant(u.getId(), 365);
+        assertTrue(granted.getTeacherUntil().isAfter(trialEnd.plus(java.time.Duration.ofDays(364))));
+        assertEquals(false, access.status(u.getId()).get("requestPending"));
+
+        // ran out: no new lessons, but old ones stay readable
+        granted.setTeacherUntil(java.time.Instant.now().minusSeconds(60));
+        users.save(granted);
+        assertEquals(false, access.status(u.getId()).get("active"));
+        assertThrows(ApiException.class, () -> service.create(u.getId(), "Late", 0, ids, 30));
+        assertThrows(ApiException.class, () -> service.start(u.getId(), code));
+        assertEquals("Trial lesson", service.board(u.getId(), code).get("title"));
+        assertEquals(1, service.mine(u.getId()).size());
+
+        // renewal after the end counts from now; 0 takes the access away
+        assertTrue(access.grant(u.getId(), 30).hasTeacherAccess());
+        assertEquals(false, access.grant(u.getId(), 0).isTeacher());
     }
 }

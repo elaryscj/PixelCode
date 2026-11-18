@@ -17,9 +17,12 @@ public class AdminUserController {
     private final UserRepository users;
     private final TokenService tokens;
     private final AdminAccess admins;
+    private final com.example.game_backend.lesson.TeacherAccessService teacherAccess;
 
-    public AdminUserController(UserRepository users, TokenService tokens, AdminAccess admins) {
+    public AdminUserController(UserRepository users, TokenService tokens, AdminAccess admins,
+                               com.example.game_backend.lesson.TeacherAccessService teacherAccess) {
         this.admins = admins;
+        this.teacherAccess = teacherAccess;
         this.users = users;
         this.tokens = tokens;
     }
@@ -67,14 +70,39 @@ public class AdminUserController {
         return ResponseEntity.ok(view(users.save(u)));
     }
 
-    /** body: {"teacher": true|false}: lets the player run lessons (teacher mode) */
+    /**
+     * Teacher mode (lessons). body: {"days": 30} adds 30 days to the subscription (renewal), {"days": null} or
+     * {"teacher": true} without days = no end date, {"days": 0} or {"teacher": false} takes it away.
+     */
     @PostMapping("/{id}/teacher")
     public ResponseEntity<Map<String, Object>> teacher(@PathVariable long id, @RequestBody Map<String, Object> body,
                                                        @RequestHeader(value = "Authorization", required = false) String auth) {
         requireAdmin(auth);
-        User u = users.findById(id).orElseThrow(() -> new ApiException(404, "Player not found"));
-        u.setTeacher(Boolean.TRUE.equals(body.get("teacher")));
-        return ResponseEntity.ok(view(users.save(u)));
+        users.findById(id).orElseThrow(() -> new ApiException(404, "Player not found"));
+        Integer days;
+        if (Boolean.FALSE.equals(body.get("teacher"))) {
+            days = 0;
+        } else if (body.get("days") instanceof Number n) {
+            days = n.intValue();
+        } else {
+            days = null;
+        }
+        return ResponseEntity.ok(view(teacherAccess.grant(id, days)));
+    }
+
+    /** Teachers' subscription requests, newest first. */
+    @GetMapping("/teacher-requests")
+    public ResponseEntity<List<Map<String, Object>>> teacherRequests(@RequestHeader(value = "Authorization", required = false) String auth) {
+        requireAdmin(auth);
+        return ResponseEntity.ok(teacherAccess.list());
+    }
+
+    @PostMapping("/teacher-requests/{requestId}/close")
+    public ResponseEntity<Void> closeTeacherRequest(@PathVariable long requestId,
+                                                    @RequestHeader(value = "Authorization", required = false) String auth) {
+        requireAdmin(auth);
+        teacherAccess.close(requestId);
+        return ResponseEntity.noContent().build();
     }
 
     private static Map<String, Object> view(User u) {
@@ -84,6 +112,8 @@ public class AdminUserController {
         m.put("rating", u.getRating());
         m.put("pixels", u.getPixels());
         m.put("teacher", u.isTeacher());
+        m.put("teacherActive", u.hasTeacherAccess());
+        m.put("teacherUntil", u.isTeacher() && u.getTeacherUntil() != null ? u.getTeacherUntil().toEpochMilli() : null);
         return m;
     }
 }

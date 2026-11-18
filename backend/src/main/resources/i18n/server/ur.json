@@ -132,5 +132,14 @@
  "Add tests": "ٹیسٹ شامل کریں",
  "Write a reference solution": "حوالہ حل لکھیں",
  "Reference solution failed: {0}": "حوالہ حل ناکام: {0}",
- "Reference solution passes only {0} of {1} tests": "حوالہ حل {1} میں سے صرف {0} ٹیسٹ پاس کرتا ہے"
+ "Reference solution passes only {0} of {1} tests": "حوالہ حل {1} میں سے صرف {0} ٹیسٹ پاس کرتا ہے",
+ "Your teacher subscription has ended": "آپ کی ٹیچر سبسکرپشن ختم ہو گئی ہے",
+ "The free trial has already been used": "مفت ٹرائل پہلے ہی استعمال ہو چکا ہے",
+ "Teacher mode is already active": "ٹیچر موڈ پہلے سے فعال ہے",
+ "Choose a month or a year": "ایک مہینہ یا ایک سال منتخب کریں",
+ "Enter your school or course": "اپنا اسکول یا کورس لکھیں",
+ "Enter a phone number or e-mail to reach you": "رابطے کے لیے فون نمبر یا ای میل لکھیں",
+ "Your request is already waiting for an answer": "آپ کی درخواست پہلے سے جواب کی منتظر ہے",
+ "Days must be between 1 and 3660": "دن 1 سے 3660 کے درمیان ہونے چاہئیں",
+ "Request not found": "درخواست نہیں ملی"
 }

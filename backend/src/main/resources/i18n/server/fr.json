@@ -132,5 +132,14 @@
  "Add tests": "Ajoutez des tests",
  "Write a reference solution": "Écrivez une solution de référence",
  "Reference solution failed: {0}": "La solution de référence a échoué : {0}",
- "Reference solution passes only {0} of {1} tests": "La solution de référence ne réussit que {0} tests sur {1}"
+ "Reference solution passes only {0} of {1} tests": "La solution de référence ne réussit que {0} tests sur {1}",
+ "Your teacher subscription has ended": "Votre abonnement enseignant a expiré",
+ "The free trial has already been used": "L'essai gratuit a déjà été utilisé",
+ "Teacher mode is already active": "Le mode enseignant est déjà actif",
+ "Choose a month or a year": "Choisissez un mois ou un an",
+ "Enter your school or course": "Indiquez votre école ou formation",
+ "Enter a phone number or e-mail to reach you": "Indiquez un téléphone ou un e-mail pour vous joindre",
+ "Your request is already waiting for an answer": "Votre demande attend déjà une réponse",
+ "Days must be between 1 and 3660": "Le nombre de jours doit être entre 1 et 3660",
+ "Request not found": "Demande introuvable"
 }

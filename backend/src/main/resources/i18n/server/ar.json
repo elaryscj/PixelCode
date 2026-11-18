@@ -132,5 +132,14 @@
  "Add tests": "أضف اختبارات",
  "Write a reference solution": "اكتب حلًا مرجعيًا",
  "Reference solution failed: {0}": "فشل الحل المرجعي: {0}",
- "Reference solution passes only {0} of {1} tests": "الحل المرجعي يجتاز {0} فقط من {1} اختبارات"
+ "Reference solution passes only {0} of {1} tests": "الحل المرجعي يجتاز {0} فقط من {1} اختبارات",
+ "Your teacher subscription has ended": "انتهى اشتراك المعلم الخاص بك",
+ "The free trial has already been used": "تم استخدام الفترة التجريبية المجانية بالفعل",
+ "Teacher mode is already active": "وضع المعلم مفعّل بالفعل",
+ "Choose a month or a year": "اختر شهرًا أو سنة",
+ "Enter your school or course": "أدخل مدرستك أو دورتك",
+ "Enter a phone number or e-mail to reach you": "أدخل رقم هاتف أو بريدًا إلكترونيًا للتواصل",
+ "Your request is already waiting for an answer": "طلبك بانتظار الرد بالفعل",
+ "Days must be between 1 and 3660": "يجب أن تكون الأيام بين 1 و3660",
+ "Request not found": "الطلب غير موجود"
 }

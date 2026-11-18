@@ -20,7 +20,10 @@ import {
   type AdminCosmetic,
   searchUsers,
   changeBalance,
-  setTeacher,
+  grantTeacher,
+  teacherRequests,
+  closeTeacherRequest,
+  type TeacherRequestRow,
   type AdminUser,
 } from "~/api/admin";
 import { SkinArt, forgetSkin } from "~/components/skins";
@@ -52,6 +55,11 @@ function AdminScreen() {
   const [busy, setBusy] = useState(false);
   const [skins, setSkins] = useState<AdminCosmetic[]>([]);
   const [players, setPlayers] = useState<AdminUser[]>([]);
+  const [requests, setRequests] = useState<TeacherRequestRow[]>([]);
+  const loadRequests = () => teacherRequests().then(setRequests).catch(() => {});
+  useEffect(() => {
+    void loadRequests();
+  }, []);
   const [query, setQuery] = useState("");
   const [amounts, setAmounts] = useState<Record<number, string>>({});
   const [balMsg, setBalMsg] = useState<string | null>(null);
@@ -314,6 +322,38 @@ function AdminScreen() {
           ))}
         </ul>
 
+        <h2 className="text-neon text-3xl mt-12 mb-3">&gt; TEACHER REQUESTS</h2>
+        <div className="border-2 border-yellow bg-[#070c1e]/90 p-6 flex flex-col gap-2">
+          <p className="text-gray-300 font-sans text-base">
+            Send an invoice to the contact, and after the payment give access below (find the player, then +30d or +1y).
+            Giving access closes the request.
+          </p>
+          {requests.length === 0 && <p className="text-gray-400 font-sans">No requests yet.</p>}
+          {requests.map((r) => (
+            <div key={r.id} className={`border px-4 py-2 font-sans ${r.status === "NEW" ? "border-yellow" : "border-gray-700 opacity-60"}`}>
+              <div className="flex flex-wrap justify-between gap-2">
+                <span className="text-yellow font-pixel text-xl">
+                  {r.username} · {r.plan === "YEAR" ? "SCHOOL YEAR" : "MONTH"}
+                </span>
+                <span className="text-gray-400 text-sm">{new Date(r.createdAt).toLocaleString()} · {r.status}</span>
+              </div>
+              <div className="text-white">{r.school}</div>
+              <div className="text-neon select-all">{r.contact}</div>
+              {r.note && <div className="text-gray-300 text-sm">{r.note}</div>}
+              <div className="flex gap-2 mt-1">
+                <button onClick={() => { setQuery(r.username); void searchUsers(r.username).then(setPlayers); }} className="border border-neon text-neon px-2 py-0.5 text-sm">
+                  FIND PLAYER
+                </button>
+                {r.status === "NEW" && (
+                  <button onClick={() => closeTeacherRequest(r.id).then(loadRequests)} className="border border-gray-500 text-gray-300 px-2 py-0.5 text-sm">
+                    CLOSE WITHOUT ACCESS
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
         <h2 className="text-neon text-3xl mt-12 mb-3">&gt; PLAYERS: BALANCE AND TEACHER MODE</h2>
         <div className="border-2 border-neon bg-[#070c1e]/90 p-6">
           <div className="flex gap-3">
@@ -343,17 +383,27 @@ function AdminScreen() {
                   <button onClick={() => applyBalance(p.id, "add")} className="border border-neon px-3 py-1 text-yellow text-xl">+ Add</button>
                   <button onClick={() => applyBalance(p.id, "add", -1)} className="border border-neon px-3 py-1 text-pink text-xl">- Take</button>
                   <button onClick={() => applyBalance(p.id, "set")} className="border border-neon px-3 py-1 text-yellow text-xl">Set</button>
-                  <button
-                    onClick={() =>
-                      setTeacher(p.id, !p.teacher)
-                        .then((u) => setPlayers((ps) => ps.map((x) => (x.id === u.id ? u : x))))
-                        .catch((e) => setBalMsg(e instanceof Error ? e.message : "Could not change teacher mode"))
-                    }
-                    className={`border px-3 py-1 text-xl ${p.teacher ? "border-yellow bg-yellow text-black" : "border-neon text-neon"}`}
-                    title="Teacher mode: may create lessons for a class"
-                  >
-                    {p.teacher ? "✓ TEACHER" : "TEACHER"}
-                  </button>
+                  <span className="flex items-center gap-1 border-s border-neon/40 ps-2">
+                    <span className={`text-lg ${p.teacherActive ? "text-yellow" : "text-gray-500"}`}>
+                      TEACHER{p.teacher ? (p.teacherUntil ? ` → ${new Date(p.teacherUntil).toLocaleDateString()}` : " ∞") : ""}
+                    </span>
+                    {([["+30d", 30], ["+1y", 365], ["∞", null], ["off", 0]] as const).map(([label, days]) => (
+                      <button
+                        key={label}
+                        onClick={() =>
+                          grantTeacher(p.id, days)
+                            .then((u) => {
+                              setPlayers((ps) => ps.map((x) => (x.id === u.id ? u : x)));
+                              void loadRequests();
+                            })
+                            .catch((e) => setBalMsg(e instanceof Error ? e.message : "Could not change teacher mode"))
+                        }
+                        className={`border px-2 py-0.5 text-lg ${label === "off" ? "border-pink text-pink" : "border-yellow text-yellow"}`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </span>
                 </span>
               </li>
             ))}

@@ -132,5 +132,14 @@
  "Add tests": "टेस्ट जोड़ें",
  "Write a reference solution": "संदर्भ हल लिखें",
  "Reference solution failed: {0}": "संदर्भ हल विफल: {0}",
- "Reference solution passes only {0} of {1} tests": "संदर्भ हल {1} में से केवल {0} टेस्ट पास करता है"
+ "Reference solution passes only {0} of {1} tests": "संदर्भ हल {1} में से केवल {0} टेस्ट पास करता है",
+ "Your teacher subscription has ended": "आपकी शिक्षक सदस्यता समाप्त हो गई है",
+ "The free trial has already been used": "मुफ़्त ट्रायल पहले ही इस्तेमाल हो चुका है",
+ "Teacher mode is already active": "शिक्षक मोड पहले से चालू है",
+ "Choose a month or a year": "एक महीना या एक साल चुनें",
+ "Enter your school or course": "अपना स्कूल या कोर्स लिखें",
+ "Enter a phone number or e-mail to reach you": "संपर्क के लिए फ़ोन नंबर या ई-मेल लिखें",
+ "Your request is already waiting for an answer": "आपका अनुरोध पहले से जवाब का इंतज़ार कर रहा है",
+ "Days must be between 1 and 3660": "दिन 1 से 3660 के बीच होने चाहिए",
+ "Request not found": "अनुरोध नहीं मिला"
 }

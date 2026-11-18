@@ -66,7 +66,17 @@ public class LessonService {
 
     // ------------------------------------------------------------------ teacher
 
+    /** Creating and starting lessons and tasks needs an active trial or subscription. */
     User requireTeacher(long userId) {
+        User u = requireAnyTeacher(userId);
+        if (!u.hasTeacherAccess()) {
+            throw new ApiException(402, "Your teacher subscription has ended");
+        }
+        return u;
+    }
+
+    /** Looking at past lessons and their results stays possible after the subscription ends. */
+    User requireAnyTeacher(long userId) {
         User u = users.findById(userId).orElseThrow(() -> new ApiException(401, "Please log in again"));
         if (!u.isTeacher()) {
             throw new ApiException(403, "Teacher mode is not enabled for this account");
@@ -146,7 +156,7 @@ public class LessonService {
     }
 
     public List<Map<String, Object>> mine(long userId) {
-        requireTeacher(userId);
+        requireAnyTeacher(userId);
         List<Map<String, Object>> out = new ArrayList<>();
         for (Lesson l : lessons.findTop50ByTeacherIdOrderByCreatedAtDesc(userId)) {
             Map<String, Object> m = summary(l);
@@ -157,7 +167,7 @@ public class LessonService {
     }
 
     private Lesson ownLesson(long userId, String code) {
-        requireTeacher(userId);
+        requireAnyTeacher(userId);
         Lesson l = lesson(code);
         if (!l.getTeacherId().equals(userId)) {
             throw new ApiException(403, "This is not your lesson");
@@ -166,6 +176,7 @@ public class LessonService {
     }
 
     public Map<String, Object> start(long userId, String code) {
+        requireTeacher(userId);
         Lesson l = ownLesson(userId, code);
         if (!Lesson.LOBBY.equals(status(l))) {
             throw new ApiException(409, "The lesson has already started");

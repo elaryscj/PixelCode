@@ -132,5 +132,14 @@
  "Add tests": "테스트를 추가하세요",
  "Write a reference solution": "모범 답안을 작성하세요",
  "Reference solution failed: {0}": "모범 답안 실패: {0}",
- "Reference solution passes only {0} of {1} tests": "모범 답안이 테스트 {1}개 중 {0}개만 통과합니다"
+ "Reference solution passes only {0} of {1} tests": "모범 답안이 테스트 {1}개 중 {0}개만 통과합니다",
+ "Your teacher subscription has ended": "교사 구독이 만료되었습니다",
+ "The free trial has already been used": "무료 체험을 이미 사용했습니다",
+ "Teacher mode is already active": "교사 모드가 이미 활성화되어 있습니다",
+ "Choose a month or a year": "1개월 또는 1년을 선택하세요",
+ "Enter your school or course": "학교 또는 학원을 입력하세요",
+ "Enter a phone number or e-mail to reach you": "연락받을 전화번호나 이메일을 입력하세요",
+ "Your request is already waiting for an answer": "신청이 이미 답변을 기다리고 있습니다",
+ "Days must be between 1 and 3660": "일수는 1~3660 사이여야 합니다",
+ "Request not found": "신청을 찾을 수 없습니다"
 }
