@@ -69,4 +69,25 @@ class MapGeometryTest {
                     arena.exit(), 1e-9, name + ": exit");
         }
     }
+
+    /** resources/game/maps.json (the bot's copy of the maps) must be what `npm run export-maps` writes now. */
+    @Test
+    void botMapsJsonIsUpToDate() throws Exception {
+        Path script = Path.of("..", "frontend", "scripts", "export-maps.mjs");
+        Assumptions.assumeTrue(Files.exists(script), "frontend sources not present");
+        Path out = Files.createTempFile("maps", ".json");
+        Process p;
+        try {
+            p = new ProcessBuilder("node", script.toString(), out.toString()).redirectErrorStream(true).start();
+        } catch (java.io.IOException e) {
+            Assumptions.abort("node is not installed");
+            return;
+        }
+        p.getInputStream().readAllBytes();
+        Assumptions.assumeTrue(p.waitFor() == 0, "export-maps could not run");
+        String fresh = Files.readString(out);
+        String stored = Files.readString(Path.of("src", "main", "resources", "game", "maps.json"));
+        assertEquals(fresh, stored, "maps.ts changed: run `npm run export-maps` in frontend/");
+        assertEquals(MapGeometry.MAPS.length, ArenaLayout.MAPS.size());
+    }
 }
