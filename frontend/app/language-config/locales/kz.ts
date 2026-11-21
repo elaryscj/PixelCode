@@ -629,6 +629,7 @@ const kz: Translation = {
   bs_attempts: "әрекет: {{n}}",
   bs_show_code: "КОД ▾",
   menu_tournament: "ДЕМАЛЫС ТУРНИРІ",
+  menu_tournament_short: "ТУРНИР",
   tn_title: "ДЕМАЛЫС ТУРНИРІ",
   tn_live: "ТУРНИР ЖҮРІП ЖАТЫР! АЯҚТАЛУЫНА",
   tn_soon: "КЕЛЕСІ ТУРНИРГЕ ДЕЙІН",

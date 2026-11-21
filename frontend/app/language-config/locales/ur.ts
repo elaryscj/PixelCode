@@ -647,6 +647,7 @@ const ur: Translation = {
   bs_attempts: "کوششیں: {{n}}",
   bs_show_code: "کوڈ ▾",
   menu_tournament: "ویک اینڈ ٹورنامنٹ",
+  menu_tournament_short: "ٹورنامنٹ",
   tn_title: "ویک اینڈ ٹورنامنٹ",
   tn_live: "ٹورنامنٹ جاری ہے! ختم ہونے میں",
   tn_soon: "اگلا ٹورنامنٹ شروع ہونے میں",

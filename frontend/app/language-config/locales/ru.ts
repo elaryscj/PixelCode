@@ -647,6 +647,7 @@ const ru: Translation = {
   bs_attempts: "попыток: {{n}}",
   bs_show_code: "КОД ▾",
   menu_tournament: "ТУРНИР ВЫХОДНОГО ДНЯ",
+  menu_tournament_short: "ТУРНИР",
   tn_title: "ТУРНИР ВЫХОДНОГО ДНЯ",
   tn_live: "ТУРНИР ИДЁТ! ДО КОНЦА",
   tn_soon: "ДО СЛЕДУЮЩЕГО ТУРНИРА",

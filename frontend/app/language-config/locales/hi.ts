@@ -647,6 +647,7 @@ const hi: Translation = {
   bs_attempts: "प्रयास: {{n}}",
   bs_show_code: "कोड ▾",
   menu_tournament: "वीकेंड टूर्नामेंट",
+  menu_tournament_short: "टूर्नामेंट",
   tn_title: "वीकेंड टूर्नामेंट",
   tn_live: "टूर्नामेंट चल रहा है! खत्म होने में",
   tn_soon: "अगला टूर्नामेंट शुरू होने में",
