@@ -114,6 +114,7 @@ The backend tests cover the code sandbox, all 42 catalog challenges (each refere
 - [docs/SRS.md](docs/SRS.md): requirements with the status of every user story.
 - [docs/DEPLOY.md](docs/DEPLOY.md): deployment to Render + Neon, backups and restore.
 - [docs/STATUS.md](docs/STATUS.md): detailed feature list and where to find each feature.
+- [docs/qa/test-cases.md](docs/qa/test-cases.md): manual test cases and results; `docs/qa/run_api_tests.py` reruns them.
 
 ## Team
 
@@ -124,4 +125,6 @@ The backend tests cover the code sandbox, all 42 catalog challenges (each refere
 | Arman | Backend |
 | Dauren | Backend |
 
-Code freeze: to be announced (Week 13).
+## Code freeze (Week 13)
+
+**Freeze date: Monday, 23 November 2026, 00:00.** From then on only bug fixes for issues already logged in GitHub Issues are merged; each fix needs a pull request, a review by another member and a retest on staging before it goes to production. Release notes: [docs/RELEASE_NOTES.md](docs/RELEASE_NOTES.md).
