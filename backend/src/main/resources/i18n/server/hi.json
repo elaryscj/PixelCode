@@ -151,5 +151,7 @@
  "Only friends of the players can watch this match": "यह मैच केवल खिलाड़ियों के दोस्त देख सकते हैं",
  "You are a player in this match": "आप इस मैच के खिलाड़ी हैं",
  "You cannot block yourself": "आप खुद को ब्लॉक नहीं कर सकते",
- "Your block list is full": "आपकी ब्लॉक सूची भर गई है"
+ "Your block list is full": "आपकी ब्लॉक सूची भर गई है",
+ "Not found": "नहीं मिला",
+ "Invalid request": "अमान्य अनुरोध"
 }

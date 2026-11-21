@@ -151,5 +151,7 @@
  "Only friends of the players can watch this match": "Hanya teman para pemain yang bisa menonton pertandingan ini",
  "You are a player in this match": "Kamu pemain di pertandingan ini",
  "You cannot block yourself": "Kamu tidak bisa memblokir dirimu sendiri",
- "Your block list is full": "Daftar blokirmu penuh"
+ "Your block list is full": "Daftar blokirmu penuh",
+ "Not found": "Tidak ditemukan",
+ "Invalid request": "Permintaan tidak valid"
 }

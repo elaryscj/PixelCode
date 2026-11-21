@@ -151,5 +151,7 @@
  "Only friends of the players can watch this match": "この試合はプレイヤーのフレンドだけが観戦できます",
  "You are a player in this match": "あなたはこの試合のプレイヤーです",
  "You cannot block yourself": "自分自身はブロックできません",
- "Your block list is full": "ブロックリストがいっぱいです"
+ "Your block list is full": "ブロックリストがいっぱいです",
+ "Not found": "見つかりません",
+ "Invalid request": "無効なリクエスト"
 }

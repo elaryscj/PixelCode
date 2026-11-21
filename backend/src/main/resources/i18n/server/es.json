@@ -151,5 +151,7 @@
  "Only friends of the players can watch this match": "Solo los amigos de los jugadores pueden ver esta partida",
  "You are a player in this match": "Eres jugador en esta partida",
  "You cannot block yourself": "No puedes bloquearte a ti mismo",
- "Your block list is full": "Tu lista de bloqueados está llena"
+ "Your block list is full": "Tu lista de bloqueados está llena",
+ "Not found": "No encontrado",
+ "Invalid request": "Solicitud no válida"
 }

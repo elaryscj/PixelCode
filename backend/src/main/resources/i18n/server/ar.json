@@ -151,5 +151,7 @@
  "Only friends of the players can watch this match": "يمكن لأصدقاء اللاعبين فقط مشاهدة هذه المباراة",
  "You are a player in this match": "أنت لاعب في هذه المباراة",
  "You cannot block yourself": "لا يمكنك حظر نفسك",
- "Your block list is full": "قائمة الحظر لديك ممتلئة"
+ "Your block list is full": "قائمة الحظر لديك ممتلئة",
+ "Not found": "غير موجود",
+ "Invalid request": "طلب غير صالح"
 }
