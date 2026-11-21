@@ -103,10 +103,16 @@ Admin checks on staging with the team's admin accounts (`dauren`, `Arman123` fro
 
 ## Production check from another device (Week 11)
 
-21 November 2026, a team member's phone (landscape), https://pixelcode-arena.onrender.com: new account registered, main menu, practice with on-screen touch controls, a door challenge opened, friends list. Everything worked; no new defects.
+21 November 2026, a team member's iPhone (account `dauren`), https://pixelcode-arena.onrender.com: main menu (portrait and landscape), Quick Play search, a match against PIXEL_BOT with touch controls, a door solved ("Accepted! 5/5 tests passed"), leaderboard with "your rank", practice, a door challenge, friends. Everything worked; no new defects. Registration of a brand-new account was checked the same day on staging (browser) and by TC-01.
 
-| Menu | Practice (touch controls) |
+| Menu | Quick Play search | Leaderboard |
+| --- | --- | --- |
+| ![Menu](phone/5-menu-portrait.jpg) | ![Finding a match](phone/6-finding-match.jpg) | ![Leaderboard](phone/9-leaderboard.jpg) |
+
+| Match against PIXEL_BOT (touch controls) | Door solved on the phone |
 | --- | --- |
-| ![Menu on a phone](phone/1-menu.jpg) | ![Practice on a phone](phone/2-practice-touch.jpg) |
-| **Door challenge** | **Friends** |
-| ![Door challenge on a phone](phone/3-door-challenge.jpg) | ![Friends on a phone](phone/4-friends.jpg) |
+| ![Match vs bot](phone/7-match-vs-bot.jpg) | ![Accepted solution](phone/8-door-solved.jpg) |
+
+| Menu (landscape) | Practice (touch controls) | Door challenge | Friends |
+| --- | --- | --- | --- |
+| ![Menu landscape](phone/1-menu.jpg) | ![Practice](phone/2-practice-touch.jpg) | ![Door challenge](phone/3-door-challenge.jpg) | ![Friends](phone/4-friends.jpg) |
