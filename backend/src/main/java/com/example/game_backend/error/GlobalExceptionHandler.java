@@ -32,8 +32,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(503).header("Retry-After", "2").body(body);
     }
 
+    /** Malformed requests (bad JSON, a letter where a number is expected): the client's mistake, not a crash. */
+    @ExceptionHandler({org.springframework.http.converter.HttpMessageNotReadableException.class,
+            org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class})
+    public ResponseEntity<Map<String, Object>> handleBadRequest(Exception e) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("message", ServerText.tr("Invalid request"));
+        return ResponseEntity.status(400).body(body);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleOther(Exception e) {
+        // unknown address, wrong HTTP method, missing parameter...: answer with Spring's own 4xx status, no stack trace
+        if (e instanceof org.springframework.web.ErrorResponse er && er.getStatusCode().is4xxClientError()) {
+            Map<String, Object> body = new LinkedHashMap<>();
+            body.put("message", ServerText.tr(er.getStatusCode().value() == 404 ? "Not found" : "Invalid request"));
+            return ResponseEntity.status(er.getStatusCode()).body(body);
+        }
         log.error("Unhandled error", e);
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("message", ServerText.tr("Internal server error"));

@@ -151,5 +151,7 @@
  "Only friends of the players can watch this match": "只有玩家的好友可以观看这场比赛",
  "You are a player in this match": "你是这场比赛的玩家",
  "You cannot block yourself": "你不能屏蔽自己",
- "Your block list is full": "你的屏蔽列表已满"
+ "Your block list is full": "你的屏蔽列表已满",
+ "Not found": "未找到",
+ "Invalid request": "无效的请求"
 }

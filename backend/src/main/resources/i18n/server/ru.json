@@ -151,5 +151,7 @@
  "Only friends of the players can watch this match": "Смотреть этот матч могут только друзья игроков",
  "You are a player in this match": "Вы игрок в этом матче",
  "You cannot block yourself": "Нельзя заблокировать самого себя",
- "Your block list is full": "Список заблокированных заполнен"
+ "Your block list is full": "Список заблокированных заполнен",
+ "Not found": "Не найдено",
+ "Invalid request": "Некорректный запрос"
 }
