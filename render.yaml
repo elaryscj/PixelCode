@@ -1,4 +1,4 @@
-# Render Blueprint: New + > Blueprint > pick this repo. Replace the two URLs after the first deploy (see DEPLOY.md).
+# Render Blueprint: New + > Blueprint > pick this repo. Replace the two URLs after the first deploy (see docs/DEPLOY.md).
 databases:
   - name: pixelcode-db
     plan: free

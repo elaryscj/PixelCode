@@ -83,7 +83,7 @@ The header shows where the game server really runs: the backend's SERVER_REGION 
 - Students need no account: /lesson (also linked on the login page and in the menu as LESSON), code + name. They all run the same map with the same four tasks at the same time; a door opens only with an accepted solution (no 4-minute auto-open), the clock is the lesson's time. Their token is kept in the browser (rejoin after closing the tab). Up to 60 students per lesson; rate limits count each student separately (a class shares one school address).
 
 ## Added 2026-11-21
-- Weekly encrypted database backup: GitHub Actions `db-backup.yml` (secrets NEON_DATABASE_URL + BACKUP_PASSPHRASE; see DEPLOY.md).
+- Weekly encrypted database backup: GitHub Actions `db-backup.yml` (secrets NEON_DATABASE_URL + BACKUP_PASSPHRASE; see docs/DEPLOY.md).
 - Door statistics: every human door in a match is stored (table door_results: solved / opened by timer / unsolved, attempts, time, accepted code). /admin STATS: matches by kind and end reason, per challenge solve rate, attempts, solve time and a TOO HARD / TOO EASY hint.
 - Best solutions /solutions/:id: shortest and fastest accepted code of a challenge, one per player; only for players who met it in a match. Reached from /results (</> SOLUTIONS per match).
 - Practice with tasks: /practice?tasks=EASY|MEDIUM|HARD|MIX, doors ask for real code checked by the sandbox (login needed, nothing recorded).
