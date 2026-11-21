@@ -188,8 +188,8 @@ function AdminScreen() {
   return (
     <>
       <div className="star-background" />
-      <div className="mx-auto max-w-250 font-pixel pb-16">
-        <h1 className="text-yellow text-[72px]/none text-glow-sm text-center my-6">ADMIN / CHALLENGES</h1>
+      <div className="mx-auto w-full max-w-250 font-pixel pb-16 px-4 min-w-0">
+        <h1 className="text-yellow text-[11vw]/none sm:text-[72px]/none text-glow-sm text-center my-6 break-words">ADMIN / CHALLENGES</h1>
 
         <form onSubmit={submit} className="border-2 border-neon bg-[#070c1e]/90 p-6">
           <h2 className="text-neon text-3xl border-b border-neon/40 pb-2">&gt; NEW CHALLENGE (EASY)</h2>
@@ -197,7 +197,7 @@ function AdminScreen() {
           <input className={`${field} ${bad("title")}`} value={form.title} onChange={set("title")} />
           <label className={label}>STATEMENT</label>
           <textarea className={`${field} ${bad("description")}`} rows={3} value={form.description} onChange={set("description")} />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={label}>INPUT FORMAT</label>
               <input className={field} value={form.inputDescription} onChange={set("inputDescription")} />

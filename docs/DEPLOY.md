@@ -55,7 +55,27 @@ pg_restore --clean --if-exists --no-owner -d "postgresql://...target..." pixelco
 | High ping for players in Kazakhstan | Server in Oregon (USA) | Backend recreated in Frankfurt; the header shows `SERVER_REGION` |
 | Kazakh letters shown in a fallback font | The pixel font had only the Latin part | Cyrillic and Latin-extended font subsets loaded on demand |
 
-## Environments
-- **Production:** `main` branch -> https://pixelcode-arena.onrender.com + https://pixelcode-api.onrender.com, Neon database `pixelcode`.
-- **Local / development:** `redesign-mobile` and feature branches run on the developer's machine with the local `game_db`; automated tests use a separate `pixelcode_test` database.
-- A separate hosted staging environment is not set up yet (Week 11 gap): planned as a second Render service + a Neon branch database, deployed from the `staging` branch.
+## Environments (staging and production)
+| Item | Staging | Production |
+| --- | --- | --- |
+| Purpose | Test changes safely | What the instructor and players see |
+| Git branch Render deploys from | `main` (every merged pull request) | `release` (moved only to a tagged, tested version) |
+| Site | https://pixelcode-staging.onrender.com | https://pixelcode-arena.onrender.com |
+| Backend | https://pixelcode-api-staging.onrender.com | https://pixelcode-api.onrender.com |
+| Database | Neon branch `staging` (separate copy) | Neon branch `main` of project `pixelcode` |
+| Secrets | own `TOKEN_SECRET`, own DB password, no payment keys | own values, never copied to staging |
+
+### One-time setup (about 20 minutes)
+1. **Release branch.** GitHub > Code > branch list > New branch `release` from `main`. Then on Render open `pixelcode-api` and `pixelcode-arena` > Settings > Build & Deploy > Branch: `release`. Production now changes only when `release` moves.
+2. **Staging database.** Neon console > project `pixelcode` > Branches > Create branch `staging` (from `main`) > Connect: copy host, user and password.
+3. **Staging backend.** Render > New > Web Service > this repo, branch `main`, Root Directory `backend`, Runtime Docker, plan Free, region Frankfurt, name `pixelcode-api-staging`. Environment: `DB_URL=jdbc:postgresql://<staging host>/neondb?sslmode=require`, `DB_USER`, `DB_PASSWORD` (from step 2), `TOKEN_SECRET` (new value: `openssl rand -hex 32`), `ADMIN_USERNAMES`, `FRONTEND_URL=https://pixelcode-staging.onrender.com`, `CORS_ORIGINS=https://pixelcode-staging.onrender.com`, `SERVER_REGION=frankfurt`. No Brevo or payment keys.
+4. **Staging site.** Render > New > Static Site > this repo, branch `main`, Root Directory `frontend`, build `npm ci && npm run build`, publish `build/client`, name `pixelcode-staging`. Environment: `VITE_API_URL=https://pixelcode-api-staging.onrender.com/api`, `VITE_WS_URL=wss://pixelcode-api-staging.onrender.com/ws`. Redirects/Rewrites: `/*` -> `/index.html` (Rewrite).
+5. Do not add the staging backend to UptimeRobot: it may sleep (the free plan has 750 instance hours a month for all services together).
+
+### Releasing a version to production
+1. Merge pull requests into `main`; Render deploys them to staging. Run `python3 docs/qa/run_api_tests.py https://pixelcode-api-staging.onrender.com/api` and click through the main flow on the staging site.
+2. GitHub > Releases > Draft a new release > tag `v0.9-beta` (next: `v1.0`) on `main`, paste the notes from `docs/RELEASE_NOTES.md`, Publish.
+3. GitHub > Pull requests > New: base `release` <- compare `main` (the tagged commit) > Merge. Render deploys production.
+4. Rollback: open a pull request into `release` from the previous tag (or on Render: the service > Events > the previous deploy > Rollback).
+
+Local / development: feature branches run on the developer's machine with the local `game_db`; automated tests use the separate `pixelcode_test` database.

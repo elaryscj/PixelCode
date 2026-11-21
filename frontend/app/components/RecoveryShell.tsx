@@ -1,16 +1,18 @@
+import { useServerLabel } from "~/lib/serverRegion";
 import type { ReactNode } from "react";
 import { Link } from "react-router";
 import { FaGamepad } from "react-icons/fa";
 
 /** Frame shared by the four account-recovery screens (Figma: Recovery/*) */
 export default function RecoveryShell({ children, width = "max-w-[560px]" }: { children: ReactNode; width?: string }) {
+  const serverLabel = useServerLabel();
   return (
     <div className="min-h-screen flex flex-col bg-[#040714] text-white font-pixel">
       <div className="grid-background" />
       <header className="relative z-10 flex items-center justify-between px-8 py-4 border-b border-[#01E4FF]/40">
         <Link to="/" className="flex items-center gap-3 text-yellow text-3xl">
           <FaGamepad className="text-[#01E4FF]" /> PIXELCODE
-          <span className="text-[#01E4FF] text-xl">| &bull; KAZAKHSTAN</span>
+          <span className="text-[#01E4FF] text-xl">| &bull; {serverLabel}</span>
         </Link>
         <div className="text-right text-[18px] leading-tight">
           <div className="text-gray-400">SECURE TERMINAL</div>
