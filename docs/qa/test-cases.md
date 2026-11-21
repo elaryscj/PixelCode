@@ -100,3 +100,13 @@ python3 docs/qa/run_api_tests.py https://pixelcode-api.onrender.com/api
 Browser check on https://pixelcode-staging.onrender.com: a new account registered through the form, the main menu opened, header shows the Frankfurt server.
 Found during the staging setup: `VITE_API_URL` must not end with `/api` (the site adds it); the docs said otherwise and were corrected.
 Admin checks on staging with the team's admin accounts (`dauren`, `Arman123` from `ADMIN_USERNAMES`): TC-33 valid challenge published — PASS; TC-34 challenge without tests refused ("Field 'testsJson' is required") — PASS; a challenge whose reference solution fails its own tests refused ("passes only 1 of 2 tests") — PASS; TC-42 withdraw sets published=false — PASS; admin STATS opens — PASS; TC-35 a normal player gets 403 on the admin API and on STATS — PASS.
+
+## Production check from another device (Week 11)
+
+21 November 2026, a team member's phone (landscape), https://pixelcode-arena.onrender.com: new account registered, main menu, practice with on-screen touch controls, a door challenge opened, friends list. Everything worked; no new defects.
+
+| Menu | Practice (touch controls) |
+| --- | --- |
+| ![Menu on a phone](phone/1-menu.jpg) | ![Practice on a phone](phone/2-practice-touch.jpg) |
+| **Door challenge** | **Friends** |
+| ![Door challenge on a phone](phone/3-door-challenge.jpg) | ![Friends on a phone](phone/4-friends.jpg) |
