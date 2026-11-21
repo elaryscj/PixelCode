@@ -56,6 +56,9 @@ pg_restore --clean --if-exists --no-owner -d "postgresql://...target..." pixelco
 | High ping for players in Kazakhstan | Server in Oregon (USA) | Backend recreated in Frankfurt; the header shows `SERVER_REGION` |
 | Kazakh letters shown in a fallback font | The pixel font had only the Latin part | Cyrillic and Latin-extended font subsets loaded on demand |
 
+## Check from another device
+After deploying, the main flow was completed on a phone (menu, Quick Play, a match against the bot with touch controls, a solved door, leaderboard, practice, friends); a brand-new account was registered on staging: see the screenshots in [qa/test-cases.md](qa/test-cases.md#production-check-from-another-device-week-11).
+
 ## Environments (staging and production)
 | Item | Staging | Production |
 | --- | --- | --- |
