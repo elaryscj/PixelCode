@@ -29,3 +29,17 @@ Logs: `docker compose logs -f backend`
 5. Set SERVER_REGION (e.g. oregon) on the backend so players see where the server is.
 Free instances sleep after ~15 min idle (first open takes ~1 min).
 6. Online payment (Freedom Pay): in the Freedom Pay cabinet copy the Merchant ID and the payment secret key, set FREEDOM_MERCHANT_ID and FREEDOM_SECRET_KEY on the backend. Start with FREEDOM_TESTING=true (test cards from docs.freedompay.kz), then remove it. The result URL is sent with every payment (https://<backend>/api/payments/freedom/result), nothing to configure.
+
+## Database backups (GitHub Actions, free)
+`.github/workflows/db-backup.yml` dumps the Neon database every Monday 01:00 UTC and keeps the encrypted file for 90 days.
+1. GitHub repo > Settings > Secrets and variables > Actions > New repository secret:
+   `NEON_DATABASE_URL` = Neon > Connect > (Pooled connection OFF) `postgresql://...?sslmode=require`;
+   `BACKUP_PASSPHRASE` = a long random phrase. Save the phrase somewhere outside GitHub too: without it a backup cannot be opened.
+2. Actions > Database backup > Run workflow, to check it once. The file is under the run's "Artifacts".
+3. GitHub pauses scheduled workflows after 60 days without commits: if that happens, press "Enable workflow" in Actions.
+
+Restore (needs PostgreSQL 18 tools or Docker):
+```bash
+gpg --decrypt pixelcode-YYYY-MM-DD.dump.gpg > pixelcode.dump      # asks for BACKUP_PASSPHRASE
+pg_restore --clean --if-exists --no-owner -d "postgresql://...target..." pixelcode.dump
+```

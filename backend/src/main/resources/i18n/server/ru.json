@@ -144,5 +144,12 @@
  "Request not found": "Заявка не найдена",
  "Online payment is not connected yet": "Онлайн-оплата пока не подключена",
  "The payment service did not answer, please try again": "Платёжный сервис не ответил, попробуйте ещё раз",
- "Payment not found": "Платёж не найден"
+ "Payment not found": "Платёж не найден",
+ "Challenge not found": "Задача не найдена",
+ "Meet this challenge in a match first": "Сначала встретьте эту задачу в матче",
+ "No challenges of this level yet": "Задач этого уровня пока нет",
+ "Only friends of the players can watch this match": "Смотреть этот матч могут только друзья игроков",
+ "You are a player in this match": "Вы игрок в этом матче",
+ "You cannot block yourself": "Нельзя заблокировать самого себя",
+ "Your block list is full": "Список заблокированных заполнен"
 }

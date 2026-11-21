@@ -18,6 +18,8 @@ interface ChallengeModalProps {
   submit?: (cpNum: number, code: string) => Promise<SubmitResult>;
   /** label of the countdown (default: the 4-minute door timer) */
   timerLabel?: string;
+  /** practice: no countdown at all */
+  hideTimer?: boolean;
 }
 
 export default function ChallengeModal({
@@ -29,6 +31,7 @@ export default function ChallengeModal({
   onSuccess,
   submit,
   timerLabel,
+  hideTimer,
 }: ChallengeModalProps) {
   const { t } = useTranslation();
   const [code, setCode] = useState<string>(challenge.initialCode);
@@ -50,10 +53,10 @@ export default function ChallengeModal({
 
   // US-20: countdown shown to the player (the server owns the real timer; it never resets)
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || hideTimer) return;
     const timer = setInterval(() => setSecondsRemaining((prev) => Math.max(0, prev - 1)), 1000);
     return () => clearInterval(timer);
-  }, [isOpen, challenge.cpNum]);
+  }, [isOpen, challenge.cpNum, hideTimer]);
 
   // Door opened by the server (solution accepted or 4 minutes passed) -> unlock and close
   useEffect(() => {
@@ -132,7 +135,7 @@ export default function ChallengeModal({
 
           <div className="flex items-center gap-4">
             {/* US-20: Door 4-minute timer countdown */}
-            <div className={`flex items-center gap-2 border px-3 py-1 text-xs ${
+            <div className={`${hideTimer ? "hidden " : ""}flex items-center gap-2 border px-3 py-1 text-xs ${
               secondsRemaining < 60 ? "border-pink text-pink animate-pulse" : "border-yellow text-yellow"
             }`}>
               <FaClock />

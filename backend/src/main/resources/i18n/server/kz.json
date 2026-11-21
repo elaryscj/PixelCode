@@ -144,5 +144,12 @@
  "Request not found": "Өтініш табылмады",
  "Online payment is not connected yet": "Онлайн төлем әлі қосылмаған",
  "The payment service did not answer, please try again": "Төлем қызметі жауап бермеді, қайталап көріңіз",
- "Payment not found": "Төлем табылмады"
+ "Payment not found": "Төлем табылмады",
+ "Challenge not found": "Тапсырма табылмады",
+ "Meet this challenge in a match first": "Алдымен бұл тапсырманы матчта кездестіріңіз",
+ "No challenges of this level yet": "Бұл деңгейдің тапсырмалары әзірге жоқ",
+ "Only friends of the players can watch this match": "Бұл матчты тек ойыншылардың достары көре алады",
+ "You are a player in this match": "Сіз бұл матчтың ойыншысысыз",
+ "You cannot block yourself": "Өзіңізді бұғаттай алмайсыз",
+ "Your block list is full": "Бұғатталғандар тізімі толы"
 }

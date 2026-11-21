@@ -144,5 +144,12 @@
  "Request not found": "未找到申请",
  "Online payment is not connected yet": "在线支付尚未开通",
  "The payment service did not answer, please try again": "支付服务未响应，请重试",
- "Payment not found": "未找到付款"
+ "Payment not found": "未找到付款",
+ "Challenge not found": "未找到该题目",
+ "Meet this challenge in a match first": "请先在比赛中遇到这道题",
+ "No challenges of this level yet": "该难度暂时没有题目",
+ "Only friends of the players can watch this match": "只有玩家的好友可以观看这场比赛",
+ "You are a player in this match": "你是这场比赛的玩家",
+ "You cannot block yourself": "你不能屏蔽自己",
+ "Your block list is full": "你的屏蔽列表已满"
 }

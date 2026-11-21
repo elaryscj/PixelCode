@@ -144,5 +144,12 @@
  "Request not found": "الطلب غير موجود",
  "Online payment is not connected yet": "الدفع الإلكتروني غير متاح بعد",
  "The payment service did not answer, please try again": "لم تستجب خدمة الدفع، حاول مرة أخرى",
- "Payment not found": "الدفعة غير موجودة"
+ "Payment not found": "الدفعة غير موجودة",
+ "Challenge not found": "التحدي غير موجود",
+ "Meet this challenge in a match first": "قابل هذا التحدي في مباراة أولًا",
+ "No challenges of this level yet": "لا توجد تحديات بهذا المستوى بعد",
+ "Only friends of the players can watch this match": "يمكن لأصدقاء اللاعبين فقط مشاهدة هذه المباراة",
+ "You are a player in this match": "أنت لاعب في هذه المباراة",
+ "You cannot block yourself": "لا يمكنك حظر نفسك",
+ "Your block list is full": "قائمة الحظر لديك ممتلئة"
 }

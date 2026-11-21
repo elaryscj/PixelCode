@@ -18,6 +18,7 @@ import {
   type FriendList,
   type FriendStatus,
 } from "~/api/friends";
+import { blockPlayer, getBlocked, unblockPlayer, type BlockedPlayer } from "~/api/stats";
 
 export function meta() {
   return [{ title: "Friends | PixelCode Arena" }];
@@ -39,7 +40,16 @@ function FriendsScreen() {
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState<number | null>(null);
 
-  const load = useCallback(() => getFriends().then(setData).catch(() => {}), []);
+  const [blocked, setBlocked] = useState<BlockedPlayer[]>([]);
+  const load = useCallback(() => {
+    getBlocked().then(setBlocked).catch(() => {});
+    return getFriends().then(setData).catch(() => {});
+  }, []);
+
+  const block = (f: FriendEntry) => {
+    if (!window.confirm(t("bl_confirm", { name: f.username }))) return;
+    void act(f.requestId, () => blockPlayer(f.userId));
+  };
 
   useEffect(() => {
     if (!getCurrentUser()) {
@@ -159,6 +169,15 @@ function FriendsScreen() {
                 >
                   <FaTimes />
                 </button>
+                <button
+                  disabled={busy === f.requestId}
+                  onClick={() => block(f)}
+                  className={`${iconBtn} border-gray-600 text-gray-400 hover:text-pink hover:border-pink`}
+                  aria-label={t("bl_block")}
+                  title={t("bl_block")}
+                >
+                  ⛔
+                </button>
               </div>
             ))}
           </section>
@@ -188,6 +207,14 @@ function FriendsScreen() {
                   >
                     ⚔ {t("fr_challenge")}
                   </button>
+                  {f.watchCode && (
+                    <Link
+                      to={`/watch/${encodeURIComponent(f.watchCode)}`}
+                      className="border-2 border-neon text-neon px-3 py-1.5 text-sm sm:text-base hover:bg-neon/10"
+                    >
+                      👁 {t("sp_watch")}
+                    </Link>
+                  )}
                   <button
                     disabled={busy === f.requestId}
                     onClick={() => window.confirm(t("fr_remove_confirm", { name: f.username })) && act(f.requestId, () => removeFriend(f.requestId))}
@@ -196,6 +223,15 @@ function FriendsScreen() {
                     title={t("fr_remove")}
                   >
                     <FaTimes />
+                  </button>
+                  <button
+                    disabled={busy === f.requestId}
+                    onClick={() => block(f)}
+                    className={`${iconBtn} border-gray-600 text-gray-400 hover:text-pink hover:border-pink`}
+                    aria-label={t("bl_block")}
+                    title={t("bl_block")}
+                  >
+                    ⛔
                   </button>
                 </div>
               );
@@ -218,6 +254,24 @@ function FriendsScreen() {
                 </button>
               </div>
             ))}
+          </section>
+        )}
+
+        {blocked.length > 0 && (
+          <section className="flex flex-col gap-2">
+            <h2 className="text-gray-300 text-xl">{t("bl_list", { n: blocked.length })}</h2>
+            {blocked.map((b) => (
+              <div key={b.userId} className={`${row} border-gray-700`}>
+                <span className="flex-1 min-w-0 truncate text-gray-300">⛔ {b.username}</span>
+                <button
+                  onClick={() => unblockPlayer(b.userId).then(load).catch(fail)}
+                  className="border border-gray-600 text-gray-300 px-3 py-1 text-sm hover:text-neon"
+                >
+                  {t("bl_unblock")}
+                </button>
+              </div>
+            ))}
+            <p className="font-sans text-xs text-gray-500">{t("bl_hint")}</p>
           </section>
         )}
 

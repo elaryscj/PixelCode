@@ -25,6 +25,51 @@ export function setSfxVolume(v: number) {
   if (master) master.gain.value = v * 0.5;
 }
 
+// Emotes and quick phrases have their own volumes (0..1, relative to the effects volume), and the
+// opponent's ones can be silenced completely.
+export type SocialSound = "emote" | "phrase";
+const SOCIAL_KEY: Record<SocialSound, string> = { emote: "sfxEmoteVolume", phrase: "sfxPhraseVolume" };
+const RIVAL_KEY = "sfxRivalSocial";
+
+export function getSocialVolume(kind: SocialSound): number {
+  try {
+    const v = localStorage.getItem(SOCIAL_KEY[kind]);
+    return v === null ? 1 : Math.min(1, Math.max(0, Number(v)));
+  } catch {
+    return 1;
+  }
+}
+
+export function setSocialVolume(kind: SocialSound, v: number) {
+  try {
+    localStorage.setItem(SOCIAL_KEY[kind], String(v));
+  } catch {
+    /* this session only */
+  }
+}
+
+/** false = the opponent's emotes and phrases make no sound (they are still shown) */
+export function getRivalSocialSound(): boolean {
+  try {
+    return localStorage.getItem(RIVAL_KEY) !== "0";
+  } catch {
+    return true;
+  }
+}
+
+export function setRivalSocialSound(on: boolean) {
+  try {
+    localStorage.setItem(RIVAL_KEY, on ? "1" : "0");
+  } catch {
+    /* this session only */
+  }
+}
+
+function socialScale(kind: SocialSound, rival: boolean): number {
+  if (rival && !getRivalSocialSound()) return 0;
+  return getSocialVolume(kind);
+}
+
 function audio(): { ac: AudioContext; out: GainNode } | null {
   if (typeof window === "undefined") return null;
   if (!ctx) {
@@ -85,14 +130,23 @@ function noise(dur: number, { at = 0, vol = 0.5, lowpass = 1800 } = {}) {
 export const sfx = {
   /** emote "wave": a friendly two-note chirp (soft = the opponent's, a bit quieter) */
   wave(soft = false) {
-    const v = soft ? 0.25 : 0.45;
+    const v = (soft ? 0.25 : 0.45) * socialScale("emote", soft);
+    if (v <= 0.001) return;
     tone(880, 0.09, { type: "triangle", vol: v });
     tone(1175, 0.14, { type: "triangle", at: 0.1, vol: v });
   },
   /** emote "dance": a quick rising arpeggio */
   dance(soft = false) {
-    const v = soft ? 0.18 : 0.32;
+    const v = (soft ? 0.18 : 0.32) * socialScale("emote", soft);
+    if (v <= 0.001) return;
     [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.08, { type: "square", at: i * 0.075, vol: v }));
+  },
+  /** quick phrase bubble: a short "pop" (soft = the opponent's) */
+  phrase(soft = false) {
+    const v = (soft ? 0.22 : 0.3) * socialScale("phrase", soft);
+    if (v <= 0.001) return;
+    tone(660, 0.05, { type: "square", vol: v });
+    tone(990, 0.08, { type: "triangle", at: 0.05, vol: v });
   },
   /** Call from any user gesture so later sounds are allowed to play. */
   unlock() {

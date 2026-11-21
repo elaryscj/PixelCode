@@ -27,10 +27,19 @@ public class ProfileController {
 
     private final com.example.game_backend.progress.ProgressService progress;
     private final com.example.game_backend.social.FriendService friends;
+    private final com.example.game_backend.social.BlockService blocks;
+    private final com.example.game_backend.tournament.TournamentService tournament;
+    private final com.example.game_backend.repository.DoorResultRepository doorResults;
 
     public ProfileController(UserRepository users, TokenService tokens, AdminAccess admins,
                              com.example.game_backend.progress.ProgressService progress,
-                             com.example.game_backend.social.FriendService friends) {
+                             com.example.game_backend.social.FriendService friends,
+                             com.example.game_backend.social.BlockService blocks,
+                             com.example.game_backend.tournament.TournamentService tournament,
+                             com.example.game_backend.repository.DoorResultRepository doorResults) {
+        this.blocks = blocks;
+        this.tournament = tournament;
+        this.doorResults = doorResults;
         this.users = users;
         this.tokens = tokens;
         this.admins = admins;
@@ -134,6 +143,9 @@ public class ProfileController {
         }
         progress.deleteFor(u.getId());
         friends.deleteFor(u.getId());
+        blocks.deleteFor(u.getId());
+        tournament.deleteFor(u.getId());
+        doorResults.deleteAllFor(u.getId()); // their code is shown in "best solutions": it goes with the account
         users.delete(u);
         tokens.invalidate(u.getId());
         return ResponseEntity.ok(Map.of("message", "Account deleted"));

@@ -43,14 +43,18 @@ public class RoomService {
     private final long staleWaitingMinutes;
     private final Object lock = new Object();
 
+    private final com.example.game_backend.social.BlockService blocks;
+
     public RoomService(RoomRepository rooms, UserRepository users, MatchResultService results, GameService games,
                        SimpMessagingTemplate messaging, PlatformTransactionManager tm,
+                       com.example.game_backend.social.BlockService blocks,
                        @Value("${game.join-window-seconds:300}") long joinWindowSeconds,
                        @Value("${game.stale-room-minutes:30}") long staleWaitingMinutes) {
         this.rooms = rooms;
         this.users = users;
         this.results = results;
         this.games = games;
+        this.blocks = blocks;
         this.messaging = messaging;
         this.tx = new TransactionTemplate(tm);
         this.joinWindowSeconds = joinWindowSeconds;
@@ -107,6 +111,11 @@ public class RoomService {
                 if (r.getRoomStatus() != RoomStatus.WAITING) {
                     throw new ApiException(409, "This room is no longer accepting players");
                 }
+                for (Player p : r.getPlayers()) {
+                    if (p.getUserId() != null && blocks.blockedEitherWay(userId, p.getUserId())) {
+                        throw new ApiException(409, "This room is no longer accepting players");
+                    }
+                }
                 if (r.getPlayers().size() >= 2) {
                     throw new ApiException(409, "Room is full");
                 }
@@ -151,7 +160,9 @@ public class RoomService {
                     r.setStartedAt(Instant.now());
                     r.setMapId(pickMap(r));
                     for (Player p : r.getPlayers()) {
-                        users.findById(p.getUserId()).ifPresent(u -> p.setRatingBefore(u.getRating()));
+                        // PIXEL_BOT keeps the rating it was given (the player's MMR, lower for a newcomer):
+                        // it sets the bot's pace
+                        users.findById(p.getUserId()).filter(u -> !u.isBot()).ifPresent(u -> p.setRatingBefore(u.getRating()));
                     }
                 }
                 return new Object[]{rooms.save(r), all};
@@ -288,6 +299,11 @@ public class RoomService {
      * joins like in a ranked match (same five-minute window). Not ranked: no MMR change, no absence bans.
      */
     public String createBotRoom(long userId, long botId) {
+        return createBotRoom(userId, botId, null);
+    }
+
+    /** botRating: the bot's shown MMR, which sets its pace (null = the player's own MMR) */
+    public String createBotRoom(long userId, long botId, Integer botRating) {
         Room room;
         synchronized (lock) {
             room = tx.execute(st -> {
@@ -299,7 +315,7 @@ public class RoomService {
                 r.setAssignedAt(Instant.now());
                 r.getPlayers().add(new Player(human.getId(), human.getUsername(), human.getRating()));
                 // shown with the player's own MMR: the bot adapts its pace to that level
-                Player b = new Player(bot.getId(), bot.getUsername(), human.getRating());
+                Player b = new Player(bot.getId(), bot.getUsername(), botRating != null ? botRating : human.getRating());
                 b.setReady(true);
                 r.getPlayers().add(b);
                 return rooms.save(r);

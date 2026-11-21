@@ -40,12 +40,14 @@ public class FriendService {
     private final RoomService rooms;
     private final TransactionTemplate tx;
     private final SimpMessagingTemplate messaging;
+    private final BlockService blocks;
     /** invited user id -> open invitations */
     private final Map<Long, List<Invite>> invites = new ConcurrentHashMap<>();
     private final Object lock = new Object();
 
     public FriendService(FriendshipRepository friendships, UserRepository users, TokenService tokens, RoomService rooms,
-                         PlatformTransactionManager tm, SimpMessagingTemplate messaging) {
+                         PlatformTransactionManager tm, SimpMessagingTemplate messaging, BlockService blocks) {
+        this.blocks = blocks;
         this.messaging = messaging;
         this.friendships = friendships;
         this.users = users;
@@ -73,6 +75,7 @@ public class FriendService {
             m.put("activeSkin", other.getActiveSkin());
             if (f.isAccepted()) {
                 m.put("status", status(other.getId()));
+                m.put("watchCode", playingRoom(other.getId()));
                 friends.add(m);
             } else if (f.getAddresseeId() == me) {
                 incoming.add(m);
@@ -100,6 +103,12 @@ public class FriendService {
         };
     }
 
+    /** code of the match this player is running right now (friends may watch it), else null */
+    String playingRoom(long userId) {
+        Map<String, Object> room = rooms.mine(userId);
+        return room != null && "PLAYING".equals(String.valueOf(room.get("roomStatus"))) ? String.valueOf(room.get("code")) : null;
+    }
+
     /** ONLINE, IN_MATCH (in a lobby or a running match) or OFFLINE */
     String status(long userId) {
         Map<String, Object> room = rooms.mine(userId);
@@ -123,6 +132,10 @@ public class FriendService {
                         .orElseThrow(() -> new ApiException(404, "Player not found").with("field", "username"));
                 if (target.getId() == me) {
                     throw new ApiException(400, "You cannot add yourself").with("field", "username");
+                }
+                if (blocks.blockedEitherWay(me, target.getId())) {
+                    // same answer as for an unknown name: the blocked player is not told
+                    throw new ApiException(404, "Player not found").with("field", "username");
                 }
                 Friendship existing = friendships.findPair(me, target.getId()).orElse(null);
                 if (existing != null) {
@@ -193,6 +206,9 @@ public class FriendService {
         Friendship f = friendships.findPair(me, friendId).filter(Friendship::isAccepted)
                 .orElseThrow(() -> new ApiException(404, "This player is not your friend"));
         String st = status(f.other(me));
+        if (blocks.blockedEitherWay(me, friendId)) {
+            throw new ApiException(404, "This player is not your friend");
+        }
         if (!"ONLINE".equals(st)) {
             throw new ApiException(409, "IN_MATCH".equals(st) ? "Your friend is in a match right now" : "Your friend is offline");
         }

@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import MusicSlider from "../components/MusicSlider";
-import { getSfxVolume, setSfxVolume, sfx } from "~/lib/sfx";
+import {
+  getRivalSocialSound,
+  getSfxVolume,
+  getSocialVolume,
+  setRivalSocialSound,
+  setSfxVolume,
+  setSocialVolume,
+  sfx,
+  type SocialSound,
+} from "~/lib/sfx";
 import { Link, useNavigate } from "react-router";
 import { logoutUser } from "~/api/auth";
 import { LANGUAGES } from "~/language-config/languages";
@@ -13,6 +22,13 @@ const Settings = () => {
   // sound effects volume (separate from music); read after mount so SSR matches
   const [fxVol, setFxVol] = useState(60);
   useEffect(() => setFxVol(Math.round(getSfxVolume() * 100)), []);
+  // emotes / quick phrases: own volumes and the opponent's on/off
+  const [social, setSocial] = useState<Record<SocialSound, number>>({ emote: 100, phrase: 100 });
+  const [rivalSound, setRivalSound] = useState(true);
+  useEffect(() => {
+    setSocial({ emote: Math.round(getSocialVolume("emote") * 100), phrase: Math.round(getSocialVolume("phrase") * 100) });
+    setRivalSound(getRivalSocialSound());
+  }, []);
 
 
   const navigate = useNavigate();
@@ -63,6 +79,49 @@ const Settings = () => {
               />
               <h3 className="font-pixel text-yellow text-xl sm:text-2xl w-14 text-end">{fxVol}%</h3>
             </div>
+          </section>
+
+          <section className={card}>
+            <h3 className={heading}>[ {t("snd_social")} ]</h3>
+            {(["emote", "phrase"] as const).map((kind) => (
+              <div key={kind}>
+                <label htmlFor={`snd-${kind}`} className="block font-pixel text-xl sm:text-2xl mt-2">
+                  {t(kind === "emote" ? "snd_emotes" : "snd_phrases")}
+                </label>
+                <div className="flex items-center justify-center gap-4">
+                  <input
+                    id={`snd-${kind}`}
+                    type="range"
+                    min={0}
+                    max={100}
+                    value={social[kind]}
+                    onChange={(e) => {
+                      const v = +e.target.value;
+                      setSocial((s) => ({ ...s, [kind]: v }));
+                      setSocialVolume(kind, v / 100);
+                    }}
+                    onPointerUp={() => (kind === "emote" ? sfx.wave() : sfx.phrase())}
+                    onKeyUp={() => (kind === "emote" ? sfx.wave() : sfx.phrase())}
+                    className="range-bar"
+                    style={{ "--range-pct": `${social[kind]}%`, "--range-fill": "#01e4ff" } as React.CSSProperties}
+                  />
+                  <h3 className="font-pixel text-yellow text-xl sm:text-2xl w-14 text-end">{social[kind]}%</h3>
+                </div>
+              </div>
+            ))}
+            <label className="flex items-center gap-3 font-pixel text-lg sm:text-xl mt-4 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={rivalSound}
+                onChange={(e) => {
+                  setRivalSound(e.target.checked);
+                  setRivalSocialSound(e.target.checked);
+                }}
+                className="w-5 h-5 accent-[#01e4ff]"
+              />
+              {t("snd_rival")}
+            </label>
+            {fxVol === 0 && <p className="font-sans text-pink text-sm mt-2">{t("snd_fx_off")}</p>}
           </section>
 
           <section className={card}>

@@ -144,5 +144,12 @@
  "Request not found": "Demande introuvable",
  "Online payment is not connected yet": "Le paiement en ligne n'est pas encore disponible",
  "The payment service did not answer, please try again": "Le service de paiement n'a pas répondu, réessayez",
- "Payment not found": "Paiement introuvable"
+ "Payment not found": "Paiement introuvable",
+ "Challenge not found": "Défi introuvable",
+ "Meet this challenge in a match first": "Rencontrez d'abord ce défi en match",
+ "No challenges of this level yet": "Pas encore de défis de ce niveau",
+ "Only friends of the players can watch this match": "Seuls les amis des joueurs peuvent regarder ce match",
+ "You are a player in this match": "Vous êtes joueur dans ce match",
+ "You cannot block yourself": "Vous ne pouvez pas vous bloquer vous-même",
+ "Your block list is full": "Votre liste de blocage est pleine"
 }

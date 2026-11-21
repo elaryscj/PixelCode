@@ -21,6 +21,7 @@ const PlayScreen = () => {
   const [error, setError] = useState<string | null>(null);
   const [searching, setSearching] = useState(false);
   const [waited, setWaited] = useState(0);
+  const [newcomer, setNewcomer] = useState(false);
   const [inQueue, setInQueue] = useState(0);
   const [current, setCurrent] = useState<Room | null>(null);
   const [bannedUntil, setBannedUntil] = useState<number | null>(null);
@@ -89,6 +90,7 @@ const PlayScreen = () => {
       if (!polling.current) return; // cancelled while the request was in flight
       setInQueue(s.playersInQueue);
       setWaited(s.waitedSeconds ?? 0);
+      setNewcomer(!!s.newcomer);
       if (s.state === "MATCHED" && s.roomCode) {
         stopPolling();
         // a running match goes straight into the game, otherwise into the lobby
@@ -241,7 +243,9 @@ const PlayScreen = () => {
               <p className="text-neon text-xl text-center">
                 {waited}s · {inQueue} {t("in_queue")}
               </p>
-              <p className="font-sans text-gray-400 text-sm sm:text-base text-center px-4">{t("bot_hint")}</p>
+              <p className="font-sans text-gray-400 text-sm sm:text-base text-center px-4">
+                {newcomer ? t("bot_hint_first") : t("bot_hint")}
+              </p>
               <button onClick={handleCancel} className={`${btn} max-w-80 border-pink text-yellow`}>
                 {t("cancel")}
               </button>

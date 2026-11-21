@@ -144,5 +144,12 @@
  "Request not found": "申し込みが見つかりません",
  "Online payment is not connected yet": "オンライン決済はまだ利用できません",
  "The payment service did not answer, please try again": "決済サービスが応答しませんでした。もう一度お試しください",
- "Payment not found": "支払いが見つかりません"
+ "Payment not found": "支払いが見つかりません",
+ "Challenge not found": "課題が見つかりません",
+ "Meet this challenge in a match first": "まず試合でこの課題に出会ってください",
+ "No challenges of this level yet": "このレベルの課題はまだありません",
+ "Only friends of the players can watch this match": "この試合はプレイヤーのフレンドだけが観戦できます",
+ "You are a player in this match": "あなたはこの試合のプレイヤーです",
+ "You cannot block yourself": "自分自身はブロックできません",
+ "Your block list is full": "ブロックリストがいっぱいです"
 }

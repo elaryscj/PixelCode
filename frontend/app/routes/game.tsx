@@ -134,6 +134,7 @@ function GameScreen() {
   // --- Match & Timing State (server time) ---
   const [matchSeconds, setMatchSeconds] = useState(0);
   const [result, setResult] = useState<MatchResult | null>(null);
+  const [spectators, setSpectators] = useState(0);
   const [hazardHit, setHazardHit] = useState(false);
 
   const [unlockedCps, setUnlockedCps] = useState<number[]>([]);
@@ -263,6 +264,7 @@ function GameScreen() {
   // ---------------------------------------------------------------- server state
   const applyState = useCallback(
     (st: GameState, restorePosition: boolean) => {
+      setSpectators(st.spectators ?? 0);
       if (st.status === "FINISHED" && st.result) {
         setResult(st.result);
         return;
@@ -439,7 +441,7 @@ function GameScreen() {
         else sfx.dance(true);
       } else if (data.type === "PHRASE" && data.userId !== myId && isPhrase(data.phrase)) {
         showBubble("opp", data.phrase);
-        sfx.wave(true);
+        sfx.phrase(true);
       } else if (data.type === "REMATCH" && data.userId !== myId && data.code) {
         setRematchOffer(String(data.code));
       } else if (data.type === "GAME_OVER" && data.result) {
@@ -546,6 +548,7 @@ function GameScreen() {
     if (now - lastPhraseAt.current < 2000) return; // the server allows one every 2 s
     lastPhraseAt.current = now;
     showBubble("me", p);
+    sfx.phrase();
     void sendPhrase(code, p).catch(() => {});
   };
   const phraseRef = useRef(phrase);
@@ -730,6 +733,11 @@ function GameScreen() {
             <span className="w-2 h-2 bg-pink inline-block animate-pulse"></span>
             {botMatch ? t("kind_bot") : ranked === false ? t("kind_private") : t("kind_ranked")} #{code}
           </div>
+          {spectators > 0 && (
+            <div className="text-neon text-[10px] md:text-xs border border-neon/40 px-2 py-1" title={t("sp_watching", { n: spectators })}>
+              👁 {spectators}
+            </div>
+          )}
           <Link
             to="/play"
             className="text-[10px] text-gray-500 hover:text-pink border border-gray-800 hover:border-pink px-2 py-1 transition-colors"

@@ -8,6 +8,7 @@ import com.example.game_backend.repository.RoomRepository;
 import com.example.game_backend.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,11 +30,14 @@ public class MatchmakingService {
         final long userId;
         final int rating;
         final long joinedAt;
+        /** has never finished a match: meets a gentle PIXEL_BOT almost at once (a first match without waiting) */
+        final boolean newcomer;
         long lastPoll;
 
-        Entry(long userId, int rating, long now) {
+        Entry(long userId, int rating, long now, boolean newcomer) {
             this.userId = userId;
             this.rating = rating;
+            this.newcomer = newcomer;
             this.joinedAt = now;
             this.lastPoll = now;
         }
@@ -57,11 +61,19 @@ public class MatchmakingService {
     private final com.example.game_backend.game.BotAccount bot;
     /** a player alone in the queue this long plays PIXEL_BOT instead (0 = never) */
     private final long botAfterMs;
+    private final long newcomerBotAfterMs;
+    private final com.example.game_backend.social.BlockService blocks;
+    /** a newcomer's first bot is slower than the usual one */
+    static final int NEWCOMER_BOT_RATING = 1300;
 
     public MatchmakingService(UserRepository users, RoomRepository rooms, RoomService roomService,
                               com.example.game_backend.game.BotAccount bot,
-                              @org.springframework.beans.factory.annotation.Value("${game.bot-after-seconds:20}") long botAfterSeconds) {
+                              com.example.game_backend.social.BlockService blocks,
+                              @org.springframework.beans.factory.annotation.Value("${game.bot-after-seconds:20}") long botAfterSeconds,
+                              @org.springframework.beans.factory.annotation.Value("${game.newcomer-bot-after-seconds:4}") long newcomerBotAfterSeconds) {
+        this.newcomerBotAfterMs = newcomerBotAfterSeconds * 1000L;
         this.bot = bot;
+        this.blocks = blocks;
         this.botAfterMs = botAfterSeconds * 1000L;
         this.users = users;
         this.rooms = rooms;
@@ -91,10 +103,22 @@ public class MatchmakingService {
             }
             matched.remove(userId);
             if (!queue.containsKey(userId)) {
-                queue.put(userId, new Entry(userId, u.getRating(), System.currentTimeMillis()));
+                boolean newcomer = isNewcomer(userId);
+                queue.put(userId, new Entry(userId, u.getRating(), System.currentTimeMillis(), newcomer));
             }
             return statusLocked(userId);
         }
+    }
+
+    /** no real match played yet (matches cancelled by a server restart or a no-show do not count) */
+    private boolean isNewcomer(long userId) {
+        for (Room r : rooms.findFinishedForUser(userId, PageRequest.of(0, 5))) {
+            com.example.game_backend.entity.Player p = r.findPlayer(userId);
+            if (p != null && p.getResult() != null && !"VOID".equals(p.getResult()) && !"NO_SHOW".equals(r.getResultReason())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public Map<String, Object> status(long userId) {
@@ -137,6 +161,7 @@ public class MatchmakingService {
             m.put("roomCode", a.code);
         } else if (e != null) {
             m.put("state", "SEARCHING");
+            m.put("newcomer", e.newcomer);
             m.put("waitedSeconds", (System.currentTimeMillis() - e.joinedAt) / 1000);
         } else {
             m.put("state", "IDLE");
@@ -165,6 +190,9 @@ public class MatchmakingService {
                     if (taken.contains(b.userId)) {
                         continue;
                     }
+                    if (blocks.blockedEitherWay(a.userId, b.userId)) {
+                        continue; // they would rather not meet: each waits for someone else (or the bot)
+                    }
                     int diff = Math.abs(a.rating - b.rating);
                     long waitedSec = Math.max(now - a.joinedAt, now - b.joinedAt) / 1000;
                     if (diff <= 100 + waitedSec * 25 && diff < bestDiff) {
@@ -189,11 +217,12 @@ public class MatchmakingService {
             // nobody to play with: after a while, face the bot rather than wait forever
             if (botAfterMs > 0) {
                 for (Entry e : list) {
-                    if (taken.contains(e.userId) || now - e.joinedAt < botAfterMs) {
+                    long wait = e.newcomer && newcomerBotAfterMs > 0 ? Math.min(botAfterMs, newcomerBotAfterMs) : botAfterMs;
+                    if (taken.contains(e.userId) || now - e.joinedAt < wait) {
                         continue;
                     }
                     try {
-                        String code = roomService.createBotRoom(e.userId, bot.id());
+                        String code = roomService.createBotRoom(e.userId, bot.id(), e.newcomer ? NEWCOMER_BOT_RATING : null);
                         matched.put(e.userId, new Assignment(code, now));
                         queue.remove(e.userId);
                         taken.add(e.userId);

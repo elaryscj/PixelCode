@@ -144,5 +144,12 @@
  "Request not found": "신청을 찾을 수 없습니다",
  "Online payment is not connected yet": "온라인 결제가 아직 연결되지 않았습니다",
  "The payment service did not answer, please try again": "결제 서비스가 응답하지 않았습니다. 다시 시도하세요",
- "Payment not found": "결제를 찾을 수 없습니다"
+ "Payment not found": "결제를 찾을 수 없습니다",
+ "Challenge not found": "문제를 찾을 수 없습니다",
+ "Meet this challenge in a match first": "먼저 매치에서 이 문제를 만나 보세요",
+ "No challenges of this level yet": "아직 이 난이도의 문제가 없습니다",
+ "Only friends of the players can watch this match": "플레이어의 친구만 이 매치를 관전할 수 있습니다",
+ "You are a player in this match": "당신은 이 매치의 플레이어입니다",
+ "You cannot block yourself": "자기 자신은 차단할 수 없습니다",
+ "Your block list is full": "차단 목록이 가득 찼습니다"
 }

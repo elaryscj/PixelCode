@@ -5,6 +5,8 @@ export type QueueStatus = {
   state: "IDLE" | "SEARCHING" | "MATCHED";
   roomCode?: string;
   waitedSeconds?: number;
+  /** never finished a match: the first opponent is a gentle PIXEL_BOT within a few seconds */
+  newcomer?: boolean;
   playersInQueue: number;
 };
 
