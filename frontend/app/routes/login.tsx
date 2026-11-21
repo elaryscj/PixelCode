@@ -1,3 +1,4 @@
+import { NICKNAME_MAX } from "~/lib/nickname";
 // app/routes/login.tsx
 // Secure Authorization Screen matching PixelCode Arena Cyberpunk Terminal
 import { useState, type FormEvent } from "react";
@@ -6,11 +7,13 @@ import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash, FaGamepad, FaWifi } from "react-icons/fa";
 import { loginUser, registerUser, AuthError } from "~/api/auth";
 import { pingColor, pingLabel, usePing } from "~/lib/liveStats";
+import { useServerLabel } from "~/lib/serverRegion";
 
 export default function LoginRoute() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const ping = usePing();
+  const serverLabel = useServerLabel();
   // where to go after signing in, e.g. an invite link (/join/CODE); only paths inside this site
   const [params] = useSearchParams();
   const rawNext = params.get("next") ?? "";
@@ -96,7 +99,7 @@ export default function LoginRoute() {
         <Link to="/" className="flex items-center gap-3 text-[#01E4FF] hover:brightness-120 transition-all">
           <FaGamepad className="text-xl" />
           <span className="text-yellow text-2xl sm:text-3xl tracking-wider">PIXELCODE</span>
-          <span className="hidden md:inline text-[#01E4FF] text-[20px]">| • {t("au_kazakhstan")}</span>
+          <span className="hidden md:inline text-[#01E4FF] text-[20px]">| • {serverLabel}</span>
         </Link>
 
         <div className="flex items-center gap-4 text-[20px]">
@@ -155,7 +158,8 @@ export default function LoginRoute() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Yelarys"
-                maxLength={20}
+                // new names are 2-16 characters; sign-in still accepts older, longer ones
+                maxLength={isRegister ? NICKNAME_MAX : 20}
                 required
                 className={`w-full bg-[#02050f] border ${fieldErrors.username ? "border-pink" : "border-[#01E4FF]"} text-white px-3.5 py-2.5 text-[20px] outline-none focus:border-glow-neon-sm transition-all`}
               />
