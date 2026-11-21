@@ -8,6 +8,7 @@ import ScreenLoading from "~/components/ScreenLoading";
 import { SkinArt } from "~/components/skins";
 import { getCurrentUser } from "~/api/auth";
 import { api } from "~/api/http";
+import { blockPlayer } from "~/api/stats";
 
 export function meta() {
   return [{ title: "Player | PixelCode Arena" }];
@@ -54,6 +55,17 @@ function PlayerScreen() {
       .catch((e) => setError(e instanceof Error ? e.message : t("unexpected_error")));
   }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const block = async () => {
+    if (!p || !window.confirm(t("bl_confirm", { name: p.username }))) return;
+    try {
+      await blockPlayer(p.userId);
+      navigate("/friends");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t("unexpected_error"));
+    }
+  };
+  const isMe = p?.userId === getCurrentUser()?.id;
+
   const earned = p?.achievements.filter((a) => a.unlockedAt !== null) ?? [];
   const decided = (p?.wins ?? 0) + (p?.losses ?? 0);
 
@@ -68,7 +80,15 @@ function PlayerScreen() {
         {!p && !error && <p className="text-neon text-center animate-pulse">{t("loading")}</p>}
         {p && (
           <>
-            <div className="flex items-center gap-5 border-2 border-neon bg-[#0a0f25] p-4">
+            <div className="relative flex items-center gap-5 border-2 border-neon bg-[#0a0f25] p-4">
+              {!isMe && (
+                <button
+                  onClick={block}
+                  className="absolute top-2 end-2 border border-gray-600 text-gray-400 hover:text-pink hover:border-pink text-xs px-2 py-1"
+                >
+                  ⛔ {t("bl_block")}
+                </button>
+              )}
               <SkinArt id={p.activeSkin} anim="wave" className="h-28 w-auto shrink-0" />
               <div className="flex flex-col gap-1 min-w-0">
                 <h1 className="text-yellow text-4xl truncate">{p.username}</h1>

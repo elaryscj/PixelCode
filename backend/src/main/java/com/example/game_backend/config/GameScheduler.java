@@ -20,9 +20,14 @@ public class GameScheduler {
     private final MatchmakingService matchmaking;
     private final SeasonService seasons;
     private final ReplayStore replays;
+    private final com.example.game_backend.stats.DoorStatsService doorStats;
+    private final com.example.game_backend.tournament.TournamentService tournament;
 
     public GameScheduler(GameService games, RoomService rooms, MatchmakingService matchmaking, SeasonService seasons,
-                         ReplayStore replays) {
+                         ReplayStore replays, com.example.game_backend.stats.DoorStatsService doorStats,
+                         com.example.game_backend.tournament.TournamentService tournament) {
+        this.tournament = tournament;
+        this.doorStats = doorStats;
         this.replays = replays;
         this.games = games;
         this.rooms = rooms;
@@ -35,6 +40,7 @@ public class GameScheduler {
         try { games.tick(); } catch (RuntimeException e) { log.error("games.tick failed", e); }
         try { rooms.sweepAssignments(); } catch (RuntimeException e) { log.error("sweepAssignments failed", e); }
         try { matchmaking.pair(); } catch (RuntimeException e) { log.error("matchmaking.pair failed", e); }
+        try { doorStats.flush(); } catch (RuntimeException e) { log.error("doorStats.flush failed", e); }
     }
 
     /** PIXEL_BOT moves eight times a second, about as often as a human client reports its position. */
@@ -48,5 +54,6 @@ public class GameScheduler {
         try { rooms.cleanupStale(); } catch (RuntimeException e) { log.error("cleanupStale failed", e); }
         try { seasons.rollover(); } catch (RuntimeException e) { log.error("season rollover failed", e); }
         try { replays.cleanup(); } catch (RuntimeException e) { log.error("replay cleanup failed", e); }
+        try { tournament.payOut(); } catch (RuntimeException e) { log.error("tournament payout failed", e); }
     }
 }

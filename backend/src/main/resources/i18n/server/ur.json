@@ -144,5 +144,12 @@
  "Request not found": "درخواست نہیں ملی",
  "Online payment is not connected yet": "آن لائن ادائیگی ابھی دستیاب نہیں",
  "The payment service did not answer, please try again": "ادائیگی سروس نے جواب نہیں دیا، دوبارہ کوشش کریں",
- "Payment not found": "ادائیگی نہیں ملی"
+ "Payment not found": "ادائیگی نہیں ملی",
+ "Challenge not found": "چیلنج نہیں ملا",
+ "Meet this challenge in a match first": "پہلے کسی میچ میں یہ چیلنج دیکھیں",
+ "No challenges of this level yet": "اس سطح کے چیلنج ابھی نہیں ہیں",
+ "Only friends of the players can watch this match": "یہ میچ صرف کھلاڑیوں کے دوست دیکھ سکتے ہیں",
+ "You are a player in this match": "آپ اس میچ کے کھلاڑی ہیں",
+ "You cannot block yourself": "آپ خود کو بلاک نہیں کر سکتے",
+ "Your block list is full": "آپ کی بلاک فہرست بھر گئی ہے"
 }

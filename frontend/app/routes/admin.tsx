@@ -31,6 +31,7 @@ import {
 import { SkinArt, forgetSkin } from "~/components/skins";
 import SkinEditor, { builtinTexture, loadTextureFromUrl, textureToDataUrl } from "~/components/admin/SkinEditor";
 import EnglishOnly from "~/components/EnglishOnly";
+import ChallengeStats from "~/components/admin/ChallengeStats";
 
 const empty: ChallengeForm = {
   title: "GATE // ",
@@ -233,6 +234,8 @@ function AdminScreen() {
             {busy ? "CHECKING..." : "PUBLISH CHALLENGE"}
           </button>
         </form>
+
+        <ChallengeStats />
 
         <h2 className="text-neon text-3xl mt-10 mb-3">&gt; CATALOG ({items.length})</h2>
         <ul className="flex flex-col gap-2">

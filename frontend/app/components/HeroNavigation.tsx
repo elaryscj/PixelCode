@@ -61,6 +61,9 @@ const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
         <Link to={"/leaderboard"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
           {t("leaderboard")}
         </Link>
+        <Link to={"/tournament"} className={`${secondary} col-span-2 !text-xl sm:!text-2xl !px-2 !border-yellow/70`}>
+          🏆 {t("menu_tournament")}
+        </Link>
         <Link to={"/store"} className={`${secondary} !text-xl sm:!text-2xl !px-2`}>
           {t("store")}
         </Link>

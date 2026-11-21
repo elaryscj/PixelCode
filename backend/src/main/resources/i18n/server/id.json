@@ -144,5 +144,12 @@
  "Request not found": "Permintaan tidak ditemukan",
  "Online payment is not connected yet": "Pembayaran online belum tersedia",
  "The payment service did not answer, please try again": "Layanan pembayaran tidak merespons, coba lagi",
- "Payment not found": "Pembayaran tidak ditemukan"
+ "Payment not found": "Pembayaran tidak ditemukan",
+ "Challenge not found": "Tantangan tidak ditemukan",
+ "Meet this challenge in a match first": "Temui tantangan ini di pertandingan dulu",
+ "No challenges of this level yet": "Belum ada tantangan untuk level ini",
+ "Only friends of the players can watch this match": "Hanya teman para pemain yang bisa menonton pertandingan ini",
+ "You are a player in this match": "Kamu pemain di pertandingan ini",
+ "You cannot block yourself": "Kamu tidak bisa memblokir dirimu sendiri",
+ "Your block list is full": "Daftar blokirmu penuh"
 }

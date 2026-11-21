@@ -48,6 +48,8 @@ export type GameState = {
   opponent?: SlotView | null;
   doorTitles?: string[];
   mapId?: number;
+  /** friends watching this match live */
+  spectators?: number;
   result: MatchResult | null;
 };
 

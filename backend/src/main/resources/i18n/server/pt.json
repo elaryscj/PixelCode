@@ -144,5 +144,12 @@
  "Request not found": "Pedido não encontrado",
  "Online payment is not connected yet": "O pagamento online ainda não está disponível",
  "The payment service did not answer, please try again": "O serviço de pagamento não respondeu, tente novamente",
- "Payment not found": "Pagamento não encontrado"
+ "Payment not found": "Pagamento não encontrado",
+ "Challenge not found": "Desafio não encontrado",
+ "Meet this challenge in a match first": "Encontre este desafio numa partida primeiro",
+ "No challenges of this level yet": "Ainda não há desafios deste nível",
+ "Only friends of the players can watch this match": "Só amigos dos jogadores podem assistir a esta partida",
+ "You are a player in this match": "Você é jogador nesta partida",
+ "You cannot block yourself": "Você não pode bloquear a si mesmo",
+ "Your block list is full": "Sua lista de bloqueados está cheia"
 }

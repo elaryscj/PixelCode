@@ -11,6 +11,8 @@ export type FriendEntry = {
   rating: number;
   activeSkin?: string;
   status?: FriendStatus;
+  /** code of the match this friend is playing right now (WATCH) */
+  watchCode?: string | null;
 };
 export type FriendList = { friends: FriendEntry[]; incoming: FriendEntry[]; outgoing: FriendEntry[] };
 export type DuelInvite = { fromUserId: number; fromName: string; code: string; expiresAt: number };

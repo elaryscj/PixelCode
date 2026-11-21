@@ -9,6 +9,7 @@ import { getCurrentUser, refreshUser } from "~/api/auth";
 import { getMatchHistory, type MatchHistoryEntry } from "~/api/game";
 import { getMap } from "~/game/maps";
 import { getProgress } from "~/api/progress";
+import { blockPlayer, getMatchDoors, type MatchDoor } from "~/api/stats";
 
 type Reward = { key: string; label: string; reward: number };
 
@@ -55,6 +56,34 @@ function ResultsScreen() {
   const [rating, setRating] = useState<number | null>(null); // filled after mount (no SSR mismatch)
   const [error, setError] = useState<string | null>(null);
   const [rewards, setRewards] = useState<Reward[]>([]);
+  /** match code -> its doors (loaded when "SOLUTIONS" is opened) */
+  const [doors, setDoors] = useState<Record<string, MatchDoor[] | "loading">>({});
+  const [open, setOpen] = useState<string | null>(null);
+  const [blocked, setBlocked] = useState<Record<number, boolean>>({});
+
+  const toggleDoors = (code: string) => {
+    if (open === code) {
+      setOpen(null);
+      return;
+    }
+    setOpen(code);
+    if (!doors[code]) {
+      setDoors((d) => ({ ...d, [code]: "loading" }));
+      getMatchDoors(code)
+        .then((list) => setDoors((d) => ({ ...d, [code]: list })))
+        .catch(() => setDoors((d) => ({ ...d, [code]: [] })));
+    }
+  };
+
+  const block = async (userId: number, name: string) => {
+    if (!window.confirm(t("bl_confirm", { name }))) return;
+    try {
+      await blockPlayer(userId);
+      setBlocked((b) => ({ ...b, [userId]: true }));
+    } catch (e) {
+      window.alert(e instanceof Error ? e.message : t("cm_unavailable"));
+    }
+  };
 
   useEffect(() => {
     if (!user) {
@@ -184,6 +213,47 @@ function ResultsScreen() {
                     <Link to={`/replay/${encodeURIComponent(m.code)}`} className="border border-yellow/70 text-yellow text-xs px-2 py-1 hover:bg-yellow/10">
                       ▶ {t("rp_short")}
                     </Link>
+                  )}
+                  <button
+                    onClick={() => toggleDoors(m.code)}
+                    aria-expanded={open === m.code}
+                    className="border border-neon/70 text-neon text-xs px-2 py-1 hover:bg-neon/10"
+                  >
+                    &lt;/&gt; {t("bs_short")}
+                  </button>
+                  {opp && !m.botMatch && opp.userId != null && (
+                    blocked[opp.userId] ? (
+                      <span className="text-[10px] text-gray-500">{t("bl_done")}</span>
+                    ) : (
+                      <button
+                        onClick={() => block(opp.userId!, opp.nickname)}
+                        title={t("bl_block")}
+                        className="border border-pink/50 text-pink/80 text-xs px-2 py-1 hover:bg-pink/10"
+                      >
+                        ⛔
+                      </button>
+                    )
+                  )}
+                  {open === m.code && (
+                    <div className="basis-full border-t border-neon/20 pt-2 mt-1 flex flex-col gap-1 font-sans text-sm">
+                      {doors[m.code] === "loading" && <span className="text-neon animate-pulse">{t("mr_loading")}</span>}
+                      {Array.isArray(doors[m.code]) && (doors[m.code] as MatchDoor[]).length === 0 && (
+                        <span className="text-gray-400">{t("bs_no_doors")}</span>
+                      )}
+                      {Array.isArray(doors[m.code]) &&
+                        (doors[m.code] as MatchDoor[]).map((d) => (
+                          <Link
+                            key={d.challengeId}
+                            to={`/solutions/${d.challengeId}`}
+                            className="flex justify-between gap-3 px-2 py-1 border border-neon/20 hover:border-neon"
+                          >
+                            <span className="text-yellow truncate">{d.title}</span>
+                            <span className={d.outcome === "SOLVED" ? "text-neon" : d.outcome === "TIMEOUT" ? "text-yellow" : "text-pink"}>
+                              {t(`bs_${d.outcome.toLowerCase()}`)} · {t("bs_see")} &gt;
+                            </span>
+                          </Link>
+                        ))}
+                    </div>
                   )}
                 </li>
               );

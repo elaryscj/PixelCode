@@ -30,10 +30,13 @@ public class MatchResultService {
     private final TransactionTemplate tx;
     private final long banMinutes;
     private final ProgressService progress;
+    private final com.example.game_backend.tournament.TournamentService tournament;
     private final Object lock = new Object();
 
     public MatchResultService(RoomRepository rooms, UserRepository users, PlatformTransactionManager tm,
-                              ProgressService progress, @Value("${game.ban-minutes:30}") long banMinutes) {
+                              ProgressService progress, com.example.game_backend.tournament.TournamentService tournament,
+                              @Value("${game.ban-minutes:30}") long banMinutes) {
+        this.tournament = tournament;
         this.rooms = rooms;
         this.users = users;
         this.progress = progress;
@@ -110,6 +113,11 @@ public class MatchResultService {
                     progress.onMatchFinished(room); // quests, achievements, season match count
                 } catch (RuntimeException e) {
                     log.error("Could not record progress for match {}", code, e);
+                }
+                try {
+                    tournament.onMatchFinished(room); // weekend tournament points
+                } catch (RuntimeException e) {
+                    log.error("Could not record tournament points for match {}", code, e);
                 }
                 rooms.save(room);
                 return ResultViews.of(room);

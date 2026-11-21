@@ -29,4 +29,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             + " and exists (select p from Player p where p member of r.players and p.userId = :userId)"
             + " order by r.finishedAt desc nulls last")
     List<Room> findFinishedForUser(@Param("userId") Long userId, Pageable page);
+
+    @Query("select r from Room r where r.roomStatus = com.example.game_backend.entity.RoomStatus.FINISHED"
+            + " and r.finishedAt >= :since")
+    List<Room> findFinishedSince(@Param("since") Instant since);
 }

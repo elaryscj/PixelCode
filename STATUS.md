@@ -81,3 +81,14 @@ The header shows where the game server really runs: the backend's SERVER_REGION 
 - Joining by QR: the lesson page shows a QR code of /lesson/CODE (drawn in the browser) and a full-screen QR for the projector; scanning opens the join page with the code filled in, the student only types a name.
 - Own tasks: on /teacher a teacher writes tasks for their class (text, method name, examples, tests as JSON, reference solution). The server runs the reference solution on every save. Such tasks are private (owner only, never published, not in public matches or the admin list) and appear first in the lesson's task picker, marked MINE.
 - Students need no account: /lesson (also linked on the login page and in the menu as LESSON), code + name. They all run the same map with the same four tasks at the same time; a door opens only with an accepted solution (no 4-minute auto-open), the clock is the lesson's time. Their token is kept in the browser (rejoin after closing the tab). Up to 60 students per lesson; rate limits count each student separately (a class shares one school address).
+
+## Added 2026-11-21
+- Weekly encrypted database backup: GitHub Actions `db-backup.yml` (secrets NEON_DATABASE_URL + BACKUP_PASSPHRASE; see DEPLOY.md).
+- Door statistics: every human door in a match is stored (table door_results: solved / opened by timer / unsolved, attempts, time, accepted code). /admin STATS: matches by kind and end reason, per challenge solve rate, attempts, solve time and a TOO HARD / TOO EASY hint.
+- Best solutions /solutions/:id: shortest and fastest accepted code of a challenge, one per player; only for players who met it in a match. Reached from /results (</> SOLUTIONS per match).
+- Practice with tasks: /practice?tasks=EASY|MEDIUM|HARD|MIX, doors ask for real code checked by the sandbox (login needed, nothing recorded).
+- Newcomers: a player without a real match meets a gentler PIXEL_BOT (paced as MMR 1300) after 4 s in Quick Play (game.newcomer-bot-after-seconds).
+- Weekend tournament /tournament: Saturday 00:00 - Monday 00:00 Asia/Almaty (game.tournament-zone). Quick Play win 3, draw 1, win over the bot 1; friendly rooms do not count. Monday: 500 / 300 / 200 PIXELS for places 1-3 with 3+ matches.
+- Sound settings: emote and phrase volumes, mute the opponent's emotes / phrases (per device).
+- Blocking: from /friends, /player/:id or a match in /results. Removes the friendship; no friend requests, duels, joining rooms, watching, or Quick Play pairing between the two. The blocked player is not told.
+- Spectator mode /watch/:code: friends of either player (and admins) watch a running match live (WATCH in /friends); players see 👁 N.

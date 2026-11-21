@@ -24,6 +24,8 @@ public class GameSession {
     public Map<String, Object> result;
     /** set when the opponent is PIXEL_BOT: its precomputed race (see BotPlan) */
     BotPlan bot;
+    /** friends watching live: viewer id -> last poll (ms) */
+    public final java.util.Map<Long, Long> spectators = new java.util.concurrent.ConcurrentHashMap<>();
     /** everything needed to watch the match again afterwards */
     public final ReplayRecorder replay;
 
@@ -65,6 +67,9 @@ public class GameSession {
         public final boolean[] unlocked = new boolean[DOORS + 1];
         public final long[] doorStartedAt = new long[DOORS + 1];
         public final long[] lastSubmitAt = new long[DOORS + 1];
+        /** submissions per door and the accepted code (for door statistics and best solutions) */
+        public final int[] attempts = new int[DOORS + 1];
+        public final String[] acceptedSource = new String[DOORS + 1];
         public long lastSeen;
         /** emotes are limited to one every EMOTE_GAP_MS so they cannot be spammed at the opponent */
         public long lastEmoteAt;

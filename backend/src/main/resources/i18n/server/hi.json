@@ -144,5 +144,12 @@
  "Request not found": "अनुरोध नहीं मिला",
  "Online payment is not connected yet": "ऑनलाइन भुगतान अभी उपलब्ध नहीं है",
  "The payment service did not answer, please try again": "भुगतान सेवा ने जवाब नहीं दिया, फिर से कोशिश करें",
- "Payment not found": "भुगतान नहीं मिला"
+ "Payment not found": "भुगतान नहीं मिला",
+ "Challenge not found": "चुनौती नहीं मिली",
+ "Meet this challenge in a match first": "पहले किसी मैच में इस चुनौती से मिलें",
+ "No challenges of this level yet": "इस स्तर की चुनौतियाँ अभी नहीं हैं",
+ "Only friends of the players can watch this match": "यह मैच केवल खिलाड़ियों के दोस्त देख सकते हैं",
+ "You are a player in this match": "आप इस मैच के खिलाड़ी हैं",
+ "You cannot block yourself": "आप खुद को ब्लॉक नहीं कर सकते",
+ "Your block list is full": "आपकी ब्लॉक सूची भर गई है"
 }

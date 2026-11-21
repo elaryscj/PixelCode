@@ -11,6 +11,8 @@ import com.example.game_backend.repository.ChallengeRepository;
 import com.example.game_backend.repository.RoomRepository;
 import com.example.game_backend.repository.UserRepository;
 import com.example.game_backend.security.TokenService;
+import com.example.game_backend.entity.DoorResult;
+import com.example.game_backend.stats.DoorStatsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,6 +61,7 @@ public class GameService {
     private final TokenService tokens;
     private final ProgressService progress;
     private final ReplayStore replays;
+    private final DoorStatsService doorStats;
 
     private final long doorMs;
     private final long maxMatchMs;
@@ -67,7 +70,7 @@ public class GameService {
 
     public GameService(RoomRepository rooms, UserRepository users, ChallengeRepository challenges, MatchResultService results,
                        ChallengeEvaluator evaluator, SimpMessagingTemplate messaging, TokenService tokens,
-                       ProgressService progress, ReplayStore replays,
+                       ProgressService progress, ReplayStore replays, DoorStatsService doorStats,
                        @Value("${game.door-seconds:240}") long doorSeconds,
                        @Value("${game.max-match-minutes:20}") long maxMatchMinutes,
                        @Value("${game.absence-seconds:300}") long absenceSeconds,
@@ -81,6 +84,7 @@ public class GameService {
         this.tokens = tokens;
         this.progress = progress;
         this.replays = replays;
+        this.doorStats = doorStats;
         this.doorMs = doorSeconds * 1000L;
         this.maxMatchMs = maxMatchMinutes * 60_000L;
         this.absenceMs = absenceSeconds * 1000L;
@@ -214,12 +218,12 @@ public class GameService {
             session.replay.position(slot.userId, slot.x, slot.y, Math.max(now, started));
         }
         if (botSlot != null) {
-            GameSession.Slot human = session.other(botSlot.userId);
             List<String> levels = new ArrayList<>();
             for (GameSession.Snap sn : snaps) {
                 levels.add(sn.difficulty);
             }
-            session.bot = new BotPlan(botSlot, mapId, levels, human == null ? 1500 : human.rating,
+            // the bot's shown rating sets its pace: the player's own MMR, or lower for a newcomer's first match
+            session.bot = new BotPlan(botSlot, mapId, levels, botSlot.rating,
                     now + BotPlan.START_DELAY_MS, doorMs, new java.util.Random());
             BotPlan.planInBackground(session.bot);
         }
@@ -287,6 +291,69 @@ public class GameService {
                 titles.add(sn.title);
             }
             m.put("doorTitles", titles);
+            m.put("result", s.over ? s.result : null);
+            m.put("spectators", spectatorCount(s, now));
+            return m;
+        }
+    }
+
+    private static final long SPECTATOR_MS = 15_000L;
+
+    private static int spectatorCount(GameSession s, long now) {
+        s.spectators.values().removeIf(t -> now - t > SPECTATOR_MS);
+        return s.spectators.size();
+    }
+
+    /** Player ids of a running (or just finished) match, for the "may I watch" check; empty when unknown. */
+    public List<Long> playersOf(String code) {
+        Room room = rooms.findByCode(code).orElseThrow(() -> new ApiException(404, "Match not found"));
+        List<Long> ids = new ArrayList<>();
+        room.getPlayers().forEach(p -> {
+            if (p.getUserId() != null) {
+                ids.add(p.getUserId());
+            }
+        });
+        return ids;
+    }
+
+    /**
+     * Spectator view: both players' positions, doors and timers, but never the challenges or code. Polling it
+     * keeps the viewer counted in "watching" (the players see how many friends watch).
+     */
+    public Map<String, Object> watch(String code, long viewerId) {
+        GameSession s = session(code);
+        if (s == null) {
+            Room room = rooms.findByCode(code).orElseThrow(() -> new ApiException(404, "Match not found"));
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("status", room.getRoomStatus() == RoomStatus.FINISHED ? "FINISHED" : "NOT_STARTED");
+            m.put("result", room.getRoomStatus() == RoomStatus.FINISHED ? ResultViews.of(room) : null);
+            return m;
+        }
+        long now = System.currentTimeMillis();
+        synchronized (s) {
+            if (!s.over) {
+                s.spectators.put(viewerId, now);
+            }
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("status", s.over ? "FINISHED" : "PLAYING");
+            m.put("serverTime", now);
+            m.put("elapsedSeconds", Math.max(0, (now - s.startedAt) / 1000));
+            m.put("maxSeconds", maxMatchMs / 1000);
+            m.put("doorSeconds", doorMs / 1000);
+            m.put("mapId", s.mapId);
+            m.put("ranked", s.ranked);
+            m.put("botMatch", s.bot != null);
+            List<Map<String, Object>> players = new ArrayList<>();
+            for (GameSession.Slot slot : s.slots) {
+                players.add(slotView(slot, now, true));
+            }
+            m.put("players", players);
+            List<String> titles = new ArrayList<>();
+            for (GameSession.Snap sn : s.challenges) {
+                titles.add(sn.title);
+            }
+            m.put("doorTitles", titles);
+            m.put("spectators", spectatorCount(s, now));
             m.put("result", s.over ? s.result : null);
             return m;
         }
@@ -407,9 +474,11 @@ public class GameService {
         synchronized (s) {
             long after = System.currentTimeMillis();
             if (!s.over && !me.unlocked[cp]) {
+                me.attempts[cp]++;
                 s.replay.attempt(me.userId, cp, source, r.passed, r.passedCount, r.total, after);
             }
             if (r.passed && !s.over && !me.unlocked[cp]) {
+                me.acceptedSource[cp] = source;
                 unlock(s, me, cp, "SOLVED");
                 solvedNow = true;
             }
@@ -426,6 +495,7 @@ public class GameService {
 
     private void unlock(GameSession s, GameSession.Slot slot, int cp, String reason) {
         slot.unlocked[cp] = true;
+        recordDoor(s, slot, cp, "SOLVED".equals(reason) ? DoorResult.SOLVED : DoorResult.TIMEOUT);
         s.replay.event(slot.userId, "UNLOCK", cp, reason, System.currentTimeMillis());
         Map<String, Object> msg = new LinkedHashMap<>();
         msg.put("type", "DOOR_UNLOCKED");
@@ -434,6 +504,18 @@ public class GameService {
         msg.put("cpNum", cp);
         msg.put("reason", reason);
         emit(s.code, msg);
+    }
+
+    /** Queues how a human did at a door (PIXEL_BOT's doors are not real attempts). */
+    private void recordDoor(GameSession s, GameSession.Slot slot, int cp, String outcome) {
+        if ((s.bot != null && s.bot.slot == slot) || slot.doorStartedAt[cp] == 0) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        int seconds = (int) Math.min(Integer.MAX_VALUE, Math.max(0, (now - slot.doorStartedAt[cp]) / 1000));
+        GameSession.Snap sn = s.challenges.get(cp - 1);
+        doorStats.enqueue(new DoorResult(sn.id, slot.userId, s.code, s.bot != null, s.ranked, slot.rating, outcome,
+                slot.attempts[cp], seconds, DoorResult.SOLVED.equals(outcome) ? slot.acceptedSource[cp] : null));
     }
 
     // ---------------------------------------------------------------- finish
@@ -537,6 +619,14 @@ public class GameService {
         }
         s.overAt = System.currentTimeMillis();
         if (!"VOID".equals(reason)) {
+            // doors that were open but still locked when the match ended
+            for (GameSession.Slot slot : s.slots) {
+                for (int cp = 1; cp <= GameSession.DOORS; cp++) {
+                    if (!slot.unlocked[cp] && slot.doorStartedAt[cp] > 0) {
+                        recordDoor(s, slot, cp, DoorResult.UNSOLVED);
+                    }
+                }
+            }
             try {
                 replays.save(s.code, s.replay.snapshot(s, result));
             } catch (RuntimeException e) {
