@@ -1,0 +1,55 @@
+# Weekly backup of the Neon database. The dump is encrypted before upload because this repository is public:
+# without BACKUP_PASSPHRASE nobody can read players' e-mails or password hashes from it.
+# Secrets (Settings -> Secrets and variables -> Actions):
+#   NEON_DATABASE_URL  postgresql://USER:PASSWORD@HOST/neondb?sslmode=require (Neon -> Connect, direct, not pooled)
+#   BACKUP_PASSPHRASE  any long random phrase; keep a copy outside GitHub, it is needed to restore
+# Restore: see DEPLOY.md, "Database backups".
+name: Database backup
+
+on:
+  schedule:
+    - cron: "0 1 * * 1" # every Monday 01:00 UTC (07:00 in Kazakhstan), after the weekend tournament
+  workflow_dispatch: {} # "Run workflow" button for a backup right now
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check the secrets
+        env:
+          DB: ${{ secrets.NEON_DATABASE_URL }}
+          PASS: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          if [ -z "$DB" ] || [ -z "$PASS" ]; then
+            echo "::error::Add NEON_DATABASE_URL and BACKUP_PASSPHRASE in Settings -> Secrets and variables -> Actions"
+            exit 1
+          fi
+
+      - name: Dump and encrypt
+        env:
+          DB: ${{ secrets.NEON_DATABASE_URL }}
+          PASS: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          name="pixelcode-$(date -u +%Y-%m-%d).dump"
+          # pg_dump must be at least the server's version (Neon runs PostgreSQL 18)
+          docker run --rm -e DB postgres:18 sh -c 'pg_dump --format=custom --no-owner --no-privileges "$DB"' > "$name"
+          size=$(stat -c %s "$name")
+          if [ "$size" -lt 1024 ]; then echo "::error::The dump is suspiciously small ($size bytes)"; exit 1; fi
+          echo "Dump: $size bytes"
+          gpg --batch --yes --pinentry-mode loopback --passphrase "$PASS" --symmetric --cipher-algo AES256 \
+              --output "$name.gpg" "$name"
+          rm "$name"
+          echo "FILE=$name.gpg" >> "$GITHUB_ENV"
+
+      - name: Keep it for 90 days
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FILE }}
+          path: ${{ env.FILE }}
+          retention-days: 90
+          compression-level: 0
