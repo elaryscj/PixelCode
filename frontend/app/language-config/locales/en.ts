@@ -651,6 +651,7 @@ const en = {
   bs_attempts: "attempts: {{n}}",
   bs_show_code: "CODE ▾",
   menu_tournament: "WEEKEND TOURNAMENT",
+  menu_tournament_short: "TOURNAMENT",
   tn_title: "WEEKEND TOURNAMENT",
   tn_live: "TOURNAMENT IS ON! ENDS IN",
   tn_soon: "NEXT TOURNAMENT STARTS IN",

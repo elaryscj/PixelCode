@@ -647,6 +647,7 @@ const zh: Translation = {
   bs_attempts: "尝试：{{n}}",
   bs_show_code: "代码 ▾",
   menu_tournament: "周末锦标赛",
+  menu_tournament_short: "锦标赛",
   tn_title: "周末锦标赛",
   tn_live: "锦标赛进行中！剩余",
   tn_soon: "下一届锦标赛开始还有",

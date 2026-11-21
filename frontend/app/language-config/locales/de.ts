@@ -647,6 +647,7 @@ const de: Translation = {
   bs_attempts: "Versuche: {{n}}",
   bs_show_code: "CODE ▾",
   menu_tournament: "WOCHENENDTURNIER",
+  menu_tournament_short: "TURNIER",
   tn_title: "WOCHENENDTURNIER",
   tn_live: "DAS TURNIER LÄUFT! ENDE IN",
   tn_soon: "NÄCHSTES TURNIER IN",

@@ -647,6 +647,7 @@ const ja: Translation = {
   bs_attempts: "試行：{{n}}",
   bs_show_code: "コード ▾",
   menu_tournament: "週末トーナメント",
+  menu_tournament_short: "大会",
   tn_title: "週末トーナメント",
   tn_live: "トーナメント開催中！終了まで",
   tn_soon: "次のトーナメントまで",

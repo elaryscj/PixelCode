@@ -647,6 +647,7 @@ const ko: Translation = {
   bs_attempts: "시도: {{n}}",
   bs_show_code: "코드 ▾",
   menu_tournament: "주말 토너먼트",
+  menu_tournament_short: "토너먼트",
   tn_title: "주말 토너먼트",
   tn_live: "토너먼트 진행 중! 종료까지",
   tn_soon: "다음 토너먼트까지",

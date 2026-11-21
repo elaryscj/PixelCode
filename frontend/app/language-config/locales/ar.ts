@@ -647,6 +647,7 @@ const ar: Translation = {
   bs_attempts: "المحاولات: {{n}}",
   bs_show_code: "الكود ▾",
   menu_tournament: "بطولة نهاية الأسبوع",
+  menu_tournament_short: "البطولة",
   tn_title: "بطولة نهاية الأسبوع",
   tn_live: "البطولة جارية! تنتهي بعد",
   tn_soon: "البطولة القادمة تبدأ بعد",

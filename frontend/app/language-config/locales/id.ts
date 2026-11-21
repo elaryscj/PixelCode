@@ -647,6 +647,7 @@ const id: Translation = {
   bs_attempts: "percobaan: {{n}}",
   bs_show_code: "KODE ▾",
   menu_tournament: "TURNAMEN AKHIR PEKAN",
+  menu_tournament_short: "TURNAMEN",
   tn_title: "TURNAMEN AKHIR PEKAN",
   tn_live: "TURNAMEN BERLANGSUNG! BERAKHIR DALAM",
   tn_soon: "TURNAMEN BERIKUTNYA DALAM",
