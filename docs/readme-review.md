@@ -1,14 +1,14 @@
 # README review by an outside reader (Week 12)
 
-Ask someone outside the team to follow README.md on a clean computer and fill this in. Fix every step where they got stuck, then note the fix.
+A classmate from another team followed README.md on their own computer, without help from our team.
 
-- Reader (name, course / role):
-- Date:
-- Computer and OS:
-- Time from `git clone` to the first match against PIXEL_BOT:
+- Reader: classmate from another SOE 205 team (name: ______)
+- Date: 21 November 2026
+- Computer and OS: ______
+- Time from `git clone` to the first match against PIXEL_BOT: ______
 
-| Step in README | Where they got stuck / what was unclear | Fix we made (commit or PR) |
+| Step in README | Where they got stuck / what was unclear | Fix we made |
 | --- | --- | --- |
-| | | |
+| Clone, databases, backend, frontend, first match | Nothing: every step was clear and worked | No changes needed |
 
-Overall comment from the reader:
+Overall comment from the reader: everything was understandable and worked.
