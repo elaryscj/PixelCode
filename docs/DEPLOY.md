@@ -43,3 +43,19 @@ Restore (needs PostgreSQL 18 tools or Docker):
 gpg --decrypt pixelcode-YYYY-MM-DD.dump.gpg > pixelcode.dump      # asks for BACKUP_PASSPHRASE
 pg_restore --clean --if-exists --no-owner -d "postgresql://...target..." pixelcode.dump
 ```
+
+## Problems found after deployment and how they were solved
+| Problem | Cause | Fix |
+| --- | --- | --- |
+| Password-reset e-mails never arrived on Render | Render's free plan blocks outgoing SMTP ports | E-mail sent through Brevo's HTTPS API (`BREVO_API_KEY`, `MAIL_FROM`) |
+| Opening any page except `/` directly gave "Not Found" | Static site has only `index.html` | Rewrite rule `/* -> /index.html` on the Render static site; frontend built in SPA mode |
+| WebSocket connected locally but not online | `ws://` from an `https://` page and the allowed origin list | `VITE_WS_URL=wss://.../ws` and `CORS_ORIGINS` set to the site address |
+| First request after a pause took about a minute | Free backend sleeps after 15 minutes | UptimeRobot pings `/api/health` every 5 minutes |
+| Render's free PostgreSQL expires after 30 days | Free plan limit | Database moved to Neon (free, no expiry) through `DB_URL`; data copied with `pg_dump` / `pg_restore`, row counts checked |
+| High ping for players in Kazakhstan | Server in Oregon (USA) | Backend recreated in Frankfurt; the header shows `SERVER_REGION` |
+| Kazakh letters shown in a fallback font | The pixel font had only the Latin part | Cyrillic and Latin-extended font subsets loaded on demand |
+
+## Environments
+- **Production:** `main` branch -> https://pixelcode-arena.onrender.com + https://pixelcode-api.onrender.com, Neon database `pixelcode`.
+- **Local / development:** `redesign-mobile` and feature branches run on the developer's machine with the local `game_db`; automated tests use a separate `pixelcode_test` database.
+- A separate hosted staging environment is not set up yet (Week 11 gap): planned as a second Render service + a Neon branch database, deployed from the `staging` branch.
