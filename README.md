@@ -99,7 +99,7 @@ All secrets live in environment variables (never in the code). Copy `.env.exampl
 | `BAN_MINUTES` | no | ban length for an abandoned match (default 30) |
 | `TEACHER_PRICE_MONTH`, `TEACHER_PRICE_YEAR`, `TEACHER_CURRENCY`, `TEACHER_TRIAL_DAYS` | no | teacher subscription prices |
 | `FREEDOM_MERCHANT_ID`, `FREEDOM_SECRET_KEY`, `FREEDOM_TESTING` | no | online payment (off until set) |
-| `VITE_API_URL`, `VITE_WS_URL` | frontend build (prod) | backend addresses, e.g. `https://pixelcode-api.onrender.com/api` |
+| `VITE_API_URL`, `VITE_WS_URL` | frontend build (prod) | backend address without `/api` (e.g. `https://pixelcode-api.onrender.com`) and the WebSocket address (`wss://pixelcode-api.onrender.com/ws`) |
 
 ## Tests
 
