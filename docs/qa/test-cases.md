@@ -93,3 +93,9 @@ python3 docs/qa/run_api_tests.py http://localhost:8092/api --short-timers
 # production (timer cases are skipped; creates a few qa* test accounts)
 python3 docs/qa/run_api_tests.py https://pixelcode-api.onrender.com/api
 ```
+
+## Staging run (Week 11 deployment check)
+
+21 November 2026, `python3 docs/qa/run_api_tests.py https://https-dashboard-render-com-fbww.onrender.com/api` (normal timers): **29 passed, 0 failed, 6 skipped** (TC-26, TC-30 – TC-32 need short timers; TC-33 – TC-34 need the test account to be an admin there). Results: `results-2026-11-21-staging.json`.
+Browser check on https://pixelcode-staging.onrender.com: a new account registered through the form, the main menu opened, header shows the Frankfurt server.
+Found during the staging setup: `VITE_API_URL` must not end with `/api` (the site adds it); the docs said otherwise and were corrected.
