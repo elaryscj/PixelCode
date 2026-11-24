@@ -10,7 +10,7 @@ import { AnimatedSkin, type SkinHandle } from "~/components/skins";
 import { getCurrentUser } from "~/api/auth";
 import { MAPS, getMap, worldTime } from "~/game/maps";
 import TouchControls from "~/components/game/TouchControls";
-import { burst, flash, shake } from "~/components/game/fx";
+import { burst, dust, flash, shake } from "~/components/game/fx";
 import { sfx } from "~/lib/sfx";
 import ChallengeModal from "~/components/game/ChallengeModal";
 import { checkPractice, getPracticeChallenge, type PracticeChallenge } from "~/api/stats";
@@ -168,6 +168,7 @@ function PracticeScreen() {
       const k = keys.current;
       if (!doneRef.current) {
         const wasGrounded = p.isGrounded;
+        const fallSpeed = -p.vy;
         const res = stepPlayer(
           p,
           {
@@ -184,7 +185,10 @@ function PracticeScreen() {
         );
         if (wasGrounded && !p.isGrounded && p.vy > 0.5) {
           sfx.jump();
-          burst(arenaRef.current, p.x + CHAR_W / 2, p.y, { color: "#ffffff", count: 6, spread: 18, size: 4 });
+          dust(arenaRef.current, p.x + CHAR_W / 2, p.y, "jump");
+        }
+        if (!wasGrounded && p.isGrounded && fallSpeed > 0.45) {
+          dust(arenaRef.current, p.x + CHAR_W / 2, p.y, "land", Math.min(1, (fallSpeed - 0.45) / 1.2));
         }
         if (res.hitHazard) {
           burst(arenaRef.current, p.x + CHAR_W / 2, p.y + 4, { color: "#FE2C96", count: 22, spread: 60 });

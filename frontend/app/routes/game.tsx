@@ -10,7 +10,7 @@ import ChallengeModal from "~/components/game/ChallengeModal";
 import GameResultModal from "~/components/game/GameResultModal";
 import PhraseBar, { Bubble, PHRASES, isPhrase, type PhraseId } from "~/components/game/PhraseBar";
 import TouchControls from "~/components/game/TouchControls";
-import { burst, confetti, flash, floatIcon, shake } from "~/components/game/fx";
+import { burst, confetti, dust, flash, floatIcon, shake } from "~/components/game/fx";
 import { sfx } from "~/lib/sfx";
 import { AnimatedSkin, type AnimId, type SkinHandle } from "~/components/skins";
 import type { EmoteId } from "~/game/skinRig";
@@ -90,23 +90,19 @@ function PanelHeader({
         ? "border-yellow text-yellow"
         : "border-pink text-pink";
   return (
-    <div className="flex items-center justify-between px-3 py-1.5 border-b border-white/10 bg-black/20">
-      <div className="flex items-center gap-3 min-w-0">
-        <div className="leading-tight">
-          <div className="text-[9px] text-gray-400 tracking-wider">{t("g_floor")} {floor} / {floors}</div>
-          <div className={`text-sm truncate max-w-[140px] ${tone === "neon" ? "text-yellow" : "text-yellow"}`}>{name}</div>
-        </div>
-        <span className={`text-[9px] px-1.5 py-0.5 border ${tone === "neon" ? "border-neon text-neon" : "border-pink text-pink"}`}>
-          MMR {rating ?? "..."}
-        </span>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="text-right leading-tight">
-          <div className="text-[9px] text-gray-400 tracking-wider">{t("cm_door_timer")}</div>
-          <div className={`text-sm ${state === "ACTIVE" && left <= 30 ? "text-pink animate-pulse" : "text-white"}`}>{fmt(left)}</div>
-        </div>
-        <span className={`text-[9px] px-1.5 py-0.5 border ${badge}`}>{t(`g_state_${state.toLowerCase()}`)}</span>
-      </div>
+    // name and rating are on the scoreboard above: here only what changes during the race
+    <div
+      className="flex items-center justify-between px-3 py-1 bg-black/30 text-[9px] tracking-wider"
+      title={`${name} · MMR ${rating ?? "..."}`}
+    >
+      <span className={tone === "neon" ? "text-neon/80" : "text-pink/80"}>
+        {t("g_floor")} {floor} / {floors}
+      </span>
+      <span className="flex items-center gap-2">
+        <span className="text-gray-500">{t("cm_door_timer")}</span>
+        <span className={`text-xs ${state === "ACTIVE" && left <= 30 ? "text-pink animate-pulse" : "text-white"}`}>{fmt(left)}</span>
+        <span className={badge.replace(/border-\S+ /, "")}>{t(`g_state_${state.toLowerCase()}`)}</span>
+      </span>
     </div>
   );
 }
@@ -610,10 +606,14 @@ function GameScreen() {
             };
 
         const wasGrounded = p.isGrounded;
+        const fallSpeed = -p.vy;
         const res = stepPlayer(p, input, map, unlockedRef.current, crumbleRef.current, t, tPrev, dt);
         if (wasGrounded && !p.isGrounded && p.vy > 0.5) {
           sfx.jump();
-          burst(myArenaRef.current, p.x + CHAR_W / 2, p.y, { color: "#ffffff", count: 6, spread: 18, size: 4 });
+          dust(myArenaRef.current, p.x + CHAR_W / 2, p.y, "jump");
+        }
+        if (!wasGrounded && p.isGrounded && fallSpeed > 0.45) {
+          dust(myArenaRef.current, p.x + CHAR_W / 2, p.y, "land", Math.min(1, (fallSpeed - 0.45) / 1.2));
         }
         if (res.hitHazard) triggerRespawn();
         if (res.nearDoor !== nearRef.current) setNearCheckpoint(res.nearDoor);
@@ -717,19 +717,19 @@ function GameScreen() {
     }`}>
       
       {/* 1. Header (Logo, Ping, Room Info) */}
-      <header className="flex justify-between items-center border-b border-neon/30 pb-3 mb-4 short:pb-1 short:mb-1">
+      <header className="flex justify-between items-center pb-2 mb-2 short:pb-1 short:mb-1">
         <div className="flex gap-6 items-center">
           <Link to="/play" className="text-yellow text-xl md:text-2xl leading-none hover:opacity-90 transition-opacity">
             PIXELCODE<br/><span className="text-pink text-xs">ARENA</span>
           </Link>
-          <div className="hidden sm:flex text-neon text-[10px] md:text-xs border-l-2 border-neon/30 pl-4 uppercase items-center gap-2">
+          <div className="hidden sm:flex text-neon/80 text-[10px] md:text-xs uppercase items-center gap-2">
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span>
             {serverLabel} / <span className={pingColor(ping)}>{pingLabel(ping)}</span>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="text-gray-400 text-[10px] md:text-xs flex items-center gap-2 uppercase border border-pink/40 px-3 py-1 bg-pink/5">
+          <div className="text-gray-400 text-[10px] md:text-xs flex items-center gap-2 uppercase">
             <span className="w-2 h-2 bg-pink inline-block animate-pulse"></span>
             {botMatch ? t("kind_bot") : ranked === false ? t("kind_private") : t("kind_ranked")} #{code}
           </div>
@@ -740,7 +740,7 @@ function GameScreen() {
           )}
           <Link
             to="/play"
-            className="text-[10px] text-gray-500 hover:text-pink border border-gray-800 hover:border-pink px-2 py-1 transition-colors"
+            className="text-[10px] text-gray-500 hover:text-pink px-2 py-1 transition-colors"
           >
             {t("g_exit_match")}
           </Link>
@@ -757,7 +757,7 @@ function GameScreen() {
               <h2 className="text-yellow text-xl md:text-3xl short:text-base uppercase truncate max-w-[180px]">{localPlayerName}</h2>
               <p className="text-neon/70 text-[9px] md:text-[10px]">MMR {myRating}</p>
             </div>
-            <span className="border border-neon text-neon px-2 py-0.5 text-[9px] bg-neon/10">{t("tag_you")}</span>
+            <span className="text-neon/70 text-[9px]">{t("tag_you")}</span>
           </div>
 
           {/* Checkpoint Indicators */}
@@ -786,8 +786,8 @@ function GameScreen() {
           }`}>
             {timerDisplay}
           </div>
-          <div className="text-yellow text-[9px] md:text-[10px] mt-1 uppercase tracking-wider text-center short:hidden">
-            {t("g_goal")}
+          <div className="text-gray-400 text-[9px] md:text-[10px] mt-1 uppercase tracking-wider text-center short:hidden" title={map?.tagline ?? t("g_goal")}>
+            {map ? `${map.name} · ${map.sector}` : t("g_loading_map")}
           </div>
         </div>
 
@@ -798,7 +798,7 @@ function GameScreen() {
               <h2 className="text-yellow text-xl md:text-3xl short:text-base uppercase truncate max-w-[180px]">{opponentName}</h2>
               <p className="text-pink/70 text-[9px] md:text-[10px]">MMR {oppRating ?? "..."}</p>
             </div>
-            <span className="border border-pink text-pink px-2 py-0.5 text-[9px] bg-pink/10">{botMatch ? t("tag_bot") : t("tag_rival")}</span>
+            <span className="text-pink/70 text-[9px]">{botMatch ? t("tag_bot") : t("tag_rival")}</span>
           </div>
 
           <div className="flex items-center gap-1.5 text-xs flex-row-reverse short:hidden">
@@ -821,25 +821,21 @@ function GameScreen() {
 
       </div>
 
-      <div className="text-neon text-[10px] mb-2 flex justify-between items-center short:hidden">
-        <span>{map ? `${map.name} · ${map.sector}` : t("g_loading_map")}</span>
-        <span className="text-gray-400">{map?.tagline ?? t("g_tagline")}</span>
-      </div>
 
       {/* 3. Dual-Panel Duel Arena */}
       <div
         ref={arenaWrapRef}
-        className="w-full border-2 border-pink/60 p-1 relative flex bg-[#060c20] overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.8)]"
+        className="w-full relative flex bg-[#060c20] overflow-hidden ring-1 ring-white/10 shadow-[0_0_30px_rgba(0,0,0,0.8)]"
         style={{ height: "var(--arena-h)" }}
       >
         
         {/* Central Divider Beam */}
-        <div className="absolute top-0 bottom-0 left-1/2 w-1.5 bg-gradient-to-b from-neon via-white to-pink -translate-x-1/2 z-30 opacity-75"></div>
+        <div className="absolute top-0 bottom-0 left-1/2 w-[3px] bg-gradient-to-b from-neon via-white to-pink -translate-x-1/2 z-30 opacity-60"></div>
 
         {/* ========================================================= */}
         {/* --- LEFT HALF: LOCAL PLAYER --- */}
         {/* ========================================================= */}
-        <div className="flex-1 flex flex-col border-[2px] border-neon/50 m-0.5 bg-[#081026] overflow-hidden">
+        <div className="flex-1 flex flex-col bg-[#081026] overflow-hidden">
           <PanelHeader
             name={localPlayerName}
             rating={myRating}
@@ -880,7 +876,7 @@ function GameScreen() {
         {/* ========================================================= */}
         {/* --- RIGHT HALF: OPPONENT (mirror of the same map) --- */}
         {/* ========================================================= */}
-        <div className="flex-1 flex flex-col border-[2px] border-pink/50 m-0.5 bg-[#180a1c] overflow-hidden">
+        <div className="flex-1 flex flex-col bg-[#180a1c] overflow-hidden">
           <PanelHeader
             name={opponentName}
             rating={oppRating}

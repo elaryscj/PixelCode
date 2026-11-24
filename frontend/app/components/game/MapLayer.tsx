@@ -4,7 +4,6 @@
 import { ArenaBackdrop } from "~/components/game/ArenaBackdrop";
 import {
   DEFAULT_HAZARD_H,
-  GROUND_Y,
   blinkPhase,
   hazardPos,
   platPos,
@@ -12,21 +11,14 @@ import {
   type MapDef,
   type PlatformDef,
 } from "~/game/maps";
-import { BARRIER_H, DOOR_H, DOOR_W, DOORS, PLATFORM_H, type CrumbleState } from "~/game/physics";
+import { BARRIER_H, DOOR_H, DOOR_W, DOORS, PLATFORM_H, blockBottom, isSolidBlock, type CrumbleState } from "~/game/physics";
 
 type Tone = "neon" | "pink";
 
 const isDynamic = (p: PlatformDef) => !!p.move || p.kind === "blink" || p.kind === "crumble";
 
-/** Extra visual thickness under a platform's walkable top (purely cosmetic, % of arena height). */
-export const PLATFORM_DEPTH = 1.8;
-
-/**
- * Bottom (in %) of a platform's drawn block whose walkable top is `y`. Ground blocks and low
- * fixed pillars (e.g. over acid) reach down to the floor; everything else is a floating slab.
- */
-const blockBottom = (y: number, fixed = false) =>
-  y <= GROUND_Y + 0.5 || (fixed && y <= 10.5) ? 0 : y - PLATFORM_H - PLATFORM_DEPTH;
+/** Bottom (in %) of a platform's drawn block: solid blocks as deep as physics says, one-way ones thin. */
+const drawBottom = (p: PlatformDef, y: number) => (isSolidBlock(p) ? blockBottom(p) : y - PLATFORM_H);
 
 // Steel tile: seams every 18px, rivets, light lip under the edge, darker underside.
 const STEEL =
@@ -91,7 +83,7 @@ function PlatformView({ p, i, mirror, tone }: { p: PlatformDef; i: number; mirro
   const mx = (x: number, w = 0) => (mirror ? 100 - x - w : x);
   const dir = (p.push ?? 0) * (mirror ? -1 : 1);
   const look = blockLook(p, tone);
-  const bottom = blockBottom(p.y, !p.move);
+  const bottom = drawBottom(p, p.y);
   return (
     <div
       data-plat={isDynamic(p) ? i : undefined}
@@ -354,7 +346,7 @@ export function animateMap(root: HTMLElement | null, map: MapDef, t: number, mir
     if (p.move) {
       const pos = platPos(p, t);
       el.style.left = `${mirror ? 100 - pos.x - p.w : pos.x}%`;
-      const b = blockBottom(pos.y);
+      const b = drawBottom(p, pos.y);
       el.style.bottom = `${b}%`;
       el.style.height = `${pos.y - b}%`;
     }

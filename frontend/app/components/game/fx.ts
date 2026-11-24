@@ -137,3 +137,40 @@ export function confetti(count = 90) {
     };
   }
 }
+
+/**
+ * Dust puffs at the feet: a small one when jumping, a bigger one when landing (`strength` 0..1 from the
+ * fall speed). Puffs roll sideways along the floor and fade. x / y are arena percentages of the feet.
+ */
+export function dust(arena: HTMLElement | null, x: number, y: number, kind: "jump" | "land", strength = 0.5) {
+  if (!arena || reduced()) return;
+  const n = kind === "jump" ? 5 : 4 + Math.round(strength * 6);
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement("div");
+    const side = i % 2 === 0 ? -1 : 1;
+    const s = (kind === "jump" ? 5 : 6 + strength * 6) * (0.6 + Math.random() * 0.7);
+    Object.assign(p.style, {
+      position: "absolute",
+      left: `${x}%`,
+      bottom: `${y}%`,
+      width: `${s}px`,
+      height: `${s}px`,
+      marginLeft: `${-s / 2}px`,
+      background: "rgba(214,222,240,0.75)",
+      boxShadow: "0 0 4px rgba(214,222,240,0.5)",
+      borderRadius: "2px",
+      zIndex: "19",
+      pointerEvents: "none",
+    });
+    arena.appendChild(p);
+    const dx = side * (8 + Math.random() * (kind === "jump" ? 14 : 18 + strength * 22));
+    const dy = -(2 + Math.random() * (kind === "jump" ? 6 : 8));
+    p.animate(
+      [
+        { transform: "translate(0,0) scale(0.6)", opacity: 0.9 },
+        { transform: `translate(${dx}px, ${dy}px) scale(1.25)`, opacity: 0 },
+      ],
+      { duration: 320 + Math.random() * 260, easing: "cubic-bezier(.15,.8,.35,1)" },
+    ).onfinish = () => p.remove();
+  }
+}
