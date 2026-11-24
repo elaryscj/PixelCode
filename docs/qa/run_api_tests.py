@@ -2,7 +2,8 @@
 """
 Week 10 manual test run, scripted against the REST API so it can be repeated (Week 13 reruns it on production).
 
-Usage:  python3 docs/qa/run_api_tests.py http://localhost:8092/api [--short-timers]
+Usage:  python3 docs/qa/run_api_tests.py http://localhost:8092/api [--short-timers] [--keep-accounts]
+--keep-accounts: leave the qa* test accounts in place (by default the run deletes the accounts it created).
 --short-timers: the backend runs with door 20 s, absence 30 s, join window 20 s, ban 2 min, no bot
 (see docs/qa/test-cases.md); without it the timer cases (TC-24, TC-27..TC-29) are skipped.
 Results are written to docs/qa/results-<date>.json. Uses only the Python standard library.
@@ -31,7 +32,7 @@ DOORS = {
     2: [(80, 3), (40, 27), (34, 51), (70, 75)],
     3: [(60, 3), (24, 27), (64, 51), (36, 75)],
     4: [(20, 3), (50, 27), (22, 51), (66, 75)],
-    5: [(12, 3), (54, 27), (26, 51), (34, 75)],
+    5: [(18, 3), (54, 27), (26, 51), (34, 75)],
 }
 EXITS = {0: (4, 75, 20), 1: (4, 75, 22), 2: (16, 75, 20), 3: (4, 75, 22), 4: (18, 75, 20), 5: (4, 75, 22)}
 
@@ -65,9 +66,27 @@ def skip(tc, story, title, why):
     print(f"SKIP  {tc} {story} {title}: {why}")
 
 
+# every account this run creates (id, token): deleted at the end unless --keep-accounts
+CREATED = []
+KEEP = "--keep-accounts" in sys.argv
+
+
 def register(name, password="Passw0rd!x"):
     st, b = call("POST", "/auth/register", {"username": name, "email": f"{name}@example.com", "password": password})
+    if st == 200 and b.get("id"):
+        CREATED.append((b["id"], b["token"]))
     return st, b
+
+
+def cleanup():
+    """Deletes the run's test accounts the way a player deletes their own (Profile > Delete account)."""
+    if KEEP or not CREATED:
+        return
+    gone = 0
+    for uid, token in CREATED:
+        st, _ = call("DELETE", f"/profile/{uid}", {"confirmation": "DELETE", "acknowledged": True}, token=token)
+        gone += st == 200
+    print(f"cleanup: deleted {gone} of {len(CREATED)} test accounts")
 
 
 def user(prefix):
@@ -351,4 +370,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    finally:
+        cleanup()
