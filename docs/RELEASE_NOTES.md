@@ -1,5 +1,16 @@
 # PixelCode Arena release notes
 
+## v0.9.3-beta (24 November 2026)
+
+### Fixed
+- I-05: on DATA STREAM door 1 could be opened from the start position (it was inside the server's "at the door" range). Door 1 moved further from the start.
+
+### Changed
+- The API test script deletes the test accounts it created at the end of a run (`--keep-accounts` to keep them); the qa* accounts from earlier runs were removed from production.
+
+### Tested
+- Backend tests: 55 passed. Local API run on DATA STREAM: 29 passed, 0 failed, 6 skipped (TC-17 PASS), test accounts deleted afterwards.
+
 ## v0.9.2-beta (24 November 2026)
 
 ### Changed
