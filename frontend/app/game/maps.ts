@@ -316,7 +316,7 @@ const DATA_STREAM: MapDef = {
     { x: 58, y: 75, w: 5 },
   ],
   doors: [
-    { num: 1, x: 12, y: GROUND_Y, exit: "right" },
+    { num: 1, x: 18, y: GROUND_Y, exit: "right" }, // not reachable from the start: the server counts 13 units as "at the door"
     { num: 2, x: 54, y: 27, exit: "left" },
     { num: 3, x: 26, y: 51, exit: "right" },
     { num: 4, x: 34, y: 75, exit: "left" },

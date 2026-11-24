@@ -61,3 +61,18 @@ Found in the Render deploy log after switching production to the `release` branc
 
 ## Also fixed: frontend dependency warnings
 `npm audit` reported 7 vulnerabilities in Express packages used only by the local preview server (the production site is static files, so players were not affected). `npm audit fix` updated them; `npm audit` now finds 0.
+
+---
+
+## I-05 — [Major] Data Stream: door 1 can be opened from the start position
+Labels: `Major`, `backend`, `frontend`
+Found 24 November 2026 by the production API run after v0.9.2-beta (TC-17 failed: "Open a door from far away" returned 200).
+
+**Steps to reproduce**
+1. Start a match on DATA STREAM (map 5).
+2. Without moving, press E (or call `POST /api/games/{code}/doors/1/open` with the start position).
+
+**Expected:** 409 "Walk up to the door first".
+**Actual:** 200, the challenge opens: door 1 stood 8 units from the start, inside the server's 13-unit "at the door" range.
+**Fix:** door 1 moved to x = 18 (maps.ts, maps.json, MapGeometry.java, QA script tables). Local rerun on map 5: TC-17 PASS.
+

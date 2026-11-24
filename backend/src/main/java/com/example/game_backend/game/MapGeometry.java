@@ -41,7 +41,7 @@ public final class MapGeometry {
                     new double[]{18.0, 75.0, 20.0, 12.0}),
             // 5 DATA STREAM
             new Arena(4.0, 3.0,
-                    new double[][]{{12.0, 3.0}, {54.0, 27.0}, {26.0, 51.0}, {34.0, 75.0}},
+                    new double[][]{{18.0, 3.0}, {54.0, 27.0}, {26.0, 51.0}, {34.0, 75.0}},
                     new double[]{4.0, 75.0, 22.0, 12.0}),
     };
 

@@ -111,6 +111,11 @@ I-04 checked on production: an unknown address (`/api/no-such-thing`) now return
 24 November 2026, after `main` was merged into `release` (PR #36) and Render redeployed both services: the door and exit tables in `run_api_tests.py` follow the rebuilt maps. `python3 docs/qa/run_api_tests.py https://pixelcode-api.onrender.com/api`: **29 passed, 0 failed, 6 skipped** (same skips as before). Results: `results-2026-11-24-prod-v0.9.1.json`. The same run against a local server with the new maps gave the same result.
 Found while testing: during a deploy the site can update a few minutes before the backend; until both are live the old server refuses doors at the new positions ("Walk up to the door first") and the bot follows the old layout. Check that both Render services show the new commit before playing.
 
+## Production run after v0.9.2-beta
+
+24 November 2026, prod: **28 passed, 1 failed, 6 skipped**. TC-17 failed on DATA STREAM: door 1 was within reach of the start (logged as I-05, fixed in v0.9.3-beta, local rerun on map 5: 29 passed, TC-17 PASS). Several reruns the same evening were stopped by the sign-up rate limit (429 "Too many attempts"): that is the anti-spam limit working, not a defect; wait for the window before running again.
+Since then the script deletes the accounts it created at the end of a run (`--keep-accounts` keeps them). The 15 qa* accounts left on production by earlier runs were deleted through the same self-delete API on 24 November.
+
 ## Production check from another device (Week 11)
 
 21 November 2026, a team member's iPhone (account `dauren`), https://pixelcode-arena.onrender.com: main menu (portrait and landscape), Quick Play search, a match against PIXEL_BOT with touch controls, a door solved ("Accepted! 5/5 tests passed"), leaderboard with "your rank", practice, a door challenge, friends. Everything worked; no new defects. Registration of a brand-new account was checked the same day on staging (browser) and by TC-01.
