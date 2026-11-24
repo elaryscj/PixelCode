@@ -10,7 +10,7 @@ import { AnimatedSkin, type SkinHandle } from "~/components/skins";
 import { getCurrentUser } from "~/api/auth";
 import { MAPS, getMap, worldTime } from "~/game/maps";
 import TouchControls from "~/components/game/TouchControls";
-import { burst, flash, shake } from "~/components/game/fx";
+import { burst, dust, flash, shake } from "~/components/game/fx";
 import { sfx } from "~/lib/sfx";
 import ChallengeModal from "~/components/game/ChallengeModal";
 import { checkPractice, getPracticeChallenge, type PracticeChallenge } from "~/api/stats";
@@ -50,6 +50,8 @@ function PracticeScreen() {
 
   const [unlocked, setUnlocked] = useState<number[]>([]);
   const [near, setNear] = useState<number | null>(null);
+  // key hints sit on the arena until the player starts moving
+  const [hints, setHints] = useState(true);
   const [elapsed, setElapsed] = useState(0);
   const [finished, setFinished] = useState<number | null>(null);
   const [deaths, setDeaths] = useState(0);
@@ -137,6 +139,7 @@ function PracticeScreen() {
           else unlockRef.current(num);
         }
       }
+      setHints(false);
       if (e.code === "KeyR") respawn(player.current);
       if (e.code === "Escape") navigate("/");
       if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) e.preventDefault();
@@ -168,6 +171,7 @@ function PracticeScreen() {
       const k = keys.current;
       if (!doneRef.current) {
         const wasGrounded = p.isGrounded;
+        const fallSpeed = -p.vy;
         const res = stepPlayer(
           p,
           {
@@ -184,7 +188,10 @@ function PracticeScreen() {
         );
         if (wasGrounded && !p.isGrounded && p.vy > 0.5) {
           sfx.jump();
-          burst(arenaRef.current, p.x + CHAR_W / 2, p.y, { color: "#ffffff", count: 6, spread: 18, size: 4 });
+          dust(arenaRef.current, p.x + CHAR_W / 2, p.y, "jump");
+        }
+        if (!wasGrounded && p.isGrounded && fallSpeed > 0.45) {
+          dust(arenaRef.current, p.x + CHAR_W / 2, p.y, "land", Math.min(1, (fallSpeed - 0.45) / 1.2));
         }
         if (res.hitHazard) {
           burst(arenaRef.current, p.x + CHAR_W / 2, p.y + 4, { color: "#FE2C96", count: 22, spread: 60 });
@@ -219,7 +226,7 @@ function PracticeScreen() {
   }, [map]);
 
   return (
-    <div dir="ltr" className="min-h-screen bg-[#050814] flex flex-col p-2 sm:p-4 md:p-6 short:p-1.5 font-pixel select-none">
+    <div dir="ltr" className="min-h-screen bg-[#050814] flex flex-col p-2 sm:p-3 short:p-1.5 font-pixel select-none">
       <TouchControls
         keys={keys.current}
         canInteract={near !== null}
@@ -237,7 +244,7 @@ function PracticeScreen() {
         <p className="text-yellow text-2xl">{t("rotate_title")}</p>
         <p className="font-sans text-gray-400 text-sm">{t("rotate_text")}</p>
       </div>
-      <header className="flex flex-wrap short:flex-nowrap justify-between items-center gap-3 border-b border-neon/30 pb-3 mb-4 short:pb-1 short:mb-1">
+      <header className="flex flex-wrap short:flex-nowrap justify-between items-center gap-3 mb-2 short:mb-1">
         <div className="flex items-center gap-3 shrink-0">
           {/* clear way back: this used to be only the logo, which also led to /play instead of the menu */}
           <Link
@@ -295,23 +302,26 @@ function PracticeScreen() {
         </div>
       </header>
 
-      <div className="flex flex-wrap justify-between items-end gap-2 mb-2 short:mb-1">
-        <div className="short:hidden">
-          <div className="text-yellow text-lg">{map.name}</div>
-          <div className="text-gray-400 text-[10px]">{map.tagline}</div>
-        </div>
-        <div className="flex gap-4 text-[10px] text-neon">
+      <div
+        className="relative mx-auto bg-[#081026] overflow-hidden ring-1 ring-white/10 shadow-[0_0_40px_rgba(0,0,0,0.8)]"
+        style={{ height: "var(--practice-h)", aspectRatio: "6 / 5", maxWidth: "100%" }}
+        title={map.tagline}
+      >
+        {/* stats on the arena itself, top-left */}
+        <div className="absolute top-2 left-3 z-30 flex gap-4 text-[10px] text-neon/90 pointer-events-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+          <span className="text-yellow">{map.name}</span>
           <span>{t("p_doors")} {unlocked.length}/{DOORS}</span>
           <span>{t("p_falls")} {deaths}</span>
           {tasks && <span className="text-pink">{t("p_tasks_solved", { n: solvedTasks })}</span>}
-          <span className="text-white text-sm">{(finished ?? elapsed).toFixed(1)}s</span>
+          <span className="text-white">{(finished ?? elapsed).toFixed(1)}s</span>
         </div>
-      </div>
-
-      <div
-        className="relative w-full max-w-[760px] mx-auto border-2 border-neon/50 bg-[#081026] overflow-hidden"
-        style={{ height: "var(--practice-h)" }}
-      >
+              <div className={`absolute top-9 left-1/2 -translate-x-1/2 z-30 flex flex-wrap justify-center gap-4 px-3 py-2 bg-black/70 text-[10px] text-gray-300 uppercase pointer-events-none pointer-coarse:hidden transition-opacity duration-700 ${hints ? "opacity-100" : "opacity-0"}`}>
+          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">A / D</kbd> {t("k_move")}</span>
+          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">SPACE</kbd> {t("k_jump")}</span>
+          <span><kbd className="border border-neon text-neon px-2 py-0.5">E</kbd> {t(tasks ? "p_open_door_task" : "p_open_door")}</span>
+          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">R</kbd> {t("k_respawn")}</span>
+          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">ESC</kbd> {t("menu")}</span>
+        </div>
         <div ref={arenaRef} className="absolute inset-0">
           <MapLayer map={map} mirror={false} unlocked={unlocked} doors={{}} tone="neon" nearCheckpoint={near} />
           <div
@@ -362,13 +372,7 @@ function PracticeScreen() {
         />
       )}
 
-      <footer className="flex flex-wrap gap-4 mt-3 text-[10px] text-gray-400 uppercase pointer-coarse:hidden">
-        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">A / D</kbd> {t("k_move")}</span>
-        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">SPACE</kbd> {t("k_jump")}</span>
-        <span><kbd className="border border-neon text-neon px-2 py-0.5">E</kbd> {t(tasks ? "p_open_door_task" : "p_open_door")}</span>
-        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">R</kbd> {t("k_respawn")}</span>
-        <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">ESC</kbd> {t("menu")}</span>
-      </footer>
+
     </div>
   );
 }

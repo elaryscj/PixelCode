@@ -253,7 +253,7 @@ body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-ins
 @custom-variant short (@media (max-height: 560px));
 
 /* Height of the duel arena: roomy on desktop, fills what is left on a sideways phone */
-:root { --arena-h: max(520px, calc(100vh - 380px)); }
+:root { --arena-h: max(460px, calc(100dvh - 150px)); }
 @media (max-height: 560px) { :root { --arena-h: calc(100dvh - 92px); } }
-:root { --practice-h: max(480px, calc(100vh - 260px)); }
+:root { --practice-h: max(440px, calc(100dvh - 70px)); }
 @media (max-height: 560px) { :root { --practice-h: calc(100dvh - 70px); } }

@@ -20,6 +20,11 @@ export const ICE_MAX_SPEED = 0.7;
 export const CHAR_W = 6;
 export const CHAR_H = 11;
 export const PLATFORM_H = 2.6;
+/** Extra thickness under a fixed platform's top: the block is solid down to `blockBottom`. */
+export const PLATFORM_DEPTH = 0.8;
+/** how much narrower than the sprite the collision box is, at the head and at the sides */
+export const HEAD_INSET = 1.6;
+export const SIDE_INSET = 1.2;
 export const DOOR_W = 6.5;
 export const DOOR_H = 10;
 export const BARRIER_H = 18; // taller than a jump, so a locked door cannot be hopped over
@@ -172,7 +177,36 @@ export function stepPlayer(
     }
   }
 
-  // 4. One-way platforms: land on the top edge when falling
+  // 4a. Fixed blocks are solid: bump your head on the underside, stop at the sides. The collision box
+  // is a little narrower than the sprite (like most platformers), so tight gaps don't snag.
+  for (const plat of plats) {
+    if (!isSolidBlock(plat)) continue;
+    const top = plat.y;
+    const bot = blockBottom(plat);
+    const l = plat.x;
+    const r = plat.x + plat.w;
+    const overY = p.y < top - EPS && p.y + CHAR_H > bot + EPS;
+    const prevOverY = prevY < top - EPS && prevY + CHAR_H > bot + EPS;
+    const sideX = p.x + CHAR_W - SIDE_INSET > l && p.x + SIDE_INSET < r;
+    const prevSideX = prevX + CHAR_W - SIDE_INSET > l + EPS && prevX + SIDE_INSET < r - EPS;
+    if (overY && prevOverY && sideX && !prevSideX) {
+      if (prevX + CHAR_W - SIDE_INSET <= l + EPS) {
+        p.x = l - CHAR_W + SIDE_INSET;
+        p.vx = Math.min(p.vx, 0);
+      } else {
+        p.x = r - SIDE_INSET;
+        p.vx = Math.max(p.vx, 0);
+      }
+      continue;
+    }
+    const headX = p.x + CHAR_W - HEAD_INSET > l && p.x + HEAD_INSET < r;
+    if (headX && p.vy > 0 && prevY + CHAR_H <= bot + 0.6 && p.y + CHAR_H > bot) {
+      p.y = bot - CHAR_H;
+      p.vy = 0;
+    }
+  }
+
+  // 4b. Land on the top edge of any platform when falling (lifts, blinking and crumbling ones stay one-way)
   p.isGrounded = false;
   p.riding = -1;
   let standingOn: PlatformDef | null = null;
@@ -276,6 +310,19 @@ export function stepPlayer(
     unlocked.length >= DOORS && p.x + CHAR_W >= ex.x && p.x <= ex.x + ex.w && p.y >= ex.y - 0.5 && p.y <= ex.y + ex.h;
 
   return { hitHazard, nearDoor, atExit };
+}
+
+const EPS = 0.01;
+
+/** Fixed, always-there platforms are solid blocks; lifts, blinking and crumbling ones are one-way. */
+export function isSolidBlock(p: PlatformDef): boolean {
+  return !p.move && p.kind !== "blink" && p.kind !== "crumble";
+}
+
+/** Bottom of a solid block: ground blocks and low pillars (over acid) reach the floor. */
+export function blockBottom(p: PlatformDef): number {
+  if (p.y <= GROUND_Y + 0.5 || (!p.move && p.y <= 10.5)) return 0;
+  return p.y - PLATFORM_H - PLATFORM_DEPTH;
 }
 
 /** The floor a hazard stands on (or hangs above): the highest static platform under its lowest point. */

@@ -21,7 +21,7 @@ import {
   type StudentState,
 } from "~/api/lessons";
 import { getMap, worldTime } from "~/game/maps";
-import { burst, flash, shake } from "~/components/game/fx";
+import { burst, dust, flash, shake } from "~/components/game/fx";
 import { sfx } from "~/lib/sfx";
 import { CHAR_H, CHAR_W, DOORS, createPlayer, doorRespawn, respawn, stepPlayer, type CrumbleState } from "~/game/physics";
 import { ApiError } from "~/api/http";
@@ -193,6 +193,7 @@ function LessonPlayScreen() {
       const k = keys.current;
       if (playingRef.current && !modalRef.current) {
         const wasGrounded = p.isGrounded;
+        const fallSpeed = -p.vy;
         const res = stepPlayer(
           p,
           {
@@ -207,7 +208,13 @@ function LessonPlayScreen() {
           tPrev,
           dt,
         );
-        if (wasGrounded && !p.isGrounded && p.vy > 0.5) sfx.jump();
+        if (wasGrounded && !p.isGrounded && p.vy > 0.5) {
+          sfx.jump();
+          dust(arenaRef.current, p.x + CHAR_W / 2, p.y, "jump");
+        }
+        if (!wasGrounded && p.isGrounded && fallSpeed > 0.45) {
+          dust(arenaRef.current, p.x + CHAR_W / 2, p.y, "land", Math.min(1, (fallSpeed - 0.45) / 1.2));
+        }
         if (res.hitHazard) {
           burst(arenaRef.current, p.x + CHAR_W / 2, p.y + 4, { color: "#FE2C96", count: 22, spread: 60 });
           shake(arenaRef.current, 10);
