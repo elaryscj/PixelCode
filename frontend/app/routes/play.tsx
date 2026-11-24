@@ -10,7 +10,7 @@ import { getCurrentUser, refreshUser } from "~/api/auth";
 import Avatar from "~/components/Avatar";
 
 const btn =
-  "btn-arcade uppercase w-full text-2xl sm:text-3xl font-pixel py-3 sm:py-2 px-6 text-center border-2 disabled:opacity-40 disabled:pointer-events-none";
+  "btn-arcade uppercase w-full text-[clamp(16px,3.6vh,30px)] font-pixel py-[min(0.75rem,1.4vh)] px-6 text-center border-2 disabled:opacity-40 disabled:pointer-events-none";
 
 const PlayScreen = () => {
   const { t } = useTranslation();
@@ -219,10 +219,10 @@ const PlayScreen = () => {
       <>
         <div className="grid-background" />
         <div className="star-background" />
-        <div className="flex flex-col items-center gap-6 mx-auto w-full font-pixel mt-12">
+        <div className="flex flex-col items-center gap-[min(1.5rem,2.5vh)] mx-auto w-full font-pixel mt-[min(3rem,3vh)]">
           <div className="flex items-center gap-4 border border-neon bg-[#060816] px-4 py-2">
             <span className="border-2 border-pink p-1">
-              <Avatar className="w-16 h-16" iconClass="text-4xl text-pink" />
+              <Avatar className="w-[min(4rem,9vh)] h-[min(4rem,9vh)]" iconClass="text-[clamp(20px,5vh,36px)] text-pink" />
             </span>
             <div className="text-left">
               <div className="text-yellow text-3xl">{user.username}</div>
@@ -231,14 +231,14 @@ const PlayScreen = () => {
           </div>
           {found ? (
             <>
-              <h1 className="text-neon text-[14vw]/none sm:text-[88px]/none md:text-[136px]/none text-glow-sm text-center px-4">{t("match_found")}</h1>
+              <h1 className="text-neon text-[clamp(32px,min(14vw,13vh),136px)]/none text-glow-sm text-center px-4">{t("match_found")}</h1>
               <p className="text-yellow text-2xl sm:text-4xl text-center">
                 {t("entering_lobby")}<span className="blink-caret">...</span>
               </p>
             </>
           ) : (
             <>
-              <h1 className="text-yellow/80 text-[14vw]/none sm:text-[88px]/none md:text-[136px]/none text-glow-sm text-center px-4">{t("finding_match")}</h1>
+              <h1 className="text-yellow/80 text-[clamp(32px,min(14vw,13vh),136px)]/none text-glow-sm text-center px-4">{t("finding_match")}</h1>
               <p className="text-pink text-2xl sm:text-4xl text-center">{t("warm_up")}</p>
               <p className="text-neon text-xl text-center">
                 {waited}s · {inQueue} {t("in_queue")}
@@ -261,10 +261,10 @@ const PlayScreen = () => {
     <>
       <div className="grid-background" />
       <div className="star-background" />
-      <div className="flex flex-col gap-5 sm:gap-6 mx-auto w-full max-w-130 px-4 py-6 enter-up">
-        <h1 className="font-pixel text-center text-glow-sm leading-none flex flex-col gap-4">
-          <span className="text-yellow text-[17vw]/none sm:text-[104px]/none">{t("choose")}</span>
-          <span className="text-pink text-[17vw]/none sm:text-[104px]/none">{t("mode")}</span>
+      <div className="flex flex-col gap-[min(1.5rem,2.2vh)] mx-auto w-full max-w-130 px-4 py-[min(1.5rem,2vh)] enter-up">
+        <h1 className="font-pixel text-center text-glow-sm leading-none flex flex-col short:flex-row short:justify-center gap-[min(1rem,1.5vh)] short:gap-4">
+          <span className="text-yellow text-[clamp(30px,min(17vw,11vh),104px)]/none">{t("choose")}</span>
+          <span className="text-pink text-[clamp(30px,min(17vw,11vh),104px)]/none">{t("mode")}</span>
         </h1>
 
         {current && current.roomStatus !== "FINISHED" && (
@@ -280,8 +280,8 @@ const PlayScreen = () => {
           {t("create_room")}
         </button>
 
-        <form onSubmit={handleJoin} className="flex flex-col gap-4">
-          <label htmlFor="room-code" className="font-pixel text-neon text-2xl">
+        <form onSubmit={handleJoin} className="flex flex-col gap-[min(1rem,1.5vh)]">
+          <label htmlFor="room-code" className="font-pixel text-neon text-[clamp(14px,3vh,24px)]">
             [{t("room_code")}]
           </label>
           <input
@@ -290,7 +290,7 @@ const PlayScreen = () => {
             onChange={(e) => setCode(e.target.value.toUpperCase())}
             maxLength={6}
             placeholder="..A1B2C3.."
-            className="py-2 px-3 text-3xl tracking-widest text-center bg-transparent border-2 border-neon font-pixel text-yellow outline-none focus:border-glow-neon-sm"
+            className="py-[min(0.5rem,1vh)] px-3 text-[clamp(18px,3.6vh,30px)] tracking-widest text-center bg-transparent border-2 border-neon font-pixel text-yellow outline-none focus:border-glow-neon-sm"
           />
           <button
             type="submit"

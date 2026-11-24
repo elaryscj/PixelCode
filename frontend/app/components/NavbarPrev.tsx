@@ -14,11 +14,11 @@ const NavbarPrev = () => {
   const inLobby = /^\/play\/[^/]+$/.test(pathname);
 
   return (
-    <header style={{ paddingTop: "max(0.75rem, env(safe-area-inset-top))" }} className="px-2 sm:px-4 py-3 sm:py-5 border-b border-neon shadow-neon sticky top-0 z-30 bg-[#050816]/95 border-glow-sm-neon">
+    <header style={{ paddingTop: "max(0.75rem, env(safe-area-inset-top))" }} className="px-2 sm:px-4 py-[min(1.25rem,2vh)] short:py-1 border-b border-neon shadow-neon sticky top-0 z-30 bg-[#050816]/95 border-glow-sm-neon">
       <div className="px-2 sm:px-4 max-w-480 mx-auto flex items-center justify-between gap-3">
         <Link
           to={inLobby ? "/play" : "/"}
-          className="flex items-center gap-2 font-pixel text-yellow btn-arcade shrink-0 px-3 sm:px-4 py-1.5 border-2 border-pink rounded-sm text-xl sm:text-2xl hover:bg-pink/10"
+          className="flex items-center gap-2 font-pixel text-yellow btn-arcade shrink-0 px-3 sm:px-4 py-1.5 short:py-0.5 border-2 border-pink rounded-sm text-xl sm:text-2xl short:text-base hover:bg-pink/10"
         >
           <FaChevronLeft className="text-sm rtl:-scale-x-100" /> {inLobby ? t("back").toUpperCase() : t("menu")}
         </Link>

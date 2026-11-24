@@ -674,6 +674,15 @@ const fr: Translation = {
   sp_offline: "connexion perdue",
   p_open_door_task: "OUVRIR LA PORTE : RÉSOUS LE DÉFI",
   sp_hint: "Tu vois les deux courses en direct. Les défis et le code des joueurs restent cachés jusqu'à la fin.",
+  // first-visit practice tutorial
+  tut_move: "Déplace-toi avec A / D ou ← →",
+  tut_move_touch: "Déplace-toi avec les boutons ◀ ▶",
+  tut_jump: "Saute avec ESPACE",
+  tut_jump_touch: "Saute avec le bouton JUMP",
+  tut_door: "Va jusqu'à la porte 1 et appuie sur E",
+  tut_door_touch: "Va jusqu'à la porte 1 et touche E",
+  tut_up: "On ne saute pas à travers le sol : trouve l'ouverture au-dessus et monte par la marche, l'ascenseur ou le trampoline",
+  tut_skip: "Passer",
 };
 
 export default fr;

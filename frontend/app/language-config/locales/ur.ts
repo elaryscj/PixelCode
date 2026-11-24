@@ -674,6 +674,15 @@ const ur: Translation = {
   sp_offline: "رابطہ منقطع",
   p_open_door_task: "دروازہ کھولیں: چیلنج حل کریں",
   sp_hint: "آپ دونوں دوڑیں لائیو دیکھ رہے ہیں۔ چیلنج اور کھلاڑیوں کا کوڈ آخر تک چھپا رہتا ہے۔",
+  // first-visit practice tutorial
+  tut_move: "A / D یا ← → سے چلیں",
+  tut_move_touch: "◀ ▶ بٹنوں سے چلیں",
+  tut_jump: "SPACE سے چھلانگ لگائیں",
+  tut_jump_touch: "JUMP بٹن سے چھلانگ لگائیں",
+  tut_door: "دروازہ 1 تک جائیں اور E دبائیں",
+  tut_door_touch: "دروازہ 1 تک جائیں اور E بٹن دبائیں",
+  tut_up: "فرش کے آر پار نہیں کود سکتے: اوپر کا خالی حصہ ڈھونڈیں اور سیڑھی، لفٹ یا اچھال پیڈ سے چڑھیں",
+  tut_skip: "چھوڑیں",
 };
 
 export default ur;

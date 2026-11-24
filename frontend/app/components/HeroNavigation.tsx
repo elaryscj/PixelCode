@@ -65,33 +65,33 @@ const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
   const small = "font-pixel text-sm sm:text-base uppercase px-2 py-1 hover:text-glow-sm transition-colors";
 
   return (
-    <nav className="enter-up mx-auto w-full max-w-100 flex flex-col gap-4" style={{ animationDelay: "120ms" }}>
+    <nav className="enter-up mx-auto w-full max-w-100 short:max-w-160 flex flex-col gap-[min(1rem,1.7vh)]" style={{ animationDelay: "120ms" }}>
       <Link
         to={"/play"}
-        className={`${base} bg-pink border-2 border-yellow text-black text-4xl sm:text-5xl py-4 shadow-[0_0_24px_rgba(254,44,150,0.55)]`}
+        className={`${base} bg-pink border-2 border-yellow text-black text-[clamp(24px,5.4vh,48px)] py-[min(1rem,1.4vh)] short:!py-0.5 shadow-[0_0_24px_rgba(254,44,150,0.55)]`}
       >
         ▶ {t("play")}
       </Link>
-      <div className="grid grid-cols-[1fr_1fr_auto] gap-3">
-        <Link to={"/practice"} className={`${secondary} flex items-center justify-center gap-2 !text-lg sm:!text-xl !px-2 !py-3 leading-tight`}>
+      <div className="grid grid-cols-[1fr_1fr_auto] gap-[min(0.75rem,1.4vh)]">
+        <Link to={"/practice"} className={`${secondary} flex items-center justify-center gap-2 !text-[clamp(13px,2.4vh,20px)] !px-2 !py-[min(0.75rem,1.3vh)] leading-tight`}>
           {t("menu_practice")}
         </Link>
-        <Link to={"/tournament"} className={`${secondary} flex items-center justify-center gap-2 !text-lg sm:!text-xl !px-2 !py-3 leading-tight !border-yellow/80`}>
+        <Link to={"/tournament"} className={`${secondary} flex items-center justify-center gap-2 !text-[clamp(13px,2.4vh,20px)] !px-2 !py-[min(0.75rem,1.3vh)] leading-tight !border-yellow/80`}>
           <FaTrophy className="text-yellow shrink-0" /> <span>{t("menu_tournament_short")}</span>
         </Link>
-        <button onClick={onHowToPlay} className={`${secondary} flex items-center justify-center !text-lg sm:!text-xl !px-4 !py-3`} title={t("how_to_play")} aria-label={t("how_to_play")}>
+        <button onClick={onHowToPlay} className={`${secondary} flex items-center justify-center !text-[clamp(13px,2.4vh,20px)] !px-4 !py-[min(0.75rem,1.3vh)]`} title={t("how_to_play")} aria-label={t("how_to_play")}>
           ?
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 short:grid-cols-6 gap-[min(0.75rem,1.4vh)]">
         {tiles.map((x) => (
           <Link
             key={x.to}
             to={x.to}
-            className="btn-arcade relative flex flex-col items-center justify-center gap-1.5 min-h-20 px-1 py-2 border-2 border-neon/70 bg-[#060b1e]/70 text-yellow hover:border-glow-neon hover:text-glow-sm"
+            className="btn-arcade relative flex flex-col items-center justify-center gap-1.5 min-h-[min(5rem,9vh)] px-1 py-[min(0.5rem,0.8vh)] border-2 border-neon/70 bg-[#060b1e]/70 text-yellow hover:border-glow-neon hover:text-glow-sm"
           >
-            <span className="text-neon text-2xl">{x.icon}</span>
+            <span className="text-neon text-[clamp(16px,3vh,24px)]">{x.icon}</span>
             <span className="font-pixel uppercase text-xs sm:text-sm leading-tight text-center break-words">{x.label}</span>
             {x.extra}
           </Link>
@@ -99,7 +99,7 @@ const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
       </div>
 
       {/* rarely needed: small links, not big buttons */}
-      <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-1 border-t border-neon/20 pt-3">
+      <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-1 border-t border-neon/20 pt-[min(0.75rem,1.2vh)]">
         <Link to={"/settings"} className={`${small} text-gray-300 hover:text-yellow flex items-center gap-1.5`}>
           <FaCog /> {t("settings")}
         </Link>

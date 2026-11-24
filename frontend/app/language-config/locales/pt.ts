@@ -674,6 +674,15 @@ const pt: Translation = {
   sp_offline: "sem conexão",
   p_open_door_task: "ABRIR PORTA: RESOLVA O DESAFIO",
   sp_hint: "Você vê as duas corridas ao vivo. Os desafios e o código dos jogadores ficam ocultos até o fim.",
+  // first-visit practice tutorial
+  tut_move: "Mova-se com A / D ou ← →",
+  tut_move_touch: "Mova-se com os botões ◀ ▶",
+  tut_jump: "Pule com ESPAÇO",
+  tut_jump_touch: "Pule com o botão JUMP",
+  tut_door: "Vá até a porta 1 e aperte E",
+  tut_door_touch: "Vá até a porta 1 e toque em E",
+  tut_up: "Não dá para pular através do piso: ache a abertura acima e suba pelo degrau, elevador ou trampolim",
+  tut_skip: "Pular",
 };
 
 export default pt;

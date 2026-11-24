@@ -674,6 +674,15 @@ const ar: Translation = {
   sp_offline: "انقطع الاتصال",
   p_open_door_task: "افتح الباب: حل التحدي",
   sp_hint: "ترى السباقين مباشرة. تبقى التحديات وكود اللاعبين مخفية حتى النهاية.",
+  // first-visit practice tutorial
+  tut_move: "تحرّك بـ A / D أو ← →",
+  tut_move_touch: "تحرّك بأزرار ◀ ▶",
+  tut_jump: "اقفز بمفتاح المسافة",
+  tut_jump_touch: "اقفز بزر JUMP",
+  tut_door: "اقترب من الباب 1 واضغط E",
+  tut_door_touch: "اقترب من الباب 1 واضغط زر E",
+  tut_up: "لا يمكنك القفز عبر الأرضية: ابحث عن الفتحة في الأعلى واصعد بالدرجة أو المصعد أو منصة القفز",
+  tut_skip: "تخطٍّ",
 };
 
 export default ar;

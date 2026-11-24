@@ -674,6 +674,15 @@ const ja: Translation = {
   sp_offline: "接続切れ",
   p_open_door_task: "ドアを開ける：課題を解く",
   sp_hint: "両者の走りをライブで見られます。課題とプレイヤーのコードは試合終了まで非表示です。",
+  // first-visit practice tutorial
+  tut_move: "A / D か ← → で移動",
+  tut_move_touch: "◀ ▶ ボタンで移動",
+  tut_jump: "スペースでジャンプ",
+  tut_jump_touch: "JUMP ボタンでジャンプ",
+  tut_door: "ドア1の前で E を押す",
+  tut_door_touch: "ドア1の前で E をタップ",
+  tut_up: "床は下からすり抜けられない：上の穴を見つけて、段差・リフト・ジャンプ台で登ろう",
+  tut_skip: "スキップ",
 };
 
 export default ja;

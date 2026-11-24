@@ -155,6 +155,27 @@ export const sfx = {
   jump() {
     tone(260, 0.12, { to: 620, vol: 0.25 });
   },
+  /** one footstep: a soft tick, brighter on ice, metallic on belts */
+  step(surface?: string) {
+    if (surface === "ice") tone(1900, 0.03, { type: "triangle", vol: 0.06 });
+    else if (surface === "conveyor") tone(520, 0.035, { type: "square", vol: 0.05 });
+    else noise(0.045, { vol: 0.16, lowpass: 1300 });
+  },
+  /** landing thud, `strength` 0..1 from the fall speed */
+  land(strength = 0.5) {
+    noise(0.08 + strength * 0.08, { vol: 0.25 + strength * 0.35, lowpass: 500 + strength * 400 });
+    tone(120, 0.08 + strength * 0.06, { type: "sine", to: 60, vol: 0.2 + strength * 0.25 });
+  },
+  /** head hits a ceiling */
+  bump() {
+    tone(210, 0.07, { type: "square", to: 150, vol: 0.18 });
+    noise(0.05, { vol: 0.2, lowpass: 2200 });
+  },
+  /** a door sliding open: hiss of steam + clank */
+  doorHiss() {
+    noise(0.55, { vol: 0.35, lowpass: 5000 });
+    tone(95, 0.18, { type: "square", vol: 0.22 });
+  },
   hazard() {
     noise(0.35, { vol: 0.7, lowpass: 900 });
     tone(180, 0.35, { type: "sawtooth", to: 50, vol: 0.35 });

@@ -7,6 +7,7 @@ import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
 import { getCurrentUser } from "~/api/auth";
 import { AnimatedSkin, type AnimId, type SkinHandle } from "~/components/skins";
+import { FitBox } from "~/components/game/FitBox";
 import { MapLayer, animateMap } from "~/components/game/MapLayer";
 import { Bubble, isPhrase } from "~/components/game/PhraseBar";
 import { getMap } from "~/game/maps";
@@ -206,7 +207,7 @@ function ReplayScreen() {
           <Link to="/results" className="border-2 border-pink px-4 py-1.5 text-xs text-pink uppercase hover:bg-pink/10">
             &lt; {t("menu_results")}
           </Link>
-          <h1 className="text-yellow text-3xl sm:text-5xl text-glow-sm">{t("replay_title")}</h1>
+          <h1 className="text-yellow text-[clamp(16px,2.4vw,40px)] text-glow-sm">{t("replay_title")}</h1>
           <span className="text-xs text-gray-400" dir="ltr">
             #{data.code} · {map.name}
           </span>
@@ -216,13 +217,17 @@ function ReplayScreen() {
         </p>
 
         {/* the two runs, side by side like in the match */}
-        <div className="flex flex-col md:flex-row gap-2 md:h-[56vh]">
+        {/* arenas keep their square shape; the timeline and door details below may scroll */}
+        <div className="flex h-[64dvh] min-h-[260px]">
+        <FitBox aspect={2} extraH={28}>
+          {({ width, height }) => (
+        <div className="flex flex-row gap-1" style={{ width, height }}>
           {sides.map((s, i) => {
             const open = unlockedAt(s.userId, time);
             const said = phraseNow(s.userId);
             return (
-              <div key={s.userId} className={`flex-1 flex flex-col border-2 ${s.tone === "neon" ? "border-neon/60" : "border-pink/60"} bg-[#0a0f24] min-h-[42vh]`}>
-                <div className="flex items-center justify-between px-3 py-1.5 text-xs">
+              <div key={s.userId} className={`flex-1 flex flex-col ring-1 ${s.tone === "neon" ? "ring-neon/40" : "ring-pink/40"} bg-[#0a0f24]`}>
+                <div className="flex items-center justify-between px-3 text-xs shrink-0" style={{ height: 28 }}>
                   <span className={s.tone === "neon" ? "text-neon" : "text-pink"}>
                     {s.nickname} {s.userId === me?.id && `(${t("tag_you")})`}
                   </span>
@@ -242,6 +247,9 @@ function ReplayScreen() {
               </div>
             );
           })}
+        </div>
+          )}
+        </FitBox>
         </div>
 
         {/* playback controls + timeline */}

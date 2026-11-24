@@ -193,23 +193,23 @@ const LobbyScreen = () => {
   if (room.ranked || room.botMatch) {
     const bot = !!room.botMatch;
     const card = (p: (typeof players)[number] | undefined, mine: boolean) => (
-      <div className="flex flex-col items-center gap-2 sm:gap-3 w-36 sm:w-64">
-        <span className={`font-pixel text-xs sm:text-xl text-center ${mine ? "text-neon" : "text-pink"}`}>
+      <div className="flex flex-col items-center gap-[min(0.75rem,1vh)] w-[min(16rem,22vw)]">
+        <span className={`font-pixel text-[clamp(10px,1.9vh,20px)] text-center ${mine ? "text-neon" : "text-pink"}`}>
           {mine ? t("lb_you_label") : bot ? t("lb_bot_label") : t("lb_rival_label")}
         </span>
-        <div className={`relative p-3 border-2 ${mine ? "border-neon shadow-neon" : "border-pink"}`}>
+        <div className={`relative p-[min(0.75rem,1vh)] border-2 ${mine ? "border-neon shadow-neon" : "border-pink"}`}>
           {["-top-1.5 -left-1.5", "-top-1.5 -right-1.5", "-bottom-1.5 -left-1.5", "-bottom-1.5 -right-1.5"].map((c) => (
             <span key={c} className={`absolute w-3 h-3 ${c} ${mine ? "bg-neon" : "bg-pink"}`} />
           ))}
           <Avatar
-            className="w-28 h-28 sm:w-52 sm:h-52"
-            iconClass={`text-8xl ${mine ? "text-neon" : "text-pink"}`}
+            className="w-[min(13rem,18vh,18vw)] h-[min(13rem,18vh,18vw)]"
+            iconClass={`text-[clamp(32px,9vh,96px)] ${mine ? "text-neon" : "text-pink"}`}
             {...(p ? { userId: p.userId } : { src: null })}
           />
         </div>
-        <span className="font-pixel text-yellow text-xl sm:text-3xl truncate max-w-full">{p?.nickname ?? "..."}</span>
-        <span className="font-pixel text-pink text-xl">MMR {p?.rating ?? "---"}</span>
-        <span className="font-pixel text-gray-400 text-xs sm:text-base text-center">
+        <span className="font-pixel text-yellow text-[clamp(14px,3vh,30px)] truncate max-w-full">{p?.nickname ?? "..."}</span>
+        <span className="font-pixel text-pink text-[clamp(12px,2.2vh,20px)]">MMR {p?.rating ?? "---"}</span>
+        <span className="font-pixel text-gray-400 text-[clamp(9px,1.6vh,16px)] text-center short:hidden">
           {!mine && bot ? t("lb_bot_status") : p ? `${t("lb_connected")} \u00B7 ${p.ready ? t("ready").toUpperCase() : t("lb_awaiting")}` : t("lb_waiting")}
         </span>
       </div>
@@ -217,42 +217,46 @@ const LobbyScreen = () => {
     return (
       <>
         <div className="star-background" />
-        <div className="flex flex-col items-center gap-6 sm:gap-8 mx-auto w-full px-4 font-pixel py-6 enter-up">
-          <h1 className="text-yellow text-[12vw]/none sm:text-[80px]/none lg:text-[112px]/none text-glow-sm text-center">{t("lb_title")}</h1>
-          <p className="text-neon text-base sm:text-2xl text-center">
+        <div className="flex flex-col items-center gap-[min(2rem,2.4vh)] short:gap-1 mx-auto w-full max-w-[1500px] px-4 font-pixel py-[min(1.5rem,2vh)] short:py-1 enter-up">
+          <h1 className="text-yellow text-[clamp(26px,min(10vw,9vh),112px)]/none text-glow-sm text-center">{t("lb_title")}</h1>
+          <p className="text-neon text-[clamp(11px,2.2vh,24px)] text-center">
             {bot ? t("lb_bot_sub") : t("lb_ranked_sub")}
           </p>
-          <div className="flex items-center gap-3 sm:gap-10">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 short:grid-cols-2 items-center gap-[min(2rem,3vw)]">
+          <div className="flex items-center justify-center gap-[min(2.5rem,2.5vw)]">
             {card(me, true)}
             <div className="flex flex-col items-center gap-2 self-stretch justify-center">
               <span className="w-0.5 flex-1 bg-neon/50" />
-              <span className="border-2 border-yellow text-yellow text-3xl sm:text-5xl px-3 sm:px-5 py-2 sm:py-3 text-glow-sm">VS</span>
+              <span className="border-2 border-yellow text-yellow text-[clamp(18px,4.5vh,48px)] px-[min(1.25rem,1.5vh)] py-[min(0.75rem,1vh)] text-glow-sm">VS</span>
               <span className="w-0.5 flex-1 bg-neon/50" />
             </div>
             {card(rival, false)}
           </div>
+          <div className="flex flex-col items-center gap-[min(1rem,1.6vh)] w-full">
           <div className="w-full max-w-180">{vote}</div>
-          <div className="w-full max-w-150 border border-neon bg-[#060b1e] p-4 sm:p-6 flex flex-col items-center gap-4">
-            <p className="text-yellow text-2xl sm:text-4xl text-center">{me?.ready ? t("lb_joined") : t("lb_join_within", { time: mm || "05:00" })}</p>
-            <div className="w-full h-1 bg-neon" />
+          <div className="w-full max-w-180 border border-neon bg-[#060b1e] p-[min(1.5rem,1.6vh)] flex flex-col items-center gap-[min(1rem,1.2vh)]">
+            <p className="text-yellow text-[clamp(14px,3vh,36px)] text-center">{me?.ready ? t("lb_joined") : t("lb_join_within", { time: mm || "05:00" })}</p>
+            <div className="w-full h-1 bg-neon short:hidden" />
             {me?.ready ? (
-              <p className="text-neon text-2xl text-center">{t("lb_waiting_rival")}<span className="blink-caret">...</span></p>
+              <p className="text-neon text-[clamp(14px,2.6vh,24px)] text-center">{t("lb_waiting_rival")}<span className="blink-caret">...</span></p>
             ) : (
               <button
                 onClick={handleReady}
                 disabled={busy || !me || !voted || status !== "READY"}
-                className="btn-arcade w-full py-3 bg-pink border-2 border-yellow text-black text-2xl sm:text-3xl disabled:opacity-40 disabled:pointer-events-none"
+                className="btn-arcade w-full py-[min(0.75rem,1.2vh)] bg-pink border-2 border-yellow text-black text-[clamp(16px,3.4vh,30px)] disabled:opacity-40 disabled:pointer-events-none"
               >
                 {busy ? t("lb_joining") : voted ? t("lb_join_match") : t("lb_pick_map")}
               </button>
             )}
-            <p className="font-sans text-gray-400 text-base text-center">
+            <p className="font-sans text-gray-400 text-[clamp(11px,1.8vh,16px)] text-center short:hidden">
               {me?.ready
                 ? t("lb_hint_joined")
                 : voted
                   ? t("lb_hint_voted")
                   : t("lb_hint_vote")}
             </p>
+          </div>
+          </div>
           </div>
           {error && <p className="text-pink text-xl text-center">{error}</p>}
         </div>

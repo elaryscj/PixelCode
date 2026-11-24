@@ -174,3 +174,60 @@ export function dust(arena: HTMLElement | null, x: number, y: number, kind: "jum
     ).onfinish = () => p.remove();
   }
 }
+
+/**
+ * A door opening: steam bursting out at both sides of its foot and sparks falling from the frame.
+ * x = the door's centre, y = its floor (arena percentages).
+ */
+export function doorOpenFx(arena: HTMLElement | null, x: number, y: number, tint = "#01E4FF") {
+  if (!arena || reduced()) return;
+  const add = (style: Partial<CSSStyleDeclaration>) => {
+    const el = document.createElement("div");
+    Object.assign(el.style, { position: "absolute", pointerEvents: "none", zIndex: "21", ...style });
+    arena.appendChild(el);
+    return el;
+  };
+  // steam: big soft puffs rolling sideways and up
+  for (let i = 0; i < 12; i++) {
+    const side = i % 2 === 0 ? -1 : 1;
+    const s = 14 + Math.random() * 18;
+    const el = add({
+      left: `${x}%`,
+      bottom: `${y + Math.random() * 3}%`,
+      width: `${s}px`,
+      height: `${s}px`,
+      marginLeft: `${-s / 2}px`,
+      borderRadius: "50%",
+      background: "radial-gradient(circle, rgba(235,242,255,0.75), rgba(235,242,255,0) 70%)",
+    });
+    const dx = side * (20 + Math.random() * 40);
+    const dy = -(18 + Math.random() * 50);
+    el.animate(
+      [
+        { transform: "translate(0,0) scale(0.5)", opacity: 0.9 },
+        { transform: `translate(${dx}px, ${dy}px) scale(1.8)`, opacity: 0 },
+      ],
+      { duration: 700 + Math.random() * 600, delay: Math.random() * 120, easing: "cubic-bezier(.1,.7,.3,1)", fill: "backwards" },
+    ).onfinish = () => el.remove();
+  }
+  // sparks: short bright streaks falling from the top of the frame
+  for (let i = 0; i < 14; i++) {
+    const el = add({
+      left: `${x + (Math.random() - 0.5) * 6}%`,
+      bottom: `${y + 8 + Math.random() * 3}%`,
+      width: "2px",
+      height: `${4 + Math.random() * 5}px`,
+      background: i % 3 === 0 ? tint : "#fde047",
+      boxShadow: `0 0 6px ${i % 3 === 0 ? tint : "#fde047"}`,
+    });
+    const dx = (Math.random() - 0.5) * 70;
+    const dy = 30 + Math.random() * 60;
+    el.animate(
+      [
+        { transform: "translate(0,0)", opacity: 1 },
+        { transform: `translate(${dx}px, ${dy}px)`, opacity: 0 },
+      ],
+      { duration: 380 + Math.random() * 380, easing: "cubic-bezier(.4,0,1,1)" },
+    ).onfinish = () => el.remove();
+  }
+}

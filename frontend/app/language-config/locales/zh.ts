@@ -674,6 +674,15 @@ const zh: Translation = {
   sp_offline: "连接中断",
   p_open_door_task: "开门：解出题目",
   sp_hint: "你可以实时看到双方的奔跑。题目和玩家代码在比赛结束前保持隐藏。",
+  // first-visit practice tutorial
+  tut_move: "用 A / D 或 ← → 移动",
+  tut_move_touch: "用 ◀ ▶ 按钮移动",
+  tut_jump: "按 空格 跳跃",
+  tut_jump_touch: "按 JUMP 按钮跳跃",
+  tut_door: "走到 1 号门前按 E",
+  tut_door_touch: "走到 1 号门前点 E",
+  tut_up: "不能从下方跳穿地板：找到上方的缺口，借台阶、电梯或弹跳板上去",
+  tut_skip: "跳过",
 };
 
 export default zh;
