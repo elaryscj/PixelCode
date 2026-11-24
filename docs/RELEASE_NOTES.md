@@ -11,6 +11,10 @@ Beta release for the SOE 205 capstone defense. Code freeze: see README.
 - I-01 username input stops at 16 characters in the register form.
 - I-02 sign-in and recovery pages show the real server location.
 - I-03 admin page fits phone screens.
+- I-04 unknown addresses and malformed requests return 404 / 400 instead of 500.
+
+## Tested
+- 24 November 2026, production: API test run 29 passed, 0 failed, 6 skipped (timer and admin cases); see docs/qa/test-cases.md.
 
 ## Known limitations
 - Free hosting: the backend sleeps after 15 minutes without visitors; the first request can take up to a minute.
