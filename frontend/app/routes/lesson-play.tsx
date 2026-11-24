@@ -1,3 +1,4 @@
+import { before, feel, newFeel } from "~/game/feel";
 // app/routes/lesson-play.tsx — /lesson/:code/play : a student's run in a lesson. Everyone in the class gets the
 // same map and the same four tasks; a door opens only with an accepted solution. The teacher watches the table.
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -5,6 +6,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
+import { FitBox } from "~/components/game/FitBox";
 import { MapLayer, animateMap } from "~/components/game/MapLayer";
 import ChallengeModal from "~/components/game/ChallengeModal";
 import TouchControls from "~/components/game/TouchControls";
@@ -21,7 +23,7 @@ import {
   type StudentState,
 } from "~/api/lessons";
 import { getMap, worldTime } from "~/game/maps";
-import { burst, dust, flash, shake } from "~/components/game/fx";
+import { burst, doorOpenFx, flash, shake } from "~/components/game/fx";
 import { sfx } from "~/lib/sfx";
 import { CHAR_H, CHAR_W, DOORS, createPlayer, doorRespawn, respawn, stepPlayer, type CrumbleState } from "~/game/physics";
 import { ApiError } from "~/api/http";
@@ -56,6 +58,8 @@ function LessonPlayScreen() {
   const skin = getCurrentUser()?.activeSkin ?? "neon_ronin";
   const unlockedCount = state?.unlocked ?? 0;
   const unlocked = Array.from({ length: unlockedCount }, (_, i) => i + 1);
+
+  const feelRef = useRef(newFeel());
 
   const player = useRef(createPlayer(map));
   const crumble = useRef<CrumbleState>(new Map());
@@ -151,7 +155,9 @@ function LessonPlayScreen() {
     sfx.doorOpen();
     flash(arenaRef.current);
     if (d) {
-      burst(arenaRef.current, d.x + 3, d.y + 6, { count: 24, spread: 80 });
+      doorOpenFx(arenaRef.current, d.x + 3.25, d.y);
+      burst(arenaRef.current, d.x + 3, d.y + 6, { count: 12, spread: 70 });
+      sfx.doorHiss();
       const r = doorRespawn(d);
       player.current.respawnX = r.x;
       player.current.respawnY = r.y;
@@ -192,8 +198,7 @@ function LessonPlayScreen() {
       const p = player.current;
       const k = keys.current;
       if (playingRef.current && !modalRef.current) {
-        const wasGrounded = p.isGrounded;
-        const fallSpeed = -p.vy;
+        const b = before(p);
         const res = stepPlayer(
           p,
           {
@@ -208,13 +213,7 @@ function LessonPlayScreen() {
           tPrev,
           dt,
         );
-        if (wasGrounded && !p.isGrounded && p.vy > 0.5) {
-          sfx.jump();
-          dust(arenaRef.current, p.x + CHAR_W / 2, p.y, "jump");
-        }
-        if (!wasGrounded && p.isGrounded && fallSpeed > 0.45) {
-          dust(arenaRef.current, p.x + CHAR_W / 2, p.y, "land", Math.min(1, (fallSpeed - 0.45) / 1.2));
-        }
+        feel(arenaRef.current, p, b, res, feelRef.current, dt);
         if (res.hitHazard) {
           burst(arenaRef.current, p.x + CHAR_W / 2, p.y + 4, { color: "#FE2C96", count: 22, spread: 60 });
           shake(arenaRef.current, 10);
@@ -267,7 +266,7 @@ function LessonPlayScreen() {
     : null;
 
   return (
-    <div dir="ltr" className="min-h-screen bg-[#050814] flex flex-col p-2 sm:p-4 md:p-6 short:p-1.5 font-pixel select-none">
+    <div dir="ltr" className="h-dvh overflow-hidden bg-[#050814] flex flex-col p-2 sm:p-3 short:p-1.5 font-pixel select-none">
       {playing && !challenge && (
         <TouchControls
           keys={keys.current}
@@ -282,7 +281,7 @@ function LessonPlayScreen() {
         <p className="font-sans text-gray-400 text-sm">{t("rotate_text")}</p>
       </div>
 
-      <header className="flex flex-wrap justify-between items-center gap-3 border-b border-neon/30 pb-3 mb-3 short:pb-1 short:mb-1">
+      <header className="flex flex-wrap justify-between items-center gap-3 mb-2 short:mb-1 shrink-0">
         <div className="flex items-center gap-3 min-w-0">
           <Link to="/" className="border-2 border-pink text-pink px-3 py-1.5 text-xs hover:bg-pink/10 shrink-0">
             &lt; {t("ls_leave")}
@@ -301,9 +300,11 @@ function LessonPlayScreen() {
         </div>
       </header>
 
+      <FitBox aspect={1}>
+        {({ width, height }) => (
       <div
-        className="relative w-full max-w-[760px] mx-auto border-2 border-neon/50 bg-[#081026] overflow-hidden"
-        style={{ height: "var(--practice-h)" }}
+        className="relative ring-1 ring-white/10 bg-[#081026] overflow-hidden"
+        style={{ width, height }}
       >
         <div ref={arenaRef} className="absolute inset-0">
           <MapLayer map={map} mirror={false} unlocked={unlocked} doors={{}} tone="neon" nearCheckpoint={playing ? near : null} />
@@ -351,6 +352,8 @@ function LessonPlayScreen() {
           </div>
         )}
       </div>
+        )}
+      </FitBox>
 
       <footer className="flex flex-wrap gap-4 mt-3 text-[10px] text-gray-400 uppercase pointer-coarse:hidden">
         <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">A / D</kbd> {t("k_move")}</span>

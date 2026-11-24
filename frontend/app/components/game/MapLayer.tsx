@@ -272,6 +272,26 @@ export function MapLayer({
                       : "drop-shadow(0 0 3px rgba(255,42,133,0.7))",
               }}
             />
+            {/* the two leaves of the sealed door slide apart when it opens (plays once, on unlock) */}
+            {isUnlocked &&
+              (["l", "r"] as const).map((side) => (
+                <img
+                  key={side}
+                  src="/doors/door-locked.png"
+                  alt=""
+                  draggable={false}
+                  className={`absolute pc-door-leaf-${side}`}
+                  style={{
+                    left: `${mx(cp.x, DOOR_W)}%`,
+                    bottom: `${cp.y}%`,
+                    width: `${DOOR_W}%`,
+                    height: `${DOOR_H}%`,
+                    objectFit: "fill",
+                    imageRendering: "pixelated",
+                    clipPath: side === "l" ? "inset(0 50% 0 0)" : "inset(0 0 0 50%)",
+                  }}
+                />
+              ))}
             {/* number plate above the door */}
             <span
               className={`absolute text-[8px] leading-none px-1 py-px border bg-black/70 ${

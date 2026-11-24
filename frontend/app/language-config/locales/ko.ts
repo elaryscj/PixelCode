@@ -674,6 +674,15 @@ const ko: Translation = {
   sp_offline: "연결 끊김",
   p_open_door_task: "문 열기: 문제를 푸세요",
   sp_hint: "두 플레이어의 질주를 실시간으로 봅니다. 문제와 코드는 끝날 때까지 숨겨집니다.",
+  // first-visit practice tutorial
+  tut_move: "A / D 또는 ← → 로 이동",
+  tut_move_touch: "◀ ▶ 버튼으로 이동",
+  tut_jump: "스페이스로 점프",
+  tut_jump_touch: "JUMP 버튼으로 점프",
+  tut_door: "1번 문 앞에서 E 를 누르세요",
+  tut_door_touch: "1번 문 앞에서 E 를 탭하세요",
+  tut_up: "바닥은 아래에서 뚫고 올라갈 수 없어요: 위쪽 틈을 찾아 발판, 리프트, 점프대로 올라가세요",
+  tut_skip: "건너뛰기",
 };
 
 export default ko;

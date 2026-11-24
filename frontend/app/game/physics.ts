@@ -87,6 +87,8 @@ export interface Input {
 
 export interface StepResult {
   hitHazard: boolean;
+  /** jumped into the underside of a solid block this frame (for a bump sound) */
+  bumpedHead: boolean;
   nearDoor: number | null;
   atExit: boolean;
 }
@@ -177,6 +179,7 @@ export function stepPlayer(
     }
   }
 
+  let bumpedHead = false;
   // 4a. Fixed blocks are solid: bump your head on the underside, stop at the sides. The collision box
   // is a little narrower than the sprite (like most platformers), so tight gaps don't snag.
   for (const plat of plats) {
@@ -203,6 +206,7 @@ export function stepPlayer(
     if (headX && p.vy > 0 && prevY + CHAR_H <= bot + 0.6 && p.y + CHAR_H > bot) {
       p.y = bot - CHAR_H;
       p.vy = 0;
+      bumpedHead = true;
     }
   }
 
@@ -309,7 +313,7 @@ export function stepPlayer(
   const atExit =
     unlocked.length >= DOORS && p.x + CHAR_W >= ex.x && p.x <= ex.x + ex.w && p.y >= ex.y - 0.5 && p.y <= ex.y + ex.h;
 
-  return { hitHazard, nearDoor, atExit };
+  return { hitHazard, bumpedHead, nearDoor, atExit };
 }
 
 const EPS = 0.01;

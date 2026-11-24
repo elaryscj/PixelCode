@@ -674,6 +674,15 @@ const de: Translation = {
   sp_offline: "Verbindung weg",
   p_open_door_task: "TÜR ÖFFNEN: LÖSE DIE AUFGABE",
   sp_hint: "Du siehst beide Läufe live. Die Aufgaben und der Code der Spieler bleiben bis zum Ende verborgen.",
+  // first-visit practice tutorial
+  tut_move: "Bewege dich mit A / D oder ← →",
+  tut_move_touch: "Bewege dich mit den Tasten ◀ ▶",
+  tut_jump: "Springe mit LEERTASTE",
+  tut_jump_touch: "Springe mit der JUMP-Taste",
+  tut_door: "Geh zu Tür 1 und drücke E",
+  tut_door_touch: "Geh zu Tür 1 und tippe auf E",
+  tut_up: "Durch den Boden kann man nicht springen: such die Lücke oben und nimm Stufe, Lift oder Sprungfeld",
+  tut_skip: "Überspringen",
 };
 
 export default de;

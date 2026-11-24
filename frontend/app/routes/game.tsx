@@ -1,3 +1,4 @@
+import { before, feel, newFeel } from "~/game/feel";
 // app/routes/game.tsx
 // Real-time duel: physics run in the browser, but doors, timers, finish and rating are decided by the server.
 import { useServerLabel } from "~/lib/serverRegion";
@@ -10,7 +11,7 @@ import ChallengeModal from "~/components/game/ChallengeModal";
 import GameResultModal from "~/components/game/GameResultModal";
 import PhraseBar, { Bubble, PHRASES, isPhrase, type PhraseId } from "~/components/game/PhraseBar";
 import TouchControls from "~/components/game/TouchControls";
-import { burst, confetti, dust, flash, floatIcon, shake } from "~/components/game/fx";
+import { burst, confetti, doorOpenFx, flash, floatIcon, shake } from "~/components/game/fx";
 import { sfx } from "~/lib/sfx";
 import { AnimatedSkin, type AnimId, type SkinHandle } from "~/components/skins";
 import type { EmoteId } from "~/game/skinRig";
@@ -31,6 +32,8 @@ import {
 } from "~/api/game";
 
 import { MapLayer, animateMap } from "~/components/game/MapLayer";
+import { FitBox } from "~/components/game/FitBox";
+import { OppMiniMap } from "~/components/game/OppMiniMap";
 import { GROUND_Y, getMap, worldTime, type MapDef } from "~/game/maps";
 import {
   CHAR_H,
@@ -57,6 +60,9 @@ function toDeadlines(doors?: Record<string, number>): Record<number, number> {
 }
 
 const fmt = (sec: number) => `${String(Math.floor(sec / 60)).padStart(2, "0")}:${String(sec % 60).padStart(2, "0")}`;
+
+/** height of the strip above each arena (FitBox keeps the arena square under it) */
+const PANEL_HEADER_H = 24;
 
 // Header above each arena: floor, player, rating and the running door timer
 function PanelHeader({
@@ -92,7 +98,8 @@ function PanelHeader({
   return (
     // name and rating are on the scoreboard above: here only what changes during the race
     <div
-      className="flex items-center justify-between px-3 py-1 bg-black/30 text-[9px] tracking-wider"
+      className="flex items-center justify-between px-3 bg-black/30 text-[9px] tracking-wider shrink-0"
+      style={{ height: PANEL_HEADER_H }}
       title={`${name} · MMR ${rating ?? "..."}`}
     >
       <span className={tone === "neon" ? "text-neon/80" : "text-pink/80"}>
@@ -180,10 +187,13 @@ function GameScreen() {
   const myArenaRef = useRef<HTMLDivElement | null>(null);
   const oppArenaRef = useRef<HTMLDivElement | null>(null);
 
+  const feelRef = useRef(newFeel());
+
   const playerState = useRef(createPlayer(getMap(0)));
 
   const playerDomRef = useRef<HTMLDivElement | null>(null);
   const opponentDomRef = useRef<HTMLDivElement | null>(null);
+  const miniDotRef = useRef<HTMLDivElement | null>(null);
   const playerSpriteRef = useRef<HTMLDivElement | null>(null);
   const opponentSpriteRef = useRef<HTMLDivElement | null>(null);
   // which animation each figure plays (walk / jump / think ...), set from the game loop without re-rendering
@@ -239,7 +249,11 @@ function GameScreen() {
     c.me.add(cpNum);
     if (!c.loaded) return;
     const at = doorCenter(cpNum);
-    if (at) burst(myArenaRef.current, at.x, at.y, { color: "#01E4FF", count: 26, spread: 90 });
+    if (at) {
+      doorOpenFx(myArenaRef.current, at.x, at.y - 5, "#01E4FF");
+      burst(myArenaRef.current, at.x, at.y, { color: "#01E4FF", count: 14, spread: 70 });
+    }
+    sfx.doorHiss();
     flash(myArenaRef.current, "rgba(1,228,255,0.3)");
     sfx.doorOpen();
     const left = DOORS - c.me.size;
@@ -251,7 +265,7 @@ function GameScreen() {
     c.opp.add(cpNum);
     if (!c.loaded) return;
     const at = doorCenter(cpNum);
-    if (at) burst(oppArenaRef.current, 100 - at.x, at.y, { color: "#FE2C96", count: 18, spread: 70 });
+    if (at) doorOpenFx(oppArenaRef.current, 100 - at.x, at.y - 5, "#FE2C96");
     flash(oppArenaRef.current, "rgba(254,44,150,0.3)");
     sfx.rivalDoor();
     showBanner(t("g_rival_cracked", { n: cpNum }), "pink", 1300);
@@ -605,16 +619,9 @@ function GameScreen() {
               jump: !!(keys["Space"] || keys["KeyW"] || keys["ArrowUp"]),
             };
 
-        const wasGrounded = p.isGrounded;
-        const fallSpeed = -p.vy;
+        const b = before(p);
         const res = stepPlayer(p, input, map, unlockedRef.current, crumbleRef.current, t, tPrev, dt);
-        if (wasGrounded && !p.isGrounded && p.vy > 0.5) {
-          sfx.jump();
-          dust(myArenaRef.current, p.x + CHAR_W / 2, p.y, "jump");
-        }
-        if (!wasGrounded && p.isGrounded && fallSpeed > 0.45) {
-          dust(myArenaRef.current, p.x + CHAR_W / 2, p.y, "land", Math.min(1, (fallSpeed - 0.45) / 1.2));
-        }
+        feel(myArenaRef.current, p, b, res, feelRef.current, dt);
         if (res.hitHazard) triggerRespawn();
         if (res.nearDoor !== nearRef.current) setNearCheckpoint(res.nearDoor);
         // Exit: only counts when every door is open; the server confirms the win
@@ -656,6 +663,10 @@ function GameScreen() {
         if (opponentDomRef.current) {
           opponentDomRef.current.style.left = `${opp.x}%`;
           opponentDomRef.current.style.bottom = `${opp.y}%`;
+        }
+        if (miniDotRef.current) {
+          miniDotRef.current.style.left = `${opp.x + CHAR_W / 2}%`;
+          miniDotRef.current.style.bottom = `${opp.y}%`;
         }
         if (opponentSpriteRef.current && Math.abs(oppDx) > 0.05) {
           // the right panel is mirrored: moving "left" on the map is moving right here
@@ -712,12 +723,12 @@ function GameScreen() {
 
   return (
     // the arena, HUD and code stay left-to-right even when the menus are in Arabic / Urdu
-    <div dir="ltr" className={`min-h-screen bg-[#050814] flex flex-col p-2 sm:p-3 short:p-1.5 font-pixel select-none relative ${
+    <div dir="ltr" className={`h-dvh overflow-hidden bg-[#050814] flex flex-col p-2 sm:p-3 short:p-1.5 font-pixel select-none relative ${
       hazardHit ? "shadow-[inset_0_0_120px_rgba(254,44,150,0.55)]" : ""
     }`}>
       
       {/* 1. Thin top line: leave, match code, spectators, connection */}
-      <div className="flex justify-between items-center text-[9px] md:text-[10px] uppercase mb-1">
+      <div className="flex justify-between items-center text-[clamp(8px,0.75vw,11px)] uppercase mb-1 shrink-0">
         <Link to="/play" className="text-gray-500 hover:text-pink transition-colors">
           ‹ {t("g_exit_match")}
         </Link>
@@ -737,13 +748,13 @@ function GameScreen() {
       </div>
 
       {/* 2. Scoreboard (Player 1, Timer, Opponent) */}
-      <div className="flex justify-between items-center mb-2 gap-2 short:mb-1">
+      <div className="flex justify-between items-center mb-2 gap-2 short:mb-1 shrink-0">
         
         {/* Local Player (Left) */}
         <div className="flex-1 flex flex-col gap-1.5">
           <div className="flex justify-between items-start border-l-4 border-neon pl-3">
             <div>
-              <h2 className="text-yellow text-lg md:text-2xl short:text-base uppercase truncate max-w-[180px]">{localPlayerName}</h2>
+              <h2 className="text-yellow text-[clamp(13px,1.9vw,28px)] uppercase truncate max-w-[32vw]">{localPlayerName}</h2>
               <p className="text-neon/70 text-[9px] md:text-[10px]">MMR {myRating}</p>
             </div>
             <span className="text-neon/70 text-[9px]">{t("tag_you")}</span>
@@ -770,7 +781,7 @@ function GameScreen() {
 
         {/* Central Match Timer */}
         <div className="flex-1 flex flex-col items-center justify-center">
-          <div className={`text-2xl md:text-4xl tracking-widest font-mono text-glow-sm ${
+          <div className={`text-[clamp(20px,3.6vw,52px)] leading-none tracking-widest font-mono text-glow-sm ${
             matchSeconds < 60 ? "text-pink animate-pulse" : "text-white"
           }`}>
             {timerDisplay}
@@ -784,7 +795,7 @@ function GameScreen() {
         <div className="flex-1 flex flex-col gap-1.5 items-end">
           <div className="flex justify-between items-start border-r-4 border-pink pr-3 w-full flex-row-reverse">
             <div className="text-right">
-              <h2 className="text-yellow text-lg md:text-2xl short:text-base uppercase truncate max-w-[180px]">{opponentName}</h2>
+              <h2 className="text-yellow text-[clamp(13px,1.9vw,28px)] uppercase truncate max-w-[32vw]">{opponentName}</h2>
               <p className="text-pink/70 text-[9px] md:text-[10px]">MMR {oppRating ?? "..."}</p>
             </div>
             <span className="text-pink/70 text-[9px]">{botMatch ? t("tag_bot") : t("tag_rival")}</span>
@@ -812,10 +823,12 @@ function GameScreen() {
 
 
       {/* 3. Dual-Panel Duel Arena */}
+      <FitBox aspect={2} extraH={PANEL_HEADER_H}>
+        {({ width, height }) => (
       <div
         ref={arenaWrapRef}
-        className="w-full relative flex bg-[#060c20] overflow-hidden ring-1 ring-white/10 shadow-[0_0_30px_rgba(0,0,0,0.8)]"
-        style={{ height: "var(--arena-h)" }}
+        className="relative flex bg-[#060c20] overflow-hidden ring-1 ring-white/10 shadow-[0_0_30px_rgba(0,0,0,0.8)]"
+        style={{ width, height }}
       >
         
         {/* Central Divider Beam */}
@@ -838,6 +851,15 @@ function GameScreen() {
           <div ref={myArenaRef} className="relative flex-1">
             {map && (
               <MapLayer map={map} mirror={false} unlocked={unlockedCps} doors={myDoors} tone="neon" nearCheckpoint={nearCheckpoint} />
+            )}
+            {/* the rival's run at a glance where their half is small (phone sideways) */}
+            {map && (
+              <OppMiniMap
+                ref={miniDotRef}
+                map={map}
+                unlocked={opponentUnlockedCps}
+                className="hidden short:block pointer-coarse:block absolute top-2 right-3 z-30"
+              />
             )}
 
             {/* LOCAL PLAYER (A/D move, Space jumps) */}
@@ -901,10 +923,12 @@ function GameScreen() {
         </div>
 
       </div>
+        )}
+      </FitBox>
 
       {/* 4. One quiet row under the arena: emotes and quick phrases (keys 1-8). Movement keys are on the
           how-to-play page; this screen shows only what you use during a match. */}
-      <div className="flex flex-wrap items-center gap-3 mt-2 text-[9px] text-gray-500 uppercase opacity-70 hover:opacity-100 transition-opacity pointer-coarse:hidden">
+      <div className="flex flex-wrap items-center gap-3 mt-2 shrink-0 text-[9px] text-gray-500 uppercase opacity-70 hover:opacity-100 transition-opacity pointer-coarse:hidden">
         <button type="button" onClick={() => emote("wave")} className="hover:text-white">
           <kbd className="text-neon">1</kbd> 👋
         </button>

@@ -674,6 +674,15 @@ const es: Translation = {
   sp_offline: "sin conexión",
   p_open_door_task: "ABRIR PUERTA: RESUELVE EL RETO",
   sp_hint: "Ves las dos carreras en directo. Los retos y el código de los jugadores quedan ocultos hasta el final.",
+  // first-visit practice tutorial
+  tut_move: "Muévete con A / D o ← →",
+  tut_move_touch: "Muévete con los botones ◀ ▶",
+  tut_jump: "Salta con ESPACIO",
+  tut_jump_touch: "Salta con el botón JUMP",
+  tut_door: "Acércate a la puerta 1 y pulsa E",
+  tut_door_touch: "Acércate a la puerta 1 y toca E",
+  tut_up: "No puedes saltar a través del suelo: busca el hueco de arriba y sube por el escalón, el ascensor o el trampolín",
+  tut_skip: "Saltar",
 };
 
 export default es;

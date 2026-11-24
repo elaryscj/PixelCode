@@ -6,14 +6,16 @@ const Greeting = () => {
 
   return (
     <div className="enter-up">
-      <TitleLine text={t("welcome_mini")} />
-      <h1 className="font-pixel text-yellow text-center text-glow title-flicker text-[18vw]/none sm:text-[100px]/none lg:text-[150px]/none">
+      <div className="short:hidden">
+        <TitleLine text={t("welcome_mini")} />
+      </div>
+      <h1 className="font-pixel text-yellow text-center text-glow title-flicker text-[clamp(34px,min(15vw,12vh),150px)]/none">
         PIXELCODE
       </h1>
-      <h3 className="font-pixel text-pink text-4xl sm:text-5xl lg:text-6xl mt-4 sm:mt-6 mb-2 text-center text-glow-sm float-slow">
+      <h3 className="font-pixel text-pink text-[clamp(18px,min(6vw,5.5vh),60px)] mt-[min(1.5rem,1.8vh)] mb-[min(0.5rem,0.8vh)] text-center text-glow-sm float-slow">
         ARENA
       </h3>
-      <p className="font-pixel text-neon/80 text-center text-base sm:text-xl">
+      <p className="short:hidden font-pixel text-neon/80 text-center text-[clamp(12px,2.2vh,20px)]">
         {t("tagline")}<span className="blink-caret">_</span>
       </p>
     </div>

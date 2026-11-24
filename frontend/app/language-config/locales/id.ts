@@ -674,6 +674,15 @@ const id: Translation = {
   sp_offline: "koneksi terputus",
   p_open_door_task: "BUKA PINTU: SELESAIKAN TANTANGAN",
   sp_hint: "Kamu melihat kedua lari secara langsung. Tantangan dan kode pemain tersembunyi sampai akhir.",
+  // first-visit practice tutorial
+  tut_move: "Bergerak dengan A / D atau ← →",
+  tut_move_touch: "Bergerak dengan tombol ◀ ▶",
+  tut_jump: "Lompat dengan SPASI",
+  tut_jump_touch: "Lompat dengan tombol JUMP",
+  tut_door: "Dekati pintu 1 dan tekan E",
+  tut_door_touch: "Dekati pintu 1 dan ketuk E",
+  tut_up: "Kamu tidak bisa melompat menembus lantai: cari celah di atas lalu naik lewat anak tangga, lift, atau pantulan",
+  tut_skip: "Lewati",
 };
 
 export default id;
