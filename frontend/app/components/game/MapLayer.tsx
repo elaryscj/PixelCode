@@ -1,8 +1,10 @@
 // app/components/game/MapLayer.tsx
 // Draws one arena (platforms, doors, hazards, finish). Static parts are React; moving parts are
 // repositioned every frame by `animateMap` straight on the DOM, so the 60 FPS loop never re-renders React.
+import { ArenaBackdrop } from "~/components/game/ArenaBackdrop";
 import {
   DEFAULT_HAZARD_H,
+  GROUND_Y,
   blinkPhase,
   hazardPos,
   platPos,
@@ -16,53 +18,103 @@ type Tone = "neon" | "pink";
 
 const isDynamic = (p: PlatformDef) => !!p.move || p.kind === "blink" || p.kind === "crumble";
 
-function platformClass(p: PlatformDef, tone: Tone): string {
+/** Extra visual thickness under a platform's walkable top (purely cosmetic, % of arena height). */
+export const PLATFORM_DEPTH = 1.8;
+
+/**
+ * Bottom (in %) of a platform's drawn block whose walkable top is `y`. Ground blocks and low
+ * fixed pillars (e.g. over acid) reach down to the floor; everything else is a floating slab.
+ */
+const blockBottom = (y: number, fixed = false) =>
+  y <= GROUND_Y + 0.5 || (fixed && y <= 10.5) ? 0 : y - PLATFORM_H - PLATFORM_DEPTH;
+
+// Steel tile: seams every 18px, rivets, light lip under the edge, darker underside.
+const STEEL =
+  "linear-gradient(to bottom, rgba(255,255,255,0.22) 0 2px, rgba(255,255,255,0.07) 2px 45%, rgba(0,0,0,0.35) 45% calc(45% + 2px), transparent calc(45% + 2px) 60%, rgba(0,0,0,0.55) 100%)," +
+  "radial-gradient(circle at 9px 7px, rgba(255,255,255,0.35) 0 1px, transparent 1.6px)," +
+  "repeating-linear-gradient(90deg, rgba(0,0,0,0.55) 0 2px, transparent 2px 18px)";
+
+interface BlockLook {
+  lip: string; // top edge colour (also the glow)
+  body: string; // base colour of the block
+  pattern?: string; // overrides the steel pattern
+  size?: string;
+  dashed?: boolean;
+}
+
+function blockLook(p: PlatformDef, tone: Tone): BlockLook {
   switch (p.kind) {
     case "conveyor":
-      return "border-yellow/80 bg-yellow/10";
+      return {
+        lip: "#facc15",
+        body: "#1d1a0a",
+        pattern:
+          "linear-gradient(to bottom, transparent 70%, rgba(0,0,0,0.6) 100%), repeating-linear-gradient(90deg, rgba(250,204,21,0.75) 0 7px, #111 7px 14px, transparent 14px 20px)",
+        size: "auto, 20px 100%",
+      };
     case "ice":
-      return "border-white/80 bg-sky-200/25 shadow-[0_0_6px_rgba(186,230,253,0.5)]";
+      return {
+        lip: "#f0f9ff",
+        body: "#3b6f8f",
+        pattern:
+          "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.35) 38%, transparent 46%), linear-gradient(to bottom, rgba(255,255,255,0.4) 0 2px, transparent 2px 60%, rgba(0,20,40,0.5) 100%)",
+      };
     case "bounce":
-      return "border-lime-300 bg-lime-300/30 shadow-[0_0_10px_rgba(190,242,100,0.7)]";
+      return {
+        lip: "#bef264",
+        body: "#2f4a12",
+        pattern:
+          "linear-gradient(to bottom, rgba(255,255,255,0.25) 0 2px, transparent 2px 60%, rgba(0,0,0,0.5) 100%), repeating-linear-gradient(90deg, rgba(190,242,100,0.35) 0 3px, transparent 3px 9px)",
+      };
     case "crumble":
-      return "border-amber-600 bg-amber-900/40 border-dashed";
+      return {
+        lip: "#d97706",
+        body: "#3b2410",
+        pattern:
+          "linear-gradient(to bottom, transparent 55%, rgba(0,0,0,0.6) 100%), repeating-linear-gradient(60deg, transparent 0 9px, rgba(0,0,0,0.6) 9px 10px, transparent 10px 23px), repeating-linear-gradient(-50deg, transparent 0 13px, rgba(0,0,0,0.45) 13px 14px)",
+        dashed: true,
+      };
     case "blink":
-      return "border-fuchsia-400 bg-fuchsia-500/25 border-dashed shadow-[0_0_8px_rgba(217,70,239,0.6)]";
+      return {
+        lip: "#e879f9",
+        body: "rgba(168,85,247,0.28)",
+        pattern: "repeating-linear-gradient(to bottom, rgba(255,255,255,0.18) 0 1px, transparent 1px 3px)",
+        dashed: true,
+      };
     default:
-      if (p.move) return "border-yellow bg-yellow/20 shadow-[0_0_8px_rgba(253,224,71,0.45)]";
-      return tone === "neon" ? "border-neon bg-neon/15" : "border-pink bg-pink/15";
+      if (p.move) return { lip: "#facc15", body: "#2a2a35" };
+      return tone === "neon" ? { lip: "#01E4FF", body: "#243a63" } : { lip: "#FE2C96", body: "#4a2150" };
   }
 }
 
 function PlatformView({ p, i, mirror, tone }: { p: PlatformDef; i: number; mirror: boolean; tone: Tone }) {
   const mx = (x: number, w = 0) => (mirror ? 100 - x - w : x);
-  const tick = tone === "neon" ? "bg-neon/40" : "bg-pink/40";
   const dir = (p.push ?? 0) * (mirror ? -1 : 1);
+  const look = blockLook(p, tone);
+  const bottom = blockBottom(p.y, !p.move);
   return (
     <div
       data-plat={isDynamic(p) ? i : undefined}
-      className={`absolute border-t-2 ${platformClass(p, tone)} flex items-center justify-around overflow-hidden pointer-events-none`}
+      className="absolute flex items-start justify-center overflow-hidden pointer-events-none"
       style={{
         left: `${mx(p.x, p.w)}%`,
-        bottom: `${p.y - PLATFORM_H}%`,
+        bottom: `${bottom}%`,
         width: `${p.w}%`,
-        height: `${PLATFORM_H}%`,
+        height: `${p.y - bottom}%`,
+        backgroundColor: look.body,
+        backgroundImage: look.pattern ?? STEEL,
+        backgroundSize: look.size,
+        borderTop: `3px ${look.dashed ? "dashed" : "solid"} ${look.lip}`,
+        boxShadow: `0 -2px 10px -2px ${look.lip}aa, 0 8px 12px -4px rgba(0,0,0,0.75), inset 0 -2px 0 rgba(0,0,0,0.5)`,
         ...(p.kind === "conveyor"
-          ? {
-              backgroundImage:
-                "repeating-linear-gradient(90deg, rgba(253,224,71,0.55) 0 6px, transparent 6px 20px)",
-              animation: `pc-belt-${dir < 0 ? "left" : "right"} ${0.08 / Math.abs(p.push || 0.1)}s linear infinite`,
-            }
+          ? { animation: `pc-belt-${dir < 0 ? "left" : "right"} ${0.08 / Math.abs(p.push || 0.1)}s linear infinite` }
+          : {}),
+        ...(p.move && !p.kind
+          ? { borderLeft: "3px solid #facc15", borderRight: "3px solid #facc15" }
           : {}),
       }}
     >
-      {p.kind === "bounce" ? (
-        <span className="text-[8px] leading-none text-lime-200">▲▲</span>
-      ) : p.kind === "conveyor" ? null : (
-        [...Array(Math.floor(p.w / 5))].map((_, j) => (
-          <div key={j} className={`h-full w-1 ${p.kind === "crumble" ? "bg-amber-500/40" : tick}`}></div>
-        ))
-      )}
+      {p.kind === "bounce" && <span className="text-[8px] leading-none text-lime-200 mt-px">▲ ▲ ▲</span>}
     </div>
   );
 }
@@ -131,11 +183,24 @@ function HazardView({ h, i, mirror }: { h: HazardDef; i: number; mirror: boolean
       </div>
     );
   }
+  // steel spikes on a base plate, lit from the left, with a red danger glow
   return (
-    <div data-haz={dyn} className="absolute flex items-end justify-between pointer-events-none" style={base}>
+    <div
+      data-haz={dyn}
+      className="absolute flex items-end justify-between pointer-events-none"
+      style={{ ...base, filter: "drop-shadow(0 0 4px rgba(254,44,150,0.75))" }}
+    >
       {[...Array(Math.max(1, Math.floor(h.w / 2.2)))].map((_, j) => (
-        <div key={j} className="w-2 h-full bg-pink" style={{ clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)" }}></div>
+        <div
+          key={j}
+          className="h-full flex-1"
+          style={{
+            clipPath: "polygon(50% 0%, 4% 100%, 96% 100%)",
+            background: "linear-gradient(90deg, #ffe4f1 0 48%, #b3125f 52% 100%)",
+          }}
+        ></div>
       ))}
+      <div className="absolute left-0 right-0 bottom-0 h-[3px] bg-[#5b0a30] border-t border-pink/70" />
     </div>
   );
 }
@@ -161,18 +226,22 @@ export function MapLayer({
 
   return (
     <>
-      {/* side walls */}
-      <div className="absolute top-0 bottom-0 left-0 w-[1.6%] bg-[#10213d] border-r border-neon/30 pointer-events-none" />
-      <div className="absolute top-0 bottom-0 right-0 w-[1.6%] bg-[#10213d] border-l border-neon/30 pointer-events-none" />
+      <ArenaBackdrop map={map} tone={tone} />
 
-      {map.floors.map((y, i) => (
-        <span
-          key={i}
-          className="absolute text-[9px] text-white/25 pointer-events-none"
-          style={{ [mirror ? "right" : "left"]: "3%", bottom: `${y + PLATFORM_H}%` }}
-        >
-          F{i + 1}
-        </span>
+      {/* side walls: riveted steel */}
+      {(["left", "right"] as const).map((side) => (
+        <div
+          key={side}
+          className="absolute top-0 bottom-0 w-[1.6%] pointer-events-none"
+          style={{
+            [side]: 0,
+            backgroundColor: "#161f36",
+            backgroundImage:
+              "radial-gradient(circle at 50% 8px, rgba(255,255,255,0.3) 0 1px, transparent 1.6px), repeating-linear-gradient(to bottom, rgba(0,0,0,0.5) 0 2px, transparent 2px 26px)",
+            backgroundSize: "100% 26px, auto",
+            boxShadow: `inset ${side === "left" ? "-2px" : "2px"} 0 0 rgba(255,255,255,0.08), 0 0 12px rgba(0,0,0,0.8)`,
+          }}
+        />
       ))}
 
       {map.platforms.map((p, i) => (
@@ -211,11 +280,14 @@ export function MapLayer({
                       : "drop-shadow(0 0 3px rgba(255,42,133,0.7))",
               }}
             />
+            {/* number plate above the door */}
             <span
-              className={`absolute text-[8px] leading-none ${isUnlocked ? "text-emerald-300" : "text-white/60"}`}
-              style={{ left: `${mx(cp.x, DOOR_W)}%`, width: `${DOOR_W}%`, textAlign: "center", bottom: `${cp.y + DOOR_H + 0.6}%` }}
+              className={`absolute text-[8px] leading-none px-1 py-px border bg-black/70 ${
+                isUnlocked ? "text-emerald-300 border-emerald-400/60" : isActive ? "text-yellow border-yellow/70" : "text-white/70 border-white/25"
+              }`}
+              style={{ left: `${mx(cp.x + DOOR_W / 2)}%`, transform: "translateX(-50%)", bottom: `${cp.y + DOOR_H + 0.8}%` }}
             >
-              CP{cp.num}
+              {cp.num}
             </span>
 
             {near && !isUnlocked && (
@@ -252,7 +324,12 @@ export function MapLayer({
         className="absolute flex flex-col items-center justify-end pointer-events-none"
         style={{ left: `${mx(ex.x, ex.w)}%`, bottom: `${ex.y}%`, width: `${ex.w}%`, height: `${ex.h}%` }}
       >
-        <span className={`text-[10px] mb-1 ${allOpen ? "text-yellow text-glow-sm animate-pulse" : "text-gray-500"}`}>
+        {/* beam of light over the exit once every door is open */}
+        <div
+          className={`absolute left-[10%] right-[10%] bottom-4 h-[160%] transition-opacity duration-700 ${allOpen ? "opacity-100 animate-pulse" : "opacity-0"}`}
+          style={{ background: "linear-gradient(to top, rgba(250,204,21,0.45), rgba(250,204,21,0.08) 60%, transparent)" }}
+        />
+        <span className={`relative text-[10px] mb-1 ${allOpen ? "text-yellow text-glow-sm animate-pulse" : "text-gray-500"}`}>
           {allOpen ? "FINISH" : `FINISH ${unlocked.length}/${DOORS}`}
         </span>
         <div
@@ -277,7 +354,9 @@ export function animateMap(root: HTMLElement | null, map: MapDef, t: number, mir
     if (p.move) {
       const pos = platPos(p, t);
       el.style.left = `${mirror ? 100 - pos.x - p.w : pos.x}%`;
-      el.style.bottom = `${pos.y - PLATFORM_H}%`;
+      const b = blockBottom(pos.y);
+      el.style.bottom = `${b}%`;
+      el.style.height = `${pos.y - b}%`;
     }
     if (p.kind === "blink") {
       const f = blinkPhase(p, t);
