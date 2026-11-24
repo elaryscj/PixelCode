@@ -128,3 +128,5 @@ The backend tests cover the code sandbox, all 42 catalog challenges (each refere
 ## Code freeze (Week 13)
 
 **Freeze date: Monday, 23 November 2026, 00:00.** From then on only bug fixes for issues already logged in GitHub Issues are merged; each fix needs a pull request, a review by another member and a retest on staging before it goes to production. Release notes: [docs/RELEASE_NOTES.md](docs/RELEASE_NOTES.md).
+
+**Releases:** `v0.9-beta` (24 November 2026, the frozen version) and `v0.9.1-beta` (24 November 2026, an exception after the freeze: solid floors, rebuilt maps and the new arena look; retested on staging and production, see the release notes).

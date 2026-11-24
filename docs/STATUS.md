@@ -82,6 +82,11 @@ The header shows where the game server really runs: the backend's SERVER_REGION 
 - Own tasks: on /teacher a teacher writes tasks for their class (text, method name, examples, tests as JSON, reference solution). The server runs the reference solution on every save. Such tasks are private (owner only, never published, not in public matches or the admin list) and appear first in the lesson's task picker, marked MINE.
 - Students need no account: /lesson (also linked on the login page and in the menu as LESSON), code + name. They all run the same map with the same four tasks at the same time; a door opens only with an accepted solution (no 4-minute auto-open), the clock is the lesson's time. Their token is kept in the browser (rejoin after closing the tab). Up to 60 students per lesson; rate limits count each student separately (a class shares one school address).
 
+## Added 2026-11-24 (v0.9.1-beta)
+- Solid floors: fixed platforms block from below and from the sides (lifts, blinking and crumbling blocks stay one-way); same rules in physics.ts and BotPhysics.java.
+- All six maps rebuilt: four floors (y 3, 27, 51, 75), the way up is a gap with a step, a lift or a bounce pad. Doors and exits: maps.ts -> `npm run export-maps` -> maps.json, plus MapGeometry.java and the QA script tables.
+- Arena look: steel blocks, per-map background, dust on jump / landing, bigger arena with less text around it; the footer shows the version from frontend/app/version.ts.
+
 ## Added 2026-11-21
 - Weekly encrypted database backup: GitHub Actions `db-backup.yml` (secrets NEON_DATABASE_URL + BACKUP_PASSPHRASE; see docs/DEPLOY.md).
 - Door statistics: every human door in a match is stored (table door_results: solved / opened by timer / unsolved, attempts, time, accepted code). /admin STATS: matches by kind and end reason, per challenge solve rate, attempts, solve time and a TOO HARD / TOO EASY hint.

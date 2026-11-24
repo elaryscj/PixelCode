@@ -78,7 +78,7 @@ After deploying, the main flow was completed on a phone (menu, Quick Play, a mat
 
 ### Releasing a version to production
 1. Merge pull requests into `main`; Render deploys them to staging. Run `python3 docs/qa/run_api_tests.py https://pixelcode-api-staging.onrender.com/api` and click through the main flow on the staging site.
-2. GitHub > Releases > Draft a new release > tag `v0.9-beta` (next: `v1.0`) on `main`, paste the notes from `docs/RELEASE_NOTES.md`, Publish.
+2. GitHub > Releases > Draft a new release > tag on `main` (released: `v0.9-beta`, `v0.9.1-beta`; next: `v1.0`); bump `frontend/app/version.ts` to the same name first, paste the notes from `docs/RELEASE_NOTES.md`, Publish.
 3. GitHub > Pull requests > New: base `release` <- compare `main` (the tagged commit) > Merge. Render deploys production.
 4. Rollback: open a pull request into `release` from the previous tag (or on Render: the service > Events > the previous deploy > Rollback).
 

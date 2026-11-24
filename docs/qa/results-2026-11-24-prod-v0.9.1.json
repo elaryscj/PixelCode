@@ -1,0 +1,322 @@
+{
+ "target": "https://pixelcode-api.onrender.com/api",
+ "run": "df234",
+ "at": "2026-11-24T21:33:45",
+ "results": [
+  {
+   "id": "TC-01",
+   "story": "US-01",
+   "title": "Register with valid data",
+   "steps": "POST /auth/register username=qadf234, valid e-mail, password Passw0rd!x",
+   "expected": "200, account created, token returned",
+   "actual": "200, token=yes",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-02",
+   "story": "US-01",
+   "title": "Register with empty fields",
+   "steps": "Submit the form with all fields empty",
+   "expected": "400, account not created, error names a field",
+   "actual": "400, Username must be 2-16 characters: letters, digits or underscore (field=username)",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-03",
+   "story": "US-01",
+   "title": "Register a duplicate username",
+   "steps": "Register qadf234 again with a different e-mail",
+   "expected": "Refused (4xx) with a username error",
+   "actual": "409, Username is already in use",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-04",
+   "story": "US-01",
+   "title": "Register with a wrong e-mail format",
+   "steps": "E-mail = not-an-email",
+   "expected": "400, e-mail field error",
+   "actual": "400, Enter a valid e-mail address (field=email)",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-05",
+   "story": "US-01",
+   "title": "Register with a very long username (300 chars)",
+   "steps": "Username of 300 letters",
+   "expected": "400, username error, no server error",
+   "actual": "400, Username must be 2-16 characters: letters, digits or underscore",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-06",
+   "story": "US-01",
+   "title": "Register with a too short password",
+   "steps": "Password = 1",
+   "expected": "400, password error",
+   "actual": "400, Password must be 8-72 characters (field=password)",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-07",
+   "story": "US-02",
+   "title": "Sign in with valid credentials",
+   "steps": "POST /auth/login with the account from TC-01",
+   "expected": "200, session token",
+   "actual": "200, token=yes",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-08",
+   "story": "US-02",
+   "title": "Sign in with a wrong password / unknown user",
+   "steps": "Wrong password; then a user that does not exist",
+   "expected": "Both refused with the same generic message",
+   "actual": "401 'Invalid username or password' / 401 'Invalid username or password'",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-09",
+   "story": "NFR-04",
+   "title": "Protected data without signing in",
+   "steps": "GET /friends with no token",
+   "expected": "401, no data",
+   "actual": "401, Please log in again",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-10",
+   "story": "US-09",
+   "title": "Enter matchmaking",
+   "steps": "Signed in, press Play (POST /matchmaking/join)",
+   "expected": "State SEARCHING",
+   "actual": "200, SEARCHING",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-11",
+   "story": "US-10",
+   "title": "Cancel matchmaking",
+   "steps": "While searching, press Cancel",
+   "expected": "State IDLE, player left the queue",
+   "actual": "200, IDLE",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-12",
+   "story": "US-09",
+   "title": "Enter matchmaking while logged out",
+   "steps": "POST /matchmaking/join without a token",
+   "expected": "401",
+   "actual": "401, Please log in again",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-13",
+   "story": "US-11",
+   "title": "Versus information after pairing",
+   "steps": "Two players with equal rating press Play at the same time",
+   "expected": "Matched; room shows both usernames and ratings",
+   "actual": "code=BDB3E4, players=['qmadf234', 'qmbdf234'], ratings=[1500, 1500]",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-14",
+   "story": "US-32",
+   "title": "Time left to join is shown",
+   "steps": "Open the assigned match (GET /rooms/{code})",
+   "expected": "Response has the join deadline",
+   "actual": "keys=['joinDeadline']",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-15",
+   "story": "US-12",
+   "title": "Both players get the same map",
+   "steps": "Both enter; compare the map of each player's state",
+   "expected": "Same mapId and door titles for both",
+   "actual": "A map 2, B map 2, same doors=True",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-16",
+   "story": "US-13",
+   "title": "Locked doors block the way to the finish",
+   "steps": "Claim the finish with all doors still locked",
+   "expected": "409, 'Unlock all doors before reaching the exit'",
+   "actual": "409, Unlock all doors before reaching the exit",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-17",
+   "story": "US-16",
+   "title": "Open a door from far away",
+   "steps": "Press E at the start, far from door 1",
+   "expected": "409, 'Walk up to the door first'",
+   "actual": "409, Walk up to the door first",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-18",
+   "story": "US-16",
+   "title": "Skip a door",
+   "steps": "Try to open door 2 before door 1",
+   "expected": "409, 'Open the previous door first'",
+   "actual": "409, Open the previous door first",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-19",
+   "story": "US-14",
+   "title": "Teleport is refused (server-confirmed position)",
+   "steps": "Report a position across the map in one step",
+   "expected": "Position not accepted",
+   "actual": "409; position after = (4.0, 3.0)",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-20",
+   "story": "US-16",
+   "title": "Open door 1 at the door",
+   "steps": "Walk to door 1, press E",
+   "expected": "Challenge with statement, input/output, starter code; door timer running",
+   "actual": "200, title=GATE // MAX SIGNAL, timer=240s",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-21",
+   "story": "US-14",
+   "title": "Opponent sees my progress",
+   "steps": "After walking, B reads the match state",
+   "expected": "B's opponent position = A's latest accepted position",
+   "actual": "B sees A at (79.0, 3.0), A is at (79.0, 3.0)",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-22",
+   "story": "US-17",
+   "title": "Submit empty code",
+   "steps": "Press Submit with an empty editor",
+   "expected": "400, 'Write some code first'",
+   "actual": "400, Write some code first",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-23",
+   "story": "US-19",
+   "title": "Submit a wrong solution",
+   "steps": "Submit the unchanged starter code",
+   "expected": "passed=false, door stays locked, feedback shown",
+   "actual": "200, passed=False, unlocked=False, 0/5 tests, error=None",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-24",
+   "story": "US-20",
+   "title": "Countdown does not reset on resubmit",
+   "steps": "Submit again (an endless loop) and compare the timer",
+   "expected": "Time left keeps going down; endless loop stopped with a time-limit or type error",
+   "actual": "219s -> 214s, error=The parameter types of 'solve' do not fit the test data (expected a number, got [1, 5, 3, 9, 2])",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-25",
+   "story": "US-18",
+   "title": "Submit a correct solution",
+   "steps": "Submit the catalog's reference solution",
+   "expected": "passed=true, door 1 unlocked",
+   "actual": "200, passed=True, unlocked=True",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-26",
+   "story": "US-21",
+   "title": "Door opens by itself when the timer ends",
+   "steps": "",
+   "expected": "",
+   "actual": "needs --short-timers (otherwise 4 minutes)",
+   "result": "SKIP"
+  },
+  {
+   "id": "TC-27",
+   "story": "US-15",
+   "title": "Finish the race",
+   "steps": "All doors open, walk into the exit",
+   "expected": "Match FINISHED, A is the winner",
+   "actual": "200, status=FINISHED, winner=15 (A=15)",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-28",
+   "story": "US-24",
+   "title": "Both players see the result",
+   "steps": "B opens the match after A finished",
+   "expected": "B sees FINISHED, LOSS for B, normal finish",
+   "actual": "B status=FINISHED, B result=LOSS, reason=FINISH",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-29",
+   "story": "US-25",
+   "title": "Rating changes once",
+   "steps": "Read A's rating, then send the finish again",
+   "expected": "Change shown (+ for A, - for B); a repeated finish does not change it again",
+   "actual": "A delta 16, B delta -16; repeat finish 200, rating after repeat 1516",
+   "result": "PASS"
+  },
+  {
+   "id": "TC-30",
+   "story": "US-34",
+   "title": "No-show is banned",
+   "steps": "",
+   "expected": "",
+   "actual": "needs --short-timers",
+   "result": "SKIP"
+  },
+  {
+   "id": "TC-31",
+   "story": "US-33",
+   "title": "Reconnect before the deadline",
+   "steps": "",
+   "expected": "",
+   "actual": "needs --short-timers",
+   "result": "SKIP"
+  },
+  {
+   "id": "TC-32",
+   "story": "US-35",
+   "title": "Disconnect too long = technical loss",
+   "steps": "",
+   "expected": "",
+   "actual": "needs --short-timers",
+   "result": "SKIP"
+  },
+  {
+   "id": "TC-33",
+   "story": "US-22",
+   "title": "Admin adds a valid challenge",
+   "steps": "",
+   "expected": "",
+   "actual": "qa_admin is not in ADMIN_USERNAMES on this server",
+   "result": "SKIP"
+  },
+  {
+   "id": "TC-34",
+   "story": "US-22",
+   "title": "Admin adds a challenge without tests",
+   "steps": "",
+   "expected": "",
+   "actual": "qa_admin is not in ADMIN_USERNAMES on this server",
+   "result": "SKIP"
+  },
+  {
+   "id": "TC-35",
+   "story": "US-22",
+   "title": "A player tries the admin API",
+   "steps": "Normal player POSTs a challenge",
+   "expected": "403",
+   "actual": "403, Administrator access required",
+   "result": "PASS"
+  }
+ ]
+}
