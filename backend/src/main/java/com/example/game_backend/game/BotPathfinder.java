@@ -144,7 +144,9 @@ final class BotPathfinder {
                             break;
                         }
                     }
-                    if (dead) {
+                    // Routes only ever go up: falling to a lower floor (through a lift shaft or off an
+                    // edge) is never part of a good plan, and pruning it keeps the search small.
+                    if (dead || s.y < from.y - 6) {
                         continue;
                     }
                     Node child = new Node(s, n, a);

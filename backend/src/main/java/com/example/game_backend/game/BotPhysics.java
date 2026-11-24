@@ -23,6 +23,9 @@ final class BotPhysics {
     static final double DOOR_W = 6.5;
     static final double BARRIER_H = 18;
     static final double GROUND_Y = 3;
+    static final double PLATFORM_H = 2.6;
+    /** drawn thickness under a fixed platform's top; the block is solid all the way down */
+    static final double PLATFORM_DEPTH = 0.8;
     static final double CRUMBLE_AFTER = 0.55;
     static final double CRUMBLE_RESPAWN = 2.5;
 
@@ -209,7 +212,39 @@ final class BotPhysics {
             }
         }
 
-        // 4. one-way platforms
+        // 4a. fixed blocks are solid: bump your head on the underside, stop at the sides.
+        // The collision box is a little narrower than the sprite (like most platformers), so the
+        // player slips through gaps about as wide as the character.
+        for (ArenaLayout.Platform plat : plats) {
+            if (!isSolidBlock(plat)) {
+                continue;
+            }
+            double top = plat.y();
+            double bot = blockBottom(plat);
+            double l = plat.x();
+            double r = plat.x() + plat.w();
+            boolean overY = p.y < top - EPS && p.y + CHAR_H > bot + EPS;
+            boolean prevOverY = prevY < top - EPS && prevY + CHAR_H > bot + EPS;
+            boolean sideX = p.x + CHAR_W - SIDE_INSET > l && p.x + SIDE_INSET < r;
+            boolean prevSideX = prevX + CHAR_W - SIDE_INSET > l + EPS && prevX + SIDE_INSET < r - EPS;
+            if (overY && prevOverY && sideX && !prevSideX) {
+                if (prevX + CHAR_W - SIDE_INSET <= l + EPS) {
+                    p.x = l - CHAR_W + SIDE_INSET;
+                    p.vx = Math.min(p.vx, 0);
+                } else {
+                    p.x = r - SIDE_INSET;
+                    p.vx = Math.max(p.vx, 0);
+                }
+                continue;
+            }
+            boolean headX = p.x + CHAR_W - HEAD_INSET > l && p.x + HEAD_INSET < r;
+            if (headX && p.vy > 0 && prevY + CHAR_H <= bot + 0.6 && p.y + CHAR_H > bot) {
+                p.y = bot - CHAR_H;
+                p.vy = 0;
+            }
+        }
+
+        // 4b. landing on top of any platform (moving, blinking and crumbling ones stay one-way)
         p.grounded = false;
         p.riding = -1;
         int standing = -1;
@@ -296,6 +331,25 @@ final class BotPhysics {
         boolean atExit = unlocked >= GameSession.DOORS && p.x + CHAR_W >= ex.x() && p.x <= ex.x() + ex.w()
                 && p.y >= ex.y() - 0.5 && p.y <= ex.y() + ex.h();
         return new Step(hit, near, atExit);
+    }
+
+    private static final double EPS = 0.01;
+    /** how much narrower than the sprite the collision box is, at the head and at the sides */
+    static final double HEAD_INSET = 1.6;
+    static final double SIDE_INSET = 1.2;
+
+    /** Fixed, always-there platforms are solid blocks; lifts, blinking and crumbling ones are one-way. */
+    static boolean isSolidBlock(ArenaLayout.Platform p) {
+        String k = p.kindOr();
+        return p.move() == null && !k.equals("blink") && !k.equals("crumble");
+    }
+
+    /** Bottom of a solid block: ground blocks and low pillars (over acid) reach the floor. */
+    static double blockBottom(ArenaLayout.Platform p) {
+        if (p.y() <= GROUND_Y + 0.5 || (p.move() == null && p.y() <= 10.5)) {
+            return 0;
+        }
+        return p.y() - PLATFORM_H - PLATFORM_DEPTH;
     }
 
     private double computeHazardFloor(ArenaLayout.Hazard h) {

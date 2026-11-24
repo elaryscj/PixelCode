@@ -101,6 +101,11 @@ Browser check on https://pixelcode-staging.onrender.com: a new account registere
 Found during the staging setup: `VITE_API_URL` must not end with `/api` (the site adds it); the docs said otherwise and were corrected.
 Admin checks on staging with the team's admin accounts (`dauren`, `Arman123` from `ADMIN_USERNAMES`): TC-33 valid challenge published — PASS; TC-34 challenge without tests refused ("Field 'testsJson' is required") — PASS; a challenge whose reference solution fails its own tests refused ("passes only 1 of 2 tests") — PASS; TC-42 withdraw sets published=false — PASS; admin STATS opens — PASS; TC-35 a normal player gets 403 on the admin API and on STATS — PASS.
 
+## Production rerun (Week 13)
+
+24 November 2026, after `main` was merged into `release` (PR #33) and Render redeployed production: `python3 docs/qa/run_api_tests.py https://pixelcode-api.onrender.com/api` (normal timers): **29 passed, 0 failed, 6 skipped**, the same as on staging (TC-26, TC-30 – TC-32 need short timers; TC-33 – TC-34 need the test account to be an admin). Results: `results-2026-11-24-prod.json`.
+I-04 checked on production: an unknown address (`/api/no-such-thing`) now returns 404 instead of 500.
+
 ## Production check from another device (Week 11)
 
 21 November 2026, a team member's iPhone (account `dauren`), https://pixelcode-arena.onrender.com: main menu (portrait and landscape), Quick Play search, a match against PIXEL_BOT with touch controls, a door solved ("Accepted! 5/5 tests passed"), leaderboard with "your rank", practice, a door challenge, friends. Everything worked; no new defects. Registration of a brand-new account was checked the same day on staging (browser) and by TC-01.

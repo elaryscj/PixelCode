@@ -25,7 +25,7 @@ export default function PhraseBar({
           key={p}
           type="button"
           onClick={() => onPhrase(p)}
-          className="border border-neon/50 bg-black/40 px-2 py-0.5 text-[11px] normal-case text-gray-100 hover:text-white hover:border-neon active:scale-95"
+          className="border border-white/10 bg-black/30 px-2 py-0.5 text-[10px] normal-case text-gray-300 hover:text-white hover:border-neon active:scale-95"
         >
           {keys && <span className="text-neon mr-1">{i + 3}</span>}
           {t(`ph_${p}`)}
