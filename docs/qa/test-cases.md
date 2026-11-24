@@ -93,3 +93,26 @@ python3 docs/qa/run_api_tests.py http://localhost:8092/api --short-timers
 # production (timer cases are skipped; creates a few qa* test accounts)
 python3 docs/qa/run_api_tests.py https://pixelcode-api.onrender.com/api
 ```
+
+## Staging run (Week 11 deployment check)
+
+21 November 2026, `python3 docs/qa/run_api_tests.py https://https-dashboard-render-com-fbww.onrender.com/api` (normal timers): **29 passed, 0 failed, 6 skipped** (TC-26, TC-30 – TC-32 need short timers; TC-33 – TC-34 need the test account to be an admin there). Results: `results-2026-11-21-staging.json`.
+Browser check on https://pixelcode-staging.onrender.com: a new account registered through the form, the main menu opened, header shows the Frankfurt server.
+Found during the staging setup: `VITE_API_URL` must not end with `/api` (the site adds it); the docs said otherwise and were corrected.
+Admin checks on staging with the team's admin accounts (`dauren`, `Arman123` from `ADMIN_USERNAMES`): TC-33 valid challenge published — PASS; TC-34 challenge without tests refused ("Field 'testsJson' is required") — PASS; a challenge whose reference solution fails its own tests refused ("passes only 1 of 2 tests") — PASS; TC-42 withdraw sets published=false — PASS; admin STATS opens — PASS; TC-35 a normal player gets 403 on the admin API and on STATS — PASS.
+
+## Production check from another device (Week 11)
+
+21 November 2026, a team member's iPhone (account `dauren`), https://pixelcode-arena.onrender.com: main menu (portrait and landscape), Quick Play search, a match against PIXEL_BOT with touch controls, a door solved ("Accepted! 5/5 tests passed"), leaderboard with "your rank", practice, a door challenge, friends. Everything worked; no new defects. Registration of a brand-new account was checked the same day on staging (browser) and by TC-01.
+
+| Menu | Quick Play search | Leaderboard |
+| --- | --- | --- |
+| ![Menu](phone/5-menu-portrait.jpg) | ![Finding a match](phone/6-finding-match.jpg) | ![Leaderboard](phone/9-leaderboard.jpg) |
+
+| Match against PIXEL_BOT (touch controls) | Door solved on the phone |
+| --- | --- |
+| ![Match vs bot](phone/7-match-vs-bot.jpg) | ![Accepted solution](phone/8-door-solved.jpg) |
+
+| Menu (landscape) | Practice (touch controls) | Door challenge | Friends |
+| --- | --- | --- | --- |
+| ![Menu landscape](phone/1-menu.jpg) | ![Practice](phone/2-practice-touch.jpg) | ![Door challenge](phone/3-door-challenge.jpg) | ![Friends](phone/4-friends.jpg) |

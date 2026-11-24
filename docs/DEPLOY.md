@@ -52,8 +52,12 @@ pg_restore --clean --if-exists --no-owner -d "postgresql://...target..." pixelco
 | WebSocket connected locally but not online | `ws://` from an `https://` page and the allowed origin list | `VITE_WS_URL=wss://.../ws` and `CORS_ORIGINS` set to the site address |
 | First request after a pause took about a minute | Free backend sleeps after 15 minutes | UptimeRobot pings `/api/health` every 5 minutes |
 | Render's free PostgreSQL expires after 30 days | Free plan limit | Database moved to Neon (free, no expiry) through `DB_URL`; data copied with `pg_dump` / `pg_restore`, row counts checked |
+| Staging site could not sign in (`/api/api/...`) | `VITE_API_URL` was given with `/api` at the end | The value is the backend origin only; the site adds `/api` |
 | High ping for players in Kazakhstan | Server in Oregon (USA) | Backend recreated in Frankfurt; the header shows `SERVER_REGION` |
 | Kazakh letters shown in a fallback font | The pixel font had only the Latin part | Cyrillic and Latin-extended font subsets loaded on demand |
+
+## Check from another device
+After deploying, the main flow was completed on a phone (menu, Quick Play, a match against the bot with touch controls, a solved door, leaderboard, practice, friends); a brand-new account was registered on staging: see the screenshots in [qa/test-cases.md](qa/test-cases.md#production-check-from-another-device-week-11).
 
 ## Environments (staging and production)
 | Item | Staging | Production |
@@ -61,7 +65,7 @@ pg_restore --clean --if-exists --no-owner -d "postgresql://...target..." pixelco
 | Purpose | Test changes safely | What the instructor and players see |
 | Git branch Render deploys from | `main` (every merged pull request) | `release` (moved only to a tagged, tested version) |
 | Site | https://pixelcode-staging.onrender.com | https://pixelcode-arena.onrender.com |
-| Backend | https://pixelcode-api-staging.onrender.com | https://pixelcode-api.onrender.com |
+| Backend | https://https-dashboard-render-com-fbww.onrender.com (service `pixelcode-api-staging`) | https://pixelcode-api.onrender.com |
 | Database | Neon branch `staging` (separate copy) | Neon branch `main` of project `pixelcode` |
 | Secrets | own `TOKEN_SECRET`, own DB password, no payment keys | own values, never copied to staging |
 
@@ -69,7 +73,7 @@ pg_restore --clean --if-exists --no-owner -d "postgresql://...target..." pixelco
 1. **Release branch.** GitHub > Code > branch list > New branch `release` from `main`. Then on Render open `pixelcode-api` and `pixelcode-arena` > Settings > Build & Deploy > Branch: `release`. Production now changes only when `release` moves.
 2. **Staging database.** Neon console > project `pixelcode` > Branches > Create branch `staging` (from `main`) > Connect: copy host, user and password.
 3. **Staging backend.** Render > New > Web Service > this repo, branch `main`, Root Directory `backend`, Runtime Docker, plan Free, region Frankfurt, name `pixelcode-api-staging`. Environment: `DB_URL=jdbc:postgresql://<staging host>/neondb?sslmode=require`, `DB_USER`, `DB_PASSWORD` (from step 2), `TOKEN_SECRET` (new value: `openssl rand -hex 32`), `ADMIN_USERNAMES`, `FRONTEND_URL=https://pixelcode-staging.onrender.com`, `CORS_ORIGINS=https://pixelcode-staging.onrender.com`, `SERVER_REGION=frankfurt`. No Brevo or payment keys.
-4. **Staging site.** Render > New > Static Site > this repo, branch `main`, Root Directory `frontend`, build `npm ci && npm run build`, publish `build/client`, name `pixelcode-staging`. Environment: `VITE_API_URL=https://pixelcode-api-staging.onrender.com/api`, `VITE_WS_URL=wss://pixelcode-api-staging.onrender.com/ws`. Redirects/Rewrites: `/*` -> `/index.html` (Rewrite).
+4. **Staging site.** Render > New > Static Site > this repo, branch `main`, Root Directory `frontend`, build `npm ci && npm run build`, publish `build/client`, name `pixelcode-staging`. Environment: `VITE_API_URL=https://<staging backend>.onrender.com` (no `/api` at the end: the site adds it), `VITE_WS_URL=wss://<staging backend>.onrender.com/ws`. Redirects/Rewrites: `/*` -> `/index.html` (Rewrite).
 5. Do not add the staging backend to UptimeRobot: it may sleep (the free plan has 750 instance hours a month for all services together).
 
 ### Releasing a version to production

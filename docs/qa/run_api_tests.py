@@ -320,21 +320,27 @@ def main():
     if st != 200:
         st, adm = call("POST", "/auth/login", {"username": "qa_admin", "password": "Passw0rd!x"})
     tadm = adm.get("token")
+    if not adm.get("admin"):
+        for tc, t in (("TC-33", "Admin adds a valid challenge"), ("TC-34", "Admin adds a challenge without tests")):
+            skip(tc, "US-22", t, "qa_admin is not in ADMIN_USERNAMES on this server")
+        tadm = None
     good = {"title": f"QA SUM {RUN}", "description": "Return a + b", "functionName": "solve", "difficulty": "EASY",
             "testsJson": '[{"input":[1,2],"expected":3},{"input":[0,0],"expected":0}]', "examples": "solve(1, 2) -> 3",
             "referenceSolution": "class Solution { public static int solve(int a, int b) { return a + b; } }"}
-    st, b = call("POST", "/admin/challenges", good, token=tadm)
-    record("TC-33", "US-22", "Admin adds a valid challenge", "Admin submits a challenge whose reference solution passes",
-           "Published", f"{st}, published={b.get('published')}", st == 200 and b.get("published"))
-    bad = dict(good, title=f"QA BAD {RUN}", testsJson="")
-    st, b = call("POST", "/admin/challenges", bad, token=tadm)
-    record("TC-34", "US-22", "Admin adds a challenge without tests", "Same form with empty tests",
-           "Blocked with a specific error", f"{st}, {b.get('message')} (field={b.get('field')})", st == 400)
+    if tadm:
+      st, b = call("POST", "/admin/challenges", good, token=tadm)
+      record("TC-33", "US-22", "Admin adds a valid challenge", "Admin submits a challenge whose reference solution passes",
+             "Published", f"{st}, published={b.get('published')}", st == 200 and b.get("published"))
+      bad = dict(good, title=f"QA BAD {RUN}", testsJson="")
+      st, b = call("POST", "/admin/challenges", bad, token=tadm)
+      record("TC-34", "US-22", "Admin adds a challenge without tests", "Same form with empty tests",
+             "Blocked with a specific error", f"{st}, {b.get('message')} (field={b.get('field')})", st == 400)
     st, b = call("POST", "/admin/challenges", good, token=ta)
     record("TC-35", "US-22", "A player tries the admin API", "Normal player POSTs a challenge",
            "403", f"{st}, {b.get('message')}", st == 403)
 
-    out = HERE / f"results-{datetime.now():%Y-%m-%d}-{'local' if 'localhost' in BASE else 'prod'}.json"
+    kind = 'local' if 'localhost' in BASE else ('staging' if 'fbww' in BASE or 'staging' in BASE else 'prod')
+    out = HERE / f"results-{datetime.now():%Y-%m-%d}-{kind}.json"
     out.write_text(json.dumps({"target": BASE, "run": RUN, "at": datetime.now().isoformat(timespec="seconds"),
                                "results": results}, indent=1, ensure_ascii=False))
     passed = sum(r["result"] == "PASS" for r in results)

@@ -44,3 +44,20 @@ Labels: `Minor`, `frontend`
 **Actual:** the whole page is 672 px wide and scrolls sideways; the title is cut.
 **Screenshot:** /admin at 375 px.
 **Fix:** the page container takes the full width (so the wide table no longer stretches it), the title size follows the screen width and the two-column form fields stack on phones.
+
+---
+
+## I-04 — [Minor] Backend answers 500 and logs a stack trace for unknown addresses and malformed requests
+Labels: `Minor`, `backend`
+
+Found in the Render deploy log after switching production to the `release` branch (Week 11 deployment check).
+
+**Steps to reproduce**
+1. Open https://pixelcode-api.onrender.com/ (Render's health check does this on every start), or send `POST /api/auth/login` with broken JSON, or `GET /api/solutions/abc`.
+
+**Expected:** 404 (unknown address) or 400 (bad request), no error in the log.
+**Actual:** 500 "Internal server error" and a long `NoResourceFoundException` stack trace in the log.
+**Fix:** the error handler returns Spring's own 4xx status for client errors (404 / 400 / 405) and logs stack traces only for real server errors.
+
+## Also fixed: frontend dependency warnings
+`npm audit` reported 7 vulnerabilities in Express packages used only by the local preview server (the production site is static files, so players were not affected). `npm audit fix` updated them; `npm audit` now finds 0.
