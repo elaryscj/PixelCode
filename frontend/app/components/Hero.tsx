@@ -11,7 +11,7 @@ const LiveStrip = () => {
   const { t } = useTranslation();
   if (!stats) return null;
   return (
-    <div className="enter-up flex flex-wrap items-center justify-center gap-x-5 gap-y-1 font-pixel text-sm sm:text-lg">
+    <div className="short:hidden enter-up flex flex-wrap items-center justify-center gap-x-5 gap-y-1 font-pixel text-[clamp(11px,2vh,18px)]">
       <span className="flex items-center gap-2 text-neon">
         <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping" />
         {stats.online.toLocaleString("en-US")} {t("live_online")}
@@ -30,7 +30,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-6 sm:gap-10 px-4 py-8 sm:py-10">
+    <div className="my-auto flex flex-col gap-[min(2.5rem,2vh)] short:gap-1.5 px-4 py-[min(2rem,1.2vh)] short:py-1">
       <Greeting />
       <LiveStrip />
       <HeroNavigation onHowToPlay={() => setShowRules(true)} />

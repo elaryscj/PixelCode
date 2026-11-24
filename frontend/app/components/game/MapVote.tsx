@@ -28,12 +28,12 @@ export default function MapVote({
           : t("mv_coin");
 
   return (
-    <div className="w-full flex flex-col gap-3 font-pixel">
+    <div className="w-full flex flex-col gap-[min(0.75rem,1vh)] font-pixel">
       <div className="flex items-baseline justify-between gap-4">
-        <span className="text-yellow text-2xl">{t("mv_title")}</span>
+        <span className="text-yellow text-[clamp(13px,2.6vh,24px)]">{t("mv_title")}</span>
         <span className={`text-sm ${agreed ? "text-neon" : "text-gray-400"}`}>{hint}</span>
       </div>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-[min(0.75rem,1vh)]">
         {MAPS.map((m) => {
           const mine = myVote === m.id;
           const theirs = rivalVote === m.id;
@@ -55,12 +55,12 @@ export default function MapVote({
               }`}
             >
               {/* static mini preview of the real map */}
-              <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#081026] pointer-events-none">
+              <div className="relative w-full aspect-[4/3] max-h-[11vh] overflow-hidden bg-[#081026] pointer-events-none">
                 <MapLayer map={m} mirror={false} unlocked={[]} doors={{}} tone="neon" />
               </div>
               <div className="px-2 py-1.5 flex flex-col gap-0.5">
                 <span className={`text-xs ${mine ? "text-neon" : "text-yellow"}`}>{m.name}</span>
-                <span className="font-sans text-[11px] leading-tight text-gray-400 line-clamp-2">{m.tagline}</span>
+                <span className="font-sans text-[11px] leading-tight text-gray-400 line-clamp-2 [@media(max-height:820px)]:hidden">{m.tagline}</span>
               </div>
               <div className="absolute top-1 right-1 flex gap-1">
                 {mine && <span className="bg-neon text-black text-[10px] px-1.5 py-0.5">{t("tag_you")}</span>}

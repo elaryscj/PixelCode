@@ -674,6 +674,15 @@ const hi: Translation = {
   sp_offline: "कनेक्शन टूटा",
   p_open_door_task: "दरवाज़ा खोलें: चुनौती हल करें",
   sp_hint: "आप दोनों दौड़ लाइव देख रहे हैं। चुनौतियाँ और खिलाड़ियों का कोड अंत तक छिपा रहता है।",
+  // first-visit practice tutorial
+  tut_move: "A / D या ← → से चलें",
+  tut_move_touch: "◀ ▶ बटनों से चलें",
+  tut_jump: "SPACE से कूदें",
+  tut_jump_touch: "JUMP बटन से कूदें",
+  tut_door: "दरवाज़ा 1 तक जाएँ और E दबाएँ",
+  tut_door_touch: "दरवाज़ा 1 तक जाएँ और E टैप करें",
+  tut_up: "फ़र्श के आर-पार नहीं कूद सकते: ऊपर का खुला हिस्सा खोजें और सीढ़ी, लिफ़्ट या उछाल पैड से चढ़ें",
+  tut_skip: "छोड़ें",
 };
 
 export default hi;

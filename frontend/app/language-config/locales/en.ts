@@ -678,6 +678,15 @@ const en = {
   sp_offline: "connection lost",
   p_open_door_task: "OPEN DOOR: SOLVE THE TASK",
   sp_hint: "You see both runs live. The tasks and the players' code stay hidden until the end.",
+  // first-visit practice tutorial
+  tut_move: "Move with A / D or ← →",
+  tut_move_touch: "Move with the ◀ ▶ buttons",
+  tut_jump: "Jump with SPACE",
+  tut_jump_touch: "Jump with the JUMP button",
+  tut_door: "Walk up to door 1 and press E",
+  tut_door_touch: "Walk up to door 1 and tap E",
+  tut_up: "You can't jump through a floor: find the gap above and climb the step, lift or bounce pad",
+  tut_skip: "Skip",
 };
 
 export type Translation = Record<keyof typeof en, string>;

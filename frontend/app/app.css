@@ -252,8 +252,9 @@ body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-ins
 /* Short landscape screens (phones turned sideways): compact match HUD */
 @custom-variant short (@media (max-height: 560px));
 
-/* Height of the duel arena: roomy on desktop, fills what is left on a sideways phone */
-:root { --arena-h: max(460px, calc(100dvh - 150px)); }
-@media (max-height: 560px) { :root { --arena-h: calc(100dvh - 92px); } }
-:root { --practice-h: max(440px, calc(100dvh - 70px)); }
-@media (max-height: 560px) { :root { --practice-h: calc(100dvh - 70px); } }
+
+/* door leaves sliding apart when a door opens (MapLayer) */
+@keyframes pc-door-leaf-l { 0% { transform: translateX(0); opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(-48%); opacity: 0; } }
+@keyframes pc-door-leaf-r { 0% { transform: translateX(0); opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(48%); opacity: 0; } }
+.pc-door-leaf-l { animation: pc-door-leaf-l 0.7s cubic-bezier(.5,0,.2,1) 0.1s both; }
+.pc-door-leaf-r { animation: pc-door-leaf-r 0.7s cubic-bezier(.5,0,.2,1) 0.1s both; }

@@ -1,16 +1,18 @@
 // app/routes/practice.tsx
 // Solo practice: run any arena map offline. Doors open instantly with E (no challenge, no rating).
+import { before, feel, newFeel } from "~/game/feel";
 import { useEffect, useRef, useState } from "react";
 import { ClientOnly } from "~/lib/currentUser";
 import ScreenLoading from "~/components/ScreenLoading";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
+import { FitBox } from "~/components/game/FitBox";
 import { MapLayer, animateMap } from "~/components/game/MapLayer";
 import { AnimatedSkin, type SkinHandle } from "~/components/skins";
 import { getCurrentUser } from "~/api/auth";
 import { MAPS, getMap, worldTime } from "~/game/maps";
 import TouchControls from "~/components/game/TouchControls";
-import { burst, dust, flash, shake } from "~/components/game/fx";
+import { burst, doorOpenFx, flash, shake } from "~/components/game/fx";
 import { sfx } from "~/lib/sfx";
 import ChallengeModal from "~/components/game/ChallengeModal";
 import { checkPractice, getPracticeChallenge, type PracticeChallenge } from "~/api/stats";
@@ -52,9 +54,24 @@ function PracticeScreen() {
   const [near, setNear] = useState<number | null>(null);
   // key hints sit on the arena until the player starts moving
   const [hints, setHints] = useState(true);
+  const touch = typeof window !== "undefined" && window.matchMedia?.("(pointer: coarse)").matches;
   const [elapsed, setElapsed] = useState(0);
   const [finished, setFinished] = useState<number | null>(null);
   const [deaths, setDeaths] = useState(0);
+
+  const feelRef = useRef(newFeel());
+
+  // First visit: a short guided start (move -> jump -> open a door -> climb a floor), then never again.
+  const [tut, setTut] = useState<TutStep | null>(null);
+  const tutRef = useRef<TutStep | null>(null);
+  tutRef.current = tut;
+  useEffect(() => {
+    if (localStorage.getItem(TUT_KEY) !== "done") setTut("move");
+  }, []);
+  const finishTut = () => {
+    localStorage.setItem(TUT_KEY, "done");
+    setTut(null);
+  };
 
   const player = useRef(createPlayer(map));
   const crumble = useRef<CrumbleState>(new Map());
@@ -92,7 +109,9 @@ function PracticeScreen() {
     sfx.doorOpen();
     flash(arenaRef.current);
     if (d) {
-      burst(arenaRef.current, d.x + 3, d.y + 6, { count: 24, spread: 80 });
+      doorOpenFx(arenaRef.current, d.x + 3.25, d.y);
+      burst(arenaRef.current, d.x + 3, d.y + 6, { count: 12, spread: 70 });
+      sfx.doorHiss();
       const r = doorRespawn(d);
       player.current.respawnX = r.x;
       player.current.respawnY = r.y;
@@ -170,8 +189,7 @@ function PracticeScreen() {
       const p = player.current;
       const k = keys.current;
       if (!doneRef.current) {
-        const wasGrounded = p.isGrounded;
-        const fallSpeed = -p.vy;
+        const b = before(p);
         const res = stepPlayer(
           p,
           {
@@ -186,12 +204,16 @@ function PracticeScreen() {
           tPrev,
           dt,
         );
-        if (wasGrounded && !p.isGrounded && p.vy > 0.5) {
-          sfx.jump();
-          dust(arenaRef.current, p.x + CHAR_W / 2, p.y, "jump");
-        }
-        if (!wasGrounded && p.isGrounded && fallSpeed > 0.45) {
-          dust(arenaRef.current, p.x + CHAR_W / 2, p.y, "land", Math.min(1, (fallSpeed - 0.45) / 1.2));
+        feel(arenaRef.current, p, b, res, feelRef.current, dt);
+        const step = tutRef.current;
+        if (step) {
+          const next = nextTutStep(step, p, b, map, unlockedRef.current, res.nearDoor);
+          if (next !== step) {
+            if (next === "done") {
+              localStorage.setItem(TUT_KEY, "done");
+              setTut(null);
+            } else setTut(next);
+          }
         }
         if (res.hitHazard) {
           burst(arenaRef.current, p.x + CHAR_W / 2, p.y + 4, { color: "#FE2C96", count: 22, spread: 60 });
@@ -226,7 +248,7 @@ function PracticeScreen() {
   }, [map]);
 
   return (
-    <div dir="ltr" className="min-h-screen bg-[#050814] flex flex-col p-2 sm:p-3 short:p-1.5 font-pixel select-none">
+    <div dir="ltr" className="h-dvh overflow-hidden bg-[#050814] flex flex-col p-2 sm:p-3 short:p-1.5 font-pixel select-none">
       <TouchControls
         keys={keys.current}
         canInteract={near !== null}
@@ -244,7 +266,7 @@ function PracticeScreen() {
         <p className="text-yellow text-2xl">{t("rotate_title")}</p>
         <p className="font-sans text-gray-400 text-sm">{t("rotate_text")}</p>
       </div>
-      <header className="flex flex-wrap short:flex-nowrap justify-between items-center gap-3 mb-2 short:mb-1">
+      <header className="flex flex-wrap short:flex-nowrap justify-between items-center gap-3 mb-2 short:mb-1 shrink-0">
         <div className="flex items-center gap-3 shrink-0">
           {/* clear way back: this used to be only the logo, which also led to /play instead of the menu */}
           <Link
@@ -302,9 +324,11 @@ function PracticeScreen() {
         </div>
       </header>
 
+      <FitBox aspect={1}>
+        {({ width, height }) => (
       <div
-        className="relative mx-auto bg-[#081026] overflow-hidden ring-1 ring-white/10 shadow-[0_0_40px_rgba(0,0,0,0.8)]"
-        style={{ height: "var(--practice-h)", aspectRatio: "6 / 5", maxWidth: "100%" }}
+        className="relative bg-[#081026] overflow-hidden ring-1 ring-white/10 shadow-[0_0_40px_rgba(0,0,0,0.8)]"
+        style={{ width, height }}
         title={map.tagline}
       >
         {/* stats on the arena itself, top-left */}
@@ -315,13 +339,22 @@ function PracticeScreen() {
           {tasks && <span className="text-pink">{t("p_tasks_solved", { n: solvedTasks })}</span>}
           <span className="text-white">{(finished ?? elapsed).toFixed(1)}s</span>
         </div>
-              <div className={`absolute top-9 left-1/2 -translate-x-1/2 z-30 flex flex-wrap justify-center gap-4 px-3 py-2 bg-black/70 text-[10px] text-gray-300 uppercase pointer-events-none pointer-coarse:hidden transition-opacity duration-700 ${hints ? "opacity-100" : "opacity-0"}`}>
+              <div className={`absolute top-9 left-1/2 -translate-x-1/2 z-30 flex flex-wrap justify-center gap-4 px-3 py-2 bg-black/70 text-[10px] text-gray-300 uppercase pointer-events-none pointer-coarse:hidden transition-opacity duration-700 ${hints && !tut ? "opacity-100" : "opacity-0"}`}>
           <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">A / D</kbd> {t("k_move")}</span>
           <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">SPACE</kbd> {t("k_jump")}</span>
           <span><kbd className="border border-neon text-neon px-2 py-0.5">E</kbd> {t(tasks ? "p_open_door_task" : "p_open_door")}</span>
           <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">R</kbd> {t("k_respawn")}</span>
           <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">ESC</kbd> {t("menu")}</span>
         </div>
+        {tut && (
+          <div className="absolute top-9 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 px-4 py-2 bg-black/80 ring-1 ring-yellow/60 text-yellow text-[clamp(10px,1.1vw,14px)] uppercase shadow-[0_0_20px_rgba(253,224,71,0.25)] enter-up" key={tut}>
+            <span className="animate-pulse">▶</span>
+            <span>{t(`tut_${tut}${touch && tut !== "up" ? "_touch" : ""}`)}</span>
+            <button type="button" onClick={finishTut} className="ml-2 text-[9px] text-gray-400 hover:text-white normal-case">
+              {t("tut_skip")}
+            </button>
+          </div>
+        )}
         <div ref={arenaRef} className="absolute inset-0">
           <MapLayer map={map} mirror={false} unlocked={unlocked} doors={{}} tone="neon" nearCheckpoint={near} />
           <div
@@ -351,8 +384,10 @@ function PracticeScreen() {
           </div>
         )}
       </div>
+        )}
+      </FitBox>
 
-      {taskMsg && <p className="text-center text-pink text-[10px] mt-2">{taskMsg}</p>}
+      {taskMsg && <p className="text-center text-pink text-[10px] mt-1 shrink-0">{taskMsg}</p>}
       {challenge && (
         <ChallengeModal
           roomCode=""
@@ -377,6 +412,27 @@ function PracticeScreen() {
   );
 }
 
+
+// ------------------------------------------------------------------ first-visit tutorial
+
+const TUT_KEY = "pixelcode.tutorial";
+type TutStep = "move" | "jump" | "door" | "up";
+
+/** Advances the guided start from what the player just did. "done" ends it. */
+function nextTutStep(
+  step: TutStep,
+  p: { x: number; y: number; isGrounded: boolean; vy: number },
+  b: { grounded: boolean },
+  map: { start: { x: number }; floors: number[] },
+  unlocked: number[],
+  nearDoor: number | null,
+): TutStep | "done" {
+  if (step === "move") return Math.abs(p.x - map.start.x) > 8 ? "jump" : step;
+  if (step === "jump") return b.grounded && !p.isGrounded && p.vy > 0.5 ? (unlocked.includes(1) ? "up" : "door") : step;
+  if (step === "door") return unlocked.includes(1) ? "up" : step;
+  // "up": reach the second floor
+  return p.isGrounded && p.y >= (map.floors[1] ?? 99) - 0.5 ? "done" : step;
+}
 export default function Practice() {
   return <ClientOnly fallback={<ScreenLoading />}>{() => <PracticeScreen />}</ClientOnly>;
 }

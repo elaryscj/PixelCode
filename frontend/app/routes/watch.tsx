@@ -10,6 +10,7 @@ import { getCurrentUser } from "~/api/auth";
 import { ApiError } from "~/api/http";
 import { onGameEvent } from "~/api/socket";
 import { AnimatedSkin, type AnimId, type SkinHandle } from "~/components/skins";
+import { FitBox } from "~/components/game/FitBox";
 import { MapLayer, animateMap } from "~/components/game/MapLayer";
 import { Bubble, isPhrase, type PhraseId } from "~/components/game/PhraseBar";
 import { getMap, worldTime } from "~/game/maps";
@@ -192,29 +193,31 @@ function WatchScreen() {
   return (
     <>
       <div className="star-background" />
-      <div className="mx-auto w-full max-w-[1400px] px-3 sm:px-4 py-4 font-pixel flex flex-col gap-3">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="h-dvh overflow-hidden w-full px-2 sm:px-3 py-2 font-pixel flex flex-col gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-3 shrink-0">
           <Link to="/friends" className="border-2 border-pink px-4 py-1.5 text-xs text-pink uppercase hover:bg-pink/10">
             &lt; {t("menu_friends")}
           </Link>
-          <h1 className="text-yellow text-3xl sm:text-5xl text-glow-sm">👁 {t("sp_title")}</h1>
+          <h1 className="text-yellow text-[clamp(16px,2.4vw,40px)] text-glow-sm">👁 {t("sp_title")}</h1>
           <span className="text-xs text-gray-400" dir="ltr">
             #{code} · {map.name} · 👁 {state.spectators ?? 1}
           </span>
         </div>
-        <div className="text-center text-white text-2xl" dir="ltr">
+        <div className="text-center text-white text-[clamp(16px,2vw,28px)] shrink-0" dir="ltr">
           {mmss(Math.floor(total - elapsed))}
         </div>
 
-        <div className="flex flex-col md:flex-row gap-2 md:h-[58vh]">
+        <FitBox aspect={2} extraH={28}>
+          {({ width, height }) => (
+        <div className="flex flex-row gap-1" style={{ width, height }}>
           {players.map((p, i) => {
             const tone = i === 0 ? "neon" : "pink";
             const open = unlocked[p.userId] ?? p.unlocked;
             const b = bubbles[p.userId];
             const doorLeft = Object.entries(p.doors ?? {});
             return (
-              <div key={p.userId} className={`flex-1 flex flex-col border-2 ${tone === "neon" ? "border-neon/60" : "border-pink/60"} bg-[#0a0f24] min-h-[42vh]`}>
-                <div className="flex items-center justify-between gap-2 px-3 py-1.5 text-xs">
+              <div key={p.userId} className={`flex-1 flex flex-col ring-1 ${tone === "neon" ? "ring-neon/40" : "ring-pink/40"} bg-[#0a0f24]`}>
+                <div className="flex items-center justify-between gap-2 px-3 text-xs shrink-0" style={{ height: 28 }}>
                   <span className={tone === "neon" ? "text-neon" : "text-pink"}>
                     {p.nickname} <span className="text-gray-400" dir="ltr">{p.rating} MMR</span>
                     {!p.connected && <span className="ml-2 text-gray-500">({t("sp_offline")})</span>}
@@ -243,7 +246,9 @@ function WatchScreen() {
             );
           })}
         </div>
-        <p className="text-center font-sans text-xs text-gray-400">{t("sp_hint")}</p>
+          )}
+        </FitBox>
+        <p className="text-center font-sans text-xs text-gray-400 shrink-0">{t("sp_hint")}</p>
       </div>
     </>
   );
