@@ -712,49 +712,38 @@ function GameScreen() {
 
   return (
     // the arena, HUD and code stay left-to-right even when the menus are in Arabic / Urdu
-    <div dir="ltr" className={`min-h-screen bg-[#050814] flex flex-col p-2 sm:p-4 md:p-6 short:p-1.5 font-pixel select-none relative ${
+    <div dir="ltr" className={`min-h-screen bg-[#050814] flex flex-col p-2 sm:p-3 short:p-1.5 font-pixel select-none relative ${
       hazardHit ? "shadow-[inset_0_0_120px_rgba(254,44,150,0.55)]" : ""
     }`}>
       
-      {/* 1. Header (Logo, Ping, Room Info) */}
-      <header className="flex justify-between items-center pb-2 mb-2 short:pb-1 short:mb-1">
-        <div className="flex gap-6 items-center">
-          <Link to="/play" className="text-yellow text-xl md:text-2xl leading-none hover:opacity-90 transition-opacity">
-            PIXELCODE<br/><span className="text-pink text-xs">ARENA</span>
-          </Link>
-          <div className="hidden sm:flex text-neon/80 text-[10px] md:text-xs uppercase items-center gap-2">
-            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span>
-            {serverLabel} / <span className={pingColor(ping)}>{pingLabel(ping)}</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="text-gray-400 text-[10px] md:text-xs flex items-center gap-2 uppercase">
-            <span className="w-2 h-2 bg-pink inline-block animate-pulse"></span>
+      {/* 1. Thin top line: leave, match code, spectators, connection */}
+      <div className="flex justify-between items-center text-[9px] md:text-[10px] uppercase mb-1">
+        <Link to="/play" className="text-gray-500 hover:text-pink transition-colors">
+          ‹ {t("g_exit_match")}
+        </Link>
+        <div className="flex items-center gap-3 text-gray-500">
+          <span>
             {botMatch ? t("kind_bot") : ranked === false ? t("kind_private") : t("kind_ranked")} #{code}
-          </div>
+          </span>
           {spectators > 0 && (
-            <div className="text-neon text-[10px] md:text-xs border border-neon/40 px-2 py-1" title={t("sp_watching", { n: spectators })}>
+            <span className="text-neon" title={t("sp_watching", { n: spectators })}>
               👁 {spectators}
-            </div>
+            </span>
           )}
-          <Link
-            to="/play"
-            className="text-[10px] text-gray-500 hover:text-pink px-2 py-1 transition-colors"
-          >
-            {t("g_exit_match")}
-          </Link>
         </div>
-      </header>
+        <div className="hidden sm:flex items-center gap-2 text-neon/70">
+          {serverLabel} / <span className={pingColor(ping)}>{pingLabel(ping)}</span>
+        </div>
+      </div>
 
       {/* 2. Scoreboard (Player 1, Timer, Opponent) */}
-      <div className="flex justify-between items-center mb-4 gap-2 short:mb-1">
+      <div className="flex justify-between items-center mb-2 gap-2 short:mb-1">
         
         {/* Local Player (Left) */}
         <div className="flex-1 flex flex-col gap-1.5">
           <div className="flex justify-between items-start border-l-4 border-neon pl-3">
             <div>
-              <h2 className="text-yellow text-xl md:text-3xl short:text-base uppercase truncate max-w-[180px]">{localPlayerName}</h2>
+              <h2 className="text-yellow text-lg md:text-2xl short:text-base uppercase truncate max-w-[180px]">{localPlayerName}</h2>
               <p className="text-neon/70 text-[9px] md:text-[10px]">MMR {myRating}</p>
             </div>
             <span className="text-neon/70 text-[9px]">{t("tag_you")}</span>
@@ -781,7 +770,7 @@ function GameScreen() {
 
         {/* Central Match Timer */}
         <div className="flex-1 flex flex-col items-center justify-center">
-          <div className={`text-3xl md:text-5xl tracking-widest font-mono text-glow-sm ${
+          <div className={`text-2xl md:text-4xl tracking-widest font-mono text-glow-sm ${
             matchSeconds < 60 ? "text-pink animate-pulse" : "text-white"
           }`}>
             {timerDisplay}
@@ -795,7 +784,7 @@ function GameScreen() {
         <div className="flex-1 flex flex-col gap-1.5 items-end">
           <div className="flex justify-between items-start border-r-4 border-pink pr-3 w-full flex-row-reverse">
             <div className="text-right">
-              <h2 className="text-yellow text-xl md:text-3xl short:text-base uppercase truncate max-w-[180px]">{opponentName}</h2>
+              <h2 className="text-yellow text-lg md:text-2xl short:text-base uppercase truncate max-w-[180px]">{opponentName}</h2>
               <p className="text-pink/70 text-[9px] md:text-[10px]">MMR {oppRating ?? "..."}</p>
             </div>
             <span className="text-pink/70 text-[9px]">{botMatch ? t("tag_bot") : t("tag_rival")}</span>
@@ -913,27 +902,17 @@ function GameScreen() {
 
       </div>
 
-      {/* 4. Footer Controls & Status */}
-      <footer className="flex flex-col sm:flex-row justify-between items-center mt-3 text-[10px] text-gray-400 uppercase gap-2 pointer-coarse:hidden">
-        <div className="flex flex-wrap gap-4 items-center">
-          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">A / D</kbd> {t("k_move")}</span>
-          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">SPACE</kbd> {t("k_jump")}</span>
-          <span><kbd className="border border-neon text-neon px-2 py-0.5">E</kbd> {t("k_interact")}</span>
-          <span><kbd className="border border-gray-600 px-2 py-0.5 text-white">R</kbd> {t("k_respawn")}</span>
-          <button type="button" onClick={() => emote("wave")} className="hover:text-white">
-            <kbd className="border border-neon/60 text-neon px-2 py-0.5">1</kbd> 👋 {t("g_emote_wave")}
-          </button>
-          <button type="button" onClick={() => emote("dance")} className="hover:text-white">
-            <kbd className="border border-neon/60 text-neon px-2 py-0.5">2</kbd> 🕺 {t("g_emote_dance")}
-          </button>
-        </div>
-        <div className="flex gap-4 items-center">
-          <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-neon"></div> {t("k_gate")}</span>
-          <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-pink"></div> {t("k_spike")}</span>
-          <span className="flex items-center gap-1.5"><div className="w-2 h-2 bg-yellow"></div> {t("k_exit")}</span>
-        </div>
-      </footer>
-      <PhraseBar onPhrase={phrase} keys className="mt-2 text-[10px] uppercase pointer-coarse:hidden" />
+      {/* 4. One quiet row under the arena: emotes and quick phrases (keys 1-8). Movement keys are on the
+          how-to-play page; this screen shows only what you use during a match. */}
+      <div className="flex flex-wrap items-center gap-3 mt-2 text-[9px] text-gray-500 uppercase opacity-70 hover:opacity-100 transition-opacity pointer-coarse:hidden">
+        <button type="button" onClick={() => emote("wave")} className="hover:text-white">
+          <kbd className="text-neon">1</kbd> 👋
+        </button>
+        <button type="button" onClick={() => emote("dance")} className="hover:text-white">
+          <kbd className="text-neon">2</kbd> 🕺
+        </button>
+        <PhraseBar onPhrase={phrase} keys className="text-[9px] uppercase" />
+      </div>
 
       {banner && (
         <div key={banner.id} className="fixed inset-x-0 top-[28%] z-45 flex justify-center pointer-events-none px-4">

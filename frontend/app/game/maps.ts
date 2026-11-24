@@ -154,7 +154,7 @@ const PISTON_WORKS: MapDef = {
     { x: 30, y: GROUND_Y, w: 40, kind: "conveyor", push: -0.12 },
     { x: 70, y: GROUND_Y, w: 14 },
     { x: 86, y: GROUND_Y, w: 12, move: { axis: "y", range: 24, period: 5 } }, // lift F1 -> F2
-    { x: 0, y: 27, w: 84 },
+    { x: 15, y: 27, w: 69 }, // nothing under the lift's shaft: you can't stand beneath it
     { x: 3, y: 27, w: 11, move: { axis: "y", range: 24, period: 5, phase: 0.5 } }, // lift F2 -> F3
     { x: 18, y: 51, w: 26 },
     { x: 44, y: 51, w: 26, kind: "conveyor", push: 0.13 },
@@ -297,7 +297,7 @@ const DATA_STREAM: MapDef = {
     { x: 0, y: GROUND_Y, w: 25 },
     { x: 25, y: GROUND_Y, w: 45, kind: "conveyor", push: 0.14 },
     { x: 70, y: GROUND_Y, w: 30 },
-    { x: 88, y: 15, w: 9, kind: "blink", period: 3 }, // F1 -> F2
+    { x: 88, y: 16.5, w: 9, kind: "blink", period: 3 }, // F1 -> F2
     { x: 2, y: 27, w: 10, kind: "bounce", power: 1.5 }, // -> F3 through the gap
     { x: 12, y: 27, w: 32, kind: "conveyor", push: -0.12 },
     { x: 44, y: 27, w: 36 },
@@ -305,7 +305,7 @@ const DATA_STREAM: MapDef = {
     { x: 43, y: 51, w: 10, kind: "blink", period: 2.4 },
     { x: 57, y: 51, w: 10, kind: "blink", period: 2.4, phase: 0.75 },
     { x: 71, y: 51, w: 29 },
-    { x: 89, y: 63, w: 9, kind: "blink", period: 3, phase: 0.25 }, // F3 -> F4
+    { x: 89, y: 64.5, w: 9, kind: "blink", period: 3, phase: 0.25 }, // F3 -> F4
     { x: 0, y: 75, w: 44 },
     { x: 44, y: 75, w: 26, kind: "conveyor", push: -0.12 },
     { x: 70, y: 75, w: 10 },
