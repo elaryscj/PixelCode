@@ -106,6 +106,11 @@ Admin checks on staging with the team's admin accounts (`dauren`, `Arman123` fro
 24 November 2026, after `main` was merged into `release` (PR #33) and Render redeployed production: `python3 docs/qa/run_api_tests.py https://pixelcode-api.onrender.com/api` (normal timers): **29 passed, 0 failed, 6 skipped**, the same as on staging (TC-26, TC-30 – TC-32 need short timers; TC-33 – TC-34 need the test account to be an admin). Results: `results-2026-11-24-prod.json`.
 I-04 checked on production: an unknown address (`/api/no-such-thing`) now returns 404 instead of 500.
 
+## Production rerun after v0.9.1-beta (new maps)
+
+24 November 2026, after `main` was merged into `release` (PR #36) and Render redeployed both services: the door and exit tables in `run_api_tests.py` follow the rebuilt maps. `python3 docs/qa/run_api_tests.py https://pixelcode-api.onrender.com/api`: **29 passed, 0 failed, 6 skipped** (same skips as before). Results: `results-2026-11-24-prod-v0.9.1.json`. The same run against a local server with the new maps gave the same result.
+Found while testing: during a deploy the site can update a few minutes before the backend; until both are live the old server refuses doors at the new positions ("Walk up to the door first") and the bot follows the old layout. Check that both Render services show the new commit before playing.
+
 ## Production check from another device (Week 11)
 
 21 November 2026, a team member's iPhone (account `dauren`), https://pixelcode-arena.onrender.com: main menu (portrait and landscape), Quick Play search, a match against PIXEL_BOT with touch controls, a door solved ("Accepted! 5/5 tests passed"), leaderboard with "your rank", practice, a door challenge, friends. Everything worked; no new defects. Registration of a brand-new account was checked the same day on staging (browser) and by TC-01.

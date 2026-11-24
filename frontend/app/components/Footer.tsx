@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import { APP_VERSION } from "~/version";
 
 const Footer = () => {
 
@@ -11,7 +12,7 @@ const Footer = () => {
         <div className="flex items-center justify-center gap-2">
           <div className="p-2 mr-2">
             <p className="uppercase text-l font-pixel text-neon">{t('footer_text')}</p>
-            <p className="uppercase text-md font-pixel text-yellow">v1.0-beta</p>
+            <p className="uppercase text-md font-pixel text-yellow">{APP_VERSION}</p>
           </div>
         </div>
         {/* the documents payment providers and parents look for */}
