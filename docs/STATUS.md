@@ -82,7 +82,7 @@ The header shows where the game server really runs: the backend's SERVER_REGION 
 - Own tasks: on /teacher a teacher writes tasks for their class (text, method name, examples, tests as JSON, reference solution). The server runs the reference solution on every save. Such tasks are private (owner only, never published, not in public matches or the admin list) and appear first in the lesson's task picker, marked MINE.
 - Students need no account: /lesson (also linked on the login page and in the menu as LESSON), code + name. They all run the same map with the same four tasks at the same time; a door opens only with an accepted solution (no 4-minute auto-open), the clock is the lesson's time. Their token is kept in the browser (rejoin after closing the tab). Up to 60 students per lesson; rate limits count each student separately (a class shares one school address).
 
-## In progress (after v0.9.1-beta, on `redesign-mobile`)
+## Added 2026-11-24 (v0.9.2-beta)
 - Screens fit the window: duel, practice, lesson, spectator and the menus use the full height (`h-dvh`) without scrolling; arenas keep a fixed shape (FitBox: square per player) and grow to the largest size that fits, so the level is never stretched; text sizes follow the window (`clamp()`). Leaderboard, admin, profile and the replay's details still scroll.
 - Sounds: footsteps (by surface), landing thud, ceiling bump, door hiss. Doors open with sliding leaves, steam and sparks.
 - First practice: a guided start (move, jump, open door 1, climb a floor), shown once, skippable, in all 14 languages.

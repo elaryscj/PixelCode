@@ -1,5 +1,17 @@
 # PixelCode Arena release notes
 
+## v0.9.2-beta (24 November 2026)
+
+### Changed
+- **Every screen fits the window.** Duel, practice, lesson and spectator screens use the full window height with no page scroll; arenas keep a fixed square shape per player and grow to the largest size that fits (FitBox), so maps are never stretched on wide or narrow screens. Text sizes follow the window. The main menu, mode select, finding a match and the match lobby fit one screen (checked from 844x390 to 2560x1440; a very small phone may still scroll a few pixels). Leaderboard, admin, profile and the replay's details still scroll.
+- **Sounds:** footsteps (by surface), landing thud, ceiling bump, door hiss.
+- **Doors** open with sliding leaves, steam and sparks.
+- **First practice:** a guided start (move, jump, open door 1, climb a floor), shown once, skippable, in all 14 languages.
+- **Phones turned sideways:** a mini-map of the rival's run in the corner of your arena.
+
+### Tested
+- Frontend type check and build; screenshots of the duel, practice, menu and lobby at 1280x720, 1366x768, 1440x900, 1920x1080, 2560x1440, 1180x820 and 844x390.
+
 ## v0.9.1-beta (24 November 2026)
 
 Released after the code freeze (23 November) as an exception: the arena looked unfinished next to other 2D games, and players could jump up through the floors. Tested on staging and production before the tag.
