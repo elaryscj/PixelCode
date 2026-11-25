@@ -11,6 +11,7 @@ import { saveNickname } from "~/lib/nickname";
 import { saveAvatar } from "~/lib/avatar";
 import {
   fetchProfile,
+  resendVerification,
   updateProfile,
   uploadAvatar,
   changePassword,
@@ -33,6 +34,8 @@ function ProfileRouteScreen() {
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
   const [profileSuccess, setProfileSuccess] = useState<string | null>(null);
+  // "send the confirmation link again": idle -> sending -> sent
+  const [resend, setResend] = useState<"idle" | "sending" | "sent">("idle");
 
   // Avatar state
   const [avatarUploading, setAvatarUploading] = useState(false);
@@ -66,6 +69,7 @@ function ProfileRouteScreen() {
         saveAvatar(data.avatarUrl);
         setPlayerName(data.playerName);
         setEmail(data.email || "");
+        void refreshUser(); // keeps the menu's "confirm your e-mail" reminder in step
       })
       .catch((err) => {
         setProfileError(err.message || t("pf_err_load"));
@@ -87,6 +91,7 @@ function ProfileRouteScreen() {
         email: email.trim() || undefined,
       });
       setProfile(updated);
+      if (updated.email !== profile.email) setResend("idle");
       saveNickname(updated.playerName);
       void refreshUser();
       setProfileSuccess(t("pf_saved"));
@@ -368,6 +373,35 @@ function ProfileRouteScreen() {
                 <span className="font-sans text-[11px] text-gray-400">
                   {t("pf_email_hint")}
                 </span>
+                {profile?.email && !profile.emailVerified && (
+                  <div className="font-sans text-[11px] text-yellow bg-yellow/10 border border-yellow/30 p-2 mt-1 leading-normal flex flex-wrap items-center gap-2">
+                    <span className="flex-1 min-w-[12rem]">
+                      {resend === "sent" ? t("pf_resent", { email: profile.email }) : t("pf_confirm_hint")}
+                    </span>
+                    {resend !== "sent" && (
+                      <button
+                        type="button"
+                        disabled={resend === "sending"}
+                        onClick={() => {
+                          setResend("sending");
+                          setProfileError(null);
+                          resendVerification(profile.id)
+                            .then((r) => {
+                              setResend("sent");
+                              if (!r.sent) void refreshUser();
+                            })
+                            .catch((err) => {
+                              setResend("idle");
+                              setProfileError(err.message || t("pf_err_save"));
+                            });
+                        }}
+                        className="font-pixel text-[10px] uppercase px-2 py-1 border border-yellow text-yellow hover:bg-yellow hover:text-black disabled:opacity-50"
+                      >
+                        {t("pf_resend")}
+                      </button>
+                    )}
+                  </div>
+                )}
                 {profile?.pendingEmail && (
                   <div className="text-[11px] text-yellow bg-yellow/10 border border-yellow/30 p-2 mt-1 leading-normal">
                     {t("pf_pending")} <strong>{profile.pendingEmail}</strong>

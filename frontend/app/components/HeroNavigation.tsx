@@ -60,7 +60,20 @@ const HeroNavigation = ({ onHowToPlay }: { onHowToPlay?: () => void }) => {
     { to: "/progress", icon: <FaStar />, label: t("menu_progress"), extra: badge(unseen, t("menu_new", { n: unseen }), true) },
     { to: "/store", icon: <FaShoppingCart />, label: t("store") },
     { to: "/results", icon: <FaChartBar />, label: t("menu_results") },
-    { to: "/profile", icon: <FaUser />, label: t("menu_profile") },
+    {
+      to: "/profile",
+      icon: <FaUser />,
+      label: t("menu_profile"),
+      extra: user?.emailVerified === false && (
+        <span
+          className="absolute -top-2 -end-2 min-w-6 h-6 px-1 flex items-center justify-center bg-yellow text-black text-xs border-2 border-pink animate-pulse"
+          aria-label={t("pf_confirm_hint")}
+          title={t("pf_confirm_hint")}
+        >
+          !
+        </span>
+      ),
+    },
   ];
   const small = "font-pixel text-sm sm:text-base uppercase px-2 py-1 hover:text-glow-sm transition-colors";
 

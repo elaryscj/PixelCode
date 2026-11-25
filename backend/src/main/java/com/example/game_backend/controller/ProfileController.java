@@ -30,13 +30,19 @@ public class ProfileController {
     private final com.example.game_backend.social.BlockService blocks;
     private final com.example.game_backend.tournament.TournamentService tournament;
     private final com.example.game_backend.repository.DoorResultRepository doorResults;
+    private final com.example.game_backend.service.AuthService authService;
+    private final com.example.game_backend.security.RateLimiter limiter;
 
     public ProfileController(UserRepository users, TokenService tokens, AdminAccess admins,
+                             com.example.game_backend.service.AuthService auth,
+                             com.example.game_backend.security.RateLimiter limiter,
                              com.example.game_backend.progress.ProgressService progress,
                              com.example.game_backend.social.FriendService friends,
                              com.example.game_backend.social.BlockService blocks,
                              com.example.game_backend.tournament.TournamentService tournament,
                              com.example.game_backend.repository.DoorResultRepository doorResults) {
+        this.authService = auth;
+        this.limiter = limiter;
         this.blocks = blocks;
         this.tournament = tournament;
         this.doorResults = doorResults;
@@ -80,6 +86,7 @@ public class ProfileController {
             u.setUsername(name);
         }
         String email = str(body.get("email"));
+        boolean emailChanged = false;
         if (email != null && !email.isBlank()) {
             email = AccountRules.email(email);
             if (!email.equalsIgnoreCase(u.getEmail())) {
@@ -89,11 +96,15 @@ public class ProfileController {
                     throw new ApiException(409, "This e-mail is already used by another account").with("field", "email");
                 }
             }
+            emailChanged = !email.equalsIgnoreCase(u.getEmail());
             u.setEmail(email);
+            if (emailChanged) u.setEmailVerified(false); // a new address has to be confirmed again
         } else if (body.containsKey("email")) {
             u.setEmail(null);
+            u.setEmailVerified(false);
         }
         users.save(u);
+        if (emailChanged) authService.resendConfirmation(u); // the link goes to the new address
         return ResponseEntity.ok(view(u));
     }
 
@@ -151,9 +162,21 @@ public class ProfileController {
         return ResponseEntity.ok(Map.of("message", "Account deleted"));
     }
 
+    /** The link from the confirmation e-mail (no login needed). */
     @GetMapping("/email/verify")
-    public ResponseEntity<Map<String, Object>> verify() {
-        return ResponseEntity.ok(Map.of("message", "E-mail is already confirmed"));
+    public ResponseEntity<Map<String, Object>> verify(@RequestParam(value = "token", required = false) String token) {
+        authService.confirmEmail(token);
+        return ResponseEntity.ok(Map.of("message", "E-mail confirmed"));
+    }
+
+    /** "Send the link again" from the profile and the reminder banner. */
+    @PostMapping("/{id}/email/resend")
+    public ResponseEntity<Map<String, Object>> resend(@PathVariable long id,
+                                                      @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        User u = me(id, authHeader);
+        limiter.hit("verify-mail:" + u.getId(), 3, 3600); // no flooding of one inbox
+        boolean sent = authService.resendConfirmation(u);
+        return ResponseEntity.ok(Map.of("sent", sent));
     }
 
     private static String str(Object o) {
@@ -168,7 +191,7 @@ public class ProfileController {
         m.put("id", u.getId());
         m.put("playerName", u.getUsername());
         m.put("email", u.getEmail());
-        m.put("emailVerified", u.getEmail() != null);
+        m.put("emailVerified", u.getEmail() != null && u.isEmailVerified());
         m.put("pendingEmail", null);
         m.put("mmr", r);
         m.put("rankTitle", rank);

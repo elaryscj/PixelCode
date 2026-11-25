@@ -153,5 +153,6 @@
  "You cannot block yourself": "आप खुद को ब्लॉक नहीं कर सकते",
  "Your block list is full": "आपकी ब्लॉक सूची भर गई है",
  "Not found": "नहीं मिला",
- "Invalid request": "अमान्य अनुरोध"
+ "Invalid request": "अमान्य अनुरोध",
+ "This confirmation link is invalid or expired": "यह पुष्टि लिंक अमान्य है या इसकी समय-सीमा समाप्त हो गई है"
 }

@@ -153,5 +153,6 @@
  "You cannot block yourself": "Você não pode bloquear a si mesmo",
  "Your block list is full": "Sua lista de bloqueados está cheia",
  "Not found": "Não encontrado",
- "Invalid request": "Solicitação inválida"
+ "Invalid request": "Solicitação inválida",
+ "This confirmation link is invalid or expired": "Este link de confirmação é inválido ou expirou"
 }
