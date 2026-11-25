@@ -451,7 +451,7 @@ export default function SkinEditor({
           <div className="grid grid-cols-4 gap-2">
             {ANIMS.map((a) => (
               <div key={a} className="flex flex-col items-center gap-1 border border-neon/30 bg-[#060b1e] p-1">
-                <AnimatedSkin sheet={sheet} anim={a} className="w-full aspect-[18/32]" />
+                <AnimatedSkin sheet={sheet} anim={a} className="w-full aspect-[18/34]" />
                 <span className="text-[10px] text-gray-300 text-center leading-tight">{ANIM_LABEL[a]}</span>
               </div>
             ))}
