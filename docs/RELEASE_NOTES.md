@@ -1,5 +1,16 @@
 # PixelCode Arena release notes
 
+## v0.9.4-beta (25 November 2026)
+
+### Added
+- **E-mail confirmation (soft).** The welcome e-mail carries a confirmation link (valid 3 days, works on any device without logging in). Until it is opened you can play as usual; the main menu shows "!" on the Profile tile and the profile offers "Send the link again" (at most 3 per hour). Changing the e-mail asks for a new confirmation and the old link stops working. Password reset links go only to confirmed addresses. Accounts created before this release count as confirmed. New texts in all 14 languages.
+
+### Fixed
+- Characters' hair was cut off at the top in poses that lift the body (walking, jumping, the win celebration): frames now have 2 spare rows on top; the figure keeps its size.
+
+### Tested
+- Backend tests: 57 passed (2 new: confirmation link, forged link, changed e-mail). Frontend type check and build; all 24 animation frames of a skin checked for the hair; sprite size in practice measured unchanged.
+
 ## v0.9.3-beta (24 November 2026)
 
 ### Fixed
