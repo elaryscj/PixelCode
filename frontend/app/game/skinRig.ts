@@ -17,7 +17,11 @@
 export const TEX_W = 32;
 export const TEX_H = 16;
 export const FRAME_W = 18;
-export const FRAME_H = 32;
+/** empty rows above the figure: poses that lift the body (walk, jump, win) move the hair up there */
+export const FRAME_TOP = 2;
+/** height of the standing figure itself */
+export const FIGURE_H = 32;
+export const FRAME_H = FIGURE_H + FRAME_TOP;
 
 export type PartId = "HEAD" | "TORSO" | "ARM_L" | "ARM_R" | "LEG_L" | "LEG_R" | "HAT";
 export type Rect = { x: number; y: number; w: number; h: number };
@@ -195,7 +199,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, tex: CanvasImageSource,
     const h = r1 - r0;
     const home = HOME[p.part];
     const x = ox + (p.at ? p.at.x : home.x + (p.dx ?? 0));
-    const y = oy + (p.at ? p.at.y : home.y + (p.dy ?? 0) + r0);
+    const y = oy + FRAME_TOP + (p.at ? p.at.y : home.y + (p.dy ?? 0) + r0);
     if (p.flipY) {
       ctx.save();
       ctx.translate(x, y + h);
@@ -209,7 +213,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, tex: CanvasImageSource,
   if (f.dots) {
     // a thought: up to three little dots above the head
     ctx.fillStyle = "#ffffff";
-    for (let i = 0; i < f.dots; i++) ctx.fillRect(ox + 12 + i * 2, oy + 1 - (i % 2), 1, 1);
+    for (let i = 0; i < f.dots; i++) ctx.fillRect(ox + 12 + i * 2, oy + FRAME_TOP + 1 - (i % 2), 1, 1);
   }
 }
 

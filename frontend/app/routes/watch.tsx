@@ -237,8 +237,8 @@ function WatchScreen() {
                     style={{ width: `${CHAR_W}%`, height: `${CHAR_H}%`, left: `${i === 1 ? 100 - p.x - CHAR_W : p.x}%`, bottom: `${p.y}%` }}
                   >
                     {b && b.until > Date.now() && <Bubble text={t(`ph_${b.text}`)} tone={tone} />}
-                    <div ref={(el) => void (sprites.current[i] = el)} className="w-full h-full">
-                      <AnimatedSkin ref={(h) => void (skins.current[i] = h)} id={p.skin} className="w-full h-full" />
+                    <div ref={(el) => void (sprites.current[i] = el)} className="relative w-full h-full">
+                      <AnimatedSkin ref={(h) => void (skins.current[i] = h)} id={p.skin} className="w-full h-full" fillBox />
                     </div>
                   </div>
                 </div>
