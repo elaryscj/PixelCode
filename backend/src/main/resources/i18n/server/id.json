@@ -153,5 +153,6 @@
  "You cannot block yourself": "Kamu tidak bisa memblokir dirimu sendiri",
  "Your block list is full": "Daftar blokirmu penuh",
  "Not found": "Tidak ditemukan",
- "Invalid request": "Permintaan tidak valid"
+ "Invalid request": "Permintaan tidak valid",
+ "This confirmation link is invalid or expired": "Tautan konfirmasi ini tidak valid atau sudah kedaluwarsa"
 }

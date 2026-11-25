@@ -153,5 +153,6 @@
  "You cannot block yourself": "自分自身はブロックできません",
  "Your block list is full": "ブロックリストがいっぱいです",
  "Not found": "見つかりません",
- "Invalid request": "無効なリクエスト"
+ "Invalid request": "無効なリクエスト",
+ "This confirmation link is invalid or expired": "この確認リンクは無効か、期限が切れています"
 }

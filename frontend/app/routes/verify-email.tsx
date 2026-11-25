@@ -5,6 +5,7 @@ import { Link, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 import { verifyEmailToken } from "~/api/profile";
+import { refreshUser } from "~/api/auth";
 
 export default function VerifyEmailRoute() {
   const { t } = useTranslation();
@@ -25,6 +26,7 @@ export default function VerifyEmailRoute() {
     verifyEmailToken(token)
       .then(() => {
         setSuccess(true);
+        void refreshUser(); // the menu reminder goes away if this browser is logged in
       })
       .catch((err) => {
         setErrorMessage(err.message || t("ve_invalid"));

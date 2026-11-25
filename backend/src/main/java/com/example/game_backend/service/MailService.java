@@ -67,9 +67,22 @@ public class MailService {
                         + link + "\n\nIf this was not you, just ignore this e-mail.");
     }
 
-    public void sendWelcome(User user) {
-        send(user.getEmail(), "Welcome to PixelCode Arena",
-                "Hi " + user.getUsername() + ",\n\nYour account is ready. See you in the arena!");
+    public void sendWelcome(User user, String verifyToken) {
+        send(user.getEmail(), "Welcome to PixelCode Arena: confirm your e-mail",
+                "Hi " + user.getUsername() + ",\n\nYour account is ready. See you in the arena!\n\n"
+                        + "Please confirm this e-mail address (the link works for 3 days):\n" + verifyLink(verifyToken)
+                        + "\n\nWithout it we cannot send you a link if you forget your password."
+                        + "\nIf you did not sign up, just ignore this e-mail.");
+    }
+
+    public void sendVerifyLink(User user, String verifyToken) {
+        send(user.getEmail(), "PixelCode Arena: confirm your e-mail",
+                "Hi " + user.getUsername() + ",\n\nOpen this link to confirm your e-mail address (valid for 3 days):\n"
+                        + verifyLink(verifyToken) + "\n\nIf this was not you, just ignore this e-mail.");
+    }
+
+    private String verifyLink(String token) {
+        return frontendUrl + "/verify-email?token=" + token;
     }
 
     /** A note to the operator (MAIL_FROM), e.g. a new teacher subscription request. */

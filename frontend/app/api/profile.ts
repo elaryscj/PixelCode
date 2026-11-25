@@ -58,6 +58,10 @@ export const changePassword = (
   data: { currentPassword: string; newPassword: string; confirmNewPassword: string },
 ) => api<{ message: string; token?: string }>(`/profile/${userId}/password`, { method: "PUT", body: JSON.stringify(data) });
 
+/** Sends the confirmation link again; `sent` is false when the e-mail is already confirmed. */
+export const resendVerification = (userId: number) =>
+  api<{ sent: boolean }>(`/profile/${userId}/email/resend`, { method: "POST" });
+
 export const verifyEmailToken = (token: string) =>
   api<{ message: string }>(`/profile/email/verify?token=${encodeURIComponent(token)}`);
 
