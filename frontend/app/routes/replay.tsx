@@ -239,8 +239,8 @@ function ReplayScreen() {
                   <MapLayer map={map} mirror={s.mirror} unlocked={open} doors={{}} tone={s.tone} />
                   <div ref={(el) => void (figures.current[i] = el)} className="absolute z-20 pointer-events-none" style={{ width: `${CHAR_W}%`, height: `${CHAR_H}%` }}>
                     {said && isPhrase(said.detail) && <Bubble text={t(`ph_${said.detail}`)} tone={s.tone} />}
-                    <div ref={(el) => void (sprites.current[i] = el)} className="w-full h-full">
-                      <AnimatedSkin ref={(h) => void (skins.current[i] = h)} id={s.skin} className="w-full h-full" />
+                    <div ref={(el) => void (sprites.current[i] = el)} className="relative w-full h-full">
+                      <AnimatedSkin ref={(h) => void (skins.current[i] = h)} id={s.skin} className="w-full h-full" fillBox />
                     </div>
                   </div>
                 </div>

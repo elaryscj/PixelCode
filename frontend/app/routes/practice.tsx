@@ -362,8 +362,8 @@ function PracticeScreen() {
             className="absolute z-20 pointer-events-none"
             style={{ left: `${map.start.x}%`, bottom: `${map.start.y}%`, width: `${CHAR_W}%`, height: `${CHAR_H}%` }}
           >
-            <div ref={spriteDom} className="w-full h-full">
-              <AnimatedSkin ref={skinRef} id={skin} className="w-full h-full" />
+            <div ref={spriteDom} className="relative w-full h-full">
+              <AnimatedSkin ref={skinRef} id={skin} className="w-full h-full" fillBox />
             </div>
           </div>
         </div>

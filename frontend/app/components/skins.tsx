@@ -4,7 +4,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState, type ReactElement } from "react";
 import { API_BASE } from "~/api/http";
 import { BUILTIN_SKINS, pixelSkinToCanvas } from "~/game/builtinSkins";
-import { FRAME_H, FRAME_W, TEX_H, TEX_W, buildSheet, type AnimId, type Sheet } from "~/game/skinRig";
+import { FIGURE_H, FRAME_H, FRAME_W, TEX_H, TEX_W, buildSheet, type AnimId, type Sheet } from "~/game/skinRig";
 
 export type SkinId = "neon_ronin" | "crimson_cipher" | "byte_knight" | "pumpkin_phantom";
 export type SkinSize = "large" | "small";
@@ -56,6 +56,11 @@ type AnimatedProps = {
   sheet?: Sheet | null;
   className?: string;
   title?: string;
+  /**
+   * The figure fills a box the size of the player's hitbox (relative parent): the frame's empty top rows
+   * stick out above the box so the figure keeps its size and the hair is never cut off.
+   */
+  fillBox?: boolean;
 };
 
 const reducedMotion = () =>
@@ -63,7 +68,7 @@ const reducedMotion = () =>
 
 /** One skin, animated in a FRAME_W x FRAME_H canvas scaled up without blurring. */
 export const AnimatedSkin = forwardRef<SkinHandle, AnimatedProps>(function AnimatedSkin(
-  { id, anim = "idle", sheet: given, className, title },
+  { id, anim = "idle", sheet: given, className, title, fillBox },
   ref,
 ) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -143,8 +148,13 @@ export const AnimatedSkin = forwardRef<SkinHandle, AnimatedProps>(function Anima
       width={FRAME_W}
       height={FRAME_H}
       title={title}
-      className={className}
-      style={{ imageRendering: "pixelated", objectFit: "contain", objectPosition: "center bottom" }}
+      className={fillBox ? "absolute left-0 bottom-0 w-full" : className}
+      style={{
+        imageRendering: "pixelated",
+        objectFit: "contain",
+        objectPosition: "center bottom",
+        ...(fillBox ? { height: `${(FRAME_H / FIGURE_H) * 100}%` } : null),
+      }}
     />
   );
 });

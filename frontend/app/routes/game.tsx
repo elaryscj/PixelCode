@@ -877,8 +877,8 @@ function GameScreen() {
                 {localPlayerName}
               </div>
               {myBubble && <Bubble text={t(`ph_${myBubble.p}`)} tone="neon" />}
-              <div ref={playerSpriteRef} className="w-full h-full">
-                <AnimatedSkin ref={mySkinRef} id={mySkin} className="w-full h-full" />
+              <div ref={playerSpriteRef} className="relative w-full h-full">
+                <AnimatedSkin ref={mySkinRef} id={mySkin} className="w-full h-full" fillBox />
               </div>
             </div>
           </div>
@@ -915,8 +915,8 @@ function GameScreen() {
                 {opponentName}
               </div>
               {oppBubble && <Bubble text={t(`ph_${oppBubble.p}`)} tone="pink" />}
-              <div ref={opponentSpriteRef} className="w-full h-full">
-                <AnimatedSkin ref={oppSkinRef} id={oppSkin} className="w-full h-full" />
+              <div ref={opponentSpriteRef} className="relative w-full h-full">
+                <AnimatedSkin ref={oppSkinRef} id={oppSkin} className="w-full h-full" fillBox />
               </div>
             </div>
           </div>
