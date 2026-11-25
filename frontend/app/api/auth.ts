@@ -19,6 +19,8 @@ export type AuthResponse = {
   pixels?: number;
   activeSkin?: string;
   avatarUrl?: string | null;
+  /** false = the e-mail still has to be confirmed (older stored logins have no value: treated as fine) */
+  emailVerified?: boolean;
 };
 
 /** The avatar is large, so it lives in its own storage key and not inside the login record. */

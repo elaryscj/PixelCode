@@ -32,8 +32,9 @@ public class AuthService {
     public void forgotPassword(String emailRaw) {
         String email = AccountRules.email(emailRaw);
         // older data can hold one e-mail on several accounts: send each account its own link
+        // only to a confirmed address: a typo'd or someone else's e-mail never receives a reset link
         for (User u : users.findAllByEmailIgnoreCase(email)) {
-            mail.sendResetLink(u, tokens.issueReset(u.getId(), u.getPassword()));
+            if (u.isEmailVerified()) mail.sendResetLink(u, tokens.issueReset(u.getId(), u.getPassword()));
         }
     }
 
@@ -68,7 +69,7 @@ public class AuthService {
         created.setEmail(email);
         User user = users.save(created);
         admins.grantIfConfigured(user);
-        mail.sendWelcome(user);
+        mail.sendWelcome(user, tokens.issueEmailVerify(user.getId(), email));
         return toResponse(user, "User created successfully");
     }
 
@@ -84,6 +85,26 @@ public class AuthService {
         return toResponse(user, "Login successful");
     }
 
+    /** Opens the link from the e-mail. No login needed: it may be opened on another device. */
+    public void confirmEmail(String token) {
+        long userId = tokens.userIdFromEmailVerify(token);
+        User user = users.findById(userId).orElse(null);
+        if (user == null || !tokens.emailVerifyValid(token, user.getEmail())) {
+            throw new ApiException(400, "This confirmation link is invalid or expired");
+        }
+        if (!user.isEmailVerified()) {
+            user.setEmailVerified(true);
+            users.save(user);
+        }
+    }
+
+    /** Sends the confirmation link again; false when there is nothing to confirm. */
+    public boolean resendConfirmation(User user) {
+        if (user.getEmail() == null || user.isEmailVerified()) return false;
+        mail.sendVerifyLink(user, tokens.issueEmailVerify(user.getId(), user.getEmail()));
+        return true;
+    }
+
     public AuthResponse me(long userId) {
         User user = users.findById(userId).orElseThrow(() -> new ApiException(401, "Please log in again"));
         return toResponse(user, "OK");
@@ -92,6 +113,7 @@ public class AuthService {
     public AuthResponse toResponse(User user, String message) {
         return new AuthResponse(user.getId(), user.getUsername(), user.getRating(), message,
                 tokens.issue(user.getId(), user.getTokenVersion()), user.getWins(), user.getLosses(), user.isAdmin(),
-                user.getPixels(), user.getActiveSkin(), user.getAvatarUrl(), user.isTeacher());  // teacher = may open /teacher (active or not)
+                user.getPixels(), user.getActiveSkin(), user.getAvatarUrl(), user.isTeacher(),
+                user.getEmail() == null || user.isEmailVerified());  // teacher = may open /teacher (active or not)
     }
 }

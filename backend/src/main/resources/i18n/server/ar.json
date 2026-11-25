@@ -153,5 +153,6 @@
  "You cannot block yourself": "لا يمكنك حظر نفسك",
  "Your block list is full": "قائمة الحظر لديك ممتلئة",
  "Not found": "غير موجود",
- "Invalid request": "طلب غير صالح"
+ "Invalid request": "طلب غير صالح",
+ "This confirmation link is invalid or expired": "رابط التأكيد هذا غير صالح أو منتهي الصلاحية"
 }

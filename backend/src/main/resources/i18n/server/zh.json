@@ -153,5 +153,6 @@
  "You cannot block yourself": "你不能屏蔽自己",
  "Your block list is full": "你的屏蔽列表已满",
  "Not found": "未找到",
- "Invalid request": "无效的请求"
+ "Invalid request": "无效的请求",
+ "This confirmation link is invalid or expired": "该确认链接无效或已过期"
 }

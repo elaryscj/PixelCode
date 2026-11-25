@@ -153,5 +153,6 @@
  "You cannot block yourself": "자기 자신은 차단할 수 없습니다",
  "Your block list is full": "차단 목록이 가득 찼습니다",
  "Not found": "찾을 수 없습니다",
- "Invalid request": "잘못된 요청"
+ "Invalid request": "잘못된 요청",
+ "This confirmation link is invalid or expired": "이 확인 링크는 유효하지 않거나 만료되었습니다"
 }

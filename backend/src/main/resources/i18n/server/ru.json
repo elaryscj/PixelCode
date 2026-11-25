@@ -153,5 +153,6 @@
  "You cannot block yourself": "Нельзя заблокировать самого себя",
  "Your block list is full": "Список заблокированных заполнен",
  "Not found": "Не найдено",
- "Invalid request": "Некорректный запрос"
+ "Invalid request": "Некорректный запрос",
+ "This confirmation link is invalid or expired": "Ссылка для подтверждения недействительна или устарела"
 }

@@ -153,5 +153,6 @@
  "You cannot block yourself": "Өзіңізді бұғаттай алмайсыз",
  "Your block list is full": "Бұғатталғандар тізімі толы",
  "Not found": "Табылмады",
- "Invalid request": "Қате сұраныс"
+ "Invalid request": "Қате сұраныс",
+ "This confirmation link is invalid or expired": "Растау сілтемесі жарамсыз немесе ескірген"
 }

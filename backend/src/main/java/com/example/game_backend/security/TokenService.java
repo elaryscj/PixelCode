@@ -143,6 +143,44 @@ public class TokenService {
                         sign(payload + ":" + passwordHash).getBytes(StandardCharsets.UTF_8));
     }
 
+    // ---- e-mail confirmation links (3 days). The signature covers the address, so a link sent to an
+    //      old address stops working once the e-mail is changed. ----
+    private static final String BAD_VERIFY = "This confirmation link is invalid or expired";
+
+    public String issueEmailVerify(long userId, String email) {
+        String payload = "e:" + userId + ":" + (System.currentTimeMillis() + 3L * 24 * 3600 * 1000);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(payload.getBytes(StandardCharsets.UTF_8))
+                + "." + sign(payload + ":" + email.toLowerCase(java.util.Locale.ROOT));
+    }
+
+    private String[] verifyParts(String token) {
+        try {
+            String payload = new String(Base64.getUrlDecoder().decode(token.split("\\.")[0]), StandardCharsets.UTF_8);
+            String[] p = payload.split(":");
+            if (p.length != 3 || !p[0].equals("e")) throw new IllegalArgumentException();
+            Long.parseLong(p[1]);
+            Long.parseLong(p[2]);
+            return p;
+        } catch (Exception e) {
+            throw new ApiException(400, BAD_VERIFY);
+        }
+    }
+
+    public long userIdFromEmailVerify(String token) {
+        if (token == null || token.isBlank()) throw new ApiException(400, BAD_VERIFY);
+        return Long.parseLong(verifyParts(token)[1]);
+    }
+
+    public boolean emailVerifyValid(String token, String email) {
+        if (email == null) return false;
+        String[] p = verifyParts(token);
+        String payload = String.join(":", p);
+        String sig = token.split("\\.").length > 1 ? token.split("\\.")[1] : "";
+        return Long.parseLong(p[2]) > System.currentTimeMillis()
+                && java.security.MessageDigest.isEqual(sig.getBytes(StandardCharsets.UTF_8),
+                        sign(payload + ":" + email.toLowerCase(java.util.Locale.ROOT)).getBytes(StandardCharsets.UTF_8));
+    }
+
     /** When this player last made an authenticated request (0 = not in the last hour). */
     public long lastActive(long userId) {
         return lastActive.getOrDefault(userId, 0L);

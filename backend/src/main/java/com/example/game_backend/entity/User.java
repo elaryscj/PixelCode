@@ -40,6 +40,11 @@ public class User {
     @Column
     private String email;
 
+    /** the owner opened the link we sent to `email`. Accounts made before this column existed count as
+     *  confirmed (column default true); new ones start unconfirmed. */
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean emailVerified = false;
+
     @Column(columnDefinition = "text")
     private String avatarUrl;
 
@@ -131,6 +136,8 @@ public class User {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+    public boolean isEmailVerified() { return emailVerified; }
+    public void setEmailVerified(boolean emailVerified) { this.emailVerified = emailVerified; }
     public String getAvatarUrl() { return avatarUrl; }
     public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
     public int getPixels() { return pixels; }
